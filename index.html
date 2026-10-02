@@ -287,6 +287,9 @@ body.has-sug{padding-bottom:calc(160px + env(safe-area-inset-bottom,0px))}
 .sh-chk .bx{flex:none;display:grid;place-items:center;width:24px;height:24px;border-radius:var(--r);border:1.5px solid var(--muted);font-size:15px;line-height:1}
 .sh-chk[aria-checked="true"]{border-color:var(--text);background:rgba(243,237,226,.08)}
 .sh-chk[aria-checked="true"] .bx{background:var(--red);border-color:var(--red);color:#fff;font-size:13px}
+.sh-qty{display:flex;align-items:center;gap:6px;flex:none}
+.sh-qty button{width:36px;height:36px;min-height:36px;border:1px solid var(--line);border-radius:var(--r);background:none;color:var(--text);font-size:18px;line-height:1}
+.sh-qty span{min-width:20px;text-align:center;font-size:14px;font-weight:600}
 .of-s .p2{display:none}
 html[data-layout="grid"] .of-h .p1{display:none}
 html[data-layout="grid"] .of-s .p2{display:inline;font-style:normal;font-weight:600;color:var(--red-hi)}
@@ -441,7 +444,7 @@ html[data-layout="grid"][data-desc="none"] .cat:not(.compact) .hd{min-height:28p
         <span>Continuar en WhatsApp</span>
       </button>
       <p class="wa-hint">Se abre WhatsApp con tu pedido ya escrito. Solo presiona enviar.</p>
-      <p class="checkout-info" id="orderStep">Te respondemos con el valor del delivery y los datos para transferir. Preparamos tu pedido cuando recibimos el comprobante.</p>
+      <p class="checkout-info" id="orderStep">Confirmaremos tu pedido y te enviaremos el valor del delivery junto con los datos de transferencia. Una vez recibido el pago, comenzaremos a preparar tu orden.</p>
       <a class="wa-fallback" id="waFallback" href="#" target="_blank" rel="noopener" hidden>¿No se abrió WhatsApp? Tócalo aquí</a>
     </div>
   </div>
@@ -485,61 +488,61 @@ const MENU = [
   ]},
   { id:"entradas", name:"Entradas", items:[
     { id:"palitos", name:"Palitos de ajo", desc:"Masa con mantequilla de ajo, para compartir.", price:5990, img:"palitos-ajo.png",
-      suggest:{ ids:["top-bbq","top-pomodoro","top-ketchup"] } },
+      extras:{ label:"Agrega una salsa", ids:["top-pomodoro","top-bbq"] } },
     { id:"cremita-zapallo", name:"Cremita de Zapallo", desc:"Con crutones, queso rallado y albahaca.", price:6990, img:"", foto:"cremita-zapallo" }
   ]},
   { id:"pizzas", name:"Pizzas", items:[
     { id:"tgm", name:"The Good Meat", desc:"Carne Mechada, Tocino, Salsa Pomodoro New York y Queso Mozzarella.",
-      options:[{label:"Slice",price:5490},{label:"40 cm",price:24990},{label:"60 cm",price:34990}], img:"",
+      options:[{label:"Slice",price:5490},{label:"40 cm",price:16990},{label:"60 cm",price:24990}], img:"",
       combo:{ byOption:{
         0:{ extra:500, desc:"+ Bebida mini" },
         1:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" },
         2:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" } } },
       suggest:{ ids:["top-bbq", "top-pomodoro", "top-parmigiano", "top-ketchup"] } },
     { id:"pepperoni", name:"Tony Pepperoni", desc:"Pepperoni Americano Ultradelgado, Salsa Pomodoro New York y Queso Mozzarella.",
-      options:[{label:"Slice",price:5490},{label:"40 cm",price:24990},{label:"60 cm",price:34990}], img:"",
+      options:[{label:"Slice",price:5490},{label:"40 cm",price:16990},{label:"60 cm",price:24990}], img:"",
       combo:{ byOption:{
         0:{ extra:500, desc:"+ Bebida mini" },
         1:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" },
         2:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" } } },
       suggest:{ ids:["top-bbq", "top-pomodoro", "top-parmigiano", "top-ketchup"] } },
     { id:"pollo-bbq", name:"Il Traditore", desc:"Pollo BBQ, Tocino, Cebolla Morada, Salsa BBQ y Queso Mozzarella.",
-      options:[{label:"Slice",price:5490},{label:"40 cm",price:24990},{label:"60 cm",price:34990}], img:"",
+      options:[{label:"Slice",price:5490},{label:"40 cm",price:16990},{label:"60 cm",price:24990}], img:"",
       combo:{ byOption:{
         0:{ extra:500, desc:"+ Bebida mini" },
         1:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" },
         2:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" } } },
       suggest:{ ids:["top-bbq", "top-pomodoro", "top-parmigiano", "top-ketchup"] } },
     { id:"napolitana", name:"Napolitana", desc:"Jamón, Tomate, Aceitunas de la Zona, Salsa Pomodoro New York, Queso Mozzarella y Orégano.",
-      options:[{label:"Slice",price:4490},{label:"40 cm",price:19990},{label:"60 cm",price:29990}], img:"",
+      options:[{label:"Slice",price:4490},{label:"40 cm",price:14990},{label:"60 cm",price:22990}], img:"",
       combo:{ byOption:{
         0:{ extra:500, desc:"+ Bebida mini" },
         1:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" },
         2:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" } } },
       suggest:{ ids:["top-bbq", "top-pomodoro", "top-parmigiano", "top-ketchup"] } },
     { id:"margarita", name:"Margarita", desc:"Salsa Pomodoro New York, Queso Mozzarella y Albahaca Fresca.",
-      options:[{label:"Slice",price:4490},{label:"40 cm",price:19990},{label:"60 cm",price:29990}], img:"",
+      options:[{label:"Slice",price:4490},{label:"40 cm",price:14990},{label:"60 cm",price:22990}], img:"",
       combo:{ byOption:{
         0:{ extra:500, desc:"+ Bebida mini" },
         1:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" },
         2:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" } } },
       suggest:{ ids:["top-bbq", "top-pomodoro", "top-parmigiano", "top-ketchup"] } },
     { id:"ajillo", name:"Al Ajillo Boss", desc:"Camarones al Ajillo, Pimentón Rojo, Salsa Pomodoro New York, Queso Mozzarella y Perejil Fresco.",
-      options:[{label:"Slice",price:5490},{label:"40 cm",price:24990},{label:"60 cm",price:34990}], img:"",
+      options:[{label:"Slice",price:5490},{label:"40 cm",price:16990},{label:"60 cm",price:24990}], img:"",
       combo:{ byOption:{
         0:{ extra:500, desc:"+ Bebida mini" },
         1:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" },
         2:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" } } },
       suggest:{ ids:["top-bbq", "top-pomodoro", "top-parmigiano", "top-ketchup"] } },
     { id:"funghi", name:"Funghi", desc:"Champiñones y Callampas Deshidratadas, Salsa Bechamel, Queso Mozzarella, Queso Parmigiano y Perejil Fresco.",
-      options:[{label:"Slice",price:4490},{label:"40 cm",price:19990},{label:"60 cm",price:29990}], img:"",
+      options:[{label:"Slice",price:4490},{label:"40 cm",price:14990},{label:"60 cm",price:22990}], img:"",
       combo:{ byOption:{
         0:{ extra:500, desc:"+ Bebida mini" },
         1:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" },
         2:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" } } },
       suggest:{ ids:["top-bbq", "top-pomodoro", "top-parmigiano", "top-ketchup"] } },
     { id:"chocleta", name:"La Chocleta", desc:"Choclo, queso y albahaca.",
-      options:[{label:"Slice",price:4490},{label:"40 cm",price:19990},{label:"60 cm",price:29990}], img:"",
+      options:[{label:"Slice",price:4490},{label:"40 cm",price:14990},{label:"60 cm",price:22990}], img:"",
       combo:{ byOption:{
         0:{ extra:500, desc:"+ Bebida mini" },
         1:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" },
@@ -547,13 +550,13 @@ const MENU = [
       suggest:{ ids:["top-bbq", "top-pomodoro", "top-parmigiano", "top-ketchup"] } }
   ]},
   { id:"pastas", name:"Pastas", items:[
-    { id:"fetuccini", name:"Fetuccini", desc:"", price:7490, img:"", foto:"fetuccini-alfredo", photoBy:{ Alfredo:"fetuccini-alfredo", Pesto:"fetuccini-pesto", Bolognesa:"bucatini-bolognesa" },
+    { id:"fetuccini", name:"Fetuccini", desc:"", price:7490, img:"", foto:"fetuccini-alfredo", photoBy:{ Alfredo:"fetuccini-alfredo", Pesto:"fetuccini-pesto", Bolognesa:"fetuccini-bolognesa" },
       pick:{ label:"Elige tu salsa", short:"Salsa", list:["Alfredo","Pesto","Bolognesa"], hidden:["Vodka","Garlic","Picante","Lemon Pepper","Aglio Parmigiano"] },
       priceByPick:{ Alfredo:7490, Pesto:7490, Bolognesa:8490 },
       combo:{ all:{ extra:500, desc:"+ Bebida mini" } },
       extras:{ label:"Agrega una proteína", ids:["albondigas", "pollo-gravy"] },
       suggest:{ ids:["albondigas","pollo-gravy"] } },
-    { id:"bucatini", name:"Bucatini", desc:"", price:7490, img:"", foto:"bucatini-bolognesa", photoBy:{ Alfredo:"fetuccini-alfredo", Pesto:"fetuccini-pesto", Bolognesa:"bucatini-bolognesa" },
+    { id:"bucatini", name:"Bucatini", desc:"", price:7490, img:"", foto:"bucatini-bolognesa", photoBy:{ Alfredo:"bucatini-alfredo", Pesto:"bucatini-pesto", Bolognesa:"bucatini-bolognesa" },
       pick:{ label:"Elige tu salsa", short:"Salsa", list:["Alfredo","Pesto","Bolognesa"], hidden:["Vodka","Garlic","Picante","Lemon Pepper","Aglio Parmigiano"] },
       priceByPick:{ Alfredo:7490, Pesto:7490, Bolognesa:8490 },
       combo:{ all:{ extra:500, desc:"+ Bebida mini" } },
@@ -561,8 +564,8 @@ const MENU = [
       suggest:{ ids:["albondigas","pollo-gravy"] } }
   ]},
   { id:"proteinas", name:"Proteínas", compact:true, note:"Agrégalas a tu pasta.", items:[
-    { id:"albondigas", name:"Albóndigas", price:3500, img:"" },
-    { id:"pollo-gravy", name:"Pollo con Gravy", price:3500, img:"" }
+    { id:"albondigas", name:"Albóndigas", price:2990, img:"Albondigas.jpg" },
+    { id:"pollo-gravy", name:"Pollo con Gravy", price:2990, img:"pollo-gravy.jpg" }
   ]},
   { id:"toppings", name:"Toppings", compact:true, items:[
     { id:"top-bbq", name:"BBQ", price:990, img:"" },
@@ -572,7 +575,7 @@ const MENU = [
   ]},
   { id:"bebidas", name:"Bebidas", compact:true, items:[
     { id:"beb-350", name:"Bebida mini", desc:"Sabor a elección.", price:1800, img:"" },
-    { id:"beb-15", name:"Bebida 1.5 L", desc:"Sabor a elección.", price:3500, img:"" },
+    { id:"beb-15", name:"Bebida 1.5 L", desc:"Coca-Cola Original o Zero.", price:3500, img:"", drinkChoice:{ label:"Elige tu bebida", list:["Coca-Cola Original","Coca-Cola Zero"] } },
     { id:"agua", name:"Agua mineral 500 ml", desc:"Con o sin gas.", price:1500, img:"" },
     { id:"jugo", name:"Jugo en botella", desc:"Sabor a elección.", price:2500, img:"" }
   ]}
@@ -606,7 +609,7 @@ const POST = () => DESIGN.cta === "actual";                              /* el c
 applyDesign();
 const dl = CONFIG.delivery || {};
 const delivRange = (dl.min && dl.max) ? fmt(dl.min) + " y " + fmt(dl.max) : "";
-$("#foot").innerHTML = (delivRange ? "<p><b>Delivery</b> entre " + delivRange + ". Nuestro equipo te confirma el valor exacto.</p>" : "") + "<p>Imágenes referenciales.</p>";
+$("#foot").innerHTML = "<p><b>MAFIA</b> · Genaro Gallo 2955, Local 2</p><p>Instagram: Mafi4.cl</p>";
 
 /* Logo: si el archivo no existe, vuelve al nombre en texto */
 (function(){
@@ -650,6 +653,19 @@ document.addEventListener("error", e => {
 
 /* ---------- Render de la carta ---------- */
 const comboOf = (it, o) => it.combo ? (it.combo.byOption ? it.combo.byOption[o] : it.combo.all) : null;
+const servingLabel = (it, o) => {
+  if (!it.options || !it.options[o]) return "";
+  const label = it.options[o].label;
+  if (label === "Slice") return "1 trozo";
+  if (label === "40 cm") return "2–3 personas";
+  if (label === "60 cm") return "6–8 personas";
+  return "";
+};
+const comboNeedsDrink = (it, o) => {
+  const cb = comboOf(it, o);
+  return !!(cb && /Bebida\s*1[.,]?5\s*L/i.test(cb.desc || ""));
+};
+const drinkChoices = it => (it.drinkChoice && Array.isArray(it.drinkChoice.list)) ? it.drinkChoice.list : ["Coca-Cola Original","Coca-Cola Zero"];
 const pickName = (it, pi) => (it.pick && pi >= 0 && it.pick.list && it.pick.list[pi] != null) ? it.pick.list[pi] : null;
 const basePrice = (it, o, pi=-1) => {
   if (it.options) return it.options[o].price;
@@ -708,8 +724,16 @@ function itemHTML(it, compact){
 function swapPhoto(card){
   const it = IDX[card.dataset.id], s = S(it.id);
   const f = it.photoBy && it.pick && s.p >= 0 ? it.photoBy[it.pick.list[s.p]] : null;
-  const img = card.querySelector("img.dish");
-  if (f && img){ const u = (CONFIG.fotosCarpeta != null ? CONFIG.fotosCarpeta : "") + f + "." + CONFIG.fotosExtension; if (img.getAttribute("src") !== u) img.src = u; }
+  if (!f) return;
+  const u = (CONFIG.fotosCarpeta != null ? CONFIG.fotosCarpeta : "") + f + "." + CONFIG.fotosExtension;
+  let img = card.querySelector("img.dish");
+  if (!img){
+    const ph = card.querySelector(".media > .ph");
+    if (!ph) return;
+    const zoom = document.createElement("button"); zoom.className = "zoom"; zoom.type = "button"; zoom.setAttribute("aria-label", "Ver foto de " + it.name);
+    img = document.createElement("img"); img.className = "dish"; img.alt = ""; img.loading = "lazy"; zoom.appendChild(img); ph.replaceWith(zoom);
+  }
+  if (img.getAttribute("src") !== u) img.src = u;
 }
 function pressOnly(btn){ btn.parentNode.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", b === btn)); }
 
@@ -719,7 +743,7 @@ function keyFor(id){
   if (it.options && s.o < 0) return null;
   if (it.pick && s.p < 0) return null;
   const o = it.options ? s.o : 0, c = (PRE() && s.c && comboOf(it, o)) ? 1 : 0, p = it.pick ? s.p : -1;
-  return [id, o, c, p].join("|");
+  return [id, o, c, p, -1].join("|");
 }
 function syncCard(card){
   const id = card.dataset.id, it = IDX[id], s = S(id), o = it.options ? s.o : 0, cb = comboOf(it, o);
@@ -729,8 +753,12 @@ function syncCard(card){
   let q = 0, kinc = k, kdec = k;
   if (PRE()){ q = k ? (cart[k] || 0) : 0; }
   else {
-    const k1 = k ? k.replace(/\|0\|(-?\d+)$/, "|1|$1") : null;          /* misma selección, versión combo */
-    const q0 = k ? (cart[k] || 0) : 0, q1 = k1 ? (cart[k1] || 0) : 0; q = q0 + q1; kdec = q0 > 0 ? k : k1;
+    const same = Object.keys(cart).filter(ck => {
+      const x = parseKey(ck); return x && x.it.id === id && x.oi === o && x.pi === (it.pick ? s.p : -1);
+    });
+    const solo = same.filter(ck => parseKey(ck).ci === 0), combos = same.filter(ck => parseKey(ck).ci === 1);
+    const q0 = solo.reduce((a, ck) => a + cart[ck], 0), q1 = combos.reduce((a, ck) => a + cart[ck], 0);
+    q = q0 + q1; kdec = q0 > 0 ? solo[0] : combos[0];
   }
   const stp = card.querySelector(".stp"), add = card.querySelector(".add");
   card.querySelector(".ap").textContent = fmt(unitPrice(it, o, PRE() && s.c, s.p));   /* el botón muestra el precio de lo que está elegido */
@@ -852,26 +880,30 @@ setActive(MENU[0].id);
 let cart = {};
 try { cart = JSON.parse(localStorage.getItem(STORE)) || {}; } catch(e){ cart = {}; }
 
-/* clave del pedido:  plato | formato | combo(0/1) | opción elegida (-1 si no aplica) */
+/* clave del pedido: plato | formato | combo(0/1) | opción elegida | bebida 1.5 L (-1 si no aplica) */
 function parseKey(k){
-  const [id, o, c, p] = k.split("|"); const it = IDX[id]; if (!it) return null;
-  const oi = +o || 0, pi = p === undefined ? -1 : +p;
+  const [id, o, c, p, v] = k.split("|"); const it = IDX[id]; if (!it) return null;
+  const oi = +o || 0, pi = p === undefined ? -1 : +p, vi = v === undefined ? -1 : +v;
   if (it.options && !it.options[oi]) return null;
   if (it.pick && !it.pick.list[pi]) return null;
-  return { it, oi, ci: (+c === 1 && comboOf(it, oi)) ? 1 : 0, pi };
+  const ci = (+c === 1 && comboOf(it, oi)) ? 1 : 0;
+  const needs = !!it.drinkChoice || (ci && comboNeedsDrink(it, oi));
+  if (needs && (vi < 0 || !drinkChoices(it)[vi])) return null;
+  return { it, oi, ci, pi, vi };
 }
 Object.keys(cart).forEach(k => { if (!parseKey(k)) delete cart[k]; });
 
 function save(){ try { localStorage.setItem(STORE, JSON.stringify(cart)); } catch(e){} }
 function lines(){
   return Object.entries(cart).map(([k, qty]) => {
-    const { it, oi, ci, pi } = parseKey(k), cb = comboOf(it, oi);
+    const { it, oi, ci, pi, vi } = parseKey(k), cb = comboOf(it, oi);
     const parts = [
-      it.options ? it.options[oi].label : "",
+      it.options ? it.options[oi].label + (servingLabel(it, oi) ? " · " + servingLabel(it, oi) : "") : "",
       ci ? "Combo: " + cb.desc.replace(/^\+\s*/, "") : "",
-      it.pick ? (it.pick.short || it.pick.label) + ": " + it.pick.list[pi] : ""
+      it.pick ? (it.pick.short || it.pick.label) + ": " + it.pick.list[pi] : "",
+      vi >= 0 ? "Bebida: " + drinkChoices(it)[vi] + " 1.5 L" : ""
     ].filter(Boolean);
-    return { k, it, qty, parts, price: unitPrice(it, oi, ci, pi), pi, thumb: photoSrc(it, pi) };
+    return { k, it, qty, parts, price: unitPrice(it, oi, ci, pi), pi, vi, thumb: photoSrc(it, pi) };
   });
 }
 function totals(){
@@ -959,16 +991,16 @@ function feedback(id){
 
 function upgrade(k){
   if (!cart[k]) return hideSuggest();
-  const [id, o, , p] = k.split("|");
+  const [id, o, , p, v] = k.split("|");
   cart[k]--; if (cart[k] <= 0) delete cart[k];
-  const nk = [id, o, 1, p].join("|");
+  const nk = [id, o, 1, p, v === undefined ? -1 : v].join("|");
   cart[nk] = (cart[nk] || 0) + 1;
   curOffer = cart[k] > 0 ? { id, k, cat:CATOF[id] } : null;   /* si quedan unidades sin combo, la oferta sigue */
   save(); renderCart(); feedback(id); hideSuggest();
   $("#live").textContent = "Combo agregado: " + IDX[id].name;
 }
 
-function add(id, viaSuggestion, cOver){
+function add(id, viaSuggestion, cOver, vOver){
   const it = IDX[id], s = S(id), card = document.querySelector('.item[data-id="' + id + '"]');
   const hadFocus = !!(card && document.activeElement && document.activeElement.classList.contains("add") && card.contains(document.activeElement));
   if (!viaSuggestion && it.pick && s.p < 0){
@@ -980,7 +1012,8 @@ function add(id, viaSuggestion, cOver){
   }
   const o = it.options ? s.o : 0, p = it.pick ? s.p : -1;
   const c = cOver !== undefined ? cOver : ((PRE() && s.c && comboOf(it, o)) ? 1 : 0);
-  const k = [id, o, c, p].join("|");
+  const v = vOver === undefined ? -1 : vOver;
+  const k = [id, o, c, p, v].join("|");
   cart[k] = (cart[k] || 0) + 1;
   save(); renderCart(); feedback(id);
   if (hadFocus){ const b = card.querySelector(".stp:not([hidden]) [data-inc]"); if (b) b.focus(); }
@@ -988,6 +1021,7 @@ function add(id, viaSuggestion, cOver){
   $("#live").textContent = "Agregado: " + it.name;
   if (viaSuggestion) drawSuggest();
   else if (POST() && !c && comboOf(it, o)){ hideSuggest(); setOffer(id, k); }
+  else if (it.suggest && it.suggest.popup){ hideOffer(); setSuggest({ type:"ids", it, cat:CATOF[id] }); }
   else drawSuggest();
 }
 
@@ -1018,9 +1052,11 @@ document.addEventListener("click", e => {
   }
   if (t.hasAttribute("data-combo") && card){ const sc = S(card.dataset.id); sc.c = !sc.c; syncCard(card); return; }
   if (t.hasAttribute("data-sh-x")) return closeSheet();
-  if (t.dataset.shC !== undefined && shCtx){ shCtx.c = +t.dataset.shC; drawSheet(); const f = $('[data-sh-c="' + shCtx.c + '"]'); if (f) f.focus(); return; }
-  if (t.dataset.shEx !== undefined && shCtx){ const x = t.dataset.shEx, i = shCtx.ex.indexOf(x); if (i >= 0) shCtx.ex.splice(i, 1); else shCtx.ex.push(x); drawSheet(); const f = $('[data-sh-ex="' + x + '"]'); if (f) f.focus(); return; }
-  if (t.hasAttribute("data-sh-add") && shCtx){ const sx = shCtx; closeSheet(); add(sx.id, false, sx.c); sx.ex.forEach(x => add(x, true)); return; }
+  if (t.dataset.shC !== undefined && shCtx){ shCtx.c = +t.dataset.shC; if (!shCtx.c) shCtx.drink = -1; drawSheet(); const f = $('[data-sh-c="' + shCtx.c + '"]'); if (f) f.focus(); return; }
+  if (t.dataset.shDrink !== undefined && shCtx){ shCtx.drink = +t.dataset.shDrink; drawSheet(); const f = $('[data-sh-drink="' + shCtx.drink + '"]'); if (f) f.focus(); return; }
+  if (t.dataset.shExInc !== undefined && shCtx){ const x = t.dataset.shExInc; shCtx.ex[x] = (shCtx.ex[x] || 0) + 1; drawSheet(); const f = $('[data-sh-ex-inc="' + x + '"]'); if (f) f.focus(); return; }
+  if (t.dataset.shExDec !== undefined && shCtx){ const x = t.dataset.shExDec, q = shCtx.ex[x] || 0; if (q <= 1) delete shCtx.ex[x]; else shCtx.ex[x] = q - 1; drawSheet(); const f = $('[data-sh-ex-dec="' + x + '"]'); if (f && !f.disabled) f.focus(); else { const g = $('[data-sh-ex-inc="' + x + '"]'); if (g) g.focus(); } return; }
+  if (t.hasAttribute("data-sh-add") && shCtx){ const sx = shCtx; const itx = IDX[sx.id], ox = itx.options ? S(sx.id).o : 0; const needDrink = !!itx.drinkChoice || (sx.c === 1 && comboNeedsDrink(itx, ox)); if (needDrink && sx.drink < 0) return; const extras = Object.entries(sx.ex); closeSheet(); add(sx.id, false, sx.c, sx.drink); extras.forEach(([x, q]) => { for (let i = 0; i < q; i++) add(x, true); }); return; }
   if (t.hasAttribute("data-opt") && card){
     const it = IDX[card.dataset.id], s = S(it.id);
     s.o = +t.dataset.opt; pressOnly(t); syncCard(card);
@@ -1079,30 +1115,37 @@ document.addEventListener("keydown", e => {
 
 /* ---------- Hoja: ¿solo o combo? ---------- */
 let shCtx = null, shFrom = null;
-const hasSheet = (it, o) => !!(comboOf(it, o) || it.extras);
+const hasSheet = (it, o) => !!(comboOf(it, o) || it.extras || it.drinkChoice);
 function sheetTotal(){
   const it = IDX[shCtx.id], s = S(it.id), o = it.options ? s.o : 0, cb = comboOf(it, o);
-  return unitPrice(it, o, false, s.p) + (shCtx.c && cb ? cb.extra : 0) + shCtx.ex.reduce((a, x) => a + IDX[x].price, 0);
+  const extrasTotal = Object.entries(shCtx.ex).reduce((a, [id, qty]) => a + ((IDX[id] && IDX[id].price) || 0) * qty, 0);
+  return unitPrice(it, o, false, s.p) + (shCtx.c && cb ? cb.extra : 0) + extrasTotal;
 }
 function drawSheet(){
   const it = IDX[shCtx.id], s = S(it.id), o = it.options ? s.o : 0, cb = comboOf(it, o);
-  const lab = [it.options ? it.options[o].label : "", it.pick && s.p >= 0 ? (it.pick.short || "Salsa") + " " + it.pick.list[s.p] : ""].filter(Boolean).join(" · ");
+  const size = it.options ? it.options[o].label : "";
+  const serve = servingLabel(it, o);
+  const lab = [size ? size + (serve ? " · " + serve : "") : "", it.pick && s.p >= 0 ? (it.pick.short || "Salsa") + " " + it.pick.list[s.p] : ""].filter(Boolean).join(" · ");
   const base = unitPrice(it, o, false, s.p);
   const radios = cb ? `<div role="radiogroup" aria-label="¿Cómo lo quieres?" class="sh-g">
       <button type="button" class="sh-opt" role="radio" aria-checked="${shCtx.c === 0}" data-sh-c="0"><span class="rd" aria-hidden="true"></span><span class="tx"><b>Solo ${esc(it.name)}</b></span><i>${fmt(base)}</i></button>
       <button type="button" class="sh-opt" role="radio" aria-checked="${shCtx.c === 1}" data-sh-c="1"><span class="rd" aria-hidden="true"></span><span class="tx"><b>Hazla combo</b><small>${esc(cb.desc.replace(/^\+\s*/, ""))}</small></span><i>${fmt(base + cb.extra)}</i></button>
     </div>` : "";
   const ex = it.extras ? `<div class="sh-ex" role="group" aria-label="${esc(it.extras.label)}"><p class="sh-lab">${esc(it.extras.label)} <small>(opcional)</small></p>
-      <div class="exg">${it.extras.ids.map(id => { const on = shCtx.ex.indexOf(id) >= 0;
-        return `<button type="button" class="sh-chk" role="checkbox" aria-checked="${on}" data-sh-ex="${esc(id)}"><span class="tx"><b>${esc(IDX[id].name)}</b><small>+ ${fmt(IDX[id].price)}</small></span><span class="bx" aria-hidden="true">${on ? "✓" : "+"}</span></button>`; }).join("")}</div></div>` : "";
+      <div class="exg">${it.extras.ids.map(id => { const q = shCtx.ex[id] || 0;
+        return `<div class="sh-chk" role="group" aria-label="${esc(IDX[id].name)}"><span class="tx"><b>${esc(IDX[id].name)}</b><small>+ ${fmt(IDX[id].price)} c/u</small></span><span class="sh-qty"><button type="button" data-sh-ex-dec="${esc(id)}" aria-label="Quitar ${esc(IDX[id].name)}"${q ? "" : " disabled"}>−</button><span>${q}</span><button type="button" data-sh-ex-inc="${esc(id)}" aria-label="Agregar ${esc(IDX[id].name)}">+</button></span></div>`; }).join("")}</div></div>` : "";
+  const needDrink = !!it.drinkChoice || (shCtx.c === 1 && comboNeedsDrink(it, o));
+  const drink = needDrink ? `<div class="sh-ex" role="radiogroup" aria-label="Elige tu bebida"><p class="sh-lab">Elige tu bebida</p>
+      <div class="exg">${drinkChoices(it).map((name, i) => `<button type="button" class="sh-chk" role="radio" aria-checked="${shCtx.drink === i}" data-sh-drink="${i}"><span class="tx"><b>${esc(name)}</b><small>1.5 L</small></span><span class="bx" aria-hidden="true">${shCtx.drink === i ? "✓" : ""}</span></button>`).join("")}</div></div>` : "";
+  const disabled = needDrink && shCtx.drink < 0 ? " disabled" : "";
   $("#sheet").innerHTML = `<div class="sh-h"><div><b id="sh-t">${esc(it.name)}</b>${lab ? `<span>${esc(lab)}</span>` : ""}</div><button class="x" type="button" data-sh-x aria-label="Cerrar">✕</button></div>
-    ${radios}${ex}
-    <button type="button" class="add sh-add" data-sh-add>+ Agregar · ${fmt(sheetTotal())}</button>`;
+    ${radios}${drink}${ex}
+    <button type="button" class="add sh-add" data-sh-add${disabled}>+ Agregar · ${fmt(sheetTotal())}</button>`;
 }
 function openSheet(id){
   const it = IDX[id], s = S(id);
   if (it.pick && s.p < 0) return add(id);                              /* mismo aviso de "elige una opción" */
-  shCtx = { id, c:0, ex:[] }; shFrom = document.activeElement; drawSheet();
+  shCtx = { id, c:0, ex:{}, drink:-1 }; shFrom = document.activeElement; drawSheet();
   $("#shbd").hidden = false; const sh = $("#sheet"); sh.hidden = false; sh.scrollTop = 0; sh.classList.remove("in"); void sh.offsetWidth; sh.classList.add("in");
   const f = $('[data-sh-c="0"]') || $("[data-sh-add]"); if (f) f.focus();
 }
@@ -1177,22 +1220,13 @@ function syncTipo(){
     : "Sin costo de envío";
   dn.hidden = false;
   const summary = $("#step2Summary");
-if (summary) {
-  summary.textContent = d
-    ? "Subtotal " + fmt(sum) + " · Entrega: Delivery"
-    : "Total " + fmt(sum) + " · Retiro en local";
-}
-
-const os = $("#orderStep");
-
-if (os) {
-  os.textContent = d
+  if (summary) summary.textContent = d ? "Subtotal " + fmt(sum) + " · Entrega: Delivery" : "Total " + fmt(sum) + " · Retiro en local";
+  const os = $("#orderStep");
+  if (os) os.textContent = d
     ? "Confirmaremos tu pedido y te enviaremos el valor del delivery junto con los datos de transferencia. Una vez recibido el pago, comenzaremos a preparar tu orden."
     : "Confirmaremos tu pedido y te enviaremos los datos de transferencia. Una vez recibido el pago, comenzaremos a preparar tu orden.";
-}
-
-$("#steps").innerHTML = "";
-syncPay();
+  $("#steps").innerHTML = "";
+  syncPay();
 }
 document.querySelectorAll('input[name="tipo"]').forEach(r => r.addEventListener("change", syncTipo));
 syncTipo();
@@ -1206,18 +1240,25 @@ $("#send").addEventListener("click", () => {
   err.textContent = "";
   try { localStorage.setItem(PROFILE, JSON.stringify({ name, addr })); } catch(e){}
 
+  const orderLine = l => {
+    const bits = [l.it.name];
+    const parsed = parseKey(l.k);
+    if (parsed.it.options) bits[0] += " " + parsed.it.options[parsed.oi].label;
+    if (parsed.it.pick) bits.push("salsa " + parsed.it.pick.list[parsed.pi]);
+    if (parsed.ci) bits.push("combo");
+    if (parsed.vi >= 0) bits.push(drinkChoices(parsed.it)[parsed.vi] + " 1.5 L");
+    return l.qty + "x " + bits.join(", ") + " " + fmt(l.qty * l.price);
+  };
   const txt = [
-    "Hola " + CONFIG.nombre + " 👋 quiero hacer un pedido:",
+    delivery ? "*DELIVERY*" : "*RETIRO EN LOCAL*",
+    "Hola, quiero realizar este pedido:",
     "",
-    ...ls.map(l => "• " + l.qty + " × " + l.it.name + (l.parts.length ? " (" + l.parts.join(" · ") + ")" : "") + " — " + fmt(l.qty * l.price)),
+    ...ls.map(orderLine),
     "",
-    "*Total: " + fmt(sum) + "*",
-    delivery ? "*Dirección:* " + addr : "*Retiro en local*",
-    "*Nombre:* " + name,
-    note ? "*Notas:* " + note : null,
-    "",
-    delivery ? "*Pago:* transferencia previa (espero tu confirmación del delivery y te envío el comprobante)"
-             : (hasPay ? "*Pago:* transferencia previa (te envío el comprobante)" : "*Pago:* transferencia previa (¿me envías los datos?)")
+    "Total: " + fmt(sum),
+    "Nombre: " + name,
+    delivery ? "Dirección: " + addr : null,
+    note ? "Nota: " + note : null
   ].filter(x => x !== null).join("\n");
   const waUrl = "https://wa.me/" + CONFIG.whatsapp + "?text=" + encodeURIComponent(txt);
   const fallback = $("#waFallback"); fallback.href = waUrl; fallback.hidden = false;
