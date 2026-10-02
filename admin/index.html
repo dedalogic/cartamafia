@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>MAFIA · Disponibilidad</title>
+<style>
+:root{--bg:#141312;--card:#1c1a18;--line:#3a3530;--text:#f3ede2;--muted:#aaa197;--red:#c8102e;--r:14px}
+*{box-sizing:border-box}html{background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}body{margin:0;min-height:100vh;background:var(--bg)}button,input{font:inherit}button{color:inherit}.wrap{width:min(720px,100%);margin:auto;padding:24px 16px 48px}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px}.top h1{font-size:24px;margin:0}.back{min-height:44px;padding:0 14px;border:1px solid var(--line);border-radius:var(--r);background:none;text-decoration:none;color:var(--text);display:inline-flex;align-items:center}.login{display:grid;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px}.login label{font-size:13px;color:var(--muted)}.login input{width:100%;min-height:48px;margin-top:6px;border:1px solid var(--line);border-radius:var(--r);padding:0 12px;background:#fff;color:#111;font-size:16px}.primary{min-height:48px;border:0;border-radius:var(--r);background:var(--red);color:#fff;font-weight:700}.status{min-height:20px;margin:10px 0;color:var(--muted);font-size:13px}.status.err{color:#ff6b7e}.controls[hidden],.login[hidden]{display:none}.cat{margin:20px 0 0}.cat h2{font-size:15px;margin:0 0 8px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}.product{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;margin:8px 0}.row{min-height:52px;display:flex;align-items:center;justify-content:space-between;gap:12px}.row b{font-size:15px}.sub{padding-left:14px;border-top:1px solid var(--line)}.sub .row{min-height:48px}.sub .row span:first-child{color:var(--muted);font-size:14px}.sw{position:relative;display:block;flex:0 0 56px;width:56px;height:44px}.sw input{position:absolute;opacity:0}.sw i{position:absolute;left:0;top:8px;width:56px;height:28px;border:1px solid var(--line);border-radius:999px;background:#27231f;transition:.18s}.sw i:after{content:"";position:absolute;left:4px;top:4px;width:18px;height:18px;border-radius:50%;background:var(--muted);transition:.18s}.sw input:checked+i{border-color:var(--text);background:rgba(243,237,226,.13)}.sw input:checked+i:after{transform:translateX(28px);background:var(--text)}.sw input:focus-visible+i{outline:2px solid var(--text);outline-offset:2px}.sw input:disabled+i{opacity:.45}.foot{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:22px}.logout{min-height:44px;padding:0 14px;border:1px solid var(--line);border-radius:var(--r);background:none;color:var(--muted)}.saved{font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="top"><h1>Disponibilidad</h1><a class="back" href="/">Ver carta</a></div>
+  <form class="login" id="login">
+    <label>Clave de administrador<input id="password" type="password" autocomplete="current-password" required></label>
+    <button class="primary" type="submit">Entrar</button>
+  </form>
+  <p class="status" id="status" aria-live="polite"></p>
+  <section class="controls" id="controls" hidden>
+    <div id="list"></div>
+    <div class="foot"><span class="saved" id="saved"></span><button class="logout" id="logout" type="button">Cerrar sesión</button></div>
+  </section>
+</main>
+<script>
+const ENDPOINT="/.netlify/functions/menu-availability";
+const $=s=>document.querySelector(s);
+let pass="", catalog=[], disabledProducts=new Set(), disabledOptions={};
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function status(msg,err=false){const el=$("#status");el.textContent=msg||"";el.classList.toggle("err",!!err)}
+function setState(d){disabledProducts=new Set(d.disabledProducts||[]);disabledOptions={};Object.entries(d.disabledOptions||{}).forEach(([id,v])=>disabledOptions[id]=new Set((v||[]).map(String)))}
+async function req(body){const r=await fetch(ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify(body)});let d={};try{d=await r.json()}catch{}if(!r.ok)throw new Error(d.error||"No se pudo guardar");return d}
+function draw(){
+  const groups={}; catalog.forEach(x=>(groups[x.category]||(groups[x.category]=[])).push(x));
+  $("#list").innerHTML=Object.entries(groups).map(([cat,items])=>`<section class="cat"><h2>${esc(cat)}</h2>${items.map(it=>{
+    const on=!disabledProducts.has(it.id);
+    const opts=(it.options||[]).map((name,i)=>{const o=!(disabledOptions[it.id]?.has(String(i)));return `<div class="row"><span>${esc(name)}</span><label class="sw"><input type="checkbox" data-option-id="${esc(it.id)}" data-option-index="${i}" ${o?"checked":""} ${on?"":"disabled"} aria-label="${esc(it.name)} ${esc(name)} disponible"><i></i></label></div>`}).join("");
+    return `<div class="product"><div class="row"><b>${esc(it.name)}</b><label class="sw"><input type="checkbox" data-product-id="${esc(it.id)}" ${on?"checked":""} aria-label="${esc(it.name)} disponible"><i></i></label></div>${opts?`<div class="sub">${opts}</div>`:""}</div>`
+  }).join("")}</section>`).join("")
+}
+async function save(){
+  status("Guardando…");
+  const body={action:"set",password:pass,disabledProducts:[...disabledProducts],disabledOptions:Object.fromEntries(Object.entries(disabledOptions).map(([id,s])=>[id,[...s]]))};
+  const d=await req(body);setState(d);draw();status("");$("#saved").textContent="Guardado";setTimeout(()=>$("#saved").textContent="",1200)
+}
+$("#login").addEventListener("submit",async e=>{e.preventDefault();pass=$("#password").value;if(!pass)return;status("Comprobando…");try{const d=await req({action:"login",password:pass});catalog=d.catalog||[];setState(d);$("#login").hidden=true;$("#controls").hidden=false;draw();status("")}catch(err){status(err.message,true)}});
+$("#list").addEventListener("change",async e=>{
+  const p=e.target.closest("[data-product-id]");const o=e.target.closest("[data-option-id]");
+  try{
+    if(p){p.checked?disabledProducts.delete(p.dataset.productId):disabledProducts.add(p.dataset.productId);draw();await save();return}
+    if(o){const id=o.dataset.optionId,i=o.dataset.optionIndex;(disabledOptions[id]||(disabledOptions[id]=new Set()));o.checked?disabledOptions[id].delete(i):disabledOptions[id].add(i);await save()}
+  }catch(err){status(err.message,true);try{const d=await req({action:"login",password:pass});setState(d);draw()}catch{}}
+});
+$("#logout").addEventListener("click",()=>{pass="";catalog=[];disabledProducts.clear();disabledOptions={};$("#password").value="";$("#controls").hidden=true;$("#login").hidden=false;status("");$("#password").focus()});
+</script>
+</body>
+</html>
