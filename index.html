@@ -67,6 +67,7 @@ main{max-width:1160px;margin:0 auto;padding:0 20px}
 @media(min-width:880px){.list{grid-template-columns:1fr 1fr}}
 
 .item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px 16px;padding:22px 0;border-bottom:1px solid var(--line)}
+.item[hidden],.cat[hidden]{display:none!important}
 .item h3{font:400 24px/1.05 var(--serif);letter-spacing:.03em}
 .item:last-child{border-bottom:0}
 @media(min-width:880px){.list .item:nth-last-child(2):nth-child(odd){border-bottom:0}}
@@ -1553,7 +1554,7 @@ if (CONFIG.opciones){
 showCheckoutStep(1, false);
 renderCart();
 loadAvailability();
-setInterval(loadAvailability, 15000);
+setInterval(loadAvailability, 5000);
 document.addEventListener("visibilitychange", () => { if (!document.hidden) loadAvailability(); });
 window.addEventListener("focus", loadAvailability);
 
