@@ -6,11 +6,12 @@
 <title>Carta · MAFIA</title>
 <meta name="description" content="Carta digital de MAFIA. Pizzas, pastas, proteínas y combos.">
 <meta name="theme-color" content="#0c0c0c">
+<link rel="preload" href="Pesto%20Mafio.ttf" as="font" type="font/ttf" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 <style>
-@font-face{font-family:"Pesto Mafio";src:url("./Pesto Mafio.ttf") format("truetype");font-style:normal;font-weight:400;font-display:swap}
+@font-face{font-family:"Pesto Mafio";src:url("./Pesto Mafio.ttf") format("truetype");font-style:normal;font-weight:400;font-display:block}
 :root{
   --bg:#0c0c0c; --surface:#161514; --line:#2a2826;
   --text:#f3ede2; --muted:#a39d92;
@@ -221,8 +222,8 @@ body.has-sug{padding-bottom:calc(160px + env(safe-area-inset-bottom,0px))}
 .sug-badge{color:var(--red-hi);font-size:12px;font-weight:600;line-height:1.2}
 .sug-price{color:var(--muted);font-size:14px;font-weight:500;white-space:nowrap}
 .sug-add{width:44px;height:44px;min-width:44px;border-radius:var(--r);border:1px solid var(--line);background:none;color:var(--text);font-size:18px;line-height:1}
-.sug-row:first-child .sug-add{border-color:var(--red);background:var(--red);color:#fff}
-.sug-row:first-child .sug-add:hover{background:var(--red-hi)}
+.sug-row .sug-add{border-color:var(--red);background:var(--red);color:#fff}
+.sug-row .sug-add:hover{background:var(--red-hi)}
 .total{display:flex;justify-content:space-between;font-size:18px;font-weight:600;padding-top:4px}
 .seg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .seg.shake{animation:shake .35s}
@@ -605,19 +606,21 @@ const MENU = [
   { id:"pastas", name:"Pastas", items:[
     { id:"fetuccini", name:"Fetuccini", desc:"", price:7490, img:"", foto:"fetuccini-alfredo", photoBy:{ Alfredo:"fetuccini-alfredo", Pesto:"fetuccini-pesto", Bolognesa:"fetuccini-bolognesa" },
       pick:{ label:"Elige tu salsa", short:"Salsa", list:["Alfredo","Pesto","Bolognesa"], hidden:["Vodka","Garlic","Picante","Lemon Pepper","Aglio Parmigiano"] },
+      pickInSheet:true,
       priceByPick:{ Alfredo:7490, Pesto:7490, Bolognesa:8490 },
       combo:{ all:{ extra:500, desc:"+ Bebida mini" } },
-      extras:{ label:"Agrega una proteína", ids:["albondigas", "pollo-gravy"] },
+      extras:{ label:"No olvides agregar tu proteína", ids:["albondigas", "pollo-gravy"] },
       suggest:{ ids:["albondigas","pollo-gravy"] } },
-    { id:"bucatini", name:"Bucatini", desc:"", price:7490, img:"", foto:"bucatini-bolognesa", photoBy:{ Alfredo:"bucatini-alfredo.png", Pesto:"bucatini-pesto.png", Bolognesa:"bucatini-bolognesa.jpg" },
+    { id:"bucatini", name:"Bucatini", desc:"", price:7490, img:"", foto:"bucatini-pesto.png", photoBy:{ Alfredo:"bucatini-alfredo.png", Pesto:"bucatini-pesto.png", Bolognesa:"bucatini-bolognesa.jpg" },
       pick:{ label:"Elige tu salsa", short:"Salsa", list:["Alfredo","Pesto","Bolognesa"], hidden:["Vodka","Garlic","Picante","Lemon Pepper","Aglio Parmigiano"] },
+      pickInSheet:true,
       priceByPick:{ Alfredo:7490, Pesto:7490, Bolognesa:8490 },
       combo:{ all:{ extra:500, desc:"+ Bebida mini" } },
-      extras:{ label:"Agrega una proteína", ids:["albondigas", "pollo-gravy"] },
+      extras:{ label:"No olvides agregar tu proteína", ids:["albondigas", "pollo-gravy"] },
       suggest:{ ids:["albondigas","pollo-gravy"] } }
   ]},
   { id:"proteinas", name:"Proteínas", compact:true, note:"Agrégalas a tu pasta.", items:[
-    { id:"albondigas", name:"Albóndigas", desc:"3 Albóndigas de carne de vacuno, cocinadas y servidas en su salsa.", price:2990, img:"Albondigas.jpg" },
+    { id:"albondigas", name:"Albóndigas", desc:"3 Albóndigas de carne de vacuno, cocinadas y servidas en su salsa.", price:2990, img:"Albondigas.jpeg" },
     { id:"pollo-gravy", name:"Pollo con Gravy", desc:"Pollo al horno con Salsa Gravy.", price:2990, img:"pollo-gravy.jpeg" }
   ]},
   { id:"toppings", name:"Toppings", items:[
@@ -688,7 +691,6 @@ function loadFont(family, file, varName, fallback){
   document.head.appendChild(st);
   document.documentElement.style.setProperty(varName, `"${family}",${fallback}`);
 }
-loadFont("CartaTitulos", CONFIG.fuenteTitulos, "--serif", '"Pesto Mafio","Playfair Display",Georgia,serif');
 loadFont("CartaTextos", CONFIG.fuenteTextos, "--sans", 'Inter,system-ui,-apple-system,"Segoe UI",sans-serif');
 
 /* Foto que no existe → recuadro de relleno */
@@ -746,11 +748,11 @@ const CART_PHOTO_OVERRIDES = {
 };
 const cartPhotoSrc = l => CART_PHOTO_OVERRIDES[l.it.id] ? assetPath(CART_PHOTO_OVERRIDES[l.it.id]) : l.thumb;
 
-function itemHTML(it, compact){
+function itemHTML(it, compact, eager=false){
   const s = S(it.id);
   const src = it.img || assetPath(it.foto || it.id);
   const media = src
-    ? `<button class="zoom" type="button" aria-label="Ver foto de ${esc(it.name)}"><img class="dish" src="${esc(src)}" alt="" loading="lazy"></button>`
+    ? `<button class="zoom" type="button" aria-label="Ver foto de ${esc(it.name)}"><img class="dish" src="${esc(src)}" alt="" loading="${eager ? "eager" : "lazy"}" fetchpriority="${eager ? "high" : "auto"}" decoding="async"></button>`
     : `<div class="ph" aria-hidden="true"></div>`;
   if (it.infoOnly){
     return `<article class="item" data-id="${esc(it.id)}">
@@ -764,7 +766,7 @@ function itemHTML(it, compact){
   const fmtH = it.options ? `<div class="opts fmt" role="group" aria-label="Formato de ${esc(it.name)}">${
     it.options.map((op, i) => `<button type="button" data-opt="${i}" aria-pressed="${i === s.o}">${esc(op.label)}</button>`).join("")
   }</div>` : "";
-  const pk = it.pick ? `<div class="pick" role="group" aria-label="${esc(it.pick.label)}">
+  const pk = (it.pick && !it.pickInSheet) ? `<div class="pick" role="group" aria-label="${esc(it.pick.label)}">
       <p class="pk-t">${esc(it.pick.label)}</p>
       <div class="opts">${it.pick.list.map((n, i) => `<button type="button" data-pick="${i}" aria-pressed="${i === s.p}">${esc(n)}</button>`).join("")}</div>
       <p class="pk-err" hidden>Elige una opción para agregar.</p></div>` : "";
@@ -825,7 +827,7 @@ function syncCard(card){
     q = q0 + q1; kdec = q0 > 0 ? solo[0] : combos[0];
   }
   const stp = card.querySelector(".stp"), add = card.querySelector(".add");
-  card.querySelector(".ap").textContent = fmt(unitPrice(it, o, PRE() && s.c, s.p));   /* el botón muestra el precio de lo que está elegido */
+  card.querySelector(".ap").textContent = it.pickInSheet ? ("Desde " + fmt(Math.min(...Object.values(it.priceByPick || {base:it.price})))) : fmt(unitPrice(it, o, PRE() && s.c, s.p));   /* las pastas muestran precio desde; el resto, precio elegido */
   stp.hidden = q === 0; add.hidden = q > 0;
   if (q > 0){
     stp.querySelector("span").textContent = q;
@@ -886,10 +888,10 @@ function setOffer(id, k){
 function pop(el){ if (!el) return; el.classList.remove("pop"); void el.offsetWidth; el.classList.add("pop"); }
 
 $("#nav").innerHTML = MENU.map(c => `<li><a href="#${c.id}">${esc(c.name)}</a></li>`).join("");
-$("#menu").innerHTML = MENU.map(c => `<section class="cat${c.compact ? " compact" : ""}" id="${c.id}" aria-labelledby="h-${c.id}">
+$("#menu").innerHTML = MENU.map((c, ci) => `<section class="cat${c.compact ? " compact" : ""}" id="${c.id}" aria-labelledby="h-${c.id}">
   <h2 id="h-${c.id}">${esc(c.name)}</h2>
   ${c.note ? `<p class="note">${esc(c.note)}</p>` : ""}
-  <div class="list">${c.items.map(i => itemHTML(i, c.compact)).join("")}</div>
+  <div class="list">${c.items.map(i => itemHTML(i, c.compact, ci === 0)).join("")}</div>
 </section>`).join("");
 
 /* ---------- Navegación de categorías ---------- */
@@ -1032,7 +1034,7 @@ function renderCart(){
   cartbtn.setAttribute("aria-label", count ? "Ver pedido: " + count + (count === 1 ? " producto, " : " productos, ") + fmt(sum) : "Ver pedido");
   cartbtn.title = count ? fmt(sum) : "";
   $("#lines").innerHTML = ls.length ? ls.map(l => { const detail = cartDetail(l), thumb = cartPhotoSrc(l); return `<div class="line">
-      ${thumb ? `<img class="line-thumb" src="${esc(thumb)}" alt="" loading="lazy">` : `<span class="line-thumb-ph" aria-hidden="true"></span>`}
+      ${thumb ? `<img class="line-thumb" src="${esc(thumb)}" alt="" loading="lazy" decoding="async">` : `<span class="line-thumb-ph" aria-hidden="true"></span>`}
       <div class="line-content">
         <b class="line-name">${esc(l.it.name)}</b>
         ${detail ? `<small class="line-detail">${esc(detail)}</small>` : ""}
@@ -1140,6 +1142,17 @@ document.addEventListener("click", e => {
   }
   if (t.hasAttribute("data-combo") && card){ const sc = S(card.dataset.id); sc.c = !sc.c; syncCard(card); return; }
   if (t.hasAttribute("data-sh-x")) return closeSheet();
+  if (t.dataset.shPick !== undefined && shCtx){
+    const itx = IDX[shCtx.id], px = +t.dataset.shPick;
+    S(shCtx.id).p = px;
+    shCtx.stage = "customize";
+    shCtx.invalid = "";
+    const cardx = document.querySelector('.item[data-id="' + shCtx.id + '"]');
+    if (cardx){ swapPhoto(cardx); syncCard(cardx); }
+    drawSheet();
+    const f = $('[data-sh-c="0"]') || $('[data-sh-ex-inc]') || $('[data-sh-add]'); if (f) f.focus();
+    return;
+  }
   if (t.dataset.shC !== undefined && shCtx){ shCtx.c = +t.dataset.shC; if (!shCtx.c) shCtx.drink = -1; drawSheet(); const f = $('[data-sh-c="' + shCtx.c + '"]'); if (f) f.focus(); return; }
   if (t.dataset.shDrink !== undefined && shCtx){ shCtx.drink = +t.dataset.shDrink; shCtx.invalid = ""; drawSheet(); const f = $('[data-sh-drink="' + shCtx.drink + '"]'); if (f) f.focus(); return; }
   if (t.dataset.shBundleGroup !== undefined && shCtx){ const gi = +t.dataset.shBundleGroup, vi = +t.dataset.shBundleValue; shCtx.bundle[gi] = vi; shCtx.invalid = ""; const itx = IDX[shCtx.id], last = !itx.bundleChoices || gi >= itx.bundleChoices.length - 1; if (!last) shCtx.step = gi + 1; drawSheet(); const f = last ? $('[data-sh-bundle-group="' + gi + '"][data-sh-bundle-value="' + vi + '"]') : $('[data-sh-bundle-group="' + (gi + 1) + '"]'); if (f) f.focus(); return; }
@@ -1220,6 +1233,11 @@ function sheetTotal(){
 }
 function drawSheet(){
   const it = IDX[shCtx.id], s = S(it.id), o = it.options ? s.o : 0, cb = comboOf(it, o);
+  if (it.pickInSheet && shCtx.stage === "pick"){
+    const choices = it.pick.list.map((name, i) => `<button type="button" class="sh-opt" role="radio" aria-checked="false" data-sh-pick="${i}"><span class="rd" aria-hidden="true"></span><span class="tx"><b>${esc(name)}</b></span><i>${fmt(basePrice(it, o, i))}</i></button>`).join("");
+    $("#sheet").innerHTML = `<div class="sh-h"><div><b id="sh-t">${esc(it.name)}</b><span>${esc(it.pick.label)}</span></div><button class="x" type="button" data-sh-x aria-label="Cerrar">✕</button></div><div class="sh-step"><div class="sh-ex" role="radiogroup" aria-label="${esc(it.pick.label)}"><p class="sh-lab">${esc(it.pick.label)}</p><div class="sh-g">${choices}</div></div></div>`;
+    return;
+  }
   const size = it.options ? it.options[o].label : "";
   const serve = servingLabel(it, o);
   const lab = [size ? size + (serve ? " · " + serve : "") : "", it.pick && s.p >= 0 ? (it.pick.short || "Salsa") + " " + it.pick.list[s.p] : ""].filter(Boolean).join(" · ");
@@ -1249,10 +1267,11 @@ function drawSheet(){
 }
 function openSheet(id){
   const it = IDX[id], s = S(id);
-  if (it.pick && s.p < 0) return add(id);                              /* mismo aviso de "elige una opción" */
-  shCtx = { id, c:0, ex:{}, drink:-1, bundle:(it.bundleChoices || []).map(() => -1), step:0, invalid:"" }; shFrom = document.activeElement; drawSheet();
+  if (it.pickInSheet) s.p = -1;
+  else if (it.pick && s.p < 0) return add(id);
+  shCtx = { id, c:0, ex:{}, drink:-1, bundle:(it.bundleChoices || []).map(() => -1), step:0, invalid:"", stage:it.pickInSheet ? "pick" : "customize" }; shFrom = document.activeElement; drawSheet();
   $("#shbd").hidden = false; const sh = $("#sheet"); sh.hidden = false; sh.scrollTop = 0; sh.classList.remove("in"); void sh.offsetWidth; sh.classList.add("in");
-  const f = $('[data-sh-c="0"]') || $("[data-sh-bundle-group=\"0\"]") || $("[data-sh-add]"); if (f) f.focus();
+  const f = it.pickInSheet ? $('[data-sh-pick="0"]') : ($('[data-sh-c="0"]') || $("[data-sh-bundle-group=\"0\"]") || $("[data-sh-add]")); if (f) f.focus();
 }
 function closeSheet(){ shCtx = null; $("#sheet").hidden = true; $("#shbd").hidden = true; if (shFrom && shFrom.focus) shFrom.focus(); }
 $("#shbd").addEventListener("click", closeSheet);
@@ -1360,13 +1379,13 @@ $("#send").addEventListener("click", () => {
     return l.qty + "x " + bits.join(", ") + " " + fmt(l.qty * l.price);
   };
   const txt = [
-    delivery ? "DELIVERY" : "RETIRO EN LOCAL",
     "Hola, quiero realizar este pedido:",
     "",
     ...ls.map(orderLine),
     "",
     "Total: " + fmt(sum),
     "Nombre: " + name,
+    delivery ? "Delivery" : "Retiro en tienda",
     delivery ? "Dirección: " + addr : null,
     note ? "Nota: " + note : null
   ].filter(x => x !== null).join("\n");
