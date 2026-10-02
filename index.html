@@ -651,7 +651,7 @@ const MENU = [
       extras:{ label:"No olvides agregar tu proteína", ids:["albondigas", "pollo-gravy"] },
       suggest:{ ids:["albondigas","pollo-gravy"] } }
   ]},
-  { id:"proteinas", name:"Proteínas", compact:true, note:"Agrégalas a tu pasta.", items:[
+  { id:"proteinas", name:"Proteínas", note:"Agrégalas a tu pasta.", items:[
     { id:"albondigas", name:"Albóndigas", desc:"3 Albóndigas de carne de vacuno, cocinadas y servidas en su salsa.", price:2990, img:"Albondigas.jpeg" },
     { id:"pollo-gravy", name:"Pollo con Gravy", desc:"Pollo al horno con Salsa Gravy.", price:2990, img:"pollo-gravy.jpeg" }
   ]},
@@ -953,6 +953,8 @@ function isOptionAvailable(id, optionIndex){
   const set = UNAVAILABLE_OPTIONS[id];
   return !(set && set.has(String(optionIndex)));
 }
+const sauceId = name => "salsa-" + String(name || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+function isSauceAvailable(name){ return isProductAvailable(sauceId(name)); }
 function setAvailabilityState(data){
   UNAVAILABLE_PRODUCTS = new Set(Array.isArray(data?.disabledProducts) ? data.disabledProducts : []);
   UNAVAILABLE_OPTIONS = {};
@@ -982,6 +984,10 @@ function applyAvailability(){
         }
       }
     }
+    if (it.pick){
+      const st0 = S(it.id);
+      if (st0.p >= 0 && !isSauceAvailable(it.pick.list[st0.p])) st0.p = -1;
+    }
     card.hidden = productOff;
   }));
 
@@ -994,7 +1000,9 @@ function applyAvailability(){
     let changed = false;
     Object.keys(cart).forEach(k => {
       const parsed = parseKey(k);
-      if (!parsed || !isProductAvailable(parsed.it.id) || (parsed.it.options && !isOptionAvailable(parsed.it.id, parsed.oi))){
+      const sauceOff = parsed && parsed.it.pick && parsed.pi >= 0 && !isSauceAvailable(parsed.it.pick.list[parsed.pi]);
+      const bundleSauceOff = parsed && parsed.it.bundleChoices && parsed.bi && parsed.it.bundleChoices.some((g, i) => /salsa/i.test(g.label || "") && parsed.bi[i] >= 0 && !isSauceAvailable(g.list[parsed.bi[i]]));
+      if (!parsed || !isProductAvailable(parsed.it.id) || (parsed.it.options && !isOptionAvailable(parsed.it.id, parsed.oi)) || sauceOff || bundleSauceOff){
         delete cart[k]; changed = true;
       }
     });
@@ -1003,7 +1011,7 @@ function applyAvailability(){
 }
 async function loadAvailability(){
   try{
-    const r = await fetch(AVAILABILITY_ENDPOINT, { headers:{"Accept":"application/json"}, cache:"no-store" });
+    const r = await fetch(AVAILABILITY_ENDPOINT + "?t=" + Date.now(), { headers:{"Accept":"application/json"}, cache:"no-store" });
     if (!r.ok) return;
     setAvailabilityState(await r.json());
     applyAvailability();
@@ -1358,7 +1366,7 @@ function sheetTotal(){
 function drawSheet(){
   const it = IDX[shCtx.id], s = S(it.id), o = it.options ? s.o : 0, cb = comboOf(it, o);
   if (it.pickInSheet && shCtx.stage === "pick"){
-    const choices = it.pick.list.map((name, i) => `<button type="button" class="sh-opt" role="radio" aria-checked="false" data-sh-pick="${i}"><span class="rd" aria-hidden="true"></span><span class="tx"><b>${esc(name)}</b></span><i>${fmt(basePrice(it, o, i))}</i></button>`).join("");
+    const choices = it.pick.list.map((name, i) => ({name, i})).filter(x => isSauceAvailable(x.name)).map(x => `<button type="button" class="sh-opt" role="radio" aria-checked="false" data-sh-pick="${x.i}"><span class="rd" aria-hidden="true"></span><span class="tx"><b>${esc(x.name)}</b></span><i>${fmt(basePrice(it, o, x.i))}</i></button>`).join("");
     $("#sheet").innerHTML = `<div class="sh-h"><div><b id="sh-t">${esc(it.name)}</b><span>${esc(it.pick.label)}</span></div><button class="x" type="button" data-sh-x aria-label="Cerrar">✕</button></div><div class="sh-step"><div class="sh-ex" role="radiogroup" aria-label="${esc(it.pick.label)}"><p class="sh-lab">${esc(it.pick.label)}</p><div class="sh-g">${choices}</div></div></div>`;
     return;
   }
@@ -1383,7 +1391,7 @@ function drawSheet(){
     const gi = Math.max(0, Math.min(shCtx.step || 0, totalSteps - 1));
     const g = it.bundleChoices[gi];
     bundleDone = shCtx.bundle.every(v => v >= 0);
-    bundle = `<div class="sh-step"><div class="sh-progress"><span>${gi > 0 ? `<button type="button" class="sh-back" data-sh-prev aria-label="Volver">←</button>` : ""}</span><span>${gi + 1} de ${totalSteps}</span></div><div class="sh-ex${shCtx.invalid === "bundle" ? " is-missing" : ""}" role="radiogroup" aria-label="${esc(g.label)}" aria-invalid="${shCtx.invalid === "bundle"}"><p class="sh-lab">${esc(g.label)}</p><div class="sh-g">${g.list.map((name, vi) => `<button type="button" class="sh-opt" role="radio" aria-checked="${shCtx.bundle[gi] === vi}" data-sh-bundle-group="${gi}" data-sh-bundle-value="${vi}"><span class="rd" aria-hidden="true"></span><span class="tx"><b>${esc(name)}</b></span></button>`).join("")}</div></div></div>`;
+    bundle = `<div class="sh-step"><div class="sh-progress"><span>${gi > 0 ? `<button type="button" class="sh-back" data-sh-prev aria-label="Volver">←</button>` : ""}</span><span>${gi + 1} de ${totalSteps}</span></div><div class="sh-ex${shCtx.invalid === "bundle" ? " is-missing" : ""}" role="radiogroup" aria-label="${esc(g.label)}" aria-invalid="${shCtx.invalid === "bundle"}"><p class="sh-lab">${esc(g.label)}</p><div class="sh-g">${g.list.map((name, vi) => ({name, vi})).filter(x => !/salsa/i.test(g.label || "") || isSauceAvailable(x.name)).map(x => `<button type="button" class="sh-opt" role="radio" aria-checked="${shCtx.bundle[gi] === x.vi}" data-sh-bundle-group="${gi}" data-sh-bundle-value="${x.vi}"><span class="rd" aria-hidden="true"></span><span class="tx"><b>${esc(x.name)}</b></span></button>`).join("")}</div></div></div>`;
   }
   const showAdd = !it.bundleChoices || !it.bundleChoices.length || ((shCtx.step || 0) === it.bundleChoices.length - 1);
   $("#sheet").innerHTML = `<div class="sh-h"><div><b id="sh-t">${esc(it.name)}</b>${lab ? `<span>${esc(lab)}</span>` : ""}</div><button class="x" type="button" data-sh-x aria-label="Cerrar">✕</button></div>
@@ -1396,7 +1404,7 @@ function openSheet(id){
   else if (it.pick && s.p < 0) return add(id);
   shCtx = { id, c:0, ex:{}, drink:-1, bundle:(it.bundleChoices || []).map(() => -1), step:0, invalid:"", stage:it.pickInSheet ? "pick" : "customize" }; shFrom = document.activeElement; drawSheet();
   $("#shbd").hidden = false; const sh = $("#sheet"); sh.hidden = false; sh.scrollTop = 0; sh.classList.remove("in"); void sh.offsetWidth; sh.classList.add("in");
-  const f = it.pickInSheet ? $('[data-sh-pick="0"]') : ($('[data-sh-c="0"]') || $("[data-sh-bundle-group=\"0\"]") || $("[data-sh-add]")); if (f) f.focus();
+  const f = it.pickInSheet ? $('[data-sh-pick]') : ($('[data-sh-c="0"]') || $("[data-sh-bundle-group=\"0\"]") || $("[data-sh-add]")); if (f) f.focus();
 }
 function closeSheet(){ shCtx = null; $("#sheet").hidden = true; $("#shbd").hidden = true; if (shFrom && shFrom.focus) shFrom.focus(); }
 $("#shbd").addEventListener("click", closeSheet);
