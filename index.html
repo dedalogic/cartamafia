@@ -620,11 +620,11 @@ const MENU = [
     { id:"albondigas", name:"Albóndigas", desc:"3 Albóndigas de carne de vacuno, cocinadas y servidas en su salsa.", price:2990, img:"Albondigas.jpg" },
     { id:"pollo-gravy", name:"Pollo con Gravy", desc:"Pollo al horno con Salsa Gravy.", price:2990, img:"pollo-gravy.jpeg" }
   ]},
-  { id:"toppings", name:"Toppings", compact:true, items:[
-    { id:"top-bbq", name:"BBQ", price:990, img:"" },
-    { id:"top-pomodoro", name:"Pomodoro New York", price:990, img:"" },
-    { id:"top-parmigiano", name:"Parmigiano", price:1290, img:"" },
-    { id:"top-ketchup", name:"Ketchup", price:990, img:"" }
+  { id:"toppings", name:"Toppings", items:[
+    { id:"top-bbq", name:"BBQ", price:990, img:"bbq.jpeg" },
+    { id:"top-pomodoro", name:"Pomodoro New York", price:990, img:"pomodoro.jpeg" },
+    { id:"top-parmigiano", name:"Parmigiano", price:1290, img:"parmigiano.png" },
+    { id:"top-ketchup", name:"Ketchup", price:990, img:"ketchup.jpeg" }
   ]},
   { id:"bebidas", name:"Bebidas", compact:true, items:[
     { id:"beb-350", name:"Bebida mini", desc:"Sabor a elección.", price:1800, img:"" },
@@ -739,10 +739,10 @@ const photoSrc = (it, pi=-1) => {
   return assetPath(f);
 };
 const CART_PHOTO_OVERRIDES = {
-  "top-bbq":"bbq(1).jpeg",
+  "top-bbq":"bbq.jpeg",
   "top-ketchup":"ketchup.jpeg",
   "top-pomodoro":"pomodoro.jpeg",
-  "top-parmigiano":"parmigiano(1).png"
+  "top-parmigiano":"parmigiano.png"
 };
 const cartPhotoSrc = l => CART_PHOTO_OVERRIDES[l.it.id] ? assetPath(CART_PHOTO_OVERRIDES[l.it.id]) : l.thumb;
 
