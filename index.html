@@ -14,175 +14,208 @@
   --bg:#0c0c0c; --surface:#161514; --line:#2a2826;
   --text:#f3ede2; --muted:#a39d92;
   --red:#c8102e; --red-hi:#e0213f; --red-dim:rgba(200,16,46,.16);
+  --r:14px;          /* una sola forma para todo: fotos, botones, formatos, paneles */
+  --mw:108px;        /* ancho de la foto y del botón de precio (siempre iguales) */
   --serif:"Playfair Display",Georgia,serif;
   --sans:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0}
+@media(min-width:600px){:root{--mw:128px}}
+@media(max-width:340px){:root{--mw:92px}}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 body{background:var(--bg);color:var(--text);font:400 16px/1.5 var(--sans);
-  padding-bottom:calc(104px + env(safe-area-inset-bottom,0px))}
+  padding-bottom:calc(40px + env(safe-area-inset-bottom,0px))}
 button{font:inherit;color:inherit;cursor:pointer}
 :focus-visible{outline:2px solid var(--red-hi);outline-offset:3px}
 
 /* ---------- Cabecera ---------- */
-.top{padding:calc(32px + env(safe-area-inset-top,0px)) 20px 22px;text-align:center}
-.brand{font:900 clamp(48px,13vw,96px)/.9 var(--serif);letter-spacing:.05em;color:var(--red)}
-.brand .logo{display:block;margin:0 auto;width:auto;height:auto;max-width:78%;max-height:clamp(64px,18vw,120px)}
+.top{padding:calc(40px + env(safe-area-inset-top,0px)) 20px 32px;text-align:center}
+.brand{font:400 clamp(48px,13vw,96px)/.9 var(--serif);letter-spacing:.05em;color:var(--red)}
+.brand .logo{display:block;margin:0 auto;width:auto;height:auto;max-width:70%;max-height:clamp(56px,15vw,88px)}
  .info{margin:12px auto 0;max-width:34ch;font-size:13px;line-height:1.45;color:var(--text);opacity:.78}
-.tagline{margin-top:10px;color:var(--muted);font-size:15px}
 
 /* ---------- Navegación de categorías ---------- */
 .nav{position:sticky;top:0;z-index:20;background:rgba(12,12,12,.93);
   -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
-.nav ul{position:relative;list-style:none;display:flex;gap:8px;overflow-x:auto;padding:12px 16px;
-  max-width:1160px;margin:0 auto;scrollbar-width:none}
+.nav-in{max-width:1160px;margin:0 auto;display:flex;align-items:center}
+.nav ul{position:relative;flex:1;min-width:0;list-style:none;display:flex;gap:8px;overflow-x:auto;padding:12px 8px 12px 16px;scrollbar-width:none}
+.cartbtn{position:relative;flex:none;width:44px;height:44px;margin:0 14px 0 4px;display:grid;place-items:center;border-radius:var(--r);border:1px solid var(--text);background:var(--text);color:#16130f;transition:filter .15s}
+.cartbtn::before{content:"";position:absolute;right:100%;top:-8px;bottom:-8px;width:20px;background:linear-gradient(to left,var(--bg),transparent);pointer-events:none}
+.cartbtn:hover{filter:brightness(.92)}
+.cartbtn.pop{animation:pop .35s}
+.cbadge{position:absolute;top:-5px;right:-6px;min-width:20px;height:20px;padding:0 5px;border-radius:10px;border:2px solid var(--bg);background:var(--red);color:#fff;font-size:11px;font-weight:700;line-height:16px;text-align:center}
+.cbadge[hidden]{display:none}
+.cbadge.pop{animation:pop .4s}
 .nav ul::-webkit-scrollbar{display:none}
-.nav a{display:block;white-space:nowrap;padding:9px 16px;border-radius:999px;
-  border:1px solid var(--line);color:var(--text);text-decoration:none;font-size:14px;font-weight:500;
+.nav a{display:flex;align-items:center;min-height:44px;white-space:nowrap;padding:2px 16px 0;border-radius:var(--r);
+  border:1px solid var(--line);color:var(--muted);text-decoration:none;font:400 15px/1.2 var(--serif);letter-spacing:.06em;
   transition:background .15s,border-color .15s}
-.nav a:hover{border-color:var(--muted)}
+.nav a:hover{border-color:var(--muted);color:var(--text)}
 .nav a[aria-current="true"]{background:var(--red);border-color:var(--red);color:#fff}
 
 /* ---------- Secciones ---------- */
 main{max-width:1160px;margin:0 auto;padding:0 20px}
-.cat{padding-top:44px;scroll-margin-top:64px}
+.cat{padding-top:64px;scroll-margin-top:64px}
+.cat:first-of-type{padding-top:56px}
 .cat:last-of-type{min-height:calc(100dvh - 140px)}
-.cat h2{font:900 clamp(30px,6vw,46px)/1.05 var(--serif)}
-.cat .note{margin-top:8px;color:var(--muted);font-size:15px;max-width:60ch}
+.cat h2{display:flex;align-items:center;gap:16px;font:400 clamp(36px,9.5vw,44px)/1 var(--serif);letter-spacing:.04em;color:var(--red)}
+.cat h2::after{content:"";flex:1;height:1px;background:var(--line)}
+.cat .note{margin-top:10px;color:var(--muted);font-size:14px;max-width:60ch}
 .list{display:grid;grid-template-columns:1fr;column-gap:56px;margin-top:12px}
 @media(min-width:880px){.list{grid-template-columns:1fr 1fr}}
 
-.item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;padding:22px 0;border-bottom:1px solid var(--line)}
-.item h3{font:700 21px/1.2 var(--serif)}
-.desc{margin-top:6px;color:var(--muted);font-size:14px;max-width:46ch}
-.opts{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
-.opts button{padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:none;font-size:13px;font-weight:500}
-.opts button[aria-pressed="true"]{border-color:var(--red);background:var(--red-dim)}
- .txt{min-width:0}
-.combo{display:flex;align-items:center;gap:10px;width:100%;margin-top:12px;padding:10px 12px;border-radius:10px;
-  border:1px dashed var(--line);background:none;text-align:left;transition:border-color .15s,background .15s}
-.combo[aria-checked="true"]{border-style:solid;border-color:var(--red);background:var(--red-dim)}
-.combo .box{flex:none;width:20px;height:20px;border-radius:6px;border:1.5px solid var(--muted);display:grid;place-items:center}
-.combo[aria-checked="true"] .box{background:var(--red);border-color:var(--red)}
-.combo[aria-checked="true"] .box::after{content:"✓";color:#fff;font-size:13px;line-height:1}
-.ctx{flex:1;min-width:0}
-.ctx b{display:block;font-size:14px;font-weight:600}
-.ctx small{display:block;color:var(--muted);font-size:12.5px;line-height:1.35}
-.cx{flex:none;font-size:13px;font-weight:600;color:var(--red-hi)}
-.combo.in{animation:open .22s ease-out}
+.item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px 16px;padding:22px 0;border-bottom:1px solid var(--line)}
+.item h3{font:400 24px/1.05 var(--serif);letter-spacing:.03em}
+.item:last-child{border-bottom:0}
+@media(min-width:880px){.list .item:nth-last-child(2):nth-child(odd){border-bottom:0}}
+.item.nopic{align-items:center;padding:14px 0}
+.item.nopic .row2{grid-column:2;grid-row:1;min-height:0}
+.hd{grid-column:1;grid-row:1;display:grid;gap:5px;align-content:start;min-width:0}
+.row2{min-height:44px;grid-column:1 / -1;display:flex;justify-content:space-between;align-items:center;gap:8px 12px;flex-wrap:wrap}
+.act{margin-left:auto;width:var(--mw)}
+.fmt[hidden],.offer[hidden]{display:none!important}
+.opts[hidden],.offer[hidden]{display:none}
+.offer{flex:1;min-width:0}
+.offer.in{animation:fadeSlow .9s ease-out}
+.fmt.in{animation:fadeSlow .6s ease-out}
+.fmt.out,.offer.out{opacity:0;transition:opacity .28s ease}
+@keyframes fadeSlow{from{opacity:0}to{opacity:1}}
+.of{display:grid;gap:1px;width:100%;min-height:44px;padding:6px 16px 7px;border:1px solid var(--line);border-radius:var(--r);background:none;color:var(--text);text-align:left;transition:border-color .15s}
+.of:hover{border-color:var(--muted)}
+.of-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.of-h b{font:400 19px/1.05 var(--serif);letter-spacing:.03em}
+.of-h i{font-style:normal;font-size:14px;font-weight:600;color:var(--red-hi)}
+.of-s{font-size:12px;line-height:1.3;color:var(--muted)}
+.desc{margin:0;color:var(--muted);font-size:14px;line-height:1.45;max-width:46ch}
+.opts{display:flex;flex-wrap:wrap;gap:6px}
+.opts button{min-height:44px;padding:0 14px;border-radius:var(--r);border:1px solid var(--line);background:none;color:var(--text);font-size:14px;font-weight:500;transition:border-color .15s,background .15s}
+.opts button:hover{border-color:var(--muted)}
+.opts button[aria-pressed="true"]{border-color:var(--text);background:rgba(243,237,226,.1)}
 @keyframes open{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
-.pick{margin-top:12px}
-.pk-t{font-size:13px;color:var(--muted)}
-.pick .opts{margin-top:8px}
-.pk-err{margin-top:8px;font-size:13px;color:#ff8a8a}
+.pick{grid-column:1 / -1;display:grid;gap:8px}
+.pk-t{font-size:12px;color:var(--muted)}
+.pk-err{margin:0;font-size:12px;color:#ff8a8a}
 .pick.shake,.fmt.shake{animation:shake .35s}
 @keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
-.price{margin-top:12px;font-weight:600;font-size:17px}
 
-.media{position:relative;width:116px;height:116px;align-self:start}
-@media(min-width:600px){.media{width:144px;height:144px}}
-.media img,.ph{display:block;width:100%;height:100%;object-fit:cover;border-radius:12px}
+.media{grid-column:2;grid-row:1;position:relative;width:var(--mw);height:var(--mw);align-self:start}
+.media img,.ph{display:block;width:100%;height:100%;object-fit:cover;border-radius:var(--r)}
 .ph{border:1px solid var(--line);
   background:repeating-linear-gradient(135deg,#1b1a19 0 10px,#211f1d 10px 20px)}
-.add{position:absolute;right:-6px;bottom:-6px;width:44px;height:44px;border-radius:50%;
-  border:3px solid var(--bg);background:var(--red);color:#fff;font-size:26px;line-height:1;
-  display:grid;place-items:center;transition:background .15s,transform .15s}
+.add{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;min-height:44px;padding:0 10px;border:0;border-radius:var(--r);background:var(--red);color:#fff;font-size:14px;font-weight:600;transition:background .15s,transform .15s}
+.add .pl{font-size:20px;line-height:1;font-weight:500}
 .add:hover{background:var(--red-hi)}
-.add.ok{background:var(--text);color:#111}
-.cnt{position:absolute;top:-8px;right:-8px;z-index:1;min-width:26px;height:26px;padding:0 7px;border-radius:13px;
-  border:2px solid var(--bg);background:var(--text);color:#111;font-size:13px;font-weight:700;display:grid;place-items:center}
-.cnt[hidden]{display:none}
-.cnt.pop,.cartbar .n.pop{animation:pop .4s}
+@media(max-width:380px){
+  .row2{gap:6px}
+  .opts button{padding:0 9px}
+  .of{padding:6px 12px 7px}
+}
+@media(max-width:340px){
+  .opts button{padding:0 6px}
+  .row2{gap:4px}
+}
+.zoom{display:block;width:100%;height:100%;padding:0;border:0;background:none;border-radius:var(--r);cursor:zoom-in}
+.stp{display:flex;align-items:center;justify-content:space-between;width:100%;height:44px;border-radius:var(--r);background:var(--red);color:#fff}
+.stp[hidden],.add[hidden]{display:none}
+.stp button{flex:0 0 40px;height:100%;border:0;background:none;color:#fff;font-size:20px;line-height:1}
+.stp span{flex:1;text-align:center;font-weight:700;font-size:16px}
+.stp.pop{animation:pop .3s}
+.lb{position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:20px;background:rgba(0,0,0,.96)}
+.lb[hidden]{display:none}
+.lb figure{display:grid;gap:12px;justify-items:center;text-align:center}
+.lb img{display:block;max-width:min(92vw,820px);max-height:76dvh;border-radius:var(--r)}
+.lb figcaption{font:400 24px/1.1 var(--serif);letter-spacing:.03em;color:#f3ede2;max-width:46ch}
+.lb figcaption small{display:block;margin-top:4px;color:#a39d92;font:400 14px/1.4 var(--sans)}
+.lb-x{position:fixed;top:calc(14px + env(safe-area-inset-top,0px));right:14px;width:46px;height:46px;border-radius:var(--r);border:1px solid #3a3836;background:#161514;color:#fff;font-size:20px}
 @keyframes pop{0%{transform:scale(.4)}60%{transform:scale(1.35)}100%{transform:scale(1)}}
-.cartbar .n{display:inline-block}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.add:active{transform:scale(.92)}
+.add:active{transform:scale(.96)}
 
-footer{max-width:1160px;margin:56px auto 0;padding:24px 20px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+footer{max-width:1160px;margin:56px auto 0;padding:24px 20px;border-top:1px solid var(--line);color:var(--muted);font-size:12px;display:grid;gap:6px}
+footer b{color:var(--text);font-weight:600}
 
-/* ---------- Barra de pedido ---------- */
-.cartbar{position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:30;
-  width:min(560px,calc(100% - 24px));transform:translate(-50%,160%);transition:transform .25s ease;
-  display:flex;justify-content:space-between;align-items:center;gap:12px;
-  padding:15px 20px;border:0;border-radius:14px;background:var(--red);color:#fff;font-weight:600;font-size:16px;
-  box-shadow:0 10px 30px rgba(0,0,0,.5)}
-.cartbar.on{transform:translate(-50%,0)}
-.cartbar:hover{background:var(--red-hi)}
-.cartbar.bump{animation:bump .3s}
-@keyframes bump{50%{transform:translate(-50%,0) scale(1.03)}}
-
-.suggest{position:fixed;left:50%;bottom:calc(86px + env(safe-area-inset-bottom,0px));z-index:31;transform:translateX(-50%);
-  width:min(560px,calc(100% - 24px));padding:12px 14px;border-radius:14px;background:var(--surface);border:1px solid var(--line);
-  box-shadow:0 10px 30px rgba(0,0,0,.5)}
+/* ---------- Bandeja inferior de sugerencias ---------- */
+.dock{position:fixed;left:50%;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:30;width:min(560px,calc(100% - 24px));
+  transform:translateX(-50%);border-radius:var(--r);overflow:hidden;box-shadow:0 12px 32px rgba(0,0,0,.55);display:none}
+.dock.on{display:block}
+.suggest{padding:10px 12px;background:#ebe2cf;color:#1c1813}
 .suggest[hidden]{display:none}
-.sg-top{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:14px;color:var(--muted)}
-.sg-x{width:28px;height:28px;border-radius:50%;border:0;background:none;color:var(--muted);font-size:14px}
+.suggest.in{animation:rise .5s ease-out}
+.suggest.out{opacity:0;transform:translateY(6px);transition:opacity .18s ease,transform .18s ease}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.sg-top b{font:400 19px/1.1 var(--serif);letter-spacing:.03em;color:#1c1813}
+.sg-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.sg-x{flex:none;width:44px;height:44px;margin:-10px -10px -10px 0;border:0;border-radius:var(--r);background:none;color:#5f5545;font-size:15px}
 .sg-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
-.sg-add{display:flex;align-items:center;gap:8px;padding:8px 8px 8px 14px;border-radius:999px;border:1px solid var(--line);background:none;font-size:14px;font-weight:500}
-.sg-add b{font-weight:600;color:var(--red-hi);font-size:13px}
-.sg-add::after{content:"+";display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--red);color:#fff;font-size:16px;line-height:1}
-.sg-add:hover{border-color:var(--muted)}
+.sg-add{flex:1 1 auto;white-space:nowrap;display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:44px;padding:0 14px;border-radius:var(--r);border:1px solid #cdbf9f;background:#f7f1e3;color:#1c1813;font-size:14px;font-weight:500;text-align:left}
+.sg-add b{display:inline-flex;align-items:center;gap:3px;font-weight:600;font-size:14px;color:var(--red)}
+.sg-add b .pl{font-size:16px;line-height:1;font-weight:500}
+.sg-add:hover{border-color:#1c1813}
+body.has-sug{padding-bottom:calc(160px + env(safe-area-inset-bottom,0px))}
 
 /* ---------- Panel del pedido ---------- */
 .scrim{position:fixed;inset:0;z-index:40;background:rgba(0,0,0,.6);opacity:0;pointer-events:none;transition:opacity .2s}
 .scrim.on{opacity:1;pointer-events:auto}
 .drawer{position:fixed;z-index:50;left:0;right:0;bottom:0;max-height:88dvh;display:flex;flex-direction:column;
-  background:#141312;border:1px solid var(--line);border-bottom:0;border-radius:18px 18px 0 0;
+  background:#141312;border:1px solid var(--line);border-bottom:0;border-radius:var(--r) var(--r) 0 0;
   transform:translateY(105%);transition:transform .25s ease;overflow-y:auto;overscroll-behavior:contain}
 .drawer > *{flex-shrink:0}
 .drawer.on{transform:none}
 @media(min-width:900px){
   .scrim{display:none}
   .drawer{left:auto;top:0;width:420px;max-height:none;border-radius:0;border-top:0;border-bottom:0;transform:translateX(105%)}
-  body.panel-open .cartbar,body.panel-open .suggest{display:none}
+  body.panel-open .dock{display:none}
   main,footer{transition:margin .25s}
   body.panel-open main,body.panel-open footer{margin-right:max(20px,calc((100% - 1160px) / 2 + 420px - 20px))}
 }
 .dh{position:sticky;top:0;z-index:2;background:#141312;display:flex;justify-content:space-between;align-items:center;padding:20px 20px 12px}
-.dh h2{font:900 26px/1 var(--serif)}
-.x{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:none;font-size:20px}
+.dh h2{font:400 24px/1 var(--serif);letter-spacing:.03em}
+.x{width:44px;height:44px;border-radius:var(--r);border:1px solid var(--line);background:none;font-size:20px}
 .lines{flex:none;padding:0 20px}
 .empty{padding:28px 0;color:var(--muted)}
 .line{display:grid;grid-template-columns:1fr auto;gap:4px 12px;padding:14px 0;border-bottom:1px solid var(--line)}
 .line b{font-weight:600}
-.line small{display:block;color:var(--muted);font-size:13px}
+.line small{display:block;color:var(--muted);font-size:12px}
 .qty{display:flex;align-items:center;gap:10px;grid-row:span 2;align-self:center}
-.qty button{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:none;font-size:18px;line-height:1}
+.qty button{width:40px;height:40px;border-radius:var(--r);border:1px solid var(--line);background:none;font-size:18px;line-height:1}
 .qty span{min-width:18px;text-align:center;font-weight:600}
 .df{margin-top:auto;padding:16px 20px calc(20px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);display:grid;gap:10px}
-.df label{font-size:13px;color:var(--muted)}
-.df input,.df textarea{width:100%;margin-top:4px;padding:11px 12px;border-radius:10px;border:1px solid var(--line);
-  background:var(--surface);color:var(--text);font:inherit;font-size:15px;resize:vertical}
+.df label{font-size:12px;color:var(--muted)}
+.df input:not([type="radio"]),.df textarea{width:100%;margin-top:4px;padding:12px 13px;border-radius:var(--r);border:2px solid #fff;
+  background:#fff;color:#16130f;font:inherit;font-size:16px;resize:vertical}
+.df input:not([type="radio"])::placeholder,.df textarea::placeholder{color:#8a8378}
+.df input:not([type="radio"]):focus,.df textarea:focus{outline:none;border-color:var(--red)}
 .sug{padding:16px 0 8px}
-.sug p{font-size:13px;color:var(--muted);margin-bottom:4px}
+.sug p{font-size:12px;color:var(--muted);margin-bottom:4px}
 .sug-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 0;font-size:14px}
 .sug-row b{font-weight:500;color:var(--muted);margin-left:6px}
-.sug-row button{width:30px;height:30px;border-radius:50%;border:1px solid var(--red);background:none;color:var(--text);font-size:18px;line-height:1}
+.sug-row button{width:40px;height:40px;border-radius:var(--r);border:1px solid var(--red);background:none;color:var(--text);font-size:18px;line-height:1}
 .sug-row button:hover{background:var(--red-dim)}
 .total{display:flex;justify-content:space-between;font-size:18px;font-weight:600;padding-top:4px}
 .seg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .seg label{display:block;margin:0;color:var(--text)}
 .seg input{position:absolute;opacity:0;width:1px;height:1px}
-.seg span{display:block;text-align:center;padding:11px 8px;border-radius:10px;border:1px solid var(--line);font-size:15px;font-weight:500;cursor:pointer}
+.seg span{display:block;text-align:center;padding:13px 8px;border-radius:var(--r);border:1px solid var(--line);font-size:14px;font-weight:500;cursor:pointer}
 .seg input:checked + span{border-color:var(--red);background:var(--red-dim)}
 .seg input:focus-visible + span{outline:2px solid var(--red-hi);outline-offset:2px}
-.err{color:#ff8a8a;font-size:13px;min-height:0}
+.err{color:#ff8a8a;font-size:12px;min-height:0}
 .err:empty{display:none}
 .hint{font-size:12px;color:var(--muted)}
-  .dnote{margin:-4px 0 0;font-size:13px;color:var(--muted)}
+  .dnote{margin:-4px 0 0;font-size:12px;color:var(--muted)}
 .dnote[hidden]{display:none}
-.paynote{padding:12px 14px;border-radius:10px;background:var(--red-dim);font-size:13px;line-height:1.45}
-.paynote b{display:block;margin-bottom:2px;font-size:14px}
-.steps{margin:0 0 0 18px;padding:0;display:grid;gap:2px;font-size:12.5px;color:var(--muted)}
-.pay{padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);font-size:13px}
+.paynote{padding:10px 14px;border-radius:var(--r);background:var(--red-dim);font-size:14px;line-height:1.4}
+.paynote b{display:block;font:400 19px/1.15 var(--serif);letter-spacing:.03em}
+.paynote span{color:var(--muted)}
+.steps{margin:0 0 0 18px;padding:0;display:grid;gap:2px;font-size:12px;color:var(--muted)}
+.pay{padding:12px 14px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);font-size:12px}
 .pay[hidden]{display:none}
 .pay-t{margin-bottom:6px;font-size:14px}
 .pay-t b{color:var(--red-hi)}
 #payRows div{display:flex;justify-content:space-between;gap:12px;padding:2px 0}
 #payRows span{color:var(--muted)}
 #payRows b{font-weight:500;text-align:right}
-.copy{margin-top:8px;padding:8px 12px;border-radius:8px;border:1px solid var(--line);background:none;font-size:13px}
-.send{position:sticky;bottom:calc(12px + env(safe-area-inset-bottom,0px));box-shadow:0 -10px 14px #141312;padding:15px;border:0;border-radius:12px;background:var(--red);color:#fff;font-weight:600;font-size:16px}
+.copy{margin-top:8px;padding:8px 14px;border-radius:var(--r);border:1px solid var(--line);background:none;font-size:14px}
+.send{position:sticky;bottom:calc(12px + env(safe-area-inset-bottom,0px));box-shadow:0 -10px 14px #141312;padding:15px;border:0;border-radius:var(--r);background:var(--red);color:#fff;font-weight:600;font-size:16px}
 .send:hover{background:var(--red-hi)}
 .send:disabled{opacity:.45;cursor:not-allowed}
 
@@ -190,26 +223,159 @@ footer{max-width:1160px;margin:56px auto 0;padding:24px 20px;border-top:1px soli
   html{scroll-behavior:auto}
   *{transition:none!important;animation:none!important}
 }
+
+/* ---------- Combo: etiqueta sobre la foto, interruptor y hoja ---------- */
+.tag{position:absolute;left:8px;bottom:8px;z-index:2;display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 12px 0 8px;border:0;border-radius:var(--r);background:rgba(12,12,12,.84);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);color:var(--text);font-size:12px;font-weight:600;transition:background .15s}
+.tag[hidden],.tog[hidden]{display:none}
+.tag .tp{display:grid;place-items:center;width:22px;height:22px;border-radius:var(--r);background:var(--red);color:#fff;font-size:15px;line-height:1}
+.tag em,.tog em{font-style:normal;color:var(--red-hi)}
+.tag[aria-checked="true"]{background:var(--text);color:#16130f}
+.tag[aria-checked="true"] em{color:#a50d26}
+.tog{display:flex;align-items:center;gap:8px;width:100%;min-height:44px;padding:6px 10px;border:1px solid var(--line);border-radius:var(--r);background:none;color:var(--text);text-align:left;transition:border-color .15s,background .15s}
+.tog .sw{flex:none;position:relative;width:32px;height:20px;border-radius:var(--r);background:var(--line);transition:background .15s}
+.tog .sw::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:var(--r);background:#fff;transition:transform .15s}
+.tog[aria-checked="true"]{border-color:var(--text);background:rgba(243,237,226,.08)}
+.tog[aria-checked="true"] .sw{background:var(--red)}
+.tog[aria-checked="true"] .sw::after{transform:translateX(12px)}
+.tog .tt{flex:1;min-width:0;display:grid;line-height:1.25}
+.tog .tt b{font-size:13px;font-weight:600}
+.tog em,.tag em{white-space:nowrap}
+.tog .tt small{font-size:12px;color:var(--muted)}
+.row2 .tog{order:9;flex:1 1 100%}
+.shbd{position:fixed;inset:0;z-index:54;background:rgba(0,0,0,.6)}
+.sheet{position:fixed;left:50%;bottom:0;transform:translateX(-50%);z-index:55;width:min(560px,100%);padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px));display:grid;gap:12px;background:#161514;border:1px solid var(--line);border-bottom:0;border-radius:var(--r) var(--r) 0 0}
+.shbd[hidden],.sheet[hidden]{display:none}
+.sheet.in{animation:sheetUp .3s ease-out}
+@keyframes sheetUp{from{opacity:0;transform:translate(-50%,24px)}to{opacity:1;transform:translateX(-50%)}}
+.sh-h{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.sh-h b{display:block;font:400 24px/1.05 var(--serif);letter-spacing:.03em}
+.sh-h span{display:block;margin-top:4px;font-size:14px;color:var(--muted)}
+.sh-g{display:grid;gap:8px}
+.sh-opt{display:flex;align-items:center;gap:12px;width:100%;min-height:60px;padding:10px 14px;border:1px solid var(--line);border-radius:var(--r);background:none;color:var(--text);text-align:left}
+.sh-opt[aria-checked="true"]{border-color:var(--text);background:rgba(243,237,226,.08)}
+.sh-opt .rd{flex:none;width:20px;height:20px;border-radius:50%;border:2px solid var(--muted)}
+.sh-opt[aria-checked="true"] .rd{border-color:var(--red);background:radial-gradient(var(--red) 45%,transparent 50%)}
+.sh-opt .tx{flex:1;min-width:0;display:grid;line-height:1.25}
+.sh-opt .tx b{font-size:14px;font-weight:600}
+.sh-opt .tx small{font-size:12px;color:var(--muted)}
+.sh-opt i{font-style:normal;font-size:14px;font-weight:600}
+.sh-add{min-height:48px}
+.sheet{max-height:88dvh;overflow-y:auto}
+.sh-lab{margin:2px 0 8px;font-size:14px;font-weight:600}
+.sh-lab small{font-weight:400;color:var(--muted)}
+.exg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.sh-chk{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:56px;padding:8px 12px;border:1px solid var(--line);border-radius:var(--r);background:none;color:var(--text);text-align:left}
+.sh-chk .tx{display:grid;line-height:1.2;min-width:0}
+.sh-chk .tx b{font-size:14px;font-weight:600}
+.sh-chk .tx small{font-size:12px;color:var(--muted)}
+.sh-chk .bx{flex:none;display:grid;place-items:center;width:24px;height:24px;border-radius:var(--r);border:1.5px solid var(--muted);font-size:15px;line-height:1}
+.sh-chk[aria-checked="true"]{border-color:var(--text);background:rgba(243,237,226,.08)}
+.sh-chk[aria-checked="true"] .bx{background:var(--red);border-color:var(--red);color:#fff;font-size:13px}
+.of-s .p2{display:none}
+html[data-layout="grid"] .of-h .p1{display:none}
+html[data-layout="grid"] .of-s .p2{display:inline;font-style:normal;font-weight:600;color:var(--red-hi)}
+html[data-layout="grid"] .cat:not(.compact) .row2 .tog{order:2;flex:none}
+html[data-layout="grid"] .tog .sw{width:22px;height:22px;border-radius:var(--r);background:transparent;border:2px solid var(--muted)}
+html[data-layout="grid"] .tog .sw::after{display:none}
+html[data-layout="grid"] .tog[aria-checked="true"] .sw{background:var(--red);border-color:var(--red)}
+html[data-layout="grid"] .tog[aria-checked="true"] .sw::before{content:"✓";position:absolute;inset:0;display:grid;place-items:center;color:#fff;font-size:13px;line-height:1}
+html[data-layout="grid"] .cat:not(.compact) .act{order:3}
+html[data-layout="grid"] .cat:not(.compact) .fmt,html[data-layout="grid"] .cat:not(.compact) .offer{order:1}
+
+/* ---------- Variantes de tipografía ---------- */
+html[data-type="contrast"] .item h3,html[data-type="contrast"] .sh-h b{font:700 20px/1.15 var(--sans);letter-spacing:0}
+html[data-type="contrast"] .nav a{font:600 13px/1.2 var(--sans);letter-spacing:.05em;text-transform:uppercase}
+html[data-type="contrast"] .of-h b{font:700 15px/1.15 var(--sans);letter-spacing:0}
+html[data-type="contrast"] .sg-top b{font:700 16px/1.15 var(--sans);letter-spacing:0}
+html[data-type="contrast"] .paynote b{font:700 14px/1.2 var(--sans);letter-spacing:0}
+html[data-type="contrast"] .dh h2,html[data-type="contrast"] .lb figcaption{font:700 22px/1.15 var(--sans);letter-spacing:0}
+html[data-type="weight"] .item h3{font-size:27px;letter-spacing:.04em;-webkit-text-stroke:.7px currentColor}
+html[data-type="weight"] .cat h2{letter-spacing:.05em;-webkit-text-stroke:1px currentColor}
+html[data-type="weight"] .nav a{-webkit-text-stroke:.35px currentColor}
+html[data-type="weight"] .desc{color:#8e887d}
+
+/* ---------- Variantes de foto ---------- */
+html[data-layout="hero"] .cat:not(.compact) .list{grid-template-columns:1fr;gap:34px;margin-top:22px}
+html[data-layout="hero"] .cat:not(.compact) .item{display:flex;flex-direction:column;align-items:stretch;gap:14px;padding:0;border-bottom:0}
+html[data-layout="hero"] .cat:not(.compact) .media{order:1;width:100%;height:auto;aspect-ratio:4/3;overflow:hidden;border-radius:var(--r)}
+html[data-layout="hero"] .cat:not(.compact) .hd{order:2}
+html[data-layout="hero"] .cat:not(.compact) .pick{order:3}
+html[data-layout="hero"] .cat:not(.compact) .row2{order:4}
+@media(min-width:880px){html[data-layout="hero"] .cat:not(.compact) .list{grid-template-columns:1fr 1fr;gap:44px 32px}html[data-layout="hero"] .cat:not(.compact) .media{aspect-ratio:16/10}}
+html[data-layout="grid"] .cat:not(.compact) .list{grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 12px;margin-top:22px}
+html[data-layout="grid"] .cat:not(.compact) .item{display:flex;flex-direction:column;align-items:stretch;gap:10px;padding:0;border-bottom:0}
+html[data-layout="grid"] .cat:not(.compact) .media{order:1;width:100%;height:auto;aspect-ratio:1/1;overflow:hidden;border-radius:var(--r)}
+html[data-layout="grid"] .cat:not(.compact) .hd{order:2}
+html[data-layout="grid"] .cat:not(.compact) .hd h3{font-size:20px}
+html[data-layout="grid"] .cat:not(.compact) .pick,html[data-layout="grid"] .cat:not(.compact) .row2{margin-top:auto}
+html[data-layout="grid"] .cat:not(.compact) .pick + .row2{margin-top:0}
+html[data-layout="grid"] .cat:not(.compact) .desc{font-size:12px;display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden}
+html[data-layout="grid"] .cat:not(.compact) .pick{order:3}
+html[data-layout="grid"] .cat:not(.compact) .row2{order:4;flex-direction:column;align-items:stretch;gap:8px}
+html[data-layout="grid"] .cat:not(.compact) .fmt{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}
+html[data-layout="grid"] .cat:not(.compact) .opts button{padding:0 2px;min-height:44px;font-size:13px}
+html[data-layout="grid"] .cat:not(.compact) .act{margin-left:0;width:100%}
+@media(min-width:880px){html[data-layout="grid"] .cat:not(.compact) .list{grid-template-columns:repeat(3,minmax(0,1fr));gap:40px 24px}}
+
+html[data-desc="one"] .desc{display:-webkit-box!important;-webkit-line-clamp:1!important;-webkit-box-orient:vertical;overflow:hidden}
+html[data-desc="none"] .desc{display:none!important}
+html[data-layout="grid"][data-desc="one"] .cat:not(.compact) .hd{min-height:50px}
+html[data-layout="grid"][data-desc="none"] .cat:not(.compact) .hd{min-height:28px}
+/* ---------- Panel de opciones de diseño ---------- */
+.labbtn{position:fixed;left:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:45;min-height:44px;padding:0 16px;border-radius:var(--r);border:1px solid var(--text);background:var(--bg);color:var(--text);font-size:14px;font-weight:600}
+.lab{position:fixed;left:12px;bottom:calc(68px + env(safe-area-inset-bottom,0px));z-index:45;width:min(340px,calc(100% - 24px));max-height:70dvh;overflow:auto;padding:12px 14px 14px;border-radius:var(--r);border:1px solid var(--line);background:#161514;box-shadow:0 12px 32px rgba(0,0,0,.6)}
+.lab[hidden]{display:none}
+.lab-t{font-size:12px;color:var(--muted);margin:8px 0 6px}
+.lab-g{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.lab-g button{min-height:44px;padding:0 4px;border-radius:var(--r);border:1px solid var(--line);background:none;font-size:14px;line-height:1.1}
+.lab-g.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.lab-g button[aria-pressed="true"]{border-color:var(--text);background:rgba(243,237,226,.1)}
+
+/* Ajustes de carrito y accesos */
+.line{grid-template-columns:54px minmax(0,1fr) auto;gap:4px 12px}
+.line-thumb{grid-column:1;grid-row:1 / span 2;width:54px;height:54px;object-fit:cover;border-radius:10px;border:1px solid var(--line);align-self:center}
+.line-main{grid-column:2;grid-row:1}
+.line-price{grid-column:2;grid-row:2}
+.line .qty{grid-column:3;grid-row:1 / span 2}
+.info-link{display:flex;flex-direction:column;align-items:stretch;gap:10px;width:100%;padding:0;border:0;background:none;color:inherit;text-align:left;cursor:pointer}
+.info-link .media{width:100%!important;height:auto!important;aspect-ratio:1/1;overflow:hidden;border-radius:var(--r)}
+.info-link .media img{display:block;width:100%;height:100%;object-fit:cover;border-radius:var(--r)}
+.info-link:hover h3{color:var(--red-hi)}
+.paynote{padding:12px 14px}
+.paynote b{margin-bottom:2px}
+.paynote span{display:block;line-height:1.35}
+
 </style>
 </head>
 <body>
 
 <header class="top">
   <h1 class="brand" id="brand">MAFIA</h1>
-  <p class="tagline" id="tagline">Pizzería · Iquique</p>
-  <p class="info" id="info"></p>
 </header>
 
 <nav class="nav" aria-label="Categorías de la carta">
-  <ul id="nav"></ul>
+  <div class="nav-in">
+    <ul id="nav"></ul>
+    <button class="cartbtn" id="cartbtn" type="button" aria-haspopup="dialog" aria-controls="drawer" aria-label="Ver pedido">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="19" r="2"/><circle cx="17" cy="19" r="2"/><path d="M17 17h-11v-14h-2"/><path d="M6 5l14 1l-1 7h-13"/></svg>
+      <span class="cbadge" id="cbadge" hidden>0</span>
+    </button>
+  </div>
 </nav>
 
 <main id="menu"></main>
 
-<footer>Imágenes referenciales. Todos los pedidos se pagan por transferencia antes de prepararlos.</footer>
+<footer id="foot"></footer>
 
-<button class="cartbar" id="cartbar" type="button" aria-haspopup="dialog" aria-controls="drawer"></button>
-<div class="suggest" id="suggest" hidden></div>
+<div class="dock" id="dock">
+  <div class="suggest" id="suggest" hidden></div>
+</div>
+<div class="shbd" id="shbd" hidden></div>
+<div class="sheet" id="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="sh-t"></div>
+<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Foto del plato">
+  <button class="lb-x" id="lbx" type="button" aria-label="Cerrar foto">✕</button>
+  <figure><img id="lbi" alt=""><figcaption id="lbc"></figcaption></figure>
+</div>
 <div class="sr" id="live" role="status" aria-live="polite"></div>
 
 <div class="scrim" id="scrim"></div>
@@ -233,19 +399,19 @@ footer{max-width:1160px;margin:56px auto 0;padding:24px 20px;border-top:1px soli
       <input id="caddr" type="text" autocomplete="street-address" placeholder="Calle, número, depto / sector">
     </label>
     <label>Notas (opcional)
-      <textarea id="cnote" rows="2" placeholder="Sabor de la bebida, sin cebolla, referencia de la casa…"></textarea>
+      <textarea id="cnote" rows="2" placeholder="Ej: sin cebolla"></textarea>
     </label>
     <p class="err" id="err" role="alert"></p>
-    <div class="paynote">
-      <b>Pago por transferencia</b>
-      <p>Es nuestro medio de pago online y lo necesitamos antes de preparar tu pedido. Te guiamos por WhatsApp: nos mandas el comprobante y tu pedido entra a cocina 🍕</p>
+    <div class="paynote" id="orderStep">
+      <b>Pedido por WhatsApp</b>
+      <span>Te confirmamos el delivery y el pago; envías el comprobante y preparamos tu pedido.</span>
     </div>
     <div class="pay" id="pay" hidden>
       <p class="pay-t" id="payT"></p>
       <div id="payRows"></div>
       <button type="button" class="copy" id="copyPay">Copiar datos</button>
     </div>
-    <ol class="steps" id="steps"></ol>
+    <ol class="steps" id="steps" hidden></ol>
     <button class="send" id="send" type="button">Enviar pedido por WhatsApp</button>
   </div>
 </aside>
@@ -256,20 +422,23 @@ footer{max-width:1160px;margin:56px auto 0;padding:24px 20px;border-top:1px soli
    ===================================================================== */
 const CONFIG = {
   nombre: "MAFIA",
-  tagline: "Pizzería · Iquique",
   whatsapp: "56945010783",         // número con código de país, sin + ni espacios
 
   /* Datos para transferir (opcional). Si completas el N° de cuenta, la carta los muestra al final
      del pedido con el monto a transferir, y el cliente solo envía el comprobante. */
-  delivery: { min:3000, max:4000 },   // rango informado al cliente; la cajera confirma el valor exacto
+  delivery: { min:3000, max:4000 },   // rango informado al cliente; nuestro equipo confirma el valor exacto
   transferencia: { titular:"", rut:"", banco:"", tipoCuenta:"", numeroCuenta:"", email:"" },
 
   /* --- Imagen y tipografía: solo deja los archivos en las carpetas y listo --- */
   logo: "logo.png",                // archivo junto a este HTML (png, svg, webp). Si no existe, se muestra el nombre en texto
-  fotosCarpeta: "",                // fotos junto a este archivo: <id del plato>.<extensión>  (ej: margarita.jpg). Si las pones en una carpeta, escribe "fotos/"
+  fotosCarpeta: "",                // fotos junto a este archivo: <id del plato>.<extensión> (ej: margarita.jpg). Si las pones en una carpeta, escribe "fotos/"
   fotosExtension: "jpg",           // jpg, png o webp (usa la misma para todas)
-  fuenteTitulos: "",               // ej: "fuentes/titulos.woff2"  (woff2, woff, ttf u otf). Vacío = Playfair Display
-  fuenteTextos: ""                 // ej: "fuentes/textos.woff2"   Vacío = Inter
+  fuenteTitulos: "Pesto_Mafio.ttf",  // archivo junto a este HTML (woff2, woff, ttf u otf). Vacío = Playfair Display
+  fuenteTextos: "",                // ej: "fuentes/textos.woff2"   Vacío = Inter
+
+  /* --- Diseño: aquí se deja la opción que elijas --- */
+  diseno: { foto:"grid", tipografia:"contrast", cta:"sheet", desc:"full" },   // foto: lista | hero | grid · tipografia: actual | contrast | weight · cta (combo): actual | toggle | tag | sheet · desc: full | one | none
+  opciones: false                  // true = muestra el botón "Opciones de diseño" para probar las variantes
 };
 
 /* Cada categoría tiene items. Cada item tiene:
@@ -277,114 +446,104 @@ const CONFIG = {
    - price (precio único)  O  options: [{label, price}] para tamaños/variantes
    LOS PRECIOS Y DESCRIPCIONES DE ABAJO SON DE EJEMPLO: reemplázalos por los reales. */
 const MENU = [
+  { id:"combos", name:"Combos", items:[
+    { id:"pizza-combo-info", name:"Haz combo tu pizza", desc:"Cualquier pizza de 40 cm o 60 cm puede ir con Palitos de ajo + Bebida 1.5 L.", img:"pizza-combo-info.png", infoOnly:true, jump:"pizzas" },
+    { id:"promo-alfredo", name:"Promo Alfredo", desc:"Fetuccini Alfredo con bebida mini.", price:7990, img:"combo-alfredo.png" },
+    { id:"combo-indecisos", name:"Combo Indecisos", desc:"Slice Tony Pepperoni + Fetuccini Pesto + bebida mini.", price:11990, img:"combo-indecisos.png" },
+    { id:"combo-soprano", name:"Combo Soprano", desc:"Fetuccini Alfredo con albóndigas, Cremita de Zapallo y bebida mini.", price:9990, img:"combo-soprano.png" }
+  ]},
   { id:"entradas", name:"Entradas", items:[
-    { id:"palitos", name:"Palitos de ajo", desc:"Palitos de masa con mantequilla de ajo, listos para compartir.", price:3990, img:"",
-      suggest:{ text:"¿Los quieres con salsa?", ids:["salsa-bbq","salsa-pomodoro"] } },
-    { id:"cremita-zapallo", name:"Cremita de Zapallo", desc:"Crema de zapallo con crutones, queso rallado y albahaca.", price:4500, img:"",
-      suggest:{ text:"¿La acompañas con palitos de ajo?", ids:["palitos"] } }
+    { id:"palitos", name:"Palitos de ajo", desc:"Masa con mantequilla de ajo, para compartir.", price:5990, img:"palitos-ajo.png",
+      suggest:{ ids:["top-bbq","top-pomodoro","top-ketchup"] } },
+    { id:"cremita-zapallo", name:"Cremita de Zapallo", desc:"Con crutones, queso rallado y albahaca.", price:6990, img:"", foto:"cremita-zapallo" }
   ]},
-  { id:"pizzas", name:"Pizzas", note:"Elige tu formato: Slice, 40 cm (2-3 personas) o 60 cm Familiar (6-8 personas).", items:[
-    { id:"margarita", name:"Margarita", desc:"Salsa de tomate, mozzarella y albahaca fresca.",
-      options:[{label:"Slice",price:2500},{label:"40 cm",price:9990},{label:"60 cm",price:17990}], img:"",
+  { id:"pizzas", name:"Pizzas", items:[
+    { id:"tgm", name:"The Good Meat", desc:"Carne Mechada, Tocino, Salsa Pomodoro New York y Queso Mozzarella.",
+      options:[{label:"Slice",price:5490},{label:"40 cm",price:24990},{label:"60 cm",price:34990}], img:"",
       combo:{ byOption:{
-        0:{ extra:1500, desc:"+ bebida mini" },
-        1:{ extra:4000, desc:"+ palitos de ajo + bebida 1.5 L" },
-        2:{ extra:4000, desc:"+ palitos de ajo + bebida 1.5 L" } } },
-      suggest:{ text:"¿Le agregas un topping?", ids:["top-queso","top-pepperoni"] } },
-    { id:"pepperoni", name:"Pepperoni", desc:"Pepperoni y queso derretido.",
-      options:[{label:"Slice",price:2900},{label:"40 cm",price:11990},{label:"60 cm",price:19990}], img:"",
+        0:{ extra:500, desc:"+ Bebida mini" },
+        1:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" },
+        2:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" } } },
+      suggest:{ ids:["top-bbq", "top-pomodoro", "top-parmigiano", "top-ketchup"] } },
+    { id:"pepperoni", name:"Tony Pepperoni", desc:"Pepperoni Americano Ultradelgado, Salsa Pomodoro New York y Queso Mozzarella.",
+      options:[{label:"Slice",price:5490},{label:"40 cm",price:24990},{label:"60 cm",price:34990}], img:"",
       combo:{ byOption:{
-        0:{ extra:1500, desc:"+ bebida mini" },
-        1:{ extra:4000, desc:"+ palitos de ajo + bebida 1.5 L" },
-        2:{ extra:4000, desc:"+ palitos de ajo + bebida 1.5 L" } } },
-      suggest:{ text:"¿Le agregas un topping?", ids:["top-queso","top-pepperoni"] } },
-    { id:"napolitana", name:"Napolitana", desc:"Jamón, tomate fresco, aceitunas negras y queso.",
-      options:[{label:"Slice",price:2900},{label:"40 cm",price:11990},{label:"60 cm",price:19990}], img:"",
+        0:{ extra:500, desc:"+ Bebida mini" },
+        1:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" },
+        2:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" } } },
+      suggest:{ ids:["top-bbq", "top-pomodoro", "top-parmigiano", "top-ketchup"] } },
+    { id:"pollo-bbq", name:"Il Traditore", desc:"Pollo BBQ, Tocino, Cebolla Morada, Salsa BBQ y Queso Mozzarella.",
+      options:[{label:"Slice",price:5490},{label:"40 cm",price:24990},{label:"60 cm",price:34990}], img:"",
       combo:{ byOption:{
-        0:{ extra:1500, desc:"+ bebida mini" },
-        1:{ extra:4000, desc:"+ palitos de ajo + bebida 1.5 L" },
-        2:{ extra:4000, desc:"+ palitos de ajo + bebida 1.5 L" } } },
-      suggest:{ text:"¿Le agregas un topping?", ids:["top-queso","top-pepperoni"] } },
-    { id:"pollo-bbq", name:"Pollo BBQ", desc:"Pollo, tocino, cebolla morada y salsa BBQ.",
-      options:[{label:"Slice",price:2900},{label:"40 cm",price:11990},{label:"60 cm",price:19990}], img:"",
+        0:{ extra:500, desc:"+ Bebida mini" },
+        1:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" },
+        2:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" } } },
+      suggest:{ ids:["top-bbq", "top-pomodoro", "top-parmigiano", "top-ketchup"] } },
+    { id:"napolitana", name:"Napolitana", desc:"Jamón, Tomate, Aceitunas de la Zona, Salsa Pomodoro New York, Queso Mozzarella y Orégano.",
+      options:[{label:"Slice",price:4490},{label:"40 cm",price:19990},{label:"60 cm",price:29990}], img:"",
       combo:{ byOption:{
-        0:{ extra:1500, desc:"+ bebida mini" },
-        1:{ extra:4000, desc:"+ palitos de ajo + bebida 1.5 L" },
-        2:{ extra:4000, desc:"+ palitos de ajo + bebida 1.5 L" } } },
-      suggest:{ text:"¿Le agregas un topping?", ids:["top-queso","top-pepperoni"] } },
-    { id:"tgm", name:"TGM", desc:"Carne, tocino y queso sobre salsa de tomate.",
-      options:[{label:"Slice",price:2900},{label:"40 cm",price:11990},{label:"60 cm",price:19990}], img:"",
+        0:{ extra:500, desc:"+ Bebida mini" },
+        1:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" },
+        2:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" } } },
+      suggest:{ ids:["top-bbq", "top-pomodoro", "top-parmigiano", "top-ketchup"] } },
+    { id:"margarita", name:"Margarita", desc:"Salsa Pomodoro New York, Queso Mozzarella y Albahaca Fresca.",
+      options:[{label:"Slice",price:4490},{label:"40 cm",price:19990},{label:"60 cm",price:29990}], img:"",
       combo:{ byOption:{
-        0:{ extra:1500, desc:"+ bebida mini" },
-        1:{ extra:4000, desc:"+ palitos de ajo + bebida 1.5 L" },
-        2:{ extra:4000, desc:"+ palitos de ajo + bebida 1.5 L" } } },
-      suggest:{ text:"¿Le agregas un topping?", ids:["top-queso","top-pepperoni"] } },
-    { id:"funghi", name:"Funghi", desc:"Champiñones salteados, queso y perejil.",
-      options:[{label:"Slice",price:2900},{label:"40 cm",price:11990},{label:"60 cm",price:19990}], img:"",
+        0:{ extra:500, desc:"+ Bebida mini" },
+        1:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" },
+        2:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" } } },
+      suggest:{ ids:["top-bbq", "top-pomodoro", "top-parmigiano", "top-ketchup"] } },
+    { id:"ajillo", name:"Al Ajillo Boss", desc:"Camarones al Ajillo, Pimentón Rojo, Salsa Pomodoro New York, Queso Mozzarella y Perejil Fresco.",
+      options:[{label:"Slice",price:5490},{label:"40 cm",price:24990},{label:"60 cm",price:34990}], img:"",
       combo:{ byOption:{
-        0:{ extra:1500, desc:"+ bebida mini" },
-        1:{ extra:4000, desc:"+ palitos de ajo + bebida 1.5 L" },
-        2:{ extra:4000, desc:"+ palitos de ajo + bebida 1.5 L" } } },
-      suggest:{ text:"¿Le agregas un topping?", ids:["top-queso","top-pepperoni"] } },
-    { id:"chocleta", name:"La Chocleta", desc:"Choclo, queso y albahaca fresca.",
-      options:[{label:"Slice",price:2900},{label:"40 cm",price:11990},{label:"60 cm",price:19990}], img:"",
+        0:{ extra:500, desc:"+ Bebida mini" },
+        1:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" },
+        2:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" } } },
+      suggest:{ ids:["top-bbq", "top-pomodoro", "top-parmigiano", "top-ketchup"] } },
+    { id:"funghi", name:"Funghi", desc:"Champiñones y Callampas Deshidratadas, Salsa Bechamel, Queso Mozzarella, Queso Parmigiano y Perejil Fresco.",
+      options:[{label:"Slice",price:4490},{label:"40 cm",price:19990},{label:"60 cm",price:29990}], img:"",
       combo:{ byOption:{
-        0:{ extra:1500, desc:"+ bebida mini" },
-        1:{ extra:4000, desc:"+ palitos de ajo + bebida 1.5 L" },
-        2:{ extra:4000, desc:"+ palitos de ajo + bebida 1.5 L" } } },
-      suggest:{ text:"¿Le agregas un topping?", ids:["top-queso","top-pepperoni"] } },
-    { id:"ajillo", name:"Al Ajillo Boss", desc:"Camarones al ajillo, queso y perejil.",
-      options:[{label:"Slice",price:2900},{label:"40 cm",price:11990},{label:"60 cm",price:19990}], img:"",
+        0:{ extra:500, desc:"+ Bebida mini" },
+        1:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" },
+        2:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" } } },
+      suggest:{ ids:["top-bbq", "top-pomodoro", "top-parmigiano", "top-ketchup"] } },
+    { id:"chocleta", name:"La Chocleta", desc:"Choclo, queso y albahaca.",
+      options:[{label:"Slice",price:4490},{label:"40 cm",price:19990},{label:"60 cm",price:29990}], img:"",
       combo:{ byOption:{
-        0:{ extra:1500, desc:"+ bebida mini" },
-        1:{ extra:4000, desc:"+ palitos de ajo + bebida 1.5 L" },
-        2:{ extra:4000, desc:"+ palitos de ajo + bebida 1.5 L" } } },
-      suggest:{ text:"¿Le agregas un topping?", ids:["top-queso","top-pepperoni"] } }
+        0:{ extra:500, desc:"+ Bebida mini" },
+        1:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" },
+        2:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" } } },
+      suggest:{ ids:["top-bbq", "top-pomodoro", "top-parmigiano", "top-ketchup"] } }
   ]},
-  { id:"pastas", name:"Pastas", note:"Todas las pastas se pueden pedir con la forma y salsa que prefieras.", items:[
-    { id:"fetuccini-alfredo", name:"Fetuccini Alfredo", desc:"Fetuccini en salsa Alfredo con jamón y queso rallado.", price:8990, img:"",
-      combo:{ all:{ extra:3500, desc:"+ Cremita de Zapallo + bebida mini" } },
-      suggest:{ text:"Súmale una proteína", ids:["albondigas","pollo-gravy"] } },
-    { id:"bucatini-bolognesa", name:"Bucatini Boloñesa", desc:"Bucatini con salsa boloñesa de carne y queso rallado.", price:8990, img:"",
-      combo:{ all:{ extra:3500, desc:"+ Cremita de Zapallo + bebida mini" } },
-      suggest:{ text:"Súmale una proteína", ids:["albondigas","pollo-gravy"] } },
-    { id:"fetuccini-pesto", name:"Fetuccini Pesto", desc:"Fetuccini en salsa pesto con albahaca y queso rallado.", price:8990, img:"",
-      combo:{ all:{ extra:3500, desc:"+ Cremita de Zapallo + bebida mini" } },
-      suggest:{ text:"Súmale una proteína", ids:["albondigas","pollo-gravy"] } }
+  { id:"pastas", name:"Pastas", items:[
+    { id:"fetuccini", name:"Fetuccini", desc:"", price:7490, img:"", foto:"fetuccini-alfredo", photoBy:{ Alfredo:"fetuccini-alfredo", Pesto:"fetuccini-pesto", Bolognesa:"bucatini-bolognesa" },
+      pick:{ label:"Elige tu salsa", short:"Salsa", list:["Alfredo","Pesto","Bolognesa"], hidden:["Vodka","Garlic","Picante","Lemon Pepper","Aglio Parmigiano"] },
+      priceByPick:{ Alfredo:7490, Pesto:7490, Bolognesa:8490 },
+      combo:{ all:{ extra:500, desc:"+ Bebida mini" } },
+      extras:{ label:"Agrega una proteína", ids:["albondigas", "pollo-gravy"] },
+      suggest:{ ids:["albondigas","pollo-gravy"] } },
+    { id:"bucatini", name:"Bucatini", desc:"", price:7490, img:"", foto:"bucatini-bolognesa", photoBy:{ Alfredo:"fetuccini-alfredo", Pesto:"fetuccini-pesto", Bolognesa:"bucatini-bolognesa" },
+      pick:{ label:"Elige tu salsa", short:"Salsa", list:["Alfredo","Pesto","Bolognesa"], hidden:["Vodka","Garlic","Picante","Lemon Pepper","Aglio Parmigiano"] },
+      priceByPick:{ Alfredo:7490, Pesto:7490, Bolognesa:8490 },
+      combo:{ all:{ extra:500, desc:"+ Bebida mini" } },
+      extras:{ label:"Agrega una proteína", ids:["albondigas", "pollo-gravy"] },
+      suggest:{ ids:["albondigas","pollo-gravy"] } }
   ]},
-  { id:"proteinas", name:"Proteínas", note:"Agrégalas a tu pasta.", items:[
-    { id:"albondigas", name:"Albóndigas", desc:"Albóndigas de la casa.", price:3500, img:"" },
-    { id:"pollo-gravy", name:"Pollo con Gravy", desc:"Pollo bañado en gravy.", price:3500, img:"" },
-    { id:"pastel-carne", name:"Pastel de Carne", desc:"Pastel de carne al horno.", price:3500, img:"" },
-    { id:"pollo-limon", name:"Pollo al Limón", desc:"Pollo con salsa de limón.", price:3500, img:"" },
-    { id:"carne-vino", name:"Carne al Vino Tinto", desc:"Carne cocida en vino tinto.", price:3900, img:"" },
-    { id:"fruti-di-mar", name:"Fruti di Mar", desc:"Mariscos en salsa.", price:4500, img:"" }
+  { id:"proteinas", name:"Proteínas", compact:true, note:"Agrégalas a tu pasta.", items:[
+    { id:"albondigas", name:"Albóndigas", price:3500, img:"" },
+    { id:"pollo-gravy", name:"Pollo con Gravy", price:3500, img:"" }
   ]},
-  { id:"combos", name:"Combos", note:"Las pizzas en 40 y 60 cm también se pueden pedir como combo, directo en su tarjeta.", items:[
-    { id:"combo-soprano", name:"Combo Soprano", desc:"Fetuccini con la salsa que elijas, Cremita de Zapallo y bebida mini.", price:12990, img:"",
-      pick:{ label:"Elige tu salsa", short:"Salsa", list:["Pesto","Bolognesa","Alfredo","Vodka","Garlic","Picante","Lemon Pepper","Aglio Parmigiano"] },
-      suggest:{ text:"Súmale una proteína", ids:["albondigas","pollo-gravy"] } }
+  { id:"toppings", name:"Toppings", compact:true, items:[
+    { id:"top-bbq", name:"BBQ", price:990, img:"" },
+    { id:"top-pomodoro", name:"Pomodoro New York", price:990, img:"" },
+    { id:"top-parmigiano", name:"Parmigiano", price:1290, img:"" },
+    { id:"top-ketchup", name:"Ketchup", price:990, img:"" }
   ]},
-  { id:"toppings", name:"Toppings", note:"Extras para sumar a tu pizza.", items:[
-    { id:"top-queso", name:"Extra queso", desc:"Más queso para tu pizza.", price:1500, img:"" },
-    { id:"top-pepperoni", name:"Pepperoni", desc:"Porción extra de pepperoni.", price:1800, img:"" },
-    { id:"top-champi", name:"Champiñones", desc:"Porción extra de champiñones.", price:1500, img:"" },
-    { id:"top-aceitunas", name:"Aceitunas", desc:"Porción extra de aceitunas.", price:1200, img:"" },
-    { id:"top-tocino", name:"Tocino", desc:"Porción extra de tocino.", price:1800, img:"" }
-  ]},
-  { id:"salsas", name:"Salsas", note:"Para dipear tus palitos y pizzas.", items:[
-    { id:"salsa-bbq", name:"Salsa BBQ", desc:"Porción individual.", price:800, img:"" },
-    { id:"salsa-pomodoro", name:"Salsa Pomodoro", desc:"Porción individual.", price:800, img:"" },
-    { id:"salsa-alioli", name:"Alioli", desc:"Porción individual.", price:800, img:"" },
-    { id:"salsa-jalapeno", name:"Jalapeño Ranch", desc:"Porción individual.", price:800, img:"" },
-    { id:"salsa-street", name:"Street", desc:"Porción individual.", price:800, img:"" },
-    { id:"salsa-emmy", name:"Emmy", desc:"Porción individual.", price:800, img:"" }
-  ]},
-  { id:"bebidas", name:"Bebidas", items:[
+  { id:"bebidas", name:"Bebidas", compact:true, items:[
     { id:"beb-350", name:"Bebida mini", desc:"Sabor a elección.", price:1800, img:"" },
     { id:"beb-15", name:"Bebida 1.5 L", desc:"Sabor a elección.", price:3500, img:"" },
     { id:"agua", name:"Agua mineral 500 ml", desc:"Con o sin gas.", price:1500, img:"" },
-    { id:"jugo", name:"Jugo natural", desc:"Sabor del día.", price:2500, img:"" }
+    { id:"jugo", name:"Jugo en botella", desc:"Sabor a elección.", price:2500, img:"" }
   ]}
 ];
 
@@ -396,16 +555,27 @@ const $ = (s, r=document) => r.querySelector(s);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const fmt = n => "$" + new Intl.NumberFormat("es-CL").format(n);
 const IDX = {};
-MENU.forEach(c => c.items.forEach(i => IDX[i.id] = i));
+const CATOF = {};
+MENU.forEach(c => c.items.forEach(i => { IDX[i.id] = i; CATOF[i.id] = c.id; }));
+let curSug = null;                    // bandeja de sugerencias (otros productos)
+let curOffer = null;                  // oferta de combo dentro de la tarjeta {id, k, cat}
 const st = {};                        // selección en cada tarjeta: {o: formato, c: combo, p: opción a elegir}
-const S = id => st[id] || (st[id] = { o: IDX[id].options ? -1 : 0, c:false, p:-1 });   // o = -1: aún no elige formato
+const S = id => st[id] || (st[id] = { o:0, c:false, p:-1 });   // o: formato elegido (el primero viene marcado)
 const STORE = "carta_pedido_v1";
 
 document.title = "Carta · " + CONFIG.nombre;
-$("#tagline").textContent = CONFIG.tagline;
+const VALID = { foto:["lista","hero","grid"], tipografia:["actual","contrast","weight"], cta:["actual","toggle","tag","sheet"], desc:["full","one","none"] };
+const DESIGN = Object.assign({ foto:"grid", tipografia:"contrast", cta:"sheet", desc:"full" }, CONFIG.diseno);
+if (CONFIG.opciones){ try { Object.assign(DESIGN, JSON.parse(localStorage.getItem("carta_diseno_v1")) || {}); } catch(e){} }
+Object.keys(VALID).forEach(k => { if (VALID[k].indexOf(DESIGN[k]) < 0) DESIGN[k] = (CONFIG.diseno && VALID[k].indexOf(CONFIG.diseno[k]) >= 0) ? CONFIG.diseno[k] : VALID[k][0]; });
+function applyDesign(){ const r = document.documentElement; r.dataset.layout = DESIGN.foto; r.dataset.type = DESIGN.tipografia; r.dataset.cta = DESIGN.cta; r.dataset.desc = DESIGN.desc; }
+const PRE = () => DESIGN.cta === "toggle" || DESIGN.cta === "tag";     /* el combo se elige antes de agregar */
+const SHEET = () => DESIGN.cta === "sheet";                              /* el combo se elige en una hoja al agregar */
+const POST = () => DESIGN.cta === "actual";                              /* el combo se ofrece después de agregar */
+applyDesign();
 const dl = CONFIG.delivery || {};
 const delivRange = (dl.min && dl.max) ? fmt(dl.min) + " y " + fmt(dl.max) : "";
-$("#info").textContent = "Pago online por transferencia previa" + (delivRange ? " · Delivery entre " + delivRange : "");
+$("#foot").innerHTML = (delivRange ? "<p><b>Delivery</b> entre " + delivRange + ". Nuestro equipo te confirma el valor exacto.</p>" : "") + "<p>Imágenes referenciales.</p>";
 
 /* Logo: si el archivo no existe, vuelve al nombre en texto */
 (function(){
@@ -421,9 +591,13 @@ $("#info").textContent = "Pago online por transferencia previa" + (delivRange ? 
 /* Tipografías propias: si el archivo no existe, se usan Playfair Display / Inter */
 function loadFont(family, file, varName, fallback){
   if (!file) return;
-  const fmt = { woff2:"woff2", woff:"woff", ttf:"truetype", otf:"opentype" }[file.split(".").pop().toLowerCase()];
+  const ext = file.indexOf("data:") === 0 ? file.slice(5).split(/[;,]/)[0].split("/").pop() : file.split(".").pop().toLowerCase();
+  const fmt = { woff2:"woff2", woff:"woff", ttf:"truetype", otf:"opentype" }[ext];
+  if (file.indexOf("data:") !== 0 && ext){      /* precarga: evita ver otra letra un instante */
+    const l = document.createElement("link"); l.rel = "preload"; l.as = "font"; l.type = "font/" + ext; l.crossOrigin = ""; l.href = file; document.head.appendChild(l);
+  }
   const st = document.createElement("style");
-  st.textContent = `@font-face{font-family:"${family}";src:url("${file}")${fmt ? ` format("${fmt}")` : ""};font-weight:100 900;font-display:swap}`;
+  st.textContent = `@font-face{font-family:"${family}";src:url("${file}")${fmt ? ` format("${fmt}")` : ""};font-weight:100 900;font-display:block}`;
   document.head.appendChild(st);
   document.documentElement.style.setProperty(varName, `"${family}",${fallback}`);
 }
@@ -435,57 +609,159 @@ document.addEventListener("error", e => {
   const t = e.target;
   if (t.tagName === "IMG" && t.classList.contains("dish")){
     const ph = document.createElement("div"); ph.className = "ph"; ph.setAttribute("aria-hidden", "true");
-    t.replaceWith(ph);
+    (t.closest(".zoom") || t).replaceWith(ph);
   }
 }, true);
 
 /* ---------- Render de la carta ---------- */
 const comboOf = (it, o) => it.combo ? (it.combo.byOption ? it.combo.byOption[o] : it.combo.all) : null;
-const unitPrice = (it, o, c) => (it.options ? it.options[o].price : it.price) + (c && comboOf(it, o) ? comboOf(it, o).extra : 0);
+const pickName = (it, pi) => (it.pick && pi >= 0 && it.pick.list && it.pick.list[pi] != null) ? it.pick.list[pi] : null;
+const basePrice = (it, o, pi=-1) => {
+  if (it.options) return it.options[o].price;
+  const pk = pickName(it, pi);
+  if (it.priceByPick && pk && it.priceByPick[pk] != null) return it.priceByPick[pk];
+  return it.price;
+};
+const unitPrice = (it, o, c, pi=-1) => basePrice(it, o, pi) + (c && comboOf(it, o) ? comboOf(it, o).extra : 0);
+const AUTO_PHOTO_IDS = new Set(["tgm","pepperoni","pollo-bbq","napolitana","margarita","ajillo","funghi","chocleta"]);
+const photoSrc = (it, pi=-1) => {
+  if (it.img) return it.img;
+  const picked = pickName(it, pi);
+  const f = (it.photoBy && picked && it.photoBy[picked]) || it.foto || (AUTO_PHOTO_IDS.has(it.id) ? it.id : "");
+  return f && CONFIG.fotosCarpeta != null ? CONFIG.fotosCarpeta + f + "." + CONFIG.fotosExtension : "";
+};
 
-function textHTML(it, anim){
-  const s = S(it.id), cb = it.options ? comboOf(it, s.o) : null;
-  const opts = it.options ? `<div class="opts fmt" role="group" aria-label="Formato de ${esc(it.name)}">${
+function itemHTML(it, compact){
+  const s = S(it.id);
+  const src = it.img || (CONFIG.fotosCarpeta != null ? CONFIG.fotosCarpeta + (it.foto || it.id) + "." + CONFIG.fotosExtension : "");
+  const media = src
+    ? `<button class="zoom" type="button" aria-label="Ver foto de ${esc(it.name)}"><img class="dish" src="${esc(src)}" alt="" loading="lazy"></button>`
+    : `<div class="ph" aria-hidden="true"></div>`;
+  if (it.infoOnly){
+    return `<article class="item" data-id="${esc(it.id)}">
+      <button class="info-link" type="button" data-jump="${esc(it.jump || "pizzas")}" aria-label="${esc(it.name)}: ir a pizzas">
+        <div class="hd"><h3>${esc(it.name)}</h3>${it.desc ? `<p class="desc">${esc(it.desc)}</p>` : ""}</div>
+        ${compact ? "" : `<div class="media">${media}</div>`}
+      </button>
+    </article>`;
+  }
+  const fmtH = it.options ? `<div class="opts fmt" role="group" aria-label="Formato de ${esc(it.name)}">${
     it.options.map((op, i) => `<button type="button" data-opt="${i}" aria-pressed="${i === s.o}">${esc(op.label)}</button>`).join("")
-  }</div><p class="pk-err opt-err" hidden>Elige un formato para agregar.</p>` : "";
-  const combo = cb ? `<button type="button" class="combo${anim ? " in" : ""}" role="switch" aria-checked="${s.c}" data-combo>
-      <span class="box" aria-hidden="true"></span>
-      <span class="ctx"><b>Hazla combo</b><small>${esc(cb.desc)}</small></span>
-      <span class="cx">+${fmt(cb.extra)}</span></button>` : "";
+  }</div>` : "";
   const pk = it.pick ? `<div class="pick" role="group" aria-label="${esc(it.pick.label)}">
       <p class="pk-t">${esc(it.pick.label)}</p>
       <div class="opts">${it.pick.list.map((n, i) => `<button type="button" data-pick="${i}" aria-pressed="${i === s.p}">${esc(n)}</button>`).join("")}</div>
       <p class="pk-err" hidden>Elige una opción para agregar.</p></div>` : "";
-  return `<h3>${esc(it.name)}</h3>
-      <p class="desc">${esc(it.desc || "")}</p>
-      ${opts}${combo}${pk}
-      <p class="price">${it.options && s.o < 0 ? "Desde " + fmt(Math.min(...it.options.map(x => x.price))) : fmt(unitPrice(it, s.o, s.c))}</p>`;
-}
-
-function itemHTML(it){
-  const src = it.img || (CONFIG.fotosCarpeta != null ? CONFIG.fotosCarpeta + it.id + "." + CONFIG.fotosExtension : "");
-  const media = src
-    ? `<img class="dish" src="${esc(src)}" alt="${esc(it.name)}" loading="lazy">`
-    : `<div class="ph" aria-hidden="true"></div>`;
-  return `<article class="item" data-id="${esc(it.id)}">
-    <div class="txt">${textHTML(it)}</div>
-    <div class="media">${media}
-      <span class="cnt" hidden aria-hidden="true"></span>
-      <button class="add" type="button" data-add aria-label="Agregar ${esc(it.name)} al pedido">+</button>
+  return `<article class="item${compact ? " nopic" : ""}" data-id="${esc(it.id)}">
+    <div class="hd"><h3>${esc(it.name)}</h3>${it.desc ? `<p class="desc">${esc(it.desc)}</p>` : ""}</div>
+    ${compact ? "" : `<div class="media">${media}${it.combo ? `<button class="tag" type="button" role="switch" aria-checked="false" data-combo hidden></button>` : ""}</div>`}
+    ${pk}
+    <div class="row2">${fmtH}
+      <div class="offer" hidden aria-live="polite"></div>
+      ${it.combo ? `<button class="tog" type="button" role="switch" aria-checked="false" data-combo hidden></button>` : ""}
+      <div class="act">
+        <button class="add" type="button" data-add aria-label="Agregar ${esc(it.name)} al pedido"><span class="pl" aria-hidden="true">+</span><span class="ap"></span></button>
+        <div class="stp" hidden role="group" aria-label="Cantidad de ${esc(it.name)}">
+          <button type="button" data-dec="" aria-label="Quitar uno de ${esc(it.name)}">−</button><span>1</span><button type="button" data-inc="" aria-label="Agregar uno de ${esc(it.name)}">+</button>
+        </div>
+      </div>
     </div>
   </article>`;
 }
 
-function refresh(card, focusSel, anim){
-  card.querySelector(".txt").innerHTML = textHTML(IDX[card.dataset.id], anim);
-  if (focusSel){ const el = card.querySelector(focusSel); if (el) el.focus(); }
+function swapPhoto(card){
+  const it = IDX[card.dataset.id], s = S(it.id);
+  const f = it.photoBy && it.pick && s.p >= 0 ? it.photoBy[it.pick.list[s.p]] : null;
+  const img = card.querySelector("img.dish");
+  if (f && img){ const u = (CONFIG.fotosCarpeta != null ? CONFIG.fotosCarpeta : "") + f + "." + CONFIG.fotosExtension; if (img.getAttribute("src") !== u) img.src = u; }
 }
+function pressOnly(btn){ btn.parentNode.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", b === btn)); }
+
+/* clave del pedido para la selección actual de la tarjeta (null si falta elegir formato/opción) */
+function keyFor(id){
+  const it = IDX[id], s = S(id);
+  if (it.options && s.o < 0) return null;
+  if (it.pick && s.p < 0) return null;
+  const o = it.options ? s.o : 0, c = (PRE() && s.c && comboOf(it, o)) ? 1 : 0, p = it.pick ? s.p : -1;
+  return [id, o, c, p].join("|");
+}
+function syncCard(card){
+  const id = card.dataset.id, it = IDX[id], s = S(id), o = it.options ? s.o : 0, cb = comboOf(it, o);
+  if (it.infoOnly || !card.querySelector(".add")) return;
+  if (s.c && (!cb || !PRE())) s.c = false;                 /* el interruptor solo existe si hay combo y la variante lo usa */
+  const k = keyFor(id);
+  let q = 0, kinc = k, kdec = k;
+  if (PRE()){ q = k ? (cart[k] || 0) : 0; }
+  else {
+    const k1 = k ? k.replace(/\|0\|(-?\d+)$/, "|1|$1") : null;          /* misma selección, versión combo */
+    const q0 = k ? (cart[k] || 0) : 0, q1 = k1 ? (cart[k1] || 0) : 0; q = q0 + q1; kdec = q0 > 0 ? k : k1;
+  }
+  const stp = card.querySelector(".stp"), add = card.querySelector(".add");
+  card.querySelector(".ap").textContent = fmt(unitPrice(it, o, PRE() && s.c, s.p));   /* el botón muestra el precio de lo que está elegido */
+  stp.hidden = q === 0; add.hidden = q > 0;
+  if (q > 0){
+    stp.querySelector("span").textContent = q;
+    stp.querySelector("[data-inc]").dataset.inc = kinc;
+    stp.querySelector("[data-dec]").dataset.dec = kdec;
+  }
+  /* interruptor (o etiqueta sobre la foto) */
+  const tog = card.querySelector(".tog"), tag = card.querySelector(".tag");
+  const inc = cb ? cb.desc.replace(/^\+\s*/, "") : "";
+  const asTag = DESIGN.cta === "tag" && DESIGN.foto !== "lista";
+  if (tog){
+    const show = !!cb && ((DESIGN.cta === "toggle") || (DESIGN.cta === "tag" && !asTag));
+    tog.hidden = !show;
+    if (show){ tog.setAttribute("aria-checked", String(!!s.c)); tog.setAttribute("aria-label", "Hazla combo con " + inc + ", más " + fmt(cb.extra));
+      tog.innerHTML = `<span class="sw" aria-hidden="true"></span><span class="tt"><b>Combo <em>+${fmt(cb.extra)}</em></b><small>${esc(inc)}</small></span>`; }
+  }
+  if (tag){
+    const show = !!cb && asTag;
+    tag.hidden = !show;
+    if (show){ tag.setAttribute("aria-checked", String(!!s.c)); tag.setAttribute("aria-label", "Hazla combo con " + inc + ", más " + fmt(cb.extra));
+      tag.innerHTML = `<span class="tp" aria-hidden="true">${s.c ? "✓" : "+"}</span>Combo <em>${fmt(cb.extra)}</em>`; }
+  }
+  syncOffer(card);
+}
+function fadeIn(el){ el.classList.remove("in"); void el.offsetWidth; el.classList.add("in"); }
+function syncOffer(card){
+  if (card._sw) return;
+  const id = card.dataset.id, it = IDX[id], off = card.querySelector(".offer"), fm = card.querySelector(".fmt");
+  const on = !!(POST() && curOffer && curOffer.id === id && cart[curOffer.k] > 0);
+  const swap = (hideEl, showEl) => {
+    if (hideEl && !hideEl.hidden){
+      hideEl.classList.add("out");
+      card._sw = setTimeout(() => { card._sw = 0; hideEl.hidden = true; hideEl.classList.remove("out"); showEl.hidden = false; fadeIn(showEl); syncOffer(card); }, 280);
+    } else { showEl.hidden = false; fadeIn(showEl); }
+  };
+  if (on){
+    if (off.dataset.k !== curOffer.k){
+      const cb = comboOf(it, +curOffer.k.split("|")[1]), inc = cb.desc.replace(/^\+\s*/, "");
+      off.innerHTML = `<button type="button" class="of" data-upgrade="${esc(curOffer.k)}" aria-label="Hazla combo con ${esc(inc)}, más ${fmt(cb.extra)}"><span class="of-h"><b>Hazla combo</b><i class="p1">+ ${fmt(cb.extra)}</i></span><span class="of-s">${esc(inc)}<i class="p2"> · + ${fmt(cb.extra)}</i></span></button>`;
+      off.dataset.k = curOffer.k;
+    }
+    if (off.hidden) swap(fm, off);
+  } else if (!off.hidden){
+    if (fm) swap(off, fm);
+    else { off.classList.add("out"); card._sw = setTimeout(() => { card._sw = 0; off.hidden = true; off.classList.remove("out"); syncOffer(card); }, 280); }
+  } else if (fm && fm.hidden){ fm.hidden = false; }
+}
+function hideOffer(){
+  if (!curOffer) return;
+  const id = curOffer.id; curOffer = null;
+  const c = document.querySelector('.item[data-id="' + id + '"]'); if (c) syncCard(c);
+}
+function setOffer(id, k){
+  const prev = curOffer && curOffer.id;
+  curOffer = { id, k, cat:CATOF[id] };
+  [prev, id].forEach(x => { const c = x && document.querySelector('.item[data-id="' + x + '"]'); if (c) syncCard(c); });
+}
+function pop(el){ if (!el) return; el.classList.remove("pop"); void el.offsetWidth; el.classList.add("pop"); }
 
 $("#nav").innerHTML = MENU.map(c => `<li><a href="#${c.id}">${esc(c.name)}</a></li>`).join("");
-$("#menu").innerHTML = MENU.map(c => `<section class="cat" id="${c.id}" aria-labelledby="h-${c.id}">
+$("#menu").innerHTML = MENU.map(c => `<section class="cat${c.compact ? " compact" : ""}" id="${c.id}" aria-labelledby="h-${c.id}">
   <h2 id="h-${c.id}">${esc(c.name)}</h2>
   ${c.note ? `<p class="note">${esc(c.note)}</p>` : ""}
-  <div class="list">${c.items.map(itemHTML).join("")}</div>
+  <div class="list">${c.items.map(i => itemHTML(i, c.compact)).join("")}</div>
 </section>`).join("");
 
 /* ---------- Navegación de categorías ---------- */
@@ -496,6 +772,7 @@ let activeId = null, lock = false, lockTimer, ticking = false;
 
 function setActive(id){
   activeId = id;
+  if (curSug && curSug.cat && curSug.cat !== id) hideSuggest();
   links.forEach(a => {
     const on = a.getAttribute("href") === "#" + id;
     on ? a.setAttribute("aria-current", "true") : a.removeAttribute("aria-current");
@@ -558,7 +835,7 @@ function lines(){
       ci ? "Combo: " + cb.desc.replace(/^\+\s*/, "") : "",
       it.pick ? (it.pick.short || it.pick.label) + ": " + it.pick.list[pi] : ""
     ].filter(Boolean);
-    return { k, it, qty, parts, price: unitPrice(it, oi, ci) };
+    return { k, it, qty, parts, price: unitPrice(it, oi, ci, pi), pi, thumb: photoSrc(it, pi) };
   });
 }
 function totals(){
@@ -567,7 +844,7 @@ function totals(){
 }
 const qtyOf = id => Object.entries(cart).reduce((a, [k, q]) => a + (k.split("|")[0] === id ? q : 0), 0);
 
-const bar = $("#cartbar"), drawer = $("#drawer"), scrim = $("#scrim");
+const cartbtn = $("#cartbtn"), cbadge = $("#cbadge"), dock = $("#dock"), drawer = $("#drawer"), scrim = $("#scrim");
 const wide = window.matchMedia("(min-width:900px)");
 
 const inCart = id => Object.keys(cart).some(k => k.split("|")[0] === id);
@@ -578,46 +855,53 @@ const sugRow = id => `<div class="sug-row"><span>${esc(IDX[id].name)}<b>+${fmt(I
 function panelSuggest(ls){
   const pool = [];
   ls.forEach(l => ((l.it.suggest && l.it.suggest.ids) || []).forEach(id => { if (!pool.includes(id)) pool.push(id); }));
-  const ids = pick(pool, 3);
-  return ids.length ? `<div class="sug"><p>¿Te falta algo?</p>${ids.map(sugRow).join("")}</div>` : "";
+  const ids = pick(pool, 4);
+  return ids.length ? `<div class="sug"><p>Agrega algo más</p>${ids.map(sugRow).join("")}</div>` : "";
 }
 
-let sugTimer;
 const sugBox = $("#suggest");
-function hideSuggest(){ clearTimeout(sugTimer); sugBox.hidden = true; }
-function showSuggest(it){
-  hideSuggest();
-  const ids = it.suggest ? pick(it.suggest.ids, 2) : [];
-  if (!ids.length) return false;
-  sugBox.innerHTML = `<div class="sg-top"><span>Agregado · ${esc(it.suggest.text)}</span>
-    <button type="button" class="sg-x" data-sgx aria-label="Cerrar sugerencia">✕</button></div>
-    <div class="sg-row">${ids.map(id => `<button type="button" class="sg-add" data-sug="${esc(id)}"><span>${esc(IDX[id].name)}</span><b>${fmt(IDX[id].price)}</b></button>`).join("")}</div>`;
-  sugBox.hidden = false;
-  sugTimer = setTimeout(hideSuggest, 9000);
-  return true;
+let sugOut;
+function hideSuggest(){
+  curSug = null; document.body.classList.remove("has-sug");
+  if (sugBox.hidden){ dock.classList.remove("on"); return; }
+  clearTimeout(sugOut); sugBox.classList.add("out");
+  sugOut = setTimeout(() => { if (!curSug){ sugBox.hidden = true; sugBox.classList.remove("out"); dock.classList.remove("on"); } }, 180);
+}
+function setSuggest(x){ curSug = x; drawSuggest(); }
+function drawSuggest(){
+  const s = curSug; let html = "";
+  if (false){  } else if (s && s.type === "ids"){
+    const ids = pick(s.it.suggest.ids, 2);
+    if (ids.length) html = `<div class="sg-top"><b>${esc(s.it.suggest.text)}</b>
+      <button type="button" class="sg-x" data-sgx aria-label="Cerrar sugerencia">✕</button></div>
+      <div class="sg-row">${ids.map(id => `<button type="button" class="sg-add" data-sug="${esc(id)}"><span>${esc(IDX[id].name.replace(/^Salsa /, ""))}</span><b><span class="pl" aria-hidden="true">+</span>${fmt(IDX[id].price)}</b></button>`).join("")}</div>`;
+  }
+  if (!html){ hideSuggest(); return; }
+  clearTimeout(sugOut); sugBox.classList.remove("out"); dock.classList.add("on");
+  sugBox.innerHTML = html; document.body.classList.add("has-sug");
+  if (sugBox.hidden){ sugBox.hidden = false; sugBox.classList.remove("in"); void sugBox.offsetWidth; sugBox.classList.add("in"); }
 }
 
 function renderCart(){
   const { count, sum, ls } = totals();
-  bar.classList.toggle("on", count > 0);
-  bar.innerHTML = `<span>Ver pedido · <span class="n">${count}</span> ${count === 1 ? "producto" : "productos"}</span><span>${fmt(sum)}</span>`;
+  cbadge.textContent = count; cbadge.hidden = count === 0;
+  cartbtn.setAttribute("aria-label", count ? "Ver pedido: " + count + (count === 1 ? " producto, " : " productos, ") + fmt(sum) : "Ver pedido");
+  cartbtn.title = count ? fmt(sum) : "";
   $("#lines").innerHTML = ls.length ? ls.map(l => `<div class="line">
-      <div><b>${esc(l.it.name)}</b>${l.parts.map(p => `<small>${esc(p)}</small>`).join("")}<small>${fmt(l.price)} c/u</small></div>
+      ${l.thumb ? `<img class="line-thumb" src="${esc(l.thumb)}" alt="" loading="lazy">` : `<div class="line-thumb ph" aria-hidden="true"></div>`}
+      <div class="line-main"><b>${esc(l.it.name)}</b>${l.parts.map(p => `<small>${esc(p)}</small>`).join("")}<small>${fmt(l.price)} c/u</small></div>
       <div class="qty">
         <button type="button" data-dec="${esc(l.k)}" aria-label="Quitar uno de ${esc(l.it.name)}">−</button>
         <span aria-label="Cantidad">${l.qty}</span>
         <button type="button" data-inc="${esc(l.k)}" aria-label="Agregar uno de ${esc(l.it.name)}">+</button>
       </div>
-      <div><b>${fmt(l.qty * l.price)}</b></div>
+      <div class="line-price"><b>${fmt(l.qty * l.price)}</b></div>
     </div>`).join("") + panelSuggest(ls) : `<p class="empty">Aún no agregas productos.</p>`;
   $("#total").textContent = fmt(sum);
   syncPay();
   $("#send").disabled = count === 0;
-  document.querySelectorAll(".item").forEach(card => {
-    const n = qtyOf(card.dataset.id), b = card.querySelector(".cnt");
-    b.textContent = n; b.hidden = n === 0;
-  });
-  if (count === 0){ hideSuggest(); if (drawer.classList.contains("on")) toggle(false); }
+  document.querySelectorAll(".item").forEach(syncCard);
+  if (count === 0){ hideSuggest(); if (drawer.classList.contains("on")) toggle(false); } else drawSuggest();
 }
 
 function toggle(open, focus){
@@ -627,25 +911,13 @@ function toggle(open, focus){
   document.body.classList.toggle("panel-open", open);
   drawer.inert = !open;
   if (open && focus) $("#close").focus();
-  if (!open && focus) bar.focus();
+  if (!open && focus) cartbtn.focus();
 }
 
 function feedback(id){
   const card = document.querySelector('.item[data-id="' + id + '"]'); if (!card) return;
-  const btn = card.querySelector(".add"), cnt = card.querySelector(".cnt");
-  btn.textContent = "✓"; btn.classList.add("ok");
-  cnt.classList.remove("pop"); void cnt.offsetWidth; cnt.classList.add("pop");
-  clearTimeout(btn._t); btn._t = setTimeout(() => { btn.textContent = "+"; btn.classList.remove("ok"); }, 700);
-}
-
-function showComboOffer(it, k){
-  hideSuggest();
-  const cb = comboOf(it, 0);
-  sugBox.innerHTML = `<div class="sg-top"><span>Agregado · ¿Lo conviertes en combo?</span>
-    <button type="button" class="sg-x" data-sgx aria-label="Cerrar sugerencia">✕</button></div>
-    <div class="sg-row"><button type="button" class="sg-add" data-upgrade="${esc(k)}"><span>${esc(cb.desc.replace(/^\+\s*/, ""))}</span><b>+${fmt(cb.extra)}</b></button></div>`;
-  sugBox.hidden = false;
-  sugTimer = setTimeout(hideSuggest, 9000);
+  const stp = card.querySelector(".stp");
+  if (!stp.hidden) pop(stp);
 }
 
 function upgrade(k){
@@ -654,19 +926,14 @@ function upgrade(k){
   cart[k]--; if (cart[k] <= 0) delete cart[k];
   const nk = [id, o, 1, p].join("|");
   cart[nk] = (cart[nk] || 0) + 1;
+  curOffer = cart[k] > 0 ? { id, k, cat:CATOF[id] } : null;   /* si quedan unidades sin combo, la oferta sigue */
   save(); renderCart(); feedback(id); hideSuggest();
   $("#live").textContent = "Combo agregado: " + IDX[id].name;
 }
 
-function add(id, viaSuggestion){
+function add(id, viaSuggestion, cOver){
   const it = IDX[id], s = S(id), card = document.querySelector('.item[data-id="' + id + '"]');
-  if (!viaSuggestion && it.options && s.o < 0){
-    const box = card.querySelector(".fmt");
-    card.querySelector(".opt-err").hidden = false;
-    box.classList.remove("shake"); void box.offsetWidth; box.classList.add("shake");
-    const first = box.querySelector("[data-opt]"); if (first) first.focus();
-    return;
-  }
+  const hadFocus = !!(card && document.activeElement && document.activeElement.classList.contains("add") && card.contains(document.activeElement));
   if (!viaSuggestion && it.pick && s.p < 0){
     const box = card.querySelector(".pick");
     card.querySelector(".pk-err").hidden = false;
@@ -674,16 +941,17 @@ function add(id, viaSuggestion){
     const first = box.querySelector("[data-pick]"); if (first) first.focus();
     return;
   }
-  const o = it.options ? s.o : 0, c = (s.c && comboOf(it, o)) ? 1 : 0, p = it.pick ? s.p : -1;
+  const o = it.options ? s.o : 0, p = it.pick ? s.p : -1;
+  const c = cOver !== undefined ? cOver : ((PRE() && s.c && comboOf(it, o)) ? 1 : 0);
   const k = [id, o, c, p].join("|");
   cart[k] = (cart[k] || 0) + 1;
   save(); renderCart(); feedback(id);
-  bar.classList.remove("bump"); void bar.offsetWidth; bar.classList.add("bump");
-  const n = $(".n", bar); if (n){ n.classList.remove("pop"); void n.offsetWidth; n.classList.add("pop"); }
+  if (hadFocus){ const b = card.querySelector(".stp:not([hidden]) [data-inc]"); if (b) b.focus(); }
+  pop(cartbtn); pop(cbadge);
   $("#live").textContent = "Agregado: " + it.name;
-  if (viaSuggestion) hideSuggest();
-  else if (!c && !it.options && comboOf(it, 0)) showComboOffer(it, k);
-  else showSuggest(it);
+  if (viaSuggestion) drawSuggest();
+  else if (POST() && !c && comboOf(it, o)){ hideSuggest(); setOffer(id, k); }
+  else drawSuggest();
 }
 
 function change(k, d){
@@ -693,33 +961,108 @@ function change(k, d){
 }
 
 document.addEventListener("click", e => {
+  const jump = e.target.closest("[data-jump]");
+  if (jump){
+    const el = document.getElementById(jump.dataset.jump);
+    if (el) el.scrollIntoView({behavior: reduced ? "auto" : "smooth", block:"start"});
+    return;
+  }
   const t = e.target.closest("button"); if (!t) return;
   const card = t.closest(".item");
+  if (card){ const cid = card.dataset.id; if (curSug && curSug.it && curSug.it.id !== cid) hideSuggest(); if (curOffer && curOffer.id !== cid) hideOffer(); }
+  if (t.classList.contains("zoom")) return openLb(t);
   if (t.hasAttribute("data-sgx")) return hideSuggest();
   if (t.dataset.sug) return add(t.dataset.sug, true);
   if (t.dataset.upgrade) return upgrade(t.dataset.upgrade);
-  if (t.hasAttribute("data-add") && card) return add(card.dataset.id);
+  if (t.hasAttribute("data-add") && card){
+    const cid = card.dataset.id, ci = IDX[cid];
+    if (SHEET() && hasSheet(ci, ci.options ? S(cid).o : 0)) return openSheet(cid);
+    return add(cid);
+  }
+  if (t.hasAttribute("data-combo") && card){ const sc = S(card.dataset.id); sc.c = !sc.c; syncCard(card); return; }
+  if (t.hasAttribute("data-sh-x")) return closeSheet();
+  if (t.dataset.shC !== undefined && shCtx){ shCtx.c = +t.dataset.shC; drawSheet(); const f = $('[data-sh-c="' + shCtx.c + '"]'); if (f) f.focus(); return; }
+  if (t.dataset.shEx !== undefined && shCtx){ const x = t.dataset.shEx, i = shCtx.ex.indexOf(x); if (i >= 0) shCtx.ex.splice(i, 1); else shCtx.ex.push(x); drawSheet(); const f = $('[data-sh-ex="' + x + '"]'); if (f) f.focus(); return; }
+  if (t.hasAttribute("data-sh-add") && shCtx){ const sx = shCtx; closeSheet(); add(sx.id, false, sx.c); sx.ex.forEach(x => add(x, true)); return; }
   if (t.hasAttribute("data-opt") && card){
     const it = IDX[card.dataset.id], s = S(it.id);
-    s.o = +t.dataset.opt; if (!comboOf(it, s.o)) s.c = false;
-    return refresh(card, '[data-opt="' + s.o + '"]', true);
-  }
-  if (t.hasAttribute("data-combo") && card){
-    const s = S(card.dataset.id); s.c = !s.c;
-    return refresh(card, "[data-combo]");
+    s.o = +t.dataset.opt; pressOnly(t); syncCard(card);
+    return;
   }
   if (t.hasAttribute("data-pick") && card){
-    S(card.dataset.id).p = +t.dataset.pick;
-    return refresh(card, '[data-pick="' + t.dataset.pick + '"]');
+    S(card.dataset.id).p = +t.dataset.pick; pressOnly(t); swapPhoto(card);
+    const er = card.querySelector(".pk-err"); if (er) er.hidden = true;
+    syncCard(card);
+    return;
   }
-  if (t.dataset.inc) return change(t.dataset.inc, 1);
-  if (t.dataset.dec) return change(t.dataset.dec, -1);
+  if (t.dataset.inc){
+    const k = t.dataset.inc, stp = t.closest(".stp");
+    if (stp && card && SHEET()){ const p0 = k.split("|"); if (hasSheet(IDX[p0[0]], +p0[1])) return openSheet(p0[0]); }
+    change(k, 1); pop(stp);
+    if (stp && card && POST()){ const p = k.split("|"); if (+p[2] === 0 && comboOf(IDX[p[0]], +p[1])) setOffer(p[0], k); }   /* cada unidad nueva vuelve a ofrecer el combo */
+    return;
+  }
+  if (t.dataset.dec){
+    const inStp = t.closest(".stp");
+    change(t.dataset.dec, -1);
+    if (inStp && card && card.querySelector(".stp").hidden){ const a = card.querySelector(".add"); if (a) a.focus(); }
+    return;
+  }
 });
 
-bar.addEventListener("click", () => toggle(!drawer.classList.contains("on"), true));
+cartbtn.addEventListener("click", () => toggle(!drawer.classList.contains("on"), true));
 $("#close").addEventListener("click", () => toggle(false, true));
 scrim.addEventListener("click", () => toggle(false, true));
-document.addEventListener("keydown", e => { if (e.key === "Escape" && drawer.classList.contains("on")) toggle(false, true); });
+document.addEventListener("keydown", e => {
+  if (e.key !== "Escape") return;
+  if (!lb.hidden) return closeLb();
+  if (shCtx) return closeSheet();
+  if (drawer.classList.contains("on")) toggle(false, true);
+});
+
+/* ---------- Hoja: ¿solo o combo? ---------- */
+let shCtx = null, shFrom = null;
+const hasSheet = (it, o) => !!(comboOf(it, o) || it.extras);
+function sheetTotal(){
+  const it = IDX[shCtx.id], s = S(it.id), o = it.options ? s.o : 0, cb = comboOf(it, o);
+  return unitPrice(it, o, false, s.p) + (shCtx.c && cb ? cb.extra : 0) + shCtx.ex.reduce((a, x) => a + IDX[x].price, 0);
+}
+function drawSheet(){
+  const it = IDX[shCtx.id], s = S(it.id), o = it.options ? s.o : 0, cb = comboOf(it, o);
+  const lab = [it.options ? it.options[o].label : "", it.pick && s.p >= 0 ? (it.pick.short || "Salsa") + " " + it.pick.list[s.p] : ""].filter(Boolean).join(" · ");
+  const base = unitPrice(it, o, false, s.p);
+  const radios = cb ? `<div role="radiogroup" aria-label="¿Cómo lo quieres?" class="sh-g">
+      <button type="button" class="sh-opt" role="radio" aria-checked="${shCtx.c === 0}" data-sh-c="0"><span class="rd" aria-hidden="true"></span><span class="tx"><b>Solo ${esc(it.name)}</b></span><i>${fmt(base)}</i></button>
+      <button type="button" class="sh-opt" role="radio" aria-checked="${shCtx.c === 1}" data-sh-c="1"><span class="rd" aria-hidden="true"></span><span class="tx"><b>Hazla combo</b><small>${esc(cb.desc.replace(/^\+\s*/, ""))}</small></span><i>${fmt(base + cb.extra)}</i></button>
+    </div>` : "";
+  const ex = it.extras ? `<div class="sh-ex" role="group" aria-label="${esc(it.extras.label)}"><p class="sh-lab">${esc(it.extras.label)} <small>(opcional)</small></p>
+      <div class="exg">${it.extras.ids.map(id => { const on = shCtx.ex.indexOf(id) >= 0;
+        return `<button type="button" class="sh-chk" role="checkbox" aria-checked="${on}" data-sh-ex="${esc(id)}"><span class="tx"><b>${esc(IDX[id].name)}</b><small>+ ${fmt(IDX[id].price)}</small></span><span class="bx" aria-hidden="true">${on ? "✓" : "+"}</span></button>`; }).join("")}</div></div>` : "";
+  $("#sheet").innerHTML = `<div class="sh-h"><div><b id="sh-t">${esc(it.name)}</b>${lab ? `<span>${esc(lab)}</span>` : ""}</div><button class="x" type="button" data-sh-x aria-label="Cerrar">✕</button></div>
+    ${radios}${ex}
+    <button type="button" class="add sh-add" data-sh-add>+ Agregar · ${fmt(sheetTotal())}</button>`;
+}
+function openSheet(id){
+  const it = IDX[id], s = S(id);
+  if (it.pick && s.p < 0) return add(id);                              /* mismo aviso de "elige una opción" */
+  shCtx = { id, c:0, ex:[] }; shFrom = document.activeElement; drawSheet();
+  $("#shbd").hidden = false; const sh = $("#sheet"); sh.hidden = false; sh.scrollTop = 0; sh.classList.remove("in"); void sh.offsetWidth; sh.classList.add("in");
+  const f = $('[data-sh-c="0"]') || $("[data-sh-add]"); if (f) f.focus();
+}
+function closeSheet(){ shCtx = null; $("#sheet").hidden = true; $("#shbd").hidden = true; if (shFrom && shFrom.focus) shFrom.focus(); }
+$("#shbd").addEventListener("click", closeSheet);
+
+/* ---------- Foto ampliada ---------- */
+const lb = $("#lb"); let lbFrom = null;
+function openLb(btn){
+  const card = btn.closest(".item"), it = IDX[card.dataset.id], img = btn.querySelector("img");
+  $("#lbi").src = img.currentSrc || img.src; $("#lbi").alt = it.name;
+  $("#lbc").innerHTML = esc(it.name) + (it.desc ? "<small>" + esc(it.desc) + "</small>" : "");
+  lbFrom = btn; lb.hidden = false; document.body.style.overflow = "hidden"; $("#lbx").focus();
+}
+function closeLb(){ lb.hidden = true; document.body.style.overflow = ""; if (lbFrom) lbFrom.focus(); }
+$("#lbx").addEventListener("click", closeLb);
+lb.addEventListener("click", e => { if (e.target === lb || e.target.tagName === "FIGURE") closeLb(); });
 
 /* ---------- Datos del cliente (se recuerdan para la próxima vez) ---------- */
 const PROFILE = "carta_cliente_v1";
@@ -757,12 +1100,13 @@ function syncTipo(){
   const d = tipo() === "delivery";
   $("#addrWrap").style.display = d ? "" : "none";
   const dn = $("#dnote");
-  dn.textContent = (d && delivRange) ? "+ Delivery entre " + delivRange + ". Nuestra cajera te confirma el valor exacto." : "";
+  dn.textContent = (d && delivRange) ? "+ Delivery entre " + delivRange + ". Nuestro equipo te confirma el valor exacto." : "";
   dn.hidden = !dn.textContent;
-  $("#steps").innerHTML = (d
-    ? ["Envías tu pedido por WhatsApp.", "Te confirmamos el valor del delivery.", "Transfieres el total y nos mandas el comprobante.", "Confirmamos y tu pedido entra a cocina."]
-    : ["Envías tu pedido por WhatsApp.", "Transfieres el total y nos mandas el comprobante.", "Confirmamos y tu pedido entra a cocina."]
-  ).map(t => "<li>" + t + "</li>").join("");
+  const os = $("#orderStep span");
+  if (os) os.textContent = d
+    ? "Envía tu pedido. Te confirmamos delivery y pago; mandas el comprobante y preparamos."
+    : "Envía tu pedido. Realizas el pago, mandas el comprobante y preparamos.";
+  $("#steps").innerHTML = "";
   syncPay();
 }
 document.querySelectorAll('input[name="tipo"]').forEach(r => r.addEventListener("change", syncTipo));
@@ -792,6 +1136,29 @@ $("#send").addEventListener("click", () => {
   ].filter(x => x !== null).join("\n");
   window.open("https://wa.me/" + CONFIG.whatsapp + "?text=" + encodeURIComponent(txt), "_blank", "noopener");
 });
+
+
+/* ---------- Opciones de diseño (solo en la versión de prueba) ---------- */
+if (CONFIG.opciones){
+  const G = [
+    ["foto", "Foto", [["lista","Lista"],["hero","Foto arriba"],["grid","Grilla de 2"]]],
+    ["tipografia", "Tipografía", [["actual","Actual"],["contrast","Contraste"],["weight","Con peso"]]],
+    ["cta", "Cómo ofrecer el combo", [["actual","Después de agregar"],["toggle","Interruptor"],["tag","Etiqueta en la foto"],["sheet","Hoja al agregar"]]],
+    ["desc", "Descripción del plato", [["full","Completa"],["one","1 línea"],["none","Sin"]]]
+  ];
+  const labBtn = document.createElement("button"); labBtn.className = "labbtn"; labBtn.type = "button"; labBtn.textContent = "Opciones de diseño"; labBtn.setAttribute("aria-expanded", "false");
+  const labBox = document.createElement("div"); labBox.className = "lab"; labBox.hidden = true;
+  const draw = () => { labBox.innerHTML = G.map(([k, t, o]) => `<p class="lab-t">${t}</p><div class="lab-g${o.length === 4 ? " two" : ""}">${o.map(([v, n]) => `<button type="button" data-lab="${k}:${v}" aria-pressed="${DESIGN[k] === v}">${n}</button>`).join("")}</div>`).join(""); };
+  draw();
+  labBtn.addEventListener("click", () => { labBox.hidden = !labBox.hidden; labBtn.setAttribute("aria-expanded", String(!labBox.hidden)); });
+  labBox.addEventListener("click", e => {
+    const b = e.target.closest("[data-lab]"); if (!b) return;
+    const [k, v] = b.dataset.lab.split(":"); DESIGN[k] = v; applyDesign(); hideOffer(); renderCart();
+    try { localStorage.setItem("carta_diseno_v1", JSON.stringify(DESIGN)); } catch(_){}
+    draw();
+  });
+  document.body.append(labBox, labBtn);
+}
 
 renderCart();
 </script>
