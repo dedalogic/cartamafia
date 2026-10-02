@@ -20,6 +20,9 @@ const CATALOG = [
   { id:"chocleta", name:"La Chocleta", category:"Pizzas", options:["Slice","40 cm","60 cm"] },
   { id:"fetuccini", name:"Fetuccini", category:"Pastas" },
   { id:"bucatini", name:"Bucatini", category:"Pastas" },
+  { id:"salsa-alfredo", name:"Alfredo", category:"Salsas" },
+  { id:"salsa-pesto", name:"Pesto", category:"Salsas" },
+  { id:"salsa-bolognesa", name:"Bolognesa", category:"Salsas" },
   { id:"albondigas", name:"Albóndigas", category:"Proteínas" },
   { id:"pollo-gravy", name:"Pollo con Gravy", category:"Proteínas" },
   { id:"top-bbq", name:"BBQ", category:"Toppings" },
@@ -38,7 +41,9 @@ const OPTIONS = Object.fromEntries(CATALOG.filter(x => x.options).map(x => [x.id
 const response = (data, status=200) => Response.json(data, {
   status,
   headers:{
-    "Cache-Control":"no-store, max-age=0",
+    "Cache-Control":"no-store, no-cache, must-revalidate, max-age=0",
+    "Pragma":"no-cache",
+    "Expires":"0",
     "Content-Type":"application/json; charset=utf-8"
   }
 });
@@ -89,8 +94,9 @@ export default async (req) => {
 
   if (body.action === "set"){
     const state = cleanState(body);
-    await store.setJSON(KEY, { ...state, updatedAt:new Date().toISOString() });
-    return response(state);
+    const savedAt = new Date().toISOString();
+    await store.setJSON(KEY, { ...state, updatedAt:savedAt });
+    return response({ ...state, savedAt });
   }
 
   return response({error:"Acción inválida"},400);
