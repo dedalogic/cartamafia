@@ -169,7 +169,10 @@ body.has-sug{padding-bottom:calc(160px + env(safe-area-inset-bottom,0px))}
   body.panel-open main,body.panel-open footer{margin-right:max(20px,calc((100% - 1160px) / 2 + 420px - 20px))}
 }
 .dh{position:sticky;top:0;z-index:2;background:#141312;display:flex;justify-content:space-between;align-items:center;padding:20px 20px 12px}
+.dh-main{display:flex;align-items:center;gap:6px;min-width:0}
 .dh h2{font:400 24px/1 var(--serif);letter-spacing:.03em}
+.head-back{display:grid;place-items:center;width:44px;height:44px;margin-left:-10px;border:0;border-radius:var(--r);background:none;color:var(--text);font-size:22px;line-height:1}
+.head-back[hidden]{display:none}
 .x{width:44px;height:44px;border-radius:var(--r);border:1px solid var(--line);background:none;font-size:20px}
 .lines{flex:none;padding:0 20px}
 .empty{padding:28px 0;color:var(--muted)}
@@ -180,6 +183,13 @@ body.has-sug{padding-bottom:calc(160px + env(safe-area-inset-bottom,0px))}
 .qty button{width:40px;height:40px;border-radius:var(--r);border:1px solid var(--line);background:none;font-size:18px;line-height:1}
 .qty span{min-width:18px;text-align:center;font-weight:600}
 .df{margin-top:auto;padding:16px 20px calc(20px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);display:grid;gap:10px}
+.checkout-step[hidden]{display:none!important}
+.checkout-step.in{animation:checkoutIn .28s ease-out}
+@keyframes checkoutIn{from{opacity:0;transform:translateX(10px)}to{opacity:1;transform:none}}
+.step2-summary{padding:11px 13px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);font-size:13px;color:var(--muted)}
+.next{min-height:48px;border-radius:var(--r);font-weight:600;font-size:15px;border:0;background:var(--red);color:#fff}
+.next:hover{background:var(--red-hi)}
+#checkout1 .next{position:sticky;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:2;box-shadow:0 -10px 14px #141312}
 .df label{font-size:12px;color:var(--muted)}
 .df input:not([type="radio"]),.df textarea{width:100%;margin-top:4px;padding:12px 13px;border-radius:var(--r);border:2px solid #fff;
   background:#fff;color:#16130f;font:inherit;font-size:16px;resize:vertical}
@@ -195,17 +205,22 @@ body.has-sug{padding-bottom:calc(160px + env(safe-area-inset-bottom,0px))}
 .seg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .seg label{display:block;margin:0;color:var(--text)}
 .seg input{position:absolute;opacity:0;width:1px;height:1px}
-.seg span{display:block;text-align:center;padding:13px 8px;border-radius:var(--r);border:1px solid var(--line);font-size:14px;font-weight:500;cursor:pointer}
-.seg input:checked + span{border-color:var(--red);background:var(--red-dim)}
+.seg span{display:flex;align-items:center;justify-content:center;gap:6px;min-height:44px;text-align:center;padding:13px 8px;border-radius:var(--r);border:1px solid var(--line);font-size:14px;font-weight:500;cursor:pointer}
+.seg input:checked + span{border-color:var(--text);background:var(--red-dim)}
+.seg input:checked + span::before{content:"✓";font-weight:700;color:var(--text)}
 .seg input:focus-visible + span{outline:2px solid var(--red-hi);outline-offset:2px}
 .err{color:#ff8a8a;font-size:12px;min-height:0}
 .err:empty{display:none}
 .hint{font-size:12px;color:var(--muted)}
   .dnote{margin:-4px 0 0;font-size:12px;color:var(--muted)}
 .dnote[hidden]{display:none}
-.paynote{padding:10px 14px;border-radius:var(--r);background:var(--red-dim);font-size:14px;line-height:1.4}
-.paynote b{display:block;font:400 19px/1.15 var(--serif);letter-spacing:.03em}
-.paynote span{color:var(--muted)}
+.checkout-info,.wa-hint{font-size:12px;line-height:1.45;color:var(--muted)}
+.wa-fallback{font-size:12px;color:var(--text);text-underline-offset:2px;min-height:44px;display:flex;align-items:center}
+.wa-fallback[hidden]{display:none}
+.note-toggle{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:44px;padding:0;border:0;background:none;color:var(--text);font:inherit;font-size:14px;text-align:left}
+.note-toggle span{color:var(--muted);font-size:18px;transition:transform .15s}
+.note-toggle[aria-expanded="true"] span{transform:rotate(45deg)}
+.note-wrap[hidden]{display:none}
 .steps{margin:0 0 0 18px;padding:0;display:grid;gap:2px;font-size:12px;color:var(--muted)}
 .pay{padding:12px 14px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);font-size:12px}
 .pay[hidden]{display:none}
@@ -215,7 +230,8 @@ body.has-sug{padding-bottom:calc(160px + env(safe-area-inset-bottom,0px))}
 #payRows span{color:var(--muted)}
 #payRows b{font-weight:500;text-align:right}
 .copy{margin-top:8px;padding:8px 14px;border-radius:var(--r);border:1px solid var(--line);background:none;font-size:14px}
-.send{position:sticky;bottom:calc(12px + env(safe-area-inset-bottom,0px));box-shadow:0 -10px 14px #141312;padding:15px;border:0;border-radius:var(--r);background:var(--red);color:#fff;font-weight:600;font-size:16px}
+.send{position:sticky;bottom:calc(12px + env(safe-area-inset-bottom,0px));box-shadow:0 -10px 14px #141312;padding:15px;border:0;border-radius:var(--r);background:var(--red);color:#fff;font-weight:600;font-size:16px;display:flex;align-items:center;justify-content:center;gap:8px;min-height:48px}
+.send svg{width:20px;height:20px;flex:none}
 .send:hover{background:var(--red-hi)}
 .send:disabled{opacity:.45;cursor:not-allowed}
 
@@ -340,8 +356,6 @@ html[data-layout="grid"][data-desc="none"] .cat:not(.compact) .hd{min-height:28p
 .jump-card{width:100%}
 .jump-card .add{width:100%}
 @media(min-width:1100px){html[data-layout="grid"] #combos .list{grid-template-columns:repeat(4,minmax(0,1fr));gap:40px 24px}}
-.paynote{padding:12px 14px}
-.paynote b{margin-bottom:2px}
 .paynote span{display:block;line-height:1.35}
 
 </style>
@@ -380,38 +394,56 @@ html[data-layout="grid"][data-desc="none"] .cat:not(.compact) .hd{min-height:28p
 <div class="scrim" id="scrim"></div>
 <aside class="drawer" id="drawer" role="dialog" aria-label="Tu pedido" inert>
   <div class="dh">
-    <h2>Tu pedido</h2>
+    <div class="dh-main">
+      <button class="head-back" id="backCheckout" type="button" aria-label="Volver a tu pedido" hidden>←</button>
+      <h2 id="drawerTitle">Tu pedido</h2>
+    </div>
     <button class="x" id="close" type="button" aria-label="Cerrar pedido">✕</button>
   </div>
-  <div class="lines" id="lines"></div>
-  <div class="df">
-    <div class="total"><span>Total</span><span id="total">$0</span></div>
-    <p class="dnote" id="dnote" hidden></p>
-    <div class="seg" role="radiogroup" aria-label="Tipo de pedido">
-      <label><input type="radio" name="tipo" value="delivery" checked><span>Delivery</span></label>
-      <label><input type="radio" name="tipo" value="retiro"><span>Retiro en local</span></label>
+
+  <div class="checkout-step" id="checkout1">
+    <div class="lines" id="lines"></div>
+    <div class="df">
+      <div class="seg" role="radiogroup" aria-label="Tipo de pedido">
+        <label><input type="radio" name="tipo" value="delivery" checked><span>Delivery</span></label>
+        <label><input type="radio" name="tipo" value="retiro"><span>Retiro en local</span></label>
+      </div>
+      <div class="total"><span id="totalLabel">Subtotal productos</span><span id="total">$0</span></div>
+      <p class="dnote" id="dnote"></p>
+      <button class="next" id="nextCheckout" type="button">Continuar</button>
     </div>
-    <label>Nombre
-      <input id="cname" type="text" autocomplete="name" placeholder="Tu nombre" required>
-    </label>
-    <label id="addrWrap">Dirección
-      <input id="caddr" type="text" autocomplete="street-address" placeholder="Calle, número, depto / sector">
-    </label>
-    <label>Notas (opcional)
-      <textarea id="cnote" rows="2" placeholder="Ej: sin cebolla"></textarea>
-    </label>
-    <p class="err" id="err" role="alert"></p>
-    <div class="paynote" id="orderStep">
-      <b>Pedido por WhatsApp</b>
-      <span>Te confirmamos el delivery y el pago; envías el comprobante y preparamos tu pedido.</span>
+  </div>
+
+  <div class="checkout-step" id="checkout2" hidden>
+    <div class="df">
+      <div class="step2-summary" id="step2Summary">Subtotal $0 · Entrega: Delivery</div>
+      <label>Nombre
+        <input id="cname" type="text" autocomplete="name" placeholder="Ej: Camila" required>
+      </label>
+      <label id="addrWrap">Dirección
+        <input id="caddr" type="text" autocomplete="street-address" placeholder="Calle, número, depto / sector" required>
+      </label>
+      <div>
+        <button class="note-toggle" id="noteToggle" type="button" aria-expanded="false" aria-controls="noteWrap">Agregar nota <span aria-hidden="true">+</span></button>
+        <div class="note-wrap" id="noteWrap" hidden>
+          <textarea id="cnote" rows="2" aria-label="Notas opcionales" placeholder="Ej: sin cebolla"></textarea>
+        </div>
+      </div>
+      <p class="err" id="err" role="alert"></p>
+      <div class="pay" id="pay" hidden>
+        <p class="pay-t" id="payT"></p>
+        <div id="payRows"></div>
+        <button type="button" class="copy" id="copyPay">Copiar datos</button>
+      </div>
+      <ol class="steps" id="steps" hidden></ol>
+      <button class="send" id="send" type="button" aria-label="Continuar en WhatsApp">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 11.7a8.5 8.5 0 0 1-12.6 7.4L3.5 20.5l1.4-4.3A8.5 8.5 0 1 1 20.5 11.7Z"/><path d="M8.7 8.1c.2-.4.4-.4.7-.4h.5c.2 0 .4 0 .5.4l.7 1.7c.1.3.1.5-.1.7l-.6.7c-.2.2-.2.4-.1.6.6 1.2 1.5 2.1 2.7 2.7.2.1.4.1.6-.1l.8-1c.2-.2.4-.3.7-.2l1.7.8c.3.1.4.3.4.5 0 .3-.2 1.5-.8 2.1-.6.6-1.5.9-2.5.6-1.1-.3-2.5-.8-4.2-2.3-1.4-1.2-2.4-2.8-2.7-3.8-.4-1-.1-2 .3-2.6Z"/></svg>
+        <span>Continuar en WhatsApp</span>
+      </button>
+      <p class="wa-hint">Se abre WhatsApp con tu pedido ya escrito. Solo presiona enviar.</p>
+      <p class="checkout-info" id="orderStep">Te respondemos con el valor del delivery y los datos para transferir. Preparamos tu pedido cuando recibimos el comprobante.</p>
+      <a class="wa-fallback" id="waFallback" href="#" target="_blank" rel="noopener" hidden>¿No se abrió WhatsApp? Tócalo aquí</a>
     </div>
-    <div class="pay" id="pay" hidden>
-      <p class="pay-t" id="payT"></p>
-      <div id="payRows"></div>
-      <button type="button" class="copy" id="copyPay">Copiar datos</button>
-    </div>
-    <ol class="steps" id="steps" hidden></ol>
-    <button class="send" id="send" type="button">Enviar pedido por WhatsApp</button>
   </div>
 </aside>
 
@@ -606,9 +638,13 @@ loadFont("CartaTextos", CONFIG.fuenteTextos, "--sans", 'Inter,system-ui,-apple-s
 /* Foto que no existe → recuadro de relleno */
 document.addEventListener("error", e => {
   const t = e.target;
-  if (t.tagName === "IMG" && t.classList.contains("dish")){
+  if (t.tagName !== "IMG") return;
+  if (t.classList.contains("dish")){
     const ph = document.createElement("div"); ph.className = "ph"; ph.setAttribute("aria-hidden", "true");
     (t.closest(".zoom") || t).replaceWith(ph);
+  } else if (t.classList.contains("line-thumb")){
+    const ph = document.createElement("div"); ph.className = "line-thumb ph"; ph.setAttribute("aria-hidden", "true");
+    t.replaceWith(ph);
   }
 }, true);
 
@@ -898,14 +934,15 @@ function renderCart(){
       <div class="line-price"><b>${fmt(l.qty * l.price)}</b></div>
     </div>`).join("") + panelSuggest(ls) : `<p class="empty">Aún no agregas productos.</p>`;
   $("#total").textContent = fmt(sum);
-  syncPay();
+  syncTipo();
   $("#send").disabled = count === 0;
+  $("#nextCheckout").disabled = count === 0;
   document.querySelectorAll(".item").forEach(syncCard);
   if (count === 0){ hideSuggest(); if (drawer.classList.contains("on")) toggle(false); } else drawSuggest();
 }
 
 function toggle(open, focus){
-  if (open) hideSuggest();
+  if (open){ hideSuggest(); showCheckoutStep(1, false); }
   drawer.classList.toggle("on", open);
   scrim.classList.toggle("on", open);
   document.body.classList.toggle("panel-open", open);
@@ -1010,6 +1047,26 @@ document.addEventListener("click", e => {
   }
 });
 
+let checkoutStep = 1;
+function showCheckoutStep(n, animate=true){
+  checkoutStep = n;
+  const a = $("#checkout1"), b = $("#checkout2"), back = $("#backCheckout");
+  a.hidden = n !== 1; b.hidden = n !== 2;
+  $("#drawerTitle").textContent = n === 1 ? "Tu pedido" : "Tus datos";
+  back.hidden = n !== 2;
+  const el = n === 1 ? a : b;
+  el.classList.remove("in");
+  if (animate){ void el.offsetWidth; el.classList.add("in"); }
+  drawer.scrollTop = 0;
+  if (n === 2) syncTipo();
+}
+$("#nextCheckout").addEventListener("click", () => {
+  if (!totals().count) return;
+  showCheckoutStep(2, true);
+  setTimeout(() => $("#cname").focus(), 120);
+});
+$("#backCheckout").addEventListener("click", () => showCheckoutStep(1, true));
+
 cartbtn.addEventListener("click", () => toggle(!drawer.classList.contains("on"), true));
 $("#close").addEventListener("click", () => toggle(false, true));
 scrim.addEventListener("click", () => toggle(false, true));
@@ -1071,6 +1128,16 @@ try {
   if (p.name) $("#cname").value = p.name;
   if (p.addr) $("#caddr").value = p.addr;
 } catch(e){}
+function saveProfile(){
+  try { localStorage.setItem(PROFILE, JSON.stringify({ name: $("#cname").value.trim(), addr: $("#caddr").value.trim() })); } catch(e){}
+}
+$("#cname").addEventListener("change", saveProfile);
+$("#caddr").addEventListener("change", saveProfile);
+$("#noteToggle").addEventListener("click", () => {
+  const btn = $("#noteToggle"), wrap = $("#noteWrap"), open = btn.getAttribute("aria-expanded") === "true";
+  btn.setAttribute("aria-expanded", String(!open)); wrap.hidden = open;
+  if (!open) setTimeout(() => $("#cnote").focus(), 0);
+});
 
 /* Datos de transferencia (si están en CONFIG) */
 const PAY = CONFIG.transferencia || {};
@@ -1097,17 +1164,35 @@ function syncPay(){
     : `Transfiere <b>${fmt(sum)}</b> a:`;
 }
 function syncTipo(){
-  const d = tipo() === "delivery";
-  $("#addrWrap").style.display = d ? "" : "none";
-  const dn = $("#dnote");
-  dn.textContent = (d && delivRange) ? "+ Delivery entre " + delivRange + ". Nuestro equipo te confirma el valor exacto." : "";
-  dn.hidden = !dn.textContent;
-  const os = $("#orderStep span");
-  if (os) os.textContent = d
-    ? "Envía tu pedido. Te confirmamos delivery y pago; mandas el comprobante y preparamos."
-    : "Envía tu pedido. Realizas el pago, mandas el comprobante y preparamos.";
-  $("#steps").innerHTML = "";
-  syncPay();
+  const d = tipo() === "delivery", sum = totals().sum;
+  const addr = $("#caddr"), wrap = $("#addrWrap");
+  wrap.style.display = d ? "" : "none";
+  addr.required = d;
+  const tl = $("#totalLabel"), dn = $("#dnote");
+  tl.textContent = d ? "Subtotal productos" : "Total";
+  dn.textContent = d
+    ? ((CONFIG.delivery && CONFIG.delivery.min && CONFIG.delivery.max)
+        ? "+ Delivery entre " + fmt(CONFIG.delivery.min) + " y " + fmt(CONFIG.delivery.max) + ". Te confirmamos el valor exacto."
+        : "+ Delivery por confirmar. Te confirmamos el valor exacto.")
+    : "Sin costo de envío";
+  dn.hidden = false;
+  const summary = $("#step2Summary");
+if (summary) {
+  summary.textContent = d
+    ? "Subtotal " + fmt(sum) + " · Entrega: Delivery"
+    : "Total " + fmt(sum) + " · Retiro en local";
+}
+
+const os = $("#orderStep");
+
+if (os) {
+  os.textContent = d
+    ? "Confirmaremos tu pedido y te enviaremos el valor del delivery junto con los datos de transferencia. Una vez recibido el pago, comenzaremos a preparar tu orden."
+    : "Confirmaremos tu pedido y te enviaremos los datos de transferencia. Una vez recibido el pago, comenzaremos a preparar tu orden.";
+}
+
+$("#steps").innerHTML = "";
+syncPay();
 }
 document.querySelectorAll('input[name="tipo"]').forEach(r => r.addEventListener("change", syncTipo));
 syncTipo();
@@ -1134,7 +1219,9 @@ $("#send").addEventListener("click", () => {
     delivery ? "*Pago:* transferencia previa (espero tu confirmación del delivery y te envío el comprobante)"
              : (hasPay ? "*Pago:* transferencia previa (te envío el comprobante)" : "*Pago:* transferencia previa (¿me envías los datos?)")
   ].filter(x => x !== null).join("\n");
-  window.open("https://wa.me/" + CONFIG.whatsapp + "?text=" + encodeURIComponent(txt), "_blank", "noopener");
+  const waUrl = "https://wa.me/" + CONFIG.whatsapp + "?text=" + encodeURIComponent(txt);
+  const fallback = $("#waFallback"); fallback.href = waUrl; fallback.hidden = false;
+  window.open(waUrl, "_blank", "noopener");
 });
 
 
@@ -1160,6 +1247,7 @@ if (CONFIG.opciones){
   document.body.append(labBox, labBtn);
 }
 
+showCheckoutStep(1, false);
 renderCart();
 </script>
 </body>
