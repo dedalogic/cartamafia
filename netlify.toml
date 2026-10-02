@@ -1,0 +1,7 @@
+[functions]
+  directory = "netlify/functions"
+
+[[headers]]
+  for = "/admin/*"
+  [headers.values]
+    Cache-Control = "no-store"
