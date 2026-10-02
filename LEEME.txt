@@ -1,0 +1,30 @@
+CARTA DIGITAL MAFIA - VERSION SIN CARPETAS (todo junto en un mismo nivel)
+=========================================================================
+
+ARCHIVOS
+  index.html        la carta (aquí se editan precios, textos y datos del local)
+  logo.png          logo de MAFIA
+  *.jpg             fotos de los platos (margarita.jpg, tgm.jpg, ...)
+  panel-demo.html   MAQUETA del panel interno. Solo demostración, datos inventados.
+  fotos-nombres.txt lista del nombre de archivo de cada foto; marca cuáles faltan
+
+SUBIR A GITHUB
+  1. Descomprime el zip.
+  2. En el repositorio: Add file > Upload files.
+  3. Abre la carpeta descomprimida, selecciona TODOS los archivos (Ctrl+A) y arrástralos.
+     Son 17 archivos, ninguno se llama igual.
+  4. Commit changes.
+  5. Netlify: Add new site > Import an existing project > GitHub > tu repositorio > Deploy.
+  La carta queda en tu dirección de Netlify y la maqueta en /panel-demo
+
+ANTES DE PUBLICAR, EDITA index.html (bloque CONFIG y MENU, al inicio del <script>)
+  - whatsapp: ya está el de MAFIA (56945010783)
+  - transferencia: completa titular, rut, banco, tipoCuenta y numeroCuenta
+  - delivery: rango que se informa al cliente ($3.000 a $4.000)
+  - precios y descripciones: los actuales son DE EJEMPLO. Precios sin punto: price: 3990
+
+ACTUALIZAR DESPUES
+  - Precios y textos: abre index.html en GitHub > lápiz > edita > Commit changes.
+  - Fotos nuevas: Add file > Upload files > sube la foto con el nombre exacto del plato
+    (misma foto con el mismo nombre = reemplaza la anterior).
+  - Si algún día quieres ordenarlas en una carpeta fotos/, cambia fotosCarpeta a "fotos/".

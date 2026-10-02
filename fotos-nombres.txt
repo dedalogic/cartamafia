@@ -1,0 +1,58 @@
+NOMBRES DE ARCHIVO PARA LAS FOTOS
+Guarda cada foto JUNTO al index.html (sin carpeta) con el nombre indicado (minúsculas, sin espacios).
+Extensión actual: .jpg  (se cambia en CONFIG > fotosExtension)
+Logo: logo.png (ya incluido, junto al index.html)
+
+[OK] = ya tiene foto en esta carpeta   [  ] = falta
+
+== Entradas ==
+[  ] palitos.jpg   (Palitos de ajo)
+[OK] cremita-zapallo.jpg   (Cremita de Zapallo)
+
+== Pizzas ==
+[OK] margarita.jpg   (Margarita)
+[OK] pepperoni.jpg   (Pepperoni)
+[OK] napolitana.jpg   (Napolitana)
+[OK] pollo-bbq.jpg   (Pollo BBQ)
+[OK] tgm.jpg   (TGM)
+[OK] funghi.jpg   (Funghi)
+[OK] chocleta.jpg   (La Chocleta)
+[OK] ajillo.jpg   (Al Ajillo Boss)
+
+== Pastas ==
+[OK] fetuccini-alfredo.jpg   (Fetuccini Alfredo)
+[OK] bucatini-bolognesa.jpg   (Bucatini Boloñesa)
+[OK] fetuccini-pesto.jpg   (Fetuccini Pesto)
+
+== Proteínas ==
+[  ] albondigas.jpg   (Albóndigas)
+[  ] pollo-gravy.jpg   (Pollo con Gravy)
+[  ] pastel-carne.jpg   (Pastel de Carne)
+[  ] pollo-limon.jpg   (Pollo al Limón)
+[  ] carne-vino.jpg   (Carne al Vino Tinto)
+[  ] fruti-di-mar.jpg   (Fruti di Mar)
+
+== Combos ==
+[  ] combo-soprano.jpg   (Combo Soprano)
+
+== Toppings ==
+[  ] top-queso.jpg   (Extra queso)
+[  ] top-pepperoni.jpg   (Pepperoni)
+[  ] top-champi.jpg   (Champiñones)
+[  ] top-aceitunas.jpg   (Aceitunas)
+[  ] top-tocino.jpg   (Tocino)
+
+== Salsas ==
+[  ] salsa-bbq.jpg   (Salsa BBQ)
+[  ] salsa-pomodoro.jpg   (Salsa Pomodoro)
+[  ] salsa-alioli.jpg   (Alioli)
+[  ] salsa-jalapeno.jpg   (Jalapeño Ranch)
+[  ] salsa-street.jpg   (Street)
+[  ] salsa-emmy.jpg   (Emmy)
+
+== Bebidas ==
+[  ] beb-350.jpg   (Bebida mini)
+[  ] beb-15.jpg   (Bebida 1.5 L)
+[  ] agua.jpg   (Agua mineral 500 ml)
+[  ] jugo.jpg   (Jugo natural)
+
