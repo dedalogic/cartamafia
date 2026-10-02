@@ -123,7 +123,7 @@ main{max-width:1160px;margin:0 auto;padding:0 20px}
 .stp[hidden],.add[hidden]{display:none}
 .stp button{flex:0 0 40px;height:100%;border:0;background:none;color:#fff;font-size:20px;line-height:1}
 .stp span{flex:1;text-align:center;font-weight:700;font-size:16px}
-.stp.pop{animation:pop .38s cubic-bezier(.22,.72,.24,1)}
+.stp.pop{animation:pop .48s cubic-bezier(.22,.72,.24,1)}
 .lb{position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:20px;background:rgba(0,0,0,.96)}
 .lb[hidden]{display:none}
 .lb figure{display:grid;gap:12px;justify-items:center;text-align:center}
@@ -131,11 +131,11 @@ main{max-width:1160px;margin:0 auto;padding:0 20px}
 .lb figcaption{font:400 24px/1.1 var(--serif);letter-spacing:.03em;color:#f3ede2;max-width:46ch}
 .lb figcaption small{display:block;margin-top:4px;color:#a39d92;font:400 14px/1.4 var(--sans)}
 .lb-x{position:fixed;top:calc(14px + env(safe-area-inset-top,0px));right:14px;width:46px;height:46px;border-radius:var(--r);border:1px solid #3a3836;background:#161514;color:#fff;font-size:20px}
-@keyframes pop{0%{transform:scale(.96);opacity:.82}55%{transform:scale(1.025);opacity:1}100%{transform:scale(1);opacity:1}}
+@keyframes pop{0%{transform:scale(.982);opacity:.9}55%{transform:scale(1.012);opacity:1}100%{transform:scale(1);opacity:1}}
 @keyframes softReveal{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
-.stp:not([hidden]){animation:softReveal .2s ease-out}
+.stp:not([hidden]){animation:softReveal .28s ease-out}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.add:active{transform:scale(.975)}
+.add:active{transform:scale(.988)}
 
 footer{max-width:1160px;margin:56px auto 0;padding:24px 20px;border-top:1px solid var(--line);color:var(--muted);font-size:12px;display:grid;gap:6px}
 footer b{color:var(--text);font-weight:600}
@@ -180,42 +180,61 @@ body.has-sug{padding-bottom:calc(160px + env(safe-area-inset-bottom,0px))}
 .head-back{display:grid;place-items:center;width:44px;height:44px;margin-left:-10px;border:0;border-radius:var(--r);background:none;color:var(--text);font-size:22px;line-height:1}
 .head-back[hidden]{display:none}
 .x{width:44px;height:44px;border-radius:var(--r);border:1px solid var(--line);background:none;font-size:20px}
-.lines{flex:none;padding:0 20px}
+.lines{flex:1 1 auto;min-height:0;overflow-y:auto;padding:0 20px;-webkit-overflow-scrolling:touch}
 .empty{padding:28px 0;color:var(--muted)}
-.line{display:grid;grid-template-columns:1fr auto;gap:4px 12px;padding:14px 0;border-bottom:1px solid var(--line)}
+.line{display:grid;grid-template-columns:56px minmax(0,1fr) auto;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
 .line b{font-weight:600}
 .line small{display:block;color:var(--muted);font-size:12px}
-.qty{display:flex;align-items:center;gap:10px;grid-row:span 2;align-self:center}
-.qty button{width:40px;height:40px;border-radius:var(--r);border:1px solid var(--line);background:none;font-size:18px;line-height:1}
+.line-thumb,.line-thumb-ph{display:block;width:56px;height:56px;border-radius:var(--r);align-self:center}
+.line-thumb{object-fit:cover;border:1px solid var(--line);background:#1b1a19}
+.line-thumb-ph{border:1px solid var(--line);background:repeating-linear-gradient(135deg,#1b1a19 0 10px,#211f1d 10px 20px)}
+.line-content{min-width:0}
+.line-name{display:block;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.line-detail{margin-top:2px;line-height:1.35;display:-webkit-box!important;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.line-price{display:flex;align-items:baseline;gap:8px;margin-top:3px;min-width:0}
+.line-total{white-space:nowrap}
+.line-unit{min-width:0}
+.qty{display:flex;align-items:center;gap:8px;flex:0 0 auto;align-self:center}
+.qty button{width:44px;height:44px;border-radius:var(--r);border:1px solid var(--line);background:none;font-size:18px;line-height:1}
 .qty span{min-width:18px;text-align:center;font-weight:600}
-.df{margin-top:auto;padding:16px 20px calc(20px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);display:grid;gap:10px}
+.df{margin-top:0;padding:16px 20px calc(20px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);display:grid;gap:10px;background:#141312;flex:0 0 auto}
+#checkout1{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;overflow:hidden}
 .checkout-step[hidden]{display:none!important}
 .checkout-step.in{animation:checkoutIn .28s ease-out}
 @keyframes checkoutIn{from{opacity:0;transform:translateX(10px)}to{opacity:1;transform:none}}
 .step2-summary{padding:11px 13px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);font-size:13px;color:var(--muted)}
 .next{min-height:48px;border-radius:var(--r);font-weight:600;font-size:15px;border:0;background:var(--red);color:#fff}
 .next:hover{background:var(--red-hi)}
-#checkout1 .next{position:sticky;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:2;box-shadow:0 -10px 14px #141312}
+#checkout1 .next{position:static;box-shadow:none}
 .df label{font-size:12px;color:var(--muted)}
 .df input:not([type="radio"]),.df textarea{width:100%;margin-top:4px;padding:12px 13px;border-radius:var(--r);border:2px solid #fff;
   background:#fff;color:#16130f;font:inherit;font-size:16px;resize:vertical}
 .df input:not([type="radio"])::placeholder,.df textarea::placeholder{color:#8a8378}
 .df input:not([type="radio"]):focus,.df textarea:focus{outline:none;border-color:var(--red)}
 .sug{padding:16px 0 8px}
-.sug p{font-size:12px;color:var(--muted);margin-bottom:4px}
-.sug-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 0;font-size:14px}
-.sug-row b{font-weight:500;color:var(--muted);margin-left:6px}
-.sug-badge{display:inline-block;margin-left:6px;color:var(--red);font-size:11px;font-weight:700}
-.sug-row button{width:40px;height:40px;border-radius:var(--r);border:1px solid var(--red);background:none;color:var(--text);font-size:18px;line-height:1}
-.sug-row button:hover{background:var(--red-dim)}
+.sug p{font-size:14px;color:var(--text);font-weight:600;margin-bottom:8px}
+.sug-list{display:grid;gap:8px}
+.sug-row{display:flex;align-items:center;justify-content:space-between;gap:10px;min-width:0}
+.sug-copy{min-width:0;flex:1;display:grid;gap:2px}
+.sug-topline{display:flex;align-items:baseline;gap:7px;min-width:0}
+.sug-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:14px;font-weight:500}
+.sug-badge{color:var(--red-hi);font-size:12px;font-weight:600;line-height:1.2}
+.sug-price{color:var(--muted);font-size:14px;font-weight:500;white-space:nowrap}
+.sug-add{width:44px;height:44px;min-width:44px;border-radius:var(--r);border:1px solid var(--line);background:none;color:var(--text);font-size:18px;line-height:1}
+.sug-row:first-child .sug-add{border-color:var(--red);background:var(--red);color:#fff}
+.sug-row:first-child .sug-add:hover{background:var(--red-hi)}
 .total{display:flex;justify-content:space-between;font-size:18px;font-weight:600;padding-top:4px}
 .seg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.seg.shake{animation:shake .35s}
 .seg label{display:block;margin:0;color:var(--text)}
 .seg input{position:absolute;opacity:0;width:1px;height:1px}
-.seg span{display:flex;align-items:center;justify-content:center;gap:6px;min-height:44px;text-align:center;padding:13px 8px;border-radius:var(--r);border:1px solid var(--line);font-size:14px;font-weight:500;cursor:pointer}
-.seg input:checked + span{border-color:var(--text);background:var(--red-dim)}
-.seg input:checked + span::before{content:"✓";font-weight:700;color:var(--text)}
-.seg input:focus-visible + span{outline:2px solid var(--red-hi);outline-offset:2px}
+.seg>label>span{display:grid;grid-template-rows:auto auto;align-items:center;justify-items:center;min-height:44px;text-align:center;padding:9px 8px;border-radius:var(--r);border:1px solid var(--line);font-size:14px;font-weight:500;cursor:pointer}
+.seg-main{grid-row:1}
+.seg-sub{grid-row:2;color:var(--muted);font-size:12px;font-weight:400;line-height:1.25}
+.seg input:checked + span{border-color:var(--text);background:rgba(243,237,226,.06)}
+.seg input:focus-visible + span{outline:2px solid var(--text);outline-offset:2px}
+.delivery-err{color:#ff8a8a;font-size:12px;min-height:0;margin:0}
+.delivery-err:empty{display:none}
 .err{color:#ff8a8a;font-size:12px;min-height:0}
 .err:empty{display:none}
 .hint{font-size:12px;color:var(--muted)}
@@ -316,6 +335,17 @@ html[data-layout="grid"] .tog[aria-checked="true"] .sw::before{content:"✓";pos
 html[data-layout="grid"] .cat:not(.compact) .act{order:3}
 html[data-layout="grid"] .cat:not(.compact) .fmt,html[data-layout="grid"] .cat:not(.compact) .offer{order:1}
 
+
+/* Ajustes táctiles y de selección del modal */
+button,a,[role="button"],[role="radio"]{touch-action:manipulation}
+#combos .item h3{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#combos .desc{display:-webkit-box!important;-webkit-line-clamp:2!important;-webkit-box-orient:vertical;overflow:hidden}
+html[data-layout="grid"] #combos .hd{min-height:58px}
+.sh-step{padding-bottom:16px}
+.sh-step .sh-g{gap:6px}
+.sh-step .sh-opt{min-height:52px;padding-top:7px;padding-bottom:7px}
+.sh-ex.is-missing .sh-opt,.sh-ex.is-missing .sh-chk{border-color:var(--red)}
+
 /* ---------- Variantes de tipografía ---------- */
 html[data-type="contrast"] .item h3,html[data-type="contrast"] .sh-h b{font:700 20px/1.15 var(--sans);letter-spacing:0}
 html[data-type="contrast"] .nav a{font:600 13px/1.2 var(--sans);letter-spacing:.05em;text-transform:uppercase}
@@ -366,11 +396,6 @@ html[data-layout="grid"][data-desc="none"] .cat:not(.compact) .hd{min-height:28p
 .lab-g button[aria-pressed="true"]{border-color:var(--text);background:rgba(243,237,226,.1)}
 
 /* Ajustes de carrito y accesos */
-.line{grid-template-columns:54px minmax(0,1fr) auto;gap:4px 12px}
-.line-thumb{grid-column:1;grid-row:1 / span 2;width:54px;height:54px;object-fit:cover;border-radius:10px;border:1px solid var(--line);align-self:center}
-.line-main{grid-column:2;grid-row:1}
-.line-price{grid-column:2;grid-row:2}
-.line .qty{grid-column:3;grid-row:1 / span 2}
 .jump-card{width:100%}
 .jump-card .add{width:100%}
 @media(min-width:1100px){html[data-layout="grid"] #combos .list{grid-template-columns:repeat(4,minmax(0,1fr));gap:40px 24px}}
@@ -422,12 +447,13 @@ html[data-layout="grid"][data-desc="none"] .cat:not(.compact) .hd{min-height:28p
   <div class="checkout-step" id="checkout1">
     <div class="lines" id="lines"></div>
     <div class="df">
-      <div class="seg" role="radiogroup" aria-label="Tipo de pedido">
-        <label><input type="radio" name="tipo" value="delivery" checked><span>Delivery</span></label>
-        <label><input type="radio" name="tipo" value="retiro"><span>Retiro en local</span></label>
+      <div class="seg" id="deliverySelector" role="radiogroup" aria-label="Tipo de pedido">
+        <label><input type="radio" name="tipo" value="delivery"><span><b class="seg-main">Delivery</b><small class="seg-sub" id="deliveryCost">+ $3.000 a $4.000</small></span></label>
+        <label><input type="radio" name="tipo" value="retiro"><span><b class="seg-main">Retiro en local</b><small class="seg-sub">Sin costo</small></span></label>
       </div>
-      <div class="total"><span id="totalLabel">Subtotal productos</span><span id="total">$0</span></div>
-      <p class="dnote" id="dnote"></p>
+      <p class="delivery-err" id="deliveryErr" aria-live="polite"></p>
+      <div class="total"><span id="totalLabel">Subtotal</span><span id="total">$0</span></div>
+      <p class="dnote" id="dnote" hidden></p>
       <button class="next" id="nextCheckout" type="button">Continuar</button>
     </div>
   </div>
@@ -496,18 +522,18 @@ const CONFIG = {
    LOS PRECIOS Y DESCRIPCIONES DE ABAJO SON DE EJEMPLO: reemplázalos por los reales. */
 const MENU = [
   { id:"combos", name:"Combos", items:[
-    { id:"pizza-combo-info", name:"Haz combo tu pizza", desc:"En pizzas de 40 cm y 60 cm, agrega Palitos de ajo + Bebida 1.5 L por $5.000.", img:"pizza-combo-info.png", infoOnly:true, jump:"pizzas" },
-    { id:"promo-alfredo", name:"Promo Alfredo", desc:"Fetuccini Alfredo + bebida mini a elección.", price:7990, img:"combo-alfredo.png",
+    { id:"pizza-combo-info", name:"Hazla combo", desc:"En 40 y 60 cm: palitos + bebida 1.5 L por +$5.000", img:"pizza-combo-info.png", infoOnly:true, jump:"pizzas" },
+    { id:"promo-alfredo", name:"Promo Alfredo", desc:"Fetuccini + bebida mini", price:7990, img:"combo-alfredo.png",
       bundleChoices:[
         { label:"Elige tu bebida mini", short:"Bebida", list:["Coca-Cola Original","Coca-Cola Zero"] }
       ] },
-    { id:"combo-indecisos", name:"Combo Indecisos", desc:"1 slice a elección + Fetuccini con salsa a elección + bebida mini.", price:11990, img:"combo-indecisos.png",
+    { id:"combo-indecisos", name:"Combo Indecisos", desc:"Slice + fetuccini + bebida mini", price:11990, img:"combo-indecisos.png",
       bundleChoices:[
         { label:"Elige tu slice", short:"Slice", list:["Tony Pepperoni","Margarita","Napolitana"] },
         { label:"Elige la salsa del Fetuccini", short:"Salsa", list:["Alfredo","Pesto","Bolognesa"] },
         { label:"Elige tu bebida mini", short:"Bebida", list:["Coca-Cola Original","Coca-Cola Zero"] }
       ] },
-    { id:"combo-soprano", name:"Combo Soprano", desc:"Fetuccini con salsa a elección, albóndigas, Cremita de Zapallo y bebida mini.", price:9990, img:"combo-soprano.png",
+    { id:"combo-soprano", name:"Combo Soprano", desc:"Fetuccini + albóndigas + cremita + bebida mini", price:9990, img:"combo-soprano.png",
       bundleChoices:[
         { label:"Elige la salsa del Fetuccini", short:"Salsa", list:["Alfredo","Pesto","Bolognesa"] },
         { label:"Elige tu bebida mini", short:"Bebida", list:["Coca-Cola Original","Coca-Cola Zero"] }
@@ -673,7 +699,7 @@ document.addEventListener("error", e => {
     const ph = document.createElement("div"); ph.className = "ph"; ph.setAttribute("aria-hidden", "true");
     (t.closest(".zoom") || t).replaceWith(ph);
   } else if (t.classList.contains("line-thumb")){
-    const ph = document.createElement("div"); ph.className = "line-thumb ph"; ph.setAttribute("aria-hidden", "true");
+    const ph = document.createElement("span"); ph.className = "line-thumb-ph"; ph.setAttribute("aria-hidden", "true");
     t.replaceWith(ph);
   }
 }, true);
@@ -712,6 +738,13 @@ const photoSrc = (it, pi=-1) => {
   const f = (it.photoBy && picked && it.photoBy[picked]) || it.foto || (AUTO_PHOTO_IDS.has(it.id) ? it.id : "");
   return assetPath(f);
 };
+const CART_PHOTO_OVERRIDES = {
+  "top-bbq":"bbq(1).jpeg",
+  "top-ketchup":"ketchup.jpeg",
+  "top-pomodoro":"pomodoro.jpeg",
+  "top-parmigiano":"parmigiano(1).png"
+};
+const cartPhotoSrc = l => CART_PHOTO_OVERRIDES[l.it.id] ? assetPath(CART_PHOTO_OVERRIDES[l.it.id]) : l.thumb;
 
 function itemHTML(it, compact){
   const s = S(it.id);
@@ -951,16 +984,14 @@ const wide = window.matchMedia("(min-width:900px)");
 
 const inCart = id => Object.keys(cart).some(k => k.split("|")[0] === id);
 const pick = (ids, max) => ids.filter(id => IDX[id] && !IDX[id].options && !IDX[id].pick && !IDX[id].combo && !inCart(id)).slice(0, max);
-const sugRow = id => {
-  const badge = id === "top-bbq" ? `<small class="sug-badge">Más vendido</small>` : "";
-  return `<div class="sug-row"><span>${esc(IDX[id].name)}${badge}<b>+${fmt(IDX[id].price)}</b></span>
-    <button type="button" data-sug="${esc(id)}" aria-label="Agregar ${esc(IDX[id].name)}">+</button></div>`;
-};
+const sugRow = (id, i) => `<div class="sug-row"><div class="sug-copy"><div class="sug-topline"><span class="sug-name">${esc(IDX[id].name)}</span><b class="sug-price">+${fmt(IDX[id].price)}</b></div>${i === 0 ? `<small class="sug-badge">Más vendido</small>` : ""}</div><button type="button" class="sug-add" data-sug="${esc(id)}" aria-label="Agregar ${esc(IDX[id].name)}">+</button></div>`;
 
 function panelSuggest(ls){
   if (!ls.length) return "";
-  const ids = ["top-bbq", "top-pomodoro"].filter(id => IDX[id] && !inCart(id));
-  return ids.length ? `<div class="sug"><p>Agrega algo más</p>${ids.map(sugRow).join("")}</div>` : "";
+  const pool = ["top-bbq", "top-pomodoro"];
+  ls.forEach(l => ((l.it.suggest && l.it.suggest.ids) || []).forEach(id => { if (!pool.includes(id)) pool.push(id); }));
+  const ids = pool.filter(id => IDX[id] && !inCart(id)).slice(0, 2);
+  return ids.length ? `<div class="sug"><p>Completa tu pedido</p><div class="sug-list">${ids.map((id, i) => sugRow(id, i)).join("")}</div></div>` : "";
 }
 
 const sugBox = $("#suggest");
@@ -986,21 +1017,33 @@ function drawSuggest(){
   if (sugBox.hidden){ sugBox.hidden = false; sugBox.classList.remove("in"); void sugBox.offsetWidth; sugBox.classList.add("in"); }
 }
 
+function cartDetail(l){
+  return l.parts.map(p => String(p)
+    .replace(/^Combo:\s*/i, "")
+    .replace(/^Salsa:\s*/i, "")
+    .replace(/^Bebida:\s*/i, "")
+    .replace(/^[^:]+:\s*/, "")
+  ).filter(Boolean).join(" · ");
+}
+
 function renderCart(){
   const { count, sum, ls } = totals();
   cbadge.textContent = count; cbadge.hidden = count === 0;
   cartbtn.setAttribute("aria-label", count ? "Ver pedido: " + count + (count === 1 ? " producto, " : " productos, ") + fmt(sum) : "Ver pedido");
   cartbtn.title = count ? fmt(sum) : "";
-  $("#lines").innerHTML = ls.length ? ls.map(l => `<div class="line">
-      ${l.thumb ? `<img class="line-thumb" src="${esc(l.thumb)}" alt="" loading="lazy">` : `<div class="line-thumb ph" aria-hidden="true"></div>`}
-      <div class="line-main"><b>${esc(l.it.name)}</b>${l.parts.map(p => `<small>${esc(p)}</small>`).join("")}<small>${fmt(l.price)} c/u</small></div>
+  $("#lines").innerHTML = ls.length ? ls.map(l => { const detail = cartDetail(l), thumb = cartPhotoSrc(l); return `<div class="line">
+      ${thumb ? `<img class="line-thumb" src="${esc(thumb)}" alt="" loading="lazy">` : `<span class="line-thumb-ph" aria-hidden="true"></span>`}
+      <div class="line-content">
+        <b class="line-name">${esc(l.it.name)}</b>
+        ${detail ? `<small class="line-detail">${esc(detail)}</small>` : ""}
+        <div class="line-price"><b class="line-total">${fmt(l.qty * l.price)}</b>${l.qty > 1 ? `<small class="line-unit">${fmt(l.price)} c/u</small>` : ""}</div>
+      </div>
       <div class="qty">
         <button type="button" data-dec="${esc(l.k)}" aria-label="Quitar uno de ${esc(l.it.name)}">−</button>
         <span aria-label="Cantidad">${l.qty}</span>
         <button type="button" data-inc="${esc(l.k)}" aria-label="Agregar uno de ${esc(l.it.name)}">+</button>
       </div>
-      <div class="line-price"><b>${fmt(l.qty * l.price)}</b></div>
-    </div>`).join("") + panelSuggest(ls) : `<p class="empty">Aún no agregas productos.</p>`;
+    </div>`; }).join("") + panelSuggest(ls) : `<p class="empty">Aún no agregas productos.</p>`;
   $("#total").textContent = fmt(sum);
   syncTipo();
   $("#send").disabled = count === 0;
@@ -1098,12 +1141,12 @@ document.addEventListener("click", e => {
   if (t.hasAttribute("data-combo") && card){ const sc = S(card.dataset.id); sc.c = !sc.c; syncCard(card); return; }
   if (t.hasAttribute("data-sh-x")) return closeSheet();
   if (t.dataset.shC !== undefined && shCtx){ shCtx.c = +t.dataset.shC; if (!shCtx.c) shCtx.drink = -1; drawSheet(); const f = $('[data-sh-c="' + shCtx.c + '"]'); if (f) f.focus(); return; }
-  if (t.dataset.shDrink !== undefined && shCtx){ shCtx.drink = +t.dataset.shDrink; drawSheet(); const f = $('[data-sh-drink="' + shCtx.drink + '"]'); if (f) f.focus(); return; }
-  if (t.dataset.shBundleGroup !== undefined && shCtx){ const gi = +t.dataset.shBundleGroup, vi = +t.dataset.shBundleValue; shCtx.bundle[gi] = vi; const itx = IDX[shCtx.id], last = !itx.bundleChoices || gi >= itx.bundleChoices.length - 1; if (!last) shCtx.step = gi + 1; drawSheet(); const f = last ? $('[data-sh-bundle-group="' + gi + '"][data-sh-bundle-value="' + vi + '"]') : $('[data-sh-bundle-group="' + (gi + 1) + '"]'); if (f) f.focus(); return; }
+  if (t.dataset.shDrink !== undefined && shCtx){ shCtx.drink = +t.dataset.shDrink; shCtx.invalid = ""; drawSheet(); const f = $('[data-sh-drink="' + shCtx.drink + '"]'); if (f) f.focus(); return; }
+  if (t.dataset.shBundleGroup !== undefined && shCtx){ const gi = +t.dataset.shBundleGroup, vi = +t.dataset.shBundleValue; shCtx.bundle[gi] = vi; shCtx.invalid = ""; const itx = IDX[shCtx.id], last = !itx.bundleChoices || gi >= itx.bundleChoices.length - 1; if (!last) shCtx.step = gi + 1; drawSheet(); const f = last ? $('[data-sh-bundle-group="' + gi + '"][data-sh-bundle-value="' + vi + '"]') : $('[data-sh-bundle-group="' + (gi + 1) + '"]'); if (f) f.focus(); return; }
   if (t.dataset.shExInc !== undefined && shCtx){ const x = t.dataset.shExInc; shCtx.ex[x] = (shCtx.ex[x] || 0) + 1; drawSheet(); const f = $('[data-sh-ex-inc="' + x + '"]'); if (f) f.focus(); return; }
   if (t.dataset.shExDec !== undefined && shCtx){ const x = t.dataset.shExDec, q = shCtx.ex[x] || 0; if (q <= 1) delete shCtx.ex[x]; else shCtx.ex[x] = q - 1; drawSheet(); const f = $('[data-sh-ex-dec="' + x + '"]'); if (f && !f.disabled) f.focus(); else { const g = $('[data-sh-ex-inc="' + x + '"]'); if (g) g.focus(); } return; }
   if (t.hasAttribute("data-sh-prev") && shCtx){ shCtx.step = Math.max(0, (shCtx.step || 0) - 1); drawSheet(); const f = $('[data-sh-bundle-group="' + shCtx.step + '"]'); if (f) f.focus(); return; }
-  if (t.hasAttribute("data-sh-add") && shCtx){ const sx = shCtx; const itx = IDX[sx.id], ox = itx.options ? S(sx.id).o : 0; const needDrink = !!itx.drinkChoice || (sx.c === 1 && comboNeedsDrink(itx, ox)); if (needDrink && sx.drink < 0) return; if (itx.bundleChoices && sx.bundle.some(v => v < 0)) return; const extras = Object.entries(sx.ex); closeSheet(); add(sx.id, false, sx.c, sx.drink, sx.bundle); extras.forEach(([x, q]) => { for (let i = 0; i < q; i++) add(x, true); }); return; }
+  if (t.hasAttribute("data-sh-add") && shCtx){ const sx = shCtx; const itx = IDX[sx.id], ox = itx.options ? S(sx.id).o : 0; const needDrink = !!itx.drinkChoice || (sx.c === 1 && comboNeedsDrink(itx, ox)); if (needDrink && sx.drink < 0){ sx.invalid = "drink"; drawSheet(); const f = $("[data-sh-drink]"); if (f) f.focus(); return; } if (itx.bundleChoices && sx.bundle.some(v => v < 0)){ const missing = sx.bundle.findIndex(v => v < 0); sx.step = missing < 0 ? sx.step : missing; sx.invalid = "bundle"; drawSheet(); const f = $('[data-sh-bundle-group="' + sx.step + '"]'); if (f) f.focus(); return; } const extras = Object.entries(sx.ex); closeSheet(); add(sx.id, false, sx.c, sx.drink, sx.bundle); extras.forEach(([x, q]) => { for (let i = 0; i < q; i++) add(x, true); }); return; }
   if (t.hasAttribute("data-opt") && card){
     const it = IDX[card.dataset.id], s = S(it.id);
     s.o = +t.dataset.opt; pressOnly(t); syncCard(card);
@@ -1145,6 +1188,13 @@ function showCheckoutStep(n, animate=true){
 }
 $("#nextCheckout").addEventListener("click", () => {
   if (!totals().count) return;
+  if (!tipo()){
+    const seg = $("#deliverySelector"), er = $("#deliveryErr");
+    er.textContent = "Elige delivery o retiro para continuar";
+    seg.classList.remove("shake"); void seg.offsetWidth; seg.classList.add("shake");
+    const first = seg.querySelector('input[name="tipo"]'); if (first) first.focus();
+    return;
+  }
   showCheckoutStep(2, true);
   setTimeout(() => $("#cname").focus(), 120);
 });
@@ -1182,7 +1232,7 @@ function drawSheet(){
       <div class="sh-g">${it.extras.ids.map(id => { const q = shCtx.ex[id] || 0;
         return `<div class="sh-opt sh-extra" role="group" aria-label="${esc(IDX[id].name)}" data-sh-extra="${esc(id)}" data-selected="${q > 0}"><span class="rd" aria-hidden="true"></span>${IDX[id].img ? `<img class="sh-thumb" src="${esc(IDX[id].img)}" alt="" onerror="this.style.display=\'none\'">` : ""}<span class="tx"><b>${esc(IDX[id].name)}</b><small>+ ${fmt(IDX[id].price)} c/u</small></span><span class="sh-qty"><button type="button" data-sh-ex-dec="${esc(id)}" aria-label="Quitar ${esc(IDX[id].name)}"${q ? "" : " disabled"}>−</button><span>${q}</span><button type="button" data-sh-ex-inc="${esc(id)}" aria-label="Agregar ${esc(IDX[id].name)}">+</button></span></div>`; }).join("")}</div></div>` : "";
   const needDrink = !!it.drinkChoice || (shCtx.c === 1 && comboNeedsDrink(it, o));
-  const drink = needDrink ? `<div class="sh-ex" role="radiogroup" aria-label="Elige tu bebida"><p class="sh-lab">Elige tu bebida</p>
+  const drink = needDrink ? `<div class="sh-ex${shCtx.invalid === "drink" ? " is-missing" : ""}" role="radiogroup" aria-label="Elige tu bebida" aria-invalid="${shCtx.invalid === "drink"}"><p class="sh-lab">Elige tu bebida</p>
       <div class="exg">${drinkChoices(it).map((name, i) => `<button type="button" class="sh-chk" role="radio" aria-checked="${shCtx.drink === i}" data-sh-drink="${i}"><span class="tx"><b>${esc(name)}</b><small>1.5 L</small></span><span class="bx" aria-hidden="true">${shCtx.drink === i ? "✓" : ""}</span></button>`).join("")}</div></div>` : "";
   let bundle = "", bundleDone = true;
   if (it.bundleChoices && it.bundleChoices.length){
@@ -1190,18 +1240,17 @@ function drawSheet(){
     const gi = Math.max(0, Math.min(shCtx.step || 0, totalSteps - 1));
     const g = it.bundleChoices[gi];
     bundleDone = shCtx.bundle.every(v => v >= 0);
-    bundle = `<div class="sh-step"><div class="sh-progress"><span>${gi > 0 ? `<button type="button" class="sh-back" data-sh-prev aria-label="Volver">←</button>` : ""}</span><span>${gi + 1} de ${totalSteps}</span></div><div class="sh-ex" role="radiogroup" aria-label="${esc(g.label)}"><p class="sh-lab">${esc(g.label)}</p><div class="sh-g">${g.list.map((name, vi) => `<button type="button" class="sh-opt" role="radio" aria-checked="${shCtx.bundle[gi] === vi}" data-sh-bundle-group="${gi}" data-sh-bundle-value="${vi}"><span class="rd" aria-hidden="true"></span><span class="tx"><b>${esc(name)}</b></span></button>`).join("")}</div></div></div>`;
+    bundle = `<div class="sh-step"><div class="sh-progress"><span>${gi > 0 ? `<button type="button" class="sh-back" data-sh-prev aria-label="Volver">←</button>` : ""}</span><span>${gi + 1} de ${totalSteps}</span></div><div class="sh-ex${shCtx.invalid === "bundle" ? " is-missing" : ""}" role="radiogroup" aria-label="${esc(g.label)}" aria-invalid="${shCtx.invalid === "bundle"}"><p class="sh-lab">${esc(g.label)}</p><div class="sh-g">${g.list.map((name, vi) => `<button type="button" class="sh-opt" role="radio" aria-checked="${shCtx.bundle[gi] === vi}" data-sh-bundle-group="${gi}" data-sh-bundle-value="${vi}"><span class="rd" aria-hidden="true"></span><span class="tx"><b>${esc(name)}</b></span></button>`).join("")}</div></div></div>`;
   }
-  const disabled = (needDrink && shCtx.drink < 0) || !bundleDone ? " disabled" : "";
   const showAdd = !it.bundleChoices || !it.bundleChoices.length || ((shCtx.step || 0) === it.bundleChoices.length - 1);
   $("#sheet").innerHTML = `<div class="sh-h"><div><b id="sh-t">${esc(it.name)}</b>${lab ? `<span>${esc(lab)}</span>` : ""}</div><button class="x" type="button" data-sh-x aria-label="Cerrar">✕</button></div>
     ${it.bundleChoices && it.bundleChoices.length ? bundle : `${radios}${drink}${ex}`}
-    ${showAdd ? `<button type="button" class="add sh-add" data-sh-add${disabled}>+ Agregar · ${fmt(sheetTotal())}</button>` : ""}`;
+    ${showAdd ? `<button type="button" class="add sh-add" data-sh-add>+ Agregar · ${fmt(sheetTotal())}</button>` : ""}`;
 }
 function openSheet(id){
   const it = IDX[id], s = S(id);
   if (it.pick && s.p < 0) return add(id);                              /* mismo aviso de "elige una opción" */
-  shCtx = { id, c:0, ex:{}, drink:-1, bundle:(it.bundleChoices || []).map(() => -1), step:0 }; shFrom = document.activeElement; drawSheet();
+  shCtx = { id, c:0, ex:{}, drink:-1, bundle:(it.bundleChoices || []).map(() => -1), step:0, invalid:"" }; shFrom = document.activeElement; drawSheet();
   $("#shbd").hidden = false; const sh = $("#sheet"); sh.hidden = false; sh.scrollTop = 0; sh.classList.remove("in"); void sh.offsetWidth; sh.classList.add("in");
   const f = $('[data-sh-c="0"]') || $("[data-sh-bundle-group=\"0\"]") || $("[data-sh-add]"); if (f) f.focus();
 }
@@ -1253,7 +1302,7 @@ if (hasPay){
   });
 }
 
-const tipo = () => document.querySelector('input[name="tipo"]:checked').value;
+const tipo = () => { const r = document.querySelector('input[name="tipo"]:checked'); return r ? r.value : ""; };
 function syncPay(){
   const t = document.getElementById("payT"); if (!t) return;
   const r = document.querySelector('input[name="tipo"]:checked');
@@ -1263,18 +1312,17 @@ function syncPay(){
     : `Transfiere <b>${fmt(sum)}</b> a:`;
 }
 function syncTipo(){
-  const d = tipo() === "delivery", sum = totals().sum;
+  const choice = tipo(), d = choice !== "retiro", sum = totals().sum;
   const addr = $("#caddr"), wrap = $("#addrWrap");
   wrap.style.display = d ? "" : "none";
   addr.required = d;
-  const tl = $("#totalLabel"), dn = $("#dnote");
-  tl.textContent = d ? "Subtotal productos" : "Total";
-  dn.textContent = d
-    ? ((CONFIG.delivery && CONFIG.delivery.min && CONFIG.delivery.max)
-        ? "+ Delivery entre " + fmt(CONFIG.delivery.min) + " y " + fmt(CONFIG.delivery.max) + ". Te confirmamos el valor exacto."
-        : "+ Delivery por confirmar. Te confirmamos el valor exacto.")
-    : "Sin costo de envío";
-  dn.hidden = false;
+  const tl = $("#totalLabel"), dn = $("#dnote"), dc = $("#deliveryCost");
+  tl.textContent = choice === "retiro" ? "Total" : "Subtotal";
+  if (dc) dc.textContent = (CONFIG.delivery && CONFIG.delivery.min && CONFIG.delivery.max)
+    ? "+ " + fmt(CONFIG.delivery.min) + " a " + fmt(CONFIG.delivery.max)
+    : "+ Por confirmar";
+  dn.textContent = "";
+  dn.hidden = true;
   const summary = $("#step2Summary");
   if (summary) summary.textContent = d ? "Subtotal " + fmt(sum) + " · Entrega: Delivery" : "Total " + fmt(sum) + " · Retiro en local";
   const os = $("#orderStep");
@@ -1284,7 +1332,12 @@ function syncTipo(){
   $("#steps").innerHTML = "";
   syncPay();
 }
-document.querySelectorAll('input[name="tipo"]').forEach(r => r.addEventListener("change", syncTipo));
+document.querySelectorAll('input[name="tipo"]').forEach(r => r.addEventListener("change", () => {
+  const er = $("#deliveryErr"), seg = $("#deliverySelector");
+  if (er) er.textContent = "";
+  if (seg) seg.classList.remove("shake");
+  syncTipo();
+}));
 syncTipo();
 
 $("#send").addEventListener("click", () => {
