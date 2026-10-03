@@ -6,6 +6,9 @@
 <title>Carta · MAFIA</title>
 <meta name="description" content="Carta digital de MAFIA. Pizzas, pastas, proteínas y combos.">
 <meta name="theme-color" content="#0c0c0c">
+<link rel="icon" type="image/png" href="/logo.png?v=mafia-20261003">
+<link rel="shortcut icon" type="image/png" href="/logo.png?v=mafia-20261003">
+<link rel="apple-touch-icon" href="/logo.png?v=mafia-20261003">
 <link rel="preload" href="Pesto%20Mafio.ttf" as="font" type="font/ttf" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -34,6 +37,9 @@ button{font:inherit;color:inherit;cursor:pointer}
 .top{padding:calc(40px + env(safe-area-inset-top,0px)) 20px 32px;text-align:center}
 .brand{font:400 clamp(48px,13vw,96px)/.9 var(--serif);letter-spacing:.05em;color:var(--red)}
 .brand .logo{display:block;margin:0 auto;width:auto;height:auto;max-width:70%;max-height:clamp(56px,15vw,88px)}
+.online-label{margin:12px 0 0;font-size:12px;font-weight:800;letter-spacing:.18em;color:var(--text)}
+.online-note{margin:11px auto 0;max-width:520px;font-size:12px;line-height:1.35;color:var(--muted)}
+.online-note b{color:var(--text);font-weight:700}
  .info{margin:12px auto 0;max-width:34ch;font-size:13px;line-height:1.45;color:var(--text);opacity:.78}
 
 /* ---------- Navegación de categorías ---------- */
@@ -424,6 +430,8 @@ html[data-layout="grid"][data-desc="none"] .cat:not(.compact) .hd{min-height:28p
 
 <header class="top">
   <h1 class="brand" id="brand">MAFIA</h1>
+  <p class="online-label">MENÚ ONLINE</p>
+  <p class="online-note"><b>Promos exclusivas delivery</b> · Productos disponibles solo por acá</p>
 </header>
 
 <nav class="nav" aria-label="Categorías de la carta">
@@ -576,7 +584,7 @@ const MENU = [
   { id:"entradas", name:"Entradas", items:[
     { id:"palitos", name:"Palitos de ajo", desc:"6 Palitos de Ajo cubiertos con Salsa Garlic y Queso Parmigiano. Incluye Salsa Pomodoro New York.", price:5990, img:"palitos-ajo.png",
       extras:{ label:"Agrega una salsa", ids:["top-pomodoro","top-bbq"] } },
-    { id:"cremita-zapallo", name:"Crema de Zapallo", desc:"Crema casera de Zapallo con Palitos de Ajo y Queso Parmigiano.", price:6990, img:"", foto:"cremita-zapallo" }
+    { id:"cremita-zapallo", name:"Cremita de Zapallo", desc:"Crema casera de Zapallo con Palitos de Ajo y Queso Parmigiano.", price:6990, img:"", foto:"cremita-zapallo" }
   ]},
   { id:"pizzas", name:"Pizzas", items:[
     { id:"tgm", name:"The Good Meat", desc:"Carne Mechada, Tocino, Salsa Pomodoro New York y Queso Mozzarella.",
@@ -637,7 +645,7 @@ const MENU = [
       suggest:{ ids:["top-bbq", "top-pomodoro", "top-parmigiano", "top-ketchup"] } }
   ]},
   { id:"pastas", name:"Pastas", items:[
-    { id:"fetuccini", name:"Fetuccini", desc:"", price:7490, img:"", foto:"fetuccini-alfredo", photoBy:{ Alfredo:"fetuccini-alfredo", Pesto:"fetuccini-pesto", Bolognesa:"fetuccini-bolognesa" },
+    { id:"fetuccini", name:"Fetuccini", desc:"", price:7490, img:"", foto:"fetuccini-alfredo", photoBy:{ Alfredo:"fetuccini-alfredo", Pesto:"fetuccini-pesto", Bolognesa:"fetuccini-bolognesa.png" },
       pick:{ label:"Elige tu salsa", short:"Salsa", list:["Alfredo","Pesto","Bolognesa"], hidden:["Vodka","Garlic","Picante","Lemon Pepper","Aglio Parmigiano"] },
       pickInSheet:true,
       priceByPick:{ Alfredo:7490, Pesto:7490, Bolognesa:8490 },
@@ -663,10 +671,10 @@ const MENU = [
     { id:"top-ketchup", name:"Ketchup", price:990, img:"ketchup.jpeg" }
   ]},
   { id:"bebidas", name:"Bebidas", compact:true, items:[
-    { id:"beb-350", name:"Bebida mini", desc:"Coca-Cola Original, Coca-Cola Zero, Sprite o Fanta.", price:1490, img:"", drinkChoice:{ label:"Elige tu bebida mini", list:["Coca-Cola Original","Coca-Cola Zero","Sprite","Fanta"], suffix:"" } },
+    { id:"beb-350", name:"Bebida mini", desc:"Coca-Cola Original, Coca-Cola Zero, Sprite o Fanta.", price:1800, img:"", drinkChoice:{ label:"Elige tu bebida mini", list:["Coca-Cola Original","Coca-Cola Zero","Sprite","Fanta"], suffix:"" } },
     { id:"beb-15", name:"Bebida 1.5 L", desc:"Coca-Cola Original o Zero.", price:3990, img:"", drinkChoice:{ label:"Elige tu bebida", list:["Coca-Cola Original","Coca-Cola Zero"], suffix:"1.5 L" } },
     { id:"agua", name:"Agua mineral 500 ml", desc:"Con o sin gas.", price:2000, img:"", drinkChoice:{ label:"Elige tu agua", list:["Con gas","Sin gas"], suffix:"" } },
-    { id:"jugo", name:"Néctar en botella", desc:"Durazno, Piña o Naranja.", price:2000, img:"", drinkChoice:{ label:"Elige tu néctar", list:["Durazno","Piña","Naranja"], suffix:"" } }
+    { id:"jugo", name:"Néctar en botella", desc:"Durazno, Piña o Naranja.", price:2490, img:"", drinkChoice:{ label:"Elige tu néctar", list:["Durazno","Piña","Naranja"], suffix:"" } }
   ]}
 ];
 
@@ -1288,6 +1296,13 @@ document.addEventListener("click", e => {
   }
   if (t.dataset.shC !== undefined && shCtx){ shCtx.c = +t.dataset.shC; if (!shCtx.c) shCtx.drink = -1; drawSheet(); const f = $('[data-sh-c="' + shCtx.c + '"]'); if (f) f.focus(); return; }
   if (t.dataset.shDrink !== undefined && shCtx){ shCtx.drink = +t.dataset.shDrink; shCtx.invalid = ""; drawSheet(); const f = $('[data-sh-drink="' + shCtx.drink + '"]'); if (f) f.focus(); return; }
+  if (t.hasAttribute("data-sh-next") && shCtx){
+    const itx = IDX[shCtx.id], ox = itx.options ? S(shCtx.id).o : 0;
+    const needDrink = !!itx.drinkChoice || (shCtx.c === 1 && comboNeedsDrink(itx, ox));
+    if (needDrink && shCtx.drink < 0){ shCtx.invalid = "drink"; drawSheet(); const f = $("[data-sh-drink]"); if (f) f.focus(); return; }
+    shCtx.stage = "proteins"; shCtx.invalid = ""; drawSheet(); const f = $("[data-sh-ex-inc]") || $("[data-sh-add]"); if (f) f.focus(); return;
+  }
+  if (t.hasAttribute("data-sh-protein-back") && shCtx){ shCtx.stage = "customize"; drawSheet(); const f = $('[data-sh-c="' + shCtx.c + '"]') || $("[data-sh-next]"); if (f) f.focus(); return; }
   if (t.dataset.shBundleGroup !== undefined && shCtx){ const gi = +t.dataset.shBundleGroup, vi = +t.dataset.shBundleValue; shCtx.bundle[gi] = vi; shCtx.invalid = ""; const itx = IDX[shCtx.id], last = !itx.bundleChoices || gi >= itx.bundleChoices.length - 1; if (!last) shCtx.step = gi + 1; drawSheet(); const f = last ? $('[data-sh-bundle-group="' + gi + '"][data-sh-bundle-value="' + vi + '"]') : $('[data-sh-bundle-group="' + (gi + 1) + '"]'); if (f) f.focus(); return; }
   if (t.dataset.shExInc !== undefined && shCtx){ const x = t.dataset.shExInc; shCtx.ex[x] = (shCtx.ex[x] || 0) + 1; drawSheet(); const f = $('[data-sh-ex-inc="' + x + '"]'); if (f) f.focus(); return; }
   if (t.dataset.shExDec !== undefined && shCtx){ const x = t.dataset.shExDec, q = shCtx.ex[x] || 0; if (q <= 1) delete shCtx.ex[x]; else shCtx.ex[x] = q - 1; drawSheet(); const f = $('[data-sh-ex-dec="' + x + '"]'); if (f && !f.disabled) f.focus(); else { const g = $('[data-sh-ex-inc="' + x + '"]'); if (g) g.focus(); } return; }
@@ -1386,6 +1401,20 @@ function drawSheet(){
   const drinkLabel = (it.drinkChoice && it.drinkChoice.label) || (comboDrinkKind(it, o) === "mini" ? "Elige tu bebida mini" : "Elige tu bebida");
   const drink = needDrink ? `<div class="sh-ex${shCtx.invalid === "drink" ? " is-missing" : ""}" role="radiogroup" aria-label="${esc(drinkLabel)}" aria-invalid="${shCtx.invalid === "drink"}"><p class="sh-lab">${esc(drinkLabel)}</p>
       <div class="exg">${drinkChoices(it, o, shCtx.c).map((name, i) => `<button type="button" class="sh-chk" role="radio" aria-checked="${shCtx.drink === i}" data-sh-drink="${i}"><span class="tx"><b>${esc(name)}</b>${drinkSuffix(it, o, shCtx.c) ? `<small>${esc(drinkSuffix(it, o, shCtx.c))}</small>` : ""}</span><span class="bx" aria-hidden="true">${shCtx.drink === i ? "✓" : ""}</span></button>`).join("")}</div></div>` : "";
+  /* Para pastas: primero Solo/Combo + bebida; después proteínas. */
+  if (it.pickInSheet && it.extras && shCtx.stage === "customize"){
+    $("#sheet").innerHTML = `<div class="sh-h"><div><b id="sh-t">${esc(it.name)}</b>${lab ? `<span>${esc(lab)}</span>` : ""}</div><button class="x" type="button" data-sh-x aria-label="Cerrar">✕</button></div>
+      ${radios}${drink}
+      <button type="button" class="add sh-add" data-sh-next>Continuar</button>`;
+    return;
+  }
+  if (it.pickInSheet && it.extras && shCtx.stage === "proteins"){
+    $("#sheet").innerHTML = `<div class="sh-h"><div><b id="sh-t">${esc(it.name)}</b>${lab ? `<span>${esc(lab)}</span>` : ""}</div><button class="x" type="button" data-sh-x aria-label="Cerrar">✕</button></div>
+      <div class="sh-progress"><span><button type="button" class="sh-back" data-sh-protein-back aria-label="Volver">←</button></span><span>Proteína opcional</span></div>
+      ${ex}
+      <button type="button" class="add sh-add" data-sh-add>+ Agregar · ${fmt(sheetTotal())}</button>`;
+    return;
+  }
   let bundle = "", bundleDone = true;
   if (it.bundleChoices && it.bundleChoices.length){
     const totalSteps = it.bundleChoices.length;
