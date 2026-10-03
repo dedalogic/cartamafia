@@ -581,9 +581,9 @@ const MENU = [
       ] }
   ]},
   { id:"entradas", name:"Entradas", items:[
-    { id:"palitos", name:"Palitos de ajo", desc:"6 Palitos de Ajo cubiertos con Salsa Garlic y Queso Parmigiano. Incluye Salsa Pomodoro New York.", price:5990, img:"palitos-ajo.png",
+    { id:"palitos", name:"Palitos de ajo", desc:"6 Palitos de Ajo cubiertos con Salsa Garlic y Queso Parmigiano. Incluye Salsa Pomodoro New York.", price:3990, img:"palitos-ajo.png",
       extras:{ label:"Agrega una salsa", ids:["top-pomodoro","top-bbq"] } },
-    { id:"cremita-zapallo", name:"Cremita de Zapallo", desc:"Crema casera de Zapallo con Palitos de Ajo y Queso Parmigiano.", price:6990, img:"", foto:"cremita-zapallo" }
+    { id:"cremita-zapallo", name:"Crema de Zapallo", desc:"Crema casera de Zapallo con Palitos de Ajo y Queso Parmigiano.", price:5990, img:"", foto:"cremita-zapallo" }
   ]},
   { id:"pizzas", name:"Pizzas", items:[
     { id:"tgm", name:"The Good Meat", desc:"Carne Mechada, Tocino, Salsa Pomodoro New York y Queso Mozzarella.",
@@ -1124,14 +1124,46 @@ const wide = window.matchMedia("(min-width:900px)");
 
 const inCart = id => Object.keys(cart).some(k => k.split("|")[0] === id);
 const pick = (ids, max) => ids.filter(id => IDX[id] && isProductAvailable(id) && !IDX[id].options && !IDX[id].pick && !IDX[id].combo && !inCart(id)).slice(0, max);
-const sugRow = (id, i) => `<div class="sug-row"><div class="sug-copy"><div class="sug-topline"><span class="sug-name">${esc(IDX[id].name)}</span><b class="sug-price">+${fmt(IDX[id].price)}</b></div>${i === 0 ? `<small class="sug-badge">Más vendido</small>` : ""}</div><button type="button" class="sug-add" data-sug="${esc(id)}" aria-label="Agregar ${esc(IDX[id].name)}">+</button></div>`;
+const sugRow = (id, badge="") => `<div class="sug-row"><div class="sug-copy"><div class="sug-topline"><span class="sug-name">${esc(IDX[id].name)}</span><b class="sug-price">+${fmt(IDX[id].price)}</b></div>${badge ? `<small class="sug-badge">${esc(badge)}</small>` : ""}</div><button type="button" class="sug-add" data-sug="${esc(id)}" aria-label="Agregar ${esc(IDX[id].name)}">+</button></div>`;
 
 function panelSuggest(ls){
   if (!ls.length) return "";
-  const pool = ["top-bbq", "top-pomodoro"];
-  ls.forEach(l => ((l.it.suggest && l.it.suggest.ids) || []).forEach(id => { if (!pool.includes(id)) pool.push(id); }));
-  const ids = pool.filter(id => IDX[id] && !inCart(id)).slice(0, 2);
-  return ids.length ? `<div class="sug"><p>Completa tu pedido</p><div class="sug-list">${ids.map((id, i) => sugRow(id, i)).join("")}</div></div>` : "";
+
+  const pastaProductIds = new Set(["fetuccini","bucatini","promo-alfredo","combo-indecisos","combo-soprano"]);
+  const hasPasta = ls.some(l => pastaProductIds.has(l.it.id));
+  const hasPizza = ls.some(l => CATOF[l.it.id] === "pizzas");
+  const beverageIds = new Set(["beb-350","beb-15","agua","jugo"]);
+  const hasDrink = ls.some(l => {
+    if (beverageIds.has(l.it.id)) return true;
+    /* Promos/combos que ya incluyen bebida no deben recibir otra sugerencia de bebida. */
+    if (/bebida/i.test((l.it.name || "") + " " + (l.it.desc || ""))) return true;
+    if ((l.it.bundleChoices || []).some(g => /bebida/i.test((g.label || "") + " " + (g.short || "")))) return true;
+    const p = parseKey(l.k);
+    return !!(p && p.ci && comboNeedsDrink(p.it, p.oi));
+  });
+  const availableMissing = ids => ids.filter(id => IDX[id] && isProductAvailable(id) && !inCart(id));
+  let suggestions = [];
+
+  /* Pastas: prioriza proteínas; si falta bebida, la sugiere de forma sutil. Máximo 2 sugerencias. */
+  if (hasPasta){
+    let proteins = availableMissing(["albondigas","pollo-gravy"]);
+    if (ls.some(l => l.it.id === "combo-soprano")) proteins = proteins.filter(id => id !== "albondigas");
+    if (!hasDrink && isProductAvailable("beb-350") && !inCart("beb-350")){
+      if (proteins.length) suggestions.push({ id:proteins[0], badge:"Para tu pasta" });
+      suggestions.push({ id:"beb-350", badge:"Para acompañar" });
+    } else {
+      suggestions = proteins.slice(0,2).map((id, i) => ({ id, badge:i === 0 ? "Para tu pasta" : "" }));
+    }
+  /* Pizzas: mantiene salsas como complemento natural, sin mostrarlas en pedidos que no corresponden. */
+  } else if (hasPizza){
+    suggestions = availableMissing(["top-bbq","top-pomodoro"]).slice(0,2).map((id, i) => ({ id, badge:i === 0 ? "Más vendido" : "" }));
+  } else {
+    const pool = [];
+    ls.forEach(l => ((l.it.suggest && l.it.suggest.ids) || []).forEach(id => { if (!pool.includes(id)) pool.push(id); }));
+    suggestions = availableMissing(pool).slice(0,2).map(id => ({ id, badge:"" }));
+  }
+
+  return suggestions.length ? `<div class="sug"><p>Completa tu pedido</p><div class="sug-list">${suggestions.map(x => sugRow(x.id, x.badge)).join("")}</div></div>` : "";
 }
 
 const sugBox = $("#suggest");
@@ -1273,7 +1305,11 @@ document.addEventListener("click", e => {
   if (card){ const cid = card.dataset.id; if (curSug && curSug.it && curSug.it.id !== cid) hideSuggest(); if (curOffer && curOffer.id !== cid) hideOffer(); }
   if (t.classList.contains("zoom")) return openLb(t);
   if (t.hasAttribute("data-sgx")) return hideSuggest();
-  if (t.dataset.sug) return add(t.dataset.sug, true);
+  if (t.dataset.sug){
+    const si = IDX[t.dataset.sug];
+    if (si && SHEET() && hasSheet(si, si.options ? S(si.id).o : 0)) return openSheet(si.id);
+    return add(t.dataset.sug, true);
+  }
   if (t.dataset.upgrade) return upgrade(t.dataset.upgrade);
   if (t.hasAttribute("data-add") && card){
     const cid = card.dataset.id, ci = IDX[cid];
