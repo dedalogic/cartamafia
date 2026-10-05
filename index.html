@@ -13,6 +13,16 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+
+<!-- PostHog · analítica MAFIA -->
+<script>
+    !function(t,e){var o,n,p,r;e.__SV||(window.posthog && window.posthog.__loaded)||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}p||((p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",p.onerror=function(){p=null},(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r));var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],Object.defineProperty(u,"toString",{configurable:!0,enumerable:!0,writable:!0,value:function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e}}),Object.defineProperty(u.people,"toString",{configurable:!0,enumerable:!0,writable:!0,value:function(){return u.toString(1)+".people (stub)"}}),o="gu mu yu bu ku init Vu Gu zu Uu Ku el Wu Yu ju rh oh ah uh hh dh capture getExtension Zu fu gh calculateEventProperties ph register register_once register_for_session unregister unregister_for_session Hu mh getFeatureFlag getFeatureFlagPayload getFeatureFlagResult getAllFeatureFlags isFeatureEnabled reloadFeatureFlags updateFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSurveysLoaded onSessionId getSurveys getActiveMatchingSurveys onActiveMatchingSurveysChanged renderSurvey displaySurvey cancelPendingSurvey canRenderSurvey canRenderSurveyAsync wh identify setPersonProperties unsetPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset kh shutdown setIdentity clearIdentity get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException addExceptionStep captureLog startExceptionAutocapture stopExceptionAutocapture loadToolbar get_property getSessionProperty yh ih createPersonProfile setInternalOrTestUser bh Su xu opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing get_explicit_consent_status is_capturing clear_opt_in_out_capturing th debug il Os getPageViewId captureTraceFeedback captureTraceMetric Du".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+    posthog.init('phc_yTw9dw9XcDmQZMGfJL4drNErpo3U8EK86ZdQ4r9RoVDk', {
+        api_host: 'https://us.i.posthog.com',
+        defaults: '2026-05-30',
+        person_profiles: 'identified_only',
+    })
+</script>
 <style>
 @font-face{font-family:"Pesto Mafio";src:url("./Pesto Mafio.ttf") format("truetype");font-style:normal;font-weight:400;font-display:block}
 :root{
@@ -693,6 +703,36 @@ const st = {};                        // selección en cada tarjeta: {o: formato
 const S = id => st[id] || (st[id] = { o:0, c:false, p:-1 });   // o: formato elegido (el primero viene marcado)
 const STORE = "carta_pedido_v1";
 
+/* ---------- Analítica MAFIA (PostHog) ---------- */
+const ANALYTICS_SEEN = new Set();
+function track(event, props={}){
+  try{
+    if (!window.posthog || typeof window.posthog.capture !== "function") return;
+    window.posthog.capture(event, Object.assign({
+      site:"MAFIA",
+      path:location.pathname,
+      device:window.matchMedia("(max-width: 700px)").matches ? "mobile" : "desktop"
+    }, props));
+  }catch(e){}
+}
+function trackOnce(key, event, props={}){
+  if (ANALYTICS_SEEN.has(key)) return;
+  ANALYTICS_SEEN.add(key);
+  track(event, props);
+}
+function cartAnalytics(){
+  try{ const t=totals(); return {cart_items:t.count, cart_total:t.sum, cart_product_ids:t.ls.map(l=>l.it.id)}; }
+  catch(e){ return {}; }
+}
+const qs = new URLSearchParams(location.search);
+track("menu_open", {
+  referrer:document.referrer || "direct",
+  utm_source:qs.get("utm_source") || "",
+  utm_medium:qs.get("utm_medium") || "",
+  utm_campaign:qs.get("utm_campaign") || ""
+});
+
+
 document.title = "Carta · " + CONFIG.nombre;
 const VALID = { foto:["lista","hero","grid"], tipografia:["actual","contrast","weight"], cta:["actual","toggle","tag","sheet"], desc:["full","one","none"] };
 const DESIGN = Object.assign({ foto:"grid", tipografia:"contrast", cta:"sheet", desc:"full" }, CONFIG.diseno);
@@ -951,6 +991,25 @@ $("#menu").innerHTML = MENU.map((c, ci) => `<section class="cat${c.compact ? " c
   <div class="list">${c.items.map(i => itemHTML(i, c.compact, ci === 0)).join("")}</div>
 </section>`).join("");
 
+/* Vistas reales de categorías y productos (una vez por visita). */
+if ("IntersectionObserver" in window){
+  const categoryObserver = new IntersectionObserver(entries => entries.forEach(e => {
+    if (e.isIntersecting && e.intersectionRatio >= .35){
+      const sec=e.target; trackOnce("cat:"+sec.id,"category_view",{category_id:sec.id,category_name:(CATOF && sec.querySelector("h2")) ? sec.querySelector("h2").textContent : sec.id});
+    }
+  }), {threshold:[.35]});
+  document.querySelectorAll(".cat").forEach(el => categoryObserver.observe(el));
+
+  const productObserver = new IntersectionObserver(entries => entries.forEach(e => {
+    if (e.isIntersecting && e.intersectionRatio >= .5 && !e.target.hidden){
+      const id=e.target.dataset.id, it=IDX[id];
+      if (it) trackOnce("product:"+id,"product_view",{product_id:id,product_name:it.name,category:CATOF[id]||""});
+    }
+  }), {threshold:[.5]});
+  document.querySelectorAll(".item[data-id]").forEach(el => productObserver.observe(el));
+}
+
+
 /* ---------- Disponibilidad pública ---------- */
 const AVAILABILITY_ENDPOINT = "/.netlify/functions/menu-availability";
 let UNAVAILABLE_PRODUCTS = new Set();
@@ -1163,6 +1222,11 @@ function panelSuggest(ls){
     suggestions = availableMissing(pool).slice(0,2).map(id => ({ id, badge:"" }));
   }
 
+  if (suggestions.length){
+    const ids = suggestions.map(x => x.id);
+    const context = hasPasta ? "pasta" : (hasPizza ? "pizza" : "other");
+    trackOnce("upsell:" + context + ":" + ids.join(",") + ":" + ls.map(l=>l.it.id).sort().join(","), "upsell_impression", {context, suggested_product_ids:ids});
+  }
   return suggestions.length ? `<div class="sug"><p>Completa tu pedido</p><div class="sug-list">${suggestions.map(x => sugRow(x.id, x.badge)).join("")}</div></div>` : "";
 }
 
@@ -1225,7 +1289,7 @@ function renderCart(){
 }
 
 function toggle(open, focus){
-  if (open){ hideSuggest(); showCheckoutStep(1, false); }
+  if (open){ hideSuggest(); showCheckoutStep(1, false); track("cart_open", cartAnalytics()); }
   drawer.classList.toggle("on", open);
   scrim.classList.toggle("on", open);
   document.body.classList.toggle("panel-open", open);
@@ -1248,6 +1312,7 @@ function upgrade(k){
   cart[nk] = (cart[nk] || 0) + 1;
   curOffer = cart[k] > 0 ? { id, k, cat:CATOF[id] } : null;   /* si quedan unidades sin combo, la oferta sigue */
   save(); renderCart(); feedback(id); hideSuggest();
+  track("combo_added", {product_id:id,product_name:IDX[id].name,source:"upgrade",...cartAnalytics()});
   $("#live").textContent = "Combo agregado: " + IDX[id].name;
 }
 
@@ -1270,6 +1335,12 @@ function add(id, viaSuggestion, cOver, vOver, bOver){
   const k = [id, o, c, p, v, ...b].join("|");
   cart[k] = (cart[k] || 0) + 1;
   save(); renderCart(); feedback(id);
+  track("product_add", {
+    product_id:id, product_name:it.name, category:CATOF[id] || "",
+    unit_price:unitPrice(it,o,c,p), variant:it.options ? it.options[o].label : "",
+    sauce:it.pick && p >= 0 ? it.pick.list[p] : "", combo:!!c,
+    source:viaSuggestion ? "suggestion" : "menu", ...cartAnalytics()
+  });
   if (hadFocus){ const b = card.querySelector(".stp:not([hidden]) [data-inc]"); if (b) b.focus(); }
   pop(cartbtn); pop(cbadge);
   $("#live").textContent = "Agregado: " + it.name;
@@ -1280,9 +1351,19 @@ function add(id, viaSuggestion, cOver, vOver, bOver){
 }
 
 function change(k, d){
+  const parsedBefore = parseKey(k);
   cart[k] = (cart[k] || 0) + d;
   if (cart[k] <= 0) delete cart[k];
   save(); renderCart();
+  if (parsedBefore){
+    track(d < 0 ? "product_remove" : "product_add", {
+      product_id:parsedBefore.it.id, product_name:parsedBefore.it.name, category:CATOF[parsedBefore.it.id] || "",
+      unit_price:unitPrice(parsedBefore.it,parsedBefore.oi,parsedBefore.ci,parsedBefore.pi),
+      variant:parsedBefore.it.options ? parsedBefore.it.options[parsedBefore.oi].label : "",
+      sauce:parsedBefore.it.pick ? parsedBefore.it.pick.list[parsedBefore.pi] : "", combo:!!parsedBefore.ci,
+      source:"cart_quantity", ...cartAnalytics()
+    });
+  }
 }
 
 document.addEventListener("click", e => {
@@ -1307,6 +1388,7 @@ document.addEventListener("click", e => {
   if (t.hasAttribute("data-sgx")) return hideSuggest();
   if (t.dataset.sug){
     const si = IDX[t.dataset.sug];
+    track("upsell_click", {product_id:t.dataset.sug,product_name:si ? si.name : t.dataset.sug,location:t.closest(".sug") ? "checkout" : "menu"});
     if (si && SHEET() && hasSheet(si, si.options ? S(si.id).o : 0)) return openSheet(si.id);
     return add(t.dataset.sug, true);
   }
@@ -1316,11 +1398,12 @@ document.addEventListener("click", e => {
     if (SHEET() && hasSheet(ci, ci.options ? S(cid).o : 0)) return openSheet(cid);
     return add(cid);
   }
-  if (t.hasAttribute("data-combo") && card){ const sc = S(card.dataset.id); sc.c = !sc.c; syncCard(card); return; }
+  if (t.hasAttribute("data-combo") && card){ const sc = S(card.dataset.id); sc.c = !sc.c; syncCard(card); track("combo_selected",{product_id:card.dataset.id,selected:sc.c}); return; }
   if (t.hasAttribute("data-sh-x")) return closeSheet();
   if (t.dataset.shPick !== undefined && shCtx){
     const itx = IDX[shCtx.id], px = +t.dataset.shPick;
     S(shCtx.id).p = px;
+    track("sauce_selected", {product_id:shCtx.id,sauce:itx.pick.list[px]});
     shCtx.stage = "customize";
     shCtx.invalid = "";
     const cardx = document.querySelector('.item[data-id="' + shCtx.id + '"]');
@@ -1329,8 +1412,8 @@ document.addEventListener("click", e => {
     const f = $('[data-sh-c="0"]') || $('[data-sh-ex-inc]') || $('[data-sh-add]'); if (f) f.focus();
     return;
   }
-  if (t.dataset.shC !== undefined && shCtx){ shCtx.c = +t.dataset.shC; if (!shCtx.c) shCtx.drink = -1; drawSheet(); const f = $('[data-sh-c="' + shCtx.c + '"]'); if (f) f.focus(); return; }
-  if (t.dataset.shDrink !== undefined && shCtx){ shCtx.drink = +t.dataset.shDrink; shCtx.invalid = ""; drawSheet(); const f = $('[data-sh-drink="' + shCtx.drink + '"]'); if (f) f.focus(); return; }
+  if (t.dataset.shC !== undefined && shCtx){ shCtx.c = +t.dataset.shC; if (!shCtx.c) shCtx.drink = -1; track("combo_selected",{product_id:shCtx.id,selected:!!shCtx.c}); drawSheet(); const f = $('[data-sh-c="' + shCtx.c + '"]'); if (f) f.focus(); return; }
+  if (t.dataset.shDrink !== undefined && shCtx){ shCtx.drink = +t.dataset.shDrink; shCtx.invalid = ""; const itx=IDX[shCtx.id], ox=itx.options ? S(shCtx.id).o : 0; track("drink_selected",{product_id:shCtx.id,drink:drinkDisplay(itx,ox,shCtx.c,shCtx.drink)}); drawSheet(); const f = $('[data-sh-drink="' + shCtx.drink + '"]'); if (f) f.focus(); return; }
   if (t.hasAttribute("data-sh-next") && shCtx){
     const itx = IDX[shCtx.id], ox = itx.options ? S(shCtx.id).o : 0;
     const needDrink = !!itx.drinkChoice || (shCtx.c === 1 && comboNeedsDrink(itx, ox));
@@ -1339,17 +1422,19 @@ document.addEventListener("click", e => {
   }
   if (t.hasAttribute("data-sh-protein-back") && shCtx){ shCtx.stage = "customize"; drawSheet(); const f = $('[data-sh-c="' + shCtx.c + '"]') || $("[data-sh-next]"); if (f) f.focus(); return; }
   if (t.dataset.shBundleGroup !== undefined && shCtx){ const gi = +t.dataset.shBundleGroup, vi = +t.dataset.shBundleValue; shCtx.bundle[gi] = vi; shCtx.invalid = ""; const itx = IDX[shCtx.id], last = !itx.bundleChoices || gi >= itx.bundleChoices.length - 1; if (!last) shCtx.step = gi + 1; drawSheet(); const f = last ? $('[data-sh-bundle-group="' + gi + '"][data-sh-bundle-value="' + vi + '"]') : $('[data-sh-bundle-group="' + (gi + 1) + '"]'); if (f) f.focus(); return; }
-  if (t.dataset.shExInc !== undefined && shCtx){ const x = t.dataset.shExInc; shCtx.ex[x] = (shCtx.ex[x] || 0) + 1; drawSheet(); const f = $('[data-sh-ex-inc="' + x + '"]'); if (f) f.focus(); return; }
-  if (t.dataset.shExDec !== undefined && shCtx){ const x = t.dataset.shExDec, q = shCtx.ex[x] || 0; if (q <= 1) delete shCtx.ex[x]; else shCtx.ex[x] = q - 1; drawSheet(); const f = $('[data-sh-ex-dec="' + x + '"]'); if (f && !f.disabled) f.focus(); else { const g = $('[data-sh-ex-inc="' + x + '"]'); if (g) g.focus(); } return; }
+  if (t.dataset.shExInc !== undefined && shCtx){ const x = t.dataset.shExInc; shCtx.ex[x] = (shCtx.ex[x] || 0) + 1; track("extra_added",{parent_product_id:shCtx.id,extra_id:x,extra_name:IDX[x] ? IDX[x].name : x,extra_type:(x==="albondigas"||x==="pollo-gravy")?"protein":"extra"}); drawSheet(); const f = $('[data-sh-ex-inc="' + x + '"]'); if (f) f.focus(); return; }
+  if (t.dataset.shExDec !== undefined && shCtx){ const x = t.dataset.shExDec, q = shCtx.ex[x] || 0; if (q <= 1) delete shCtx.ex[x]; else shCtx.ex[x] = q - 1; track("extra_removed",{parent_product_id:shCtx.id,extra_id:x,extra_name:IDX[x] ? IDX[x].name : x,extra_type:(x==="albondigas"||x==="pollo-gravy")?"protein":"extra"}); drawSheet(); const f = $('[data-sh-ex-dec="' + x + '"]'); if (f && !f.disabled) f.focus(); else { const g = $('[data-sh-ex-inc="' + x + '"]'); if (g) g.focus(); } return; }
   if (t.hasAttribute("data-sh-prev") && shCtx){ shCtx.step = Math.max(0, (shCtx.step || 0) - 1); drawSheet(); const f = $('[data-sh-bundle-group="' + shCtx.step + '"]'); if (f) f.focus(); return; }
   if (t.hasAttribute("data-sh-add") && shCtx){ const sx = shCtx; const itx = IDX[sx.id], ox = itx.options ? S(sx.id).o : 0; const needDrink = !!itx.drinkChoice || (sx.c === 1 && comboNeedsDrink(itx, ox)); if (needDrink && sx.drink < 0){ sx.invalid = "drink"; drawSheet(); const f = $("[data-sh-drink]"); if (f) f.focus(); return; } if (itx.bundleChoices && sx.bundle.some(v => v < 0)){ const missing = sx.bundle.findIndex(v => v < 0); sx.step = missing < 0 ? sx.step : missing; sx.invalid = "bundle"; drawSheet(); const f = $('[data-sh-bundle-group="' + sx.step + '"]'); if (f) f.focus(); return; } const extras = Object.entries(sx.ex); closeSheet(); add(sx.id, false, sx.c, sx.drink, sx.bundle); extras.forEach(([x, q]) => { for (let i = 0; i < q; i++) add(x, true); }); return; }
   if (t.hasAttribute("data-opt") && card){
     const it = IDX[card.dataset.id], s = S(it.id);
     s.o = +t.dataset.opt; pressOnly(t); syncCard(card);
+    track("variant_selected",{product_id:it.id,product_name:it.name,variant:it.options[s.o] ? it.options[s.o].label : String(s.o)});
     return;
   }
   if (t.hasAttribute("data-pick") && card){
     S(card.dataset.id).p = +t.dataset.pick; pressOnly(t); swapPhoto(card);
+    track("sauce_selected",{product_id:card.dataset.id,sauce:IDX[card.dataset.id].pick.list[+t.dataset.pick]});
     const er = card.querySelector(".pk-err"); if (er) er.hidden = true;
     syncCard(card);
     return;
@@ -1391,6 +1476,7 @@ $("#nextCheckout").addEventListener("click", () => {
     const first = seg.querySelector('input[name="tipo"]'); if (first) first.focus();
     return;
   }
+  track("checkout_continue", {fulfillment:tipo(), ...cartAnalytics()});
   showCheckoutStep(2, true);
   setTimeout(() => $("#cname").focus(), 120);
 });
@@ -1553,6 +1639,7 @@ document.querySelectorAll('input[name="tipo"]').forEach(r => r.addEventListener(
   const er = $("#deliveryErr"), seg = $("#deliverySelector");
   if (er) er.textContent = "";
   if (seg) seg.classList.remove("shake");
+  track("fulfillment_selected", {fulfillment:r.value, ...cartAnalytics()});
   syncTipo();
 }));
 syncTipo();
@@ -1564,6 +1651,7 @@ $("#send").addEventListener("click", () => {
   if (!name){ err.textContent = "Escribe tu nombre."; $("#cname").focus(); return; }
   if (delivery && addr.length < 5){ err.textContent = "Escribe tu dirección para el delivery."; $("#caddr").focus(); return; }
   err.textContent = "";
+  track("whatsapp_click", {fulfillment:delivery ? "delivery" : "retiro", order_total:sum, cart_items:ls.reduce((a,l)=>a+l.qty,0), product_ids:ls.map(l=>l.it.id)});
   try { localStorage.setItem(PROFILE, JSON.stringify({ name, addr })); } catch(e){}
 
   const orderLine = l => {
