@@ -39,10 +39,39 @@ function parseSignature(header) {
   return result;
 }
 
+async function getMercadoPagoOrder(orderId, accessToken) {
+  const response = await fetch(
+    `https://api.mercadopago.com/v1/orders/${encodeURIComponent(orderId)}`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        Accept: "application/json",
+      },
+    }
+  );
+
+  const data = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    console.error("❌ Error consultando order en Mercado Pago", {
+      order_id: orderId,
+      status: response.status,
+      mp_error: data?.message || data?.error || "desconocido",
+    });
+
+    throw new Error(
+      `Mercado Pago respondió ${response.status}`
+    );
+  }
+
+  return data;
+}
+
 export default async (req) => {
   /*
-   * GET: sirve solamente para comprobar desde el navegador
-   * que la función está publicada.
+   * GET solamente sirve para comprobar que
+   * la función está publicada y configurada.
    */
   if (req.method === "GET") {
     return json({
@@ -50,6 +79,9 @@ export default async (req) => {
       message: "Webhook activo",
       secret_configured: Boolean(
         process.env.MERCADOPAGO_WEBHOOK_SECRET
+      ),
+      access_token_configured: Boolean(
+        process.env.MERCADOPAGO_ACCESS_TOKEN
       ),
     });
   }
@@ -64,15 +96,15 @@ export default async (req) => {
     );
   }
 
-  const secret = process.env.MERCADOPAGO_WEBHOOK_SECRET;
+  const secret =
+    process.env.MERCADOPAGO_WEBHOOK_SECRET;
 
-  /*
-   * Nunca mostramos el secret.
-   * Solo registramos si existe o no.
-   */
+  const accessToken =
+    process.env.MERCADOPAGO_ACCESS_TOKEN;
+
   if (!secret) {
     console.error(
-      "❌ MERCADOPAGO_WEBHOOK_SECRET no está disponible en este deploy"
+      "❌ MERCADOPAGO_WEBHOOK_SECRET no configurado"
     );
 
     return json(
@@ -84,27 +116,32 @@ export default async (req) => {
     );
   }
 
-  /*
-   * Leemos primero el body porque algunas notificaciones
-   * pueden traer data.id dentro del JSON.
-   */
+  if (!accessToken) {
+    console.error(
+      "❌ MERCADOPAGO_ACCESS_TOKEN no configurado"
+    );
+
+    return json(
+      {
+        ok: false,
+        error: "Access Token no configurado",
+      },
+      500
+    );
+  }
+
   let body = {};
 
   try {
     body = await req.json();
-  } catch (error) {
-    console.warn("⚠️ No se pudo interpretar el body como JSON");
+  } catch {
+    console.warn(
+      "⚠️ No se pudo interpretar el body como JSON"
+    );
   }
 
   const url = new URL(req.url);
 
-  /*
-   * Mercado Pago normalmente manda data.id también
-   * como parámetro en la URL.
-   *
-   * Dejamos fallback al body para hacer el receptor
-   * más tolerante en las pruebas.
-   */
   const dataId =
     url.searchParams.get("data.id") ||
     url.searchParams.get("data_id") ||
@@ -118,19 +155,25 @@ export default async (req) => {
     req.headers.get("x-request-id") || "";
 
   console.log("📩 Webhook Mercado Pago recibido", {
-    method: req.method,
     type: body?.type,
     action: body?.action,
     data_id: dataId,
     has_signature: Boolean(xSignature),
     has_request_id: Boolean(xRequestId),
-    has_secret: Boolean(secret),
     live_mode: body?.live_mode,
   });
 
-  if (!xSignature) {
-    console.warn("❌ Falta header x-signature");
+  if (!dataId) {
+    return json(
+      {
+        ok: false,
+        error: "Falta ID de la order",
+      },
+      400
+    );
+  }
 
+  if (!xSignature) {
     return json(
       {
         ok: false,
@@ -140,17 +183,14 @@ export default async (req) => {
     );
   }
 
-  const signature = parseSignature(xSignature);
+  const signature =
+    parseSignature(xSignature);
 
   const ts = signature.ts;
-  const receivedSignature = signature.v1;
+  const receivedSignature =
+    signature.v1;
 
   if (!ts || !receivedSignature) {
-    console.warn("❌ Firma incompleta", {
-      has_ts: Boolean(ts),
-      has_v1: Boolean(receivedSignature),
-    });
-
     return json(
       {
         ok: false,
@@ -160,10 +200,6 @@ export default async (req) => {
     );
   }
 
-  /*
-   * Manifest utilizado para verificar que la notificación
-   * realmente proviene de Mercado Pago.
-   */
   let manifest = "";
 
   if (dataId) {
@@ -181,12 +217,18 @@ export default async (req) => {
     .update(manifest)
     .digest("hex");
 
-  if (!safeEqual(expectedSignature, receivedSignature)) {
-    console.warn("❌ Firma Mercado Pago inválida", {
-      data_id: dataId,
-      has_request_id: Boolean(xRequestId),
-      manifest_length: manifest.length,
-    });
+  if (
+    !safeEqual(
+      expectedSignature,
+      receivedSignature
+    )
+  ) {
+    console.warn(
+      "❌ Firma Mercado Pago inválida",
+      {
+        data_id: dataId,
+      }
+    );
 
     return json(
       {
@@ -197,32 +239,145 @@ export default async (req) => {
     );
   }
 
-  console.log("✅ Webhook Mercado Pago válido", {
-    type: body?.type,
-    action: body?.action,
-    data_id: dataId,
-    status: body?.data?.status,
-    status_detail: body?.data?.status_detail,
-    live_mode: body?.live_mode,
-  });
+  console.log(
+    "✅ Firma del webhook válida"
+  );
 
   /*
-   * PRÓXIMA ETAPA:
+   * IMPORTANTE:
+   * No confiamos en el status que viene
+   * dentro del webhook.
    *
-   * Cuando esto ya esté validado:
+   * Consultamos la order directamente
+   * a Mercado Pago.
+   */
+  let order;
+
+  try {
+    order = await getMercadoPagoOrder(
+      dataId,
+      accessToken
+    );
+  } catch (error) {
+    console.error(
+      "❌ No se pudo verificar la order",
+      error.message
+    );
+
+    /*
+     * Respondemos 500 para que Mercado Pago
+     * pueda volver a intentar la notificación.
+     */
+    return json(
+      {
+        ok: false,
+        error:
+          "No se pudo verificar la order",
+      },
+      500
+    );
+  }
+
+  const orderStatus =
+    order?.status || "";
+
+  const orderStatusDetail =
+    order?.status_detail || "";
+
+  const orderId =
+    order?.id || dataId;
+
+  const externalReference =
+    order?.external_reference || null;
+
+  const total =
+    Number(
+      order?.total_amount ??
+      order?.total_paid_amount ??
+      0
+    );
+
+  console.log(
+    "🔎 Order verificada directamente con Mercado Pago",
+    {
+      order_id: orderId,
+      status: orderStatus,
+      status_detail: orderStatusDetail,
+      external_reference:
+        externalReference,
+      total,
+    }
+  );
+
+  const paid =
+    orderStatus === "processed" &&
+    orderStatusDetail === "accredited";
+
+  if (!paid) {
+    console.log(
+      "ℹ️ Order recibida pero todavía no acreditada",
+      {
+        order_id: orderId,
+        status: orderStatus,
+        status_detail:
+          orderStatusDetail,
+      }
+    );
+
+    return json({
+      ok: true,
+      verified: true,
+      paid: false,
+      order_id: orderId,
+      status: orderStatus,
+      status_detail:
+        orderStatusDetail,
+    });
+  }
+
+  /*
+   * ACÁ TENEMOS EL PUNTO SEGURO.
    *
-   * 1. Consultaremos la orden directamente a Mercado Pago.
-   * 2. Confirmaremos status = processed.
-   * 3. Confirmaremos status_detail = accredited.
-   * 4. Verificaremos monto y external_reference.
-   * 5. Evitaremos procesar dos veces la misma orden.
-   * 6. Recién ahí enviaremos la comanda a Fudo.
+   * La firma era válida
+   * Y además Mercado Pago confirmó
+   * directamente que la order está pagada.
+   */
+
+  console.log(
+    "💰 PAGO CONFIRMADO POR MERCADO PAGO",
+    {
+      order_id: orderId,
+      external_reference:
+        externalReference,
+      total,
+    }
+  );
+
+  /*
+   * PRÓXIMO PASO:
+   *
+   * 1. Recuperar el pedido correspondiente
+   *    usando external_reference.
+   *
+   * 2. Comparar el total pagado con
+   *    el total calculado por MAFIA.
+   *
+   * 3. Evitar procesar dos veces
+   *    el mismo order_id.
+   *
+   * 4. Enviar recién ahí
+   *    la comanda a Fudo.
    */
 
   return json({
     ok: true,
-    received: true,
+    verified: true,
+    paid: true,
+    order_id: orderId,
+    status: orderStatus,
+    status_detail:
+      orderStatusDetail,
   });
 };
 
-// webhook redeploy v2
+// webhook verify-order v3
