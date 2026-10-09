@@ -446,6 +446,42 @@ html[data-layout="grid"][data-desc="none"] .cat:not(.compact) .hd{min-height:28p
 .mp-test-back{width:100%;min-height:46px;margin-top:10px;border:1px solid var(--line);border-radius:var(--r);background:none;color:var(--text);font-weight:600}
 .mp-test-success{text-align:center;padding:24px 10px}.mp-test-check{display:grid;place-items:center;width:58px;height:58px;margin:0 auto 12px;border-radius:50%;background:#2f9e62;color:#fff;font-size:30px}.mp-test-success h3{font:400 26px/1.05 var(--serif);margin-bottom:6px}.mp-test-success p{color:var(--muted);font-size:13px}.mp-test-order{margin-top:14px;padding:12px;border:1px solid var(--line);border-radius:var(--r);text-align:left;font-size:12px}.mp-test-order div{display:flex;justify-content:space-between;gap:10px;padding:3px 0}.mp-test-order span{color:var(--muted)}
 
+
+/* ---------- Mercado Pago TEST v3: transición de pago clara ---------- */
+.mp-test-card{position:relative}
+.mp-test-processing{
+  min-height:360px;display:grid;place-items:center;text-align:center;padding:34px 18px
+}
+.mp-test-processing-inner{display:grid;justify-items:center;gap:14px;max-width:300px}
+.mp-test-spinner{
+  width:54px;height:54px;border-radius:50%;
+  border:4px solid #342f2b;border-top-color:var(--red);
+  animation:mpSpin .8s linear infinite
+}
+@keyframes mpSpin{to{transform:rotate(360deg)}}
+.mp-test-processing h3{font:400 27px/1.08 var(--serif);margin:0}
+.mp-test-processing p{margin:0;color:var(--muted);font-size:13px;line-height:1.45}
+.mp-test-processing .mp-test-amount{font-size:22px;font-weight:700;color:var(--text)}
+.mp-test-success{
+  min-height:420px;display:grid;align-content:center;text-align:center;padding:34px 18px
+}
+.mp-test-check{
+  width:74px;height:74px;margin:0 auto 16px;font-size:38px;
+  box-shadow:0 0 0 8px rgba(47,158,98,.10)
+}
+.mp-test-success h3{font:400 30px/1.05 var(--serif);margin:0 0 8px}
+.mp-test-success p{max-width:32ch;margin:0 auto;color:var(--muted);font-size:14px;line-height:1.45}
+.mp-test-order{margin-top:20px}
+.mp-test-primary{
+  width:100%;min-height:50px;margin-top:14px;border:0;border-radius:var(--r);
+  background:var(--red);color:#fff;font-weight:700
+}
+.mp-test-primary:hover{background:var(--red-hi)}
+.mp-test-result-note{
+  margin-top:12px!important;font-size:12px!important;color:var(--muted)!important
+}
+.mp-test-success[data-result="approved"] .mp-test-order{display:none}
+
 </style>
 <script src="https://sdk.mercadopago.com/js/v2"></script>
 </head>
@@ -1815,6 +1851,21 @@ window.addEventListener("focus", loadAvailability);
     return JSON.parse(JSON.stringify(cart || {}));
   }
 
+  function showPaymentProcessing(total){
+    const step=ensureMpStep();
+    step.innerHTML=`<div class="mp-test-card mp-test-processing">
+      <div class="mp-test-processing-inner">
+        <div class="mp-test-spinner" aria-hidden="true"></div>
+        <h3>Procesando tu pago</h3>
+        <div class="mp-test-amount">${money(total)}</div>
+        <p>No cierres esta ventana. Estamos esperando la confirmación de Mercado Pago.</p>
+      </div>
+    </div>`;
+    drawerTitle.textContent="Procesando pago";
+    backCheckoutBtn.hidden=true;
+    drawerEl.scrollTop=0;
+  }
+
   async function openPaymentStep(customer){
     const step=ensureMpStep();
     checkout2.hidden=true;
@@ -1836,11 +1887,19 @@ window.addEventListener("focus", loadAvailability);
       callbacks:{
         onReady:()=>{},
         onSubmit:(formData, additionalData)=>new Promise(async (resolve,reject)=>{
-          const errEl=step.querySelector("#mpTestError"); errEl.textContent="Procesando pago de prueba…";
+          const errEl=step.querySelector("#mpTestError");
+          if(errEl) errEl.textContent="";
+          const submittedTotal=total;
           try{
             /* Cada envío real del formulario es un intento de pago nuevo.
                La idempotency key debe cambiar si Mercado Pago genera un token nuevo. */
             mpAttemptId = (crypto && crypto.randomUUID) ? crypto.randomUUID() : (Date.now()+"-"+Math.random().toString(16).slice(2));
+
+            /* No cerramos el flujo ni volvemos al carrito: mostramos un estado
+               claro de procesamiento mientras el backend espera a Mercado Pago. */
+            await destroyBrick();
+            showPaymentProcessing(submittedTotal);
+
             const r=await fetch(MP_CREATE_ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify({
               attempt_id:mpAttemptId,
               cart:clientCartSnapshot(),
@@ -1860,8 +1919,13 @@ window.addEventListener("focus", loadAvailability);
             resolve();
             showPaymentResult(d);
           }catch(err){
-            errEl.textContent=err.message || "No se pudo procesar el pago";
             reject(err);
+            /* Si falla la orden, devolvemos al formulario con el mensaje visible. */
+            try{
+              await openPaymentStep(customer);
+              const restored=document.getElementById("mpTestError");
+              if(restored) restored.textContent=err.message || "No se pudo procesar el pago";
+            }catch(_){}
           }
         }),
         onError:(error)=>{ const e=document.getElementById("mpTestError"); if(e) e.textContent="Mercado Pago informó un error en el formulario. Revisa los datos e intenta nuevamente."; console.error(error); }
@@ -1874,32 +1938,68 @@ window.addEventListener("focus", loadAvailability);
     const step=ensureMpStep();
     const processed=d.status==="processed" && d.status_detail==="accredited";
     const pending=d.status==="processing" || d.status==="action_required" || d.status==="created";
+
+    drawerTitle.textContent = processed ? "Pedido confirmado" : (pending ? "Confirmando pago" : "Pago no aprobado");
+    backCheckoutBtn.hidden=true;
+
     if(processed){
-      try{ cart={}; save(); renderCart(); }catch(e){}
+      try{ cart={}; save(); }catch(e){}
       track("payment_test_processed",{order_id:d.order_id,order_total:d.total||0});
     }
-    step.innerHTML=`<div class="mp-test-card mp-test-success">
-      <div class="mp-test-check" style="background:${processed?'#2f9e62':(pending?'#b98820':'#b73d4c')}">${processed?'✓':(pending?'…':'!')}</div>
-      <h3>${processed?'Pago aprobado':(pending?'Pago en proceso':'Pago no aprobado')}</h3>
-      <p>${processed?'Mercado Pago acreditó el pago de prueba.':(pending?'La orden todavía no está acreditada.':'Puedes volver e intentar con otra tarjeta de prueba.')}</p>
+
+    step.innerHTML=`<div class="mp-test-card mp-test-success" data-result="${processed?'approved':(pending?'pending':'failed')}">
+      <div class="mp-test-check" style="background:${processed?'#2f9e62':(pending?'#b98820':'#b73d4c')};box-shadow:0 0 0 8px ${processed?'rgba(47,158,98,.10)':(pending?'rgba(185,136,32,.10)':'rgba(183,61,76,.10)')}">${processed?'✓':(pending?'…':'!')}</div>
+      <h3>${processed?'¡Pago aprobado!':(pending?'Estamos confirmando tu pago':'No pudimos aprobar el pago')}</h3>
+      <p>${processed
+        ? 'Tu pago fue acreditado correctamente y tu pedido quedó confirmado.'
+        : (pending
+          ? 'Mercado Pago todavía está procesando la orden. Puedes consultar el estado en unos segundos.'
+          : 'No se realizó el cobro. Puedes volver e intentar con otra tarjeta de prueba.')}</p>
+
       <div class="mp-test-order">
-        <div><span>Order</span><b>${esc(d.order_id||'—')}</b></div>
+        <div><span>Pedido</span><b>${esc(d.order_id||'—')}</b></div>
         <div><span>Estado</span><b>${esc(d.status||'—')}</b></div>
-        <div><span>Detalle</span><b>${esc(d.status_detail||'—')}</b></div>
         <div><span>Total</span><b>${money(d.total||0)}</b></div>
       </div>
-      ${pending?'<button type="button" class="mp-test-back" id="mpCheckStatus">Consultar estado</button>':''}
-      <button type="button" class="mp-test-back" id="mpResultBack">${processed?'Volver a la carta':'Volver'}</button>
+
+      ${processed
+        ? `<p class="mp-test-result-note">En producción, desde aquí el pedido seguirá automáticamente al local/Fudo.</p>
+           <button type="button" class="mp-test-primary" id="mpResultBack">Volver al menú</button>`
+        : pending
+          ? `<button type="button" class="mp-test-primary" id="mpCheckStatus">Consultar estado</button>
+             <button type="button" class="mp-test-back" id="mpResultBack">Volver</button>`
+          : `<button type="button" class="mp-test-primary" id="mpResultBack">Intentar nuevamente</button>`
+      }
     </div>`;
+
+    drawerEl.scrollTop=0;
+
     const back=step.querySelector("#mpResultBack");
-    back.addEventListener("click",()=>{ if(processed){ toggle(false,true); location.hash=""; location.reload(); } else closePaymentStep(); });
+    if(back) back.addEventListener("click",()=>{
+      if(processed){
+        /* Mantiene visible la confirmación hasta que el usuario decide salir. */
+        try{ renderCart(); }catch(e){}
+        toggle(false,true);
+        showCheckoutStep(1,false);
+        step.hidden=true;
+      }else{
+        closePaymentStep();
+      }
+    });
+
     const check=step.querySelector("#mpCheckStatus");
     if(check) check.addEventListener("click",async()=>{
       check.disabled=true; check.textContent="Consultando…";
       try{
         const r=await fetch(MP_STATUS_ENDPOINT+"?id="+encodeURIComponent(d.order_id),{cache:"no-store"});
-        const x=await r.json(); if(r.ok&&x.ok) showPaymentResult(x); else throw new Error(x.error||"No se pudo consultar");
-      }catch(e){check.disabled=false;check.textContent="Consultar estado";alert(e.message||"No se pudo consultar");}
+        const x=await r.json();
+        if(r.ok&&x.ok) showPaymentResult(x);
+        else throw new Error(x.error||"No se pudo consultar");
+      }catch(e){
+        check.disabled=false;
+        check.textContent="Consultar estado";
+        alert(e.message||"No se pudo consultar");
+      }
     });
   }
 
