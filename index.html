@@ -434,7 +434,74 @@ html[data-layout="grid"][data-desc="none"] .cat:not(.compact) .hd{min-height:28p
 .admin-switch{position:relative;display:block;flex:0 0 auto;width:54px;height:44px;cursor:pointer}.admin-switch input{position:absolute;opacity:0;pointer-events:none}.admin-switch span{position:absolute;left:0;top:9px;width:54px;height:26px;border:1px solid var(--line);border-radius:999px;background:#23211f;transition:.18s ease}.admin-switch span:after{content:"";position:absolute;left:3px;top:3px;width:18px;height:18px;border-radius:50%;background:var(--muted);transition:.18s ease}.admin-switch input:checked+span{border-color:var(--text);background:rgba(243,237,226,.12)}.admin-switch input:checked+span:after{transform:translateX(28px);background:var(--text)}
 .admin-actions{display:flex;justify-content:flex-end;margin-top:14px}.admin-logout{min-height:44px;padding:0 12px;border:1px solid var(--line);border-radius:var(--r);background:none;color:var(--muted)}
 
+
+/* ---------- Mercado Pago TEST (solo se activa por variable de entorno en Netlify) ---------- */
+.mp-test-pill{display:inline-flex;align-items:center;gap:6px;min-height:28px;padding:0 9px;border:1px solid #5b533f;border-radius:999px;background:#2b2618;color:#ffe580;font-size:11px;font-weight:700;letter-spacing:.05em}
+.mp-test-step{padding:0 20px 24px;overflow-y:auto;flex:1 1 auto}
+.mp-test-card{margin:0 0 12px;padding:14px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+.mp-test-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}.mp-test-title b{font-size:14px}.mp-test-title small{color:var(--muted)}
+.mp-test-total{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:12px}.mp-test-total span{color:var(--muted);font-size:13px}.mp-test-total b{font-size:22px}
+.mp-test-note{margin:8px 0 0;color:var(--muted);font-size:11px;line-height:1.45}
+.mp-test-error{margin:10px 0 0;color:#ff8a8a;font-size:12px;line-height:1.45}.mp-test-error:empty{display:none}
+.mp-test-back{width:100%;min-height:46px;margin-top:10px;border:1px solid var(--line);border-radius:var(--r);background:none;color:var(--text);font-weight:600}
+.mp-test-success{text-align:center;padding:24px 10px}.mp-test-check{display:grid;place-items:center;width:58px;height:58px;margin:0 auto 12px;border-radius:50%;background:#2f9e62;color:#fff;font-size:30px}.mp-test-success h3{font:400 26px/1.05 var(--serif);margin-bottom:6px}.mp-test-success p{color:var(--muted);font-size:13px}.mp-test-order{margin-top:14px;padding:12px;border:1px solid var(--line);border-radius:var(--r);text-align:left;font-size:12px}.mp-test-order div{display:flex;justify-content:space-between;gap:10px;padding:3px 0}.mp-test-order span{color:var(--muted)}
+
+
+/* ---------- Mercado Pago TEST v3: transición de pago clara ---------- */
+.mp-test-card{position:relative}
+.mp-test-processing{
+  min-height:360px;display:grid;place-items:center;text-align:center;padding:34px 18px
+}
+.mp-test-processing-inner{display:grid;justify-items:center;gap:14px;max-width:300px}
+.mp-test-spinner{
+  width:54px;height:54px;border-radius:50%;
+  border:4px solid #342f2b;border-top-color:var(--red);
+  animation:mpSpin .8s linear infinite
+}
+@keyframes mpSpin{to{transform:rotate(360deg)}}
+.mp-test-processing h3{font:400 27px/1.08 var(--serif);margin:0}
+.mp-test-processing p{margin:0;color:var(--muted);font-size:13px;line-height:1.45}
+.mp-test-processing .mp-test-amount{font-size:22px;font-weight:700;color:var(--text)}
+.mp-test-success{
+  min-height:420px;display:grid;align-content:center;text-align:center;padding:34px 18px
+}
+.mp-test-check{
+  width:74px;height:74px;margin:0 auto 16px;font-size:38px;
+  box-shadow:0 0 0 8px rgba(47,158,98,.10)
+}
+.mp-test-success h3{font:400 30px/1.05 var(--serif);margin:0 0 8px}
+.mp-test-success p{max-width:32ch;margin:0 auto;color:var(--muted);font-size:14px;line-height:1.45}
+.mp-test-order{margin-top:20px}
+.mp-test-primary{
+  width:100%;min-height:50px;margin-top:14px;border:0;border-radius:var(--r);
+  background:var(--red);color:#fff;font-weight:700
+}
+.mp-test-primary:hover{background:var(--red-hi)}
+.mp-test-result-note{
+  margin-top:12px!important;font-size:12px!important;color:var(--muted)!important
+}
+
+
+/* ---------- Preparación Wallets (Apple Pay / Google Pay) ---------- */
+.wallet-area{display:grid;gap:10px;margin-bottom:12px}
+.wallet-area[hidden],.wallet-btn[hidden],.wallet-sep[hidden]{display:none!important}
+.wallet-btn{width:100%;min-height:48px;border:0;border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700}
+.wallet-apple{background:#fff;color:#000}
+.wallet-google{background:#fff;color:#111}
+.wallet-sep{display:flex;align-items:center;gap:10px;margin:4px 0 10px;color:var(--muted);font-size:11px}
+.wallet-sep::before,.wallet-sep::after{content:"";flex:1;height:1px;background:var(--line)}
+.wallet-card-title{margin:0 0 8px;font-size:12px;color:var(--muted)}
+.mp-test-data{margin:0 0 12px;padding:12px;border:1px solid #5b533f;border-radius:var(--r);background:#211d14;color:var(--text)}
+.mp-test-data-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
+.mp-test-data-head b{font-size:12px;color:#ffe580;letter-spacing:.03em}
+.mp-test-copyall{min-height:34px;padding:0 10px;border:1px solid #6f654d;border-radius:10px;background:none;color:#ffe580;font-size:11px;font-weight:700}
+.mp-test-data-grid{display:grid;gap:5px;font-size:11px}
+.mp-test-data-row{display:flex;justify-content:space-between;gap:12px}
+.mp-test-data-row span{color:var(--muted)}
+.mp-test-data-row code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--text);font-size:11px;text-align:right}
+
 </style>
+<script src="https://sdk.mercadopago.com/js/v2"></script>
 </head>
 <body>
 
@@ -1711,5 +1778,324 @@ document.addEventListener("visibilitychange", () => { if (!document.hidden) load
 window.addEventListener("focus", loadAvailability);
 
 </script>
+
+<script>
+/* =====================================================================
+   MERCADO PAGO TEST — oculto por defecto.
+   Se activa solo si /.netlify/functions/mp-test-config devuelve enabled:true.
+   En producción, si MAFIA_MP_TEST_ENABLED no está en true, el flujo WhatsApp
+   original permanece exactamente igual.
+   ===================================================================== */
+(function(){
+  const MP_CONFIG_ENDPOINT = "/.netlify/functions/mp-test-config";
+  const MP_CREATE_ENDPOINT = "/.netlify/functions/mp-create-order";
+  const MP_STATUS_ENDPOINT = "/.netlify/functions/mp-order-status";
+  let mpTest = { enabled:false, publicKey:"" };
+  const WALLETS = { applePay:false, googlePay:false };
+  let mpInstance = null, mpBricks = null, mpController = null, mpAttemptId = "";
+
+  const money = n => "$" + new Intl.NumberFormat("es-CL").format(Number(n)||0);
+  const sendBtn = document.getElementById("send");
+  const checkout2 = document.getElementById("checkout2");
+  const drawerEl = document.getElementById("drawer");
+  const drawerTitle = document.getElementById("drawerTitle");
+  const backCheckoutBtn = document.getElementById("backCheckout");
+
+  async function loadMpTestConfig(){
+    try{
+      const r = await fetch(MP_CONFIG_ENDPOINT + "?t=" + Date.now(), {cache:"no-store", headers:{"Accept":"application/json"}});
+      if(!r.ok) return;
+      const d = await r.json();
+      if(!d || !d.enabled || !d.publicKey) return;
+      mpTest = d;
+      enableMpTestUI();
+    }catch(e){}
+  }
+
+  function enableMpTestUI(){
+    if(!sendBtn) return;
+    sendBtn.setAttribute("aria-label", "Pagar con Mercado Pago en ambiente de prueba");
+    sendBtn.innerHTML = '<span>Pagar con Mercado Pago</span><span class="mp-test-pill">TEST</span>';
+    const hint = document.querySelector(".wa-hint"); if(hint) hint.textContent = "Ambiente privado de prueba. No afecta la carta pública mientras la variable TEST esté desactivada en Production.";
+    const info = document.getElementById("orderStep"); if(info) info.textContent = "En esta versión privada probaremos el pago dentro de MAFIA. El pedido solo se confirmará cuando Mercado Pago responda como acreditado.";
+  }
+
+  function validCustomer(){
+    const name = document.getElementById("cname").value.trim();
+    const addr = document.getElementById("caddr").value.trim();
+    const delivery = tipo() === "delivery";
+    const err = document.getElementById("err");
+    if(!name){ err.textContent="Escribe tu nombre."; document.getElementById("cname").focus(); return null; }
+    if(delivery && addr.length < 5){ err.textContent="Escribe tu dirección para el delivery."; document.getElementById("caddr").focus(); return null; }
+    err.textContent="";
+    return { name, addr, note:document.getElementById("cnote").value.trim(), fulfillment:delivery?"delivery":"retiro" };
+  }
+
+  function applePayAvailable(){
+    if(!WALLETS.applePay) return false;
+    try{return !!(window.ApplePaySession && ApplePaySession.canMakePayments());}catch(e){return false;}
+  }
+  function googlePayAvailable(){ return !!WALLETS.googlePay; }
+  function syncWalletUI(step){
+    if(!step) return;
+    const apple=step.querySelector("#applePayBtn"), google=step.querySelector("#googlePayBtn");
+    const showApple=applePayAvailable(), showGoogle=googlePayAvailable(), any=showApple||showGoogle;
+    const area=step.querySelector("#walletArea"), sep=step.querySelector("#walletSep");
+    if(area) area.hidden=!any;
+    if(apple) apple.hidden=!showApple;
+    if(google) google.hidden=!showGoogle;
+    if(sep) sep.hidden=!any;
+  }
+  function testPaymentDataText(){
+    return ["Visa: 4168 8188 4444 7115","Vencimiento: 11/30","CVV: 123","Titular: APRO","Documento: 123456789","Email: test@testuser.com"].join("\n");
+  }
+
+  function ensureMpStep(){
+    let step = document.getElementById("mpTestStep");
+    if(step) return step;
+    step = document.createElement("section");
+    step.id="mpTestStep";
+    step.className="mp-test-step";
+    step.hidden=true;
+    step.innerHTML = `
+      <div class="mp-test-card">
+        <div class="mp-test-title"><b>Pago seguro</b><span class="mp-test-pill">MERCADO PAGO · TEST</span></div>
+        <div class="mp-test-total"><span>Total a pagar</span><b id="mpTestTotal">$0</b></div>
+
+        <div class="wallet-area" id="walletArea" hidden>
+          <button type="button" class="wallet-btn wallet-apple" id="applePayBtn" hidden> Pay</button>
+          <button type="button" class="wallet-btn wallet-google" id="googlePayBtn" hidden>Google Pay</button>
+        </div>
+        <div class="wallet-sep" id="walletSep" hidden><span>o paga con tarjeta</span></div>
+
+        <div class="mp-test-data">
+          <div class="mp-test-data-head"><b>DATOS DE PRUEBA</b><button type="button" class="mp-test-copyall" id="mpCopyTestData">Copiar</button></div>
+          <div class="mp-test-data-grid">
+            <div class="mp-test-data-row"><span>Visa</span><code>4168 8188 4444 7115</code></div>
+            <div class="mp-test-data-row"><span>Vence</span><code>11/30</code></div>
+            <div class="mp-test-data-row"><span>CVV</span><code>123</code></div>
+            <div class="mp-test-data-row"><span>Titular</span><code>APRO</code></div>
+            <div class="mp-test-data-row"><span>Documento</span><code>123456789</code></div>
+            <div class="mp-test-data-row"><span>Email</span><code>test@testuser.com</code></div>
+          </div>
+        </div>
+
+        <p class="wallet-card-title">Tarjeta de crédito o débito</p>
+        <div id="cardPaymentBrick_container"></div>
+        <p class="mp-test-note">Los datos de la tarjeta son capturados y tokenizados por Mercado Pago. MAFIA no recibe ni almacena el número completo ni el CVV.</p>
+        <p class="mp-test-error" id="mpTestError" role="alert"></p>
+      </div>
+      <button type="button" class="mp-test-back" id="mpTestBack">← Volver a tus datos</button>`;
+    drawerEl.appendChild(step);
+    step.querySelector("#mpTestBack").addEventListener("click", closePaymentStep);
+    const copyTest=step.querySelector("#mpCopyTestData");
+    if(copyTest) copyTest.addEventListener("click",async()=>{
+      try{await navigator.clipboard.writeText(testPaymentDataText());copyTest.textContent="Copiado ✓";}
+      catch(e){copyTest.textContent="No se pudo copiar";}
+      setTimeout(()=>copyTest.textContent="Copiar",1400);
+    });
+    const appleBtn=step.querySelector("#applePayBtn");
+    if(appleBtn) appleBtn.addEventListener("click",()=>{const e=step.querySelector("#mpTestError");if(e)e.textContent="Apple Pay está preparado pero aún no está habilitado.";});
+    const googleBtn=step.querySelector("#googlePayBtn");
+    if(googleBtn) googleBtn.addEventListener("click",()=>{const e=step.querySelector("#mpTestError");if(e)e.textContent="Google Pay está preparado pero aún no está habilitado.";});
+    syncWalletUI(step);
+    return step;
+  }
+
+  async function destroyBrick(){
+    try{ if(mpController && typeof mpController.unmount === "function") await mpController.unmount(); }catch(e){}
+    mpController=null;
+  }
+
+  async function closePaymentStep(){
+    const step=document.getElementById("mpTestStep"); if(step) step.hidden=true;
+    await destroyBrick();
+    checkout2.hidden=false;
+    drawerTitle.textContent="Tus datos";
+    backCheckoutBtn.hidden=false;
+    drawerEl.scrollTop=0;
+  }
+
+  function clientCartSnapshot(){
+    return JSON.parse(JSON.stringify(cart || {}));
+  }
+
+  function showPaymentProcessing(total){
+    const step=ensureMpStep();
+    step.innerHTML=`<div class="mp-test-card mp-test-processing">
+      <div class="mp-test-processing-inner">
+        <div class="mp-test-spinner" aria-hidden="true"></div>
+        <h3>Procesando tu pago</h3>
+        <div class="mp-test-amount">${money(total)}</div>
+        <p>No cierres esta ventana. Estamos esperando la confirmación de Mercado Pago.</p>
+      </div>
+    </div>`;
+    drawerTitle.textContent="Procesando pago";
+    backCheckoutBtn.hidden=true;
+    drawerEl.scrollTop=0;
+  }
+
+  async function openPaymentStep(customer){
+    const step=ensureMpStep();
+    checkout2.hidden=true;
+    step.hidden=false;
+    drawerTitle.textContent="Pagar";
+    backCheckoutBtn.hidden=true;
+    drawerEl.scrollTop=0;
+    const total=totals().sum;
+    step.querySelector("#mpTestTotal").textContent=money(total);
+    step.querySelector("#mpTestError").textContent="";
+    syncWalletUI(step);
+    mpAttemptId = (crypto && crypto.randomUUID) ? crypto.randomUUID() : (Date.now()+"-"+Math.random().toString(16).slice(2));
+
+    if(!window.MercadoPago){ step.querySelector("#mpTestError").textContent="No se pudo cargar Mercado Pago.js."; return; }
+    await destroyBrick();
+    if(!mpInstance){ mpInstance = new MercadoPago(mpTest.publicKey, {locale:"es-CL"}); mpBricks = mpInstance.bricks(); }
+
+    const settings={
+      initialization:{ amount:Number(total) },
+      callbacks:{
+        onReady:()=>{},
+        onSubmit:(formData, additionalData)=>new Promise(async (resolve,reject)=>{
+          const errEl=step.querySelector("#mpTestError");
+          if(errEl) errEl.textContent="";
+          const submittedTotal=total;
+          try{
+            /* Cada envío real del formulario es un intento de pago nuevo.
+               La idempotency key debe cambiar si Mercado Pago genera un token nuevo. */
+            mpAttemptId = (crypto && crypto.randomUUID) ? crypto.randomUUID() : (Date.now()+"-"+Math.random().toString(16).slice(2));
+
+            /* No cerramos el flujo ni volvemos al carrito: mostramos un estado
+               claro de procesamiento mientras el backend espera a Mercado Pago. */
+            await destroyBrick();
+            showPaymentProcessing(submittedTotal);
+
+            const r=await fetch(MP_CREATE_ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify({
+              attempt_id:mpAttemptId,
+              cart:clientCartSnapshot(),
+              customer:{name:customer.name,address:customer.addr,note:customer.note},
+              fulfillment:customer.fulfillment,
+              payment:{
+                token:formData.token,
+                payment_method_id:formData.payment_method_id,
+                installments:formData.installments,
+                payer:formData.payer || {},
+                payment_type_id:(additionalData && additionalData.paymentTypeId) || formData.payment_type_id || ""
+              }
+            })});
+            const d=await r.json().catch(()=>({}));
+            if(!r.ok || !d.ok) throw new Error(d.error || "No se pudo procesar el pago");
+            errEl.textContent="";
+            resolve();
+            showPaymentResult(d);
+          }catch(err){
+            reject(err);
+            /* Si falla la orden, devolvemos al formulario con el mensaje visible. */
+            try{
+              await openPaymentStep(customer);
+              const restored=document.getElementById("mpTestError");
+              if(restored) restored.textContent=err.message || "No se pudo procesar el pago";
+            }catch(_){}
+          }
+        }),
+        onError:(error)=>{ const e=document.getElementById("mpTestError"); if(e) e.textContent="Mercado Pago informó un error en el formulario. Revisa los datos e intenta nuevamente."; console.error(error); }
+      }
+    };
+    mpController = await mpBricks.create("cardPayment","cardPaymentBrick_container",settings);
+  }
+
+  function showPaymentResult(d){
+    const step=ensureMpStep();
+    const processed=d.status==="processed" && d.status_detail==="accredited";
+    const pending=d.status==="processing" || d.status==="action_required" || d.status==="created";
+
+    drawerTitle.textContent = processed ? "Pedido confirmado" : (pending ? "Confirmando pago" : "Pago no aprobado");
+    backCheckoutBtn.hidden=true;
+
+    if(processed){
+      try{ cart={}; save(); }catch(e){}
+      track("payment_test_processed",{order_id:d.order_id,order_total:d.total||0});
+    }
+
+    step.innerHTML=`<div class="mp-test-card mp-test-success" data-result="${processed?'approved':(pending?'pending':'failed')}">
+      <div class="mp-test-check" style="background:${processed?'#2f9e62':(pending?'#b98820':'#b73d4c')};box-shadow:0 0 0 8px ${processed?'rgba(47,158,98,.10)':(pending?'rgba(185,136,32,.10)':'rgba(183,61,76,.10)')}">${processed?'✓':(pending?'…':'!')}</div>
+      <h3>${processed?'¡Pago aprobado!':(pending?'Estamos confirmando tu pago':'No pudimos aprobar el pago')}</h3>
+      <p>${processed
+        ? 'Tu pago fue acreditado correctamente y tu pedido quedó confirmado.'
+        : (pending
+          ? 'Mercado Pago todavía está procesando la orden. Puedes consultar el estado en unos segundos.'
+          : 'No se realizó el cobro. Puedes volver e intentar con otra tarjeta de prueba.')}</p>
+
+      <div class="mp-test-order">
+        <div><span>Pedido</span><b>${esc(d.order_id||'—')}</b></div>
+        <div><span>Estado</span><b>${esc(d.status||'—')}</b></div>
+        <div><span>Total</span><b>${money(d.total||0)}</b></div>
+      </div>
+
+      ${processed
+        ? `<p class="mp-test-result-note">En producción, desde aquí el pedido seguirá automáticamente al local/Fudo.</p>
+           <button type="button" class="mp-test-primary" id="mpResultBack">Volver al menú</button>`
+        : pending
+          ? `<button type="button" class="mp-test-primary" id="mpCheckStatus">Consultar estado</button>
+             <button type="button" class="mp-test-back" id="mpResultBack">Volver</button>`
+          : `<button type="button" class="mp-test-primary" id="mpResultBack">Intentar nuevamente</button>`
+      }
+    </div>`;
+
+    drawerEl.scrollTop=0;
+
+    const back=step.querySelector("#mpResultBack");
+    if(back) back.addEventListener("click",()=>{
+      if(processed){
+        /* Mantiene visible la confirmación hasta que el usuario decide salir. */
+        try{ renderCart(); }catch(e){}
+        toggle(false,true);
+        showCheckoutStep(1,false);
+        step.hidden=true;
+      }else{
+        closePaymentStep();
+      }
+    });
+
+    const check=step.querySelector("#mpCheckStatus");
+    if(check) check.addEventListener("click",async()=>{
+      check.disabled=true; check.textContent="Consultando…";
+      try{
+        const r=await fetch(MP_STATUS_ENDPOINT+"?id="+encodeURIComponent(d.order_id),{cache:"no-store"});
+        const x=await r.json();
+        if(r.ok&&x.ok) showPaymentResult(x);
+        else throw new Error(x.error||"No se pudo consultar");
+      }catch(e){
+        check.disabled=false;
+        check.textContent="Consultar estado";
+        alert(e.message||"No se pudo consultar");
+      }
+    });
+  }
+
+  /* Captura el click antes del listener WhatsApp original. Si TEST está apagado, no interviene. */
+  if(sendBtn){
+    sendBtn.addEventListener("click",function(e){
+      if(!mpTest.enabled) return;
+      e.preventDefault(); e.stopImmediatePropagation();
+      const customer=validCustomer(); if(!customer) return;
+      try{ saveProfile(); }catch(_){ }
+      track("payment_test_open",{fulfillment:customer.fulfillment,...cartAnalytics()});
+      openPaymentStep(customer).catch(err=>{const x=document.getElementById("mpTestError");if(x)x.textContent=err.message||"No se pudo iniciar Mercado Pago";});
+    },true);
+  }
+
+  /* Si estamos en el paso de pago, el botón de volver del header regresa a Tus datos. */
+  if(backCheckoutBtn){
+    backCheckoutBtn.addEventListener("click",function(e){
+      const step=document.getElementById("mpTestStep");
+      if(mpTest.enabled && step && !step.hidden){e.preventDefault();e.stopImmediatePropagation();closePaymentStep();}
+    },true);
+  }
+
+  loadMpTestConfig();
+})();
+</script>
+
 </body>
 </html>

@@ -1,0 +1,18 @@
+MAFIA · MERCADO PAGO TEST
+
+Esta copia mantiene WhatsApp como flujo normal cuando MAFIA_MP_TEST_ENABLED no está en true.
+
+PARA ACTIVAR SOLO EN DEPLOY PREVIEWS (Netlify):
+1. MERCADOPAGO_ACCESS_TOKEN = tu Access Token TEST (scope Functions, contexto Deploy Previews).
+2. MERCADOPAGO_PUBLIC_KEY = tu Public Key TEST (scope Functions, contexto Deploy Previews).
+3. MAFIA_MP_TEST_ENABLED = true (scope Functions, contexto Deploy Previews).
+4. En Production deja MAFIA_MP_TEST_ENABLED sin valor o false.
+5. Haz un nuevo deploy preview después de cambiar variables.
+
+ARCHIVOS NUEVOS:
+- netlify/functions/mp-test-config.mjs
+- netlify/functions/mp-create-order.mjs
+- netlify/functions/mp-order-status.mjs
+- netlify/functions/_mafia-pricing.mjs
+
+TODAVÍA NO INCLUYE WEBHOOK. Primero validamos el Card Payment Brick y Orders API. Después agregamos el Webhook Secret y confirmación server-side definitiva.
