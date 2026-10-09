@@ -1,5 +1,12 @@
 import crypto from "node:crypto";
 
+import {
+  getOrderByReference,
+  markOrderPaid,
+  markOrderProcessed,
+  totalsMatch,
+} from "./_mafia-orders.mjs";
+
 function json(body, status = 200) {
   return new Response(JSON.stringify(body), {
     status,
@@ -57,22 +64,49 @@ async function getMercadoPagoOrder(orderId, accessToken) {
     console.error("❌ Error consultando order en Mercado Pago", {
       order_id: orderId,
       status: response.status,
-      mp_error: data?.message || data?.error || "desconocido",
+      message: data?.message || data?.error || "desconocido",
     });
 
-    throw new Error(
-      `Mercado Pago respondió ${response.status}`
-    );
+    throw new Error(`Mercado Pago respondió ${response.status}`);
   }
 
   return data;
 }
 
-export default async (req) => {
+function getPaidTotal(order) {
   /*
-   * GET solamente sirve para comprobar que
-   * la función está publicada y configurada.
+   * Buscamos el total pagado de varias formas
+   * para tolerar diferencias en la respuesta.
    */
+
+  if (order?.total_paid_amount != null) {
+    return Number(order.total_paid_amount);
+  }
+
+  const payments =
+    order?.transactions?.payments || [];
+
+  if (Array.isArray(payments) && payments.length) {
+    return payments.reduce((sum, payment) => {
+      return (
+        sum +
+        Number(
+          payment?.paid_amount ??
+            payment?.amount ??
+            0
+        )
+      );
+    }, 0);
+  }
+
+  if (order?.total_amount != null) {
+    return Number(order.total_amount);
+  }
+
+  return 0;
+}
+
+export default async (req) => {
   if (req.method === "GET") {
     return json({
       ok: true,
@@ -103,10 +137,6 @@ export default async (req) => {
     process.env.MERCADOPAGO_ACCESS_TOKEN;
 
   if (!secret) {
-    console.error(
-      "❌ MERCADOPAGO_WEBHOOK_SECRET no configurado"
-    );
-
     return json(
       {
         ok: false,
@@ -117,10 +147,6 @@ export default async (req) => {
   }
 
   if (!accessToken) {
-    console.error(
-      "❌ MERCADOPAGO_ACCESS_TOKEN no configurado"
-    );
-
     return json(
       {
         ok: false,
@@ -134,11 +160,7 @@ export default async (req) => {
 
   try {
     body = await req.json();
-  } catch {
-    console.warn(
-      "⚠️ No se pudo interpretar el body como JSON"
-    );
-  }
+  } catch {}
 
   const url = new URL(req.url);
 
@@ -153,15 +175,6 @@ export default async (req) => {
 
   const xRequestId =
     req.headers.get("x-request-id") || "";
-
-  console.log("📩 Webhook Mercado Pago recibido", {
-    type: body?.type,
-    action: body?.action,
-    data_id: dataId,
-    has_signature: Boolean(xSignature),
-    has_request_id: Boolean(xRequestId),
-    live_mode: body?.live_mode,
-  });
 
   if (!dataId) {
     return json(
@@ -186,7 +199,9 @@ export default async (req) => {
   const signature =
     parseSignature(xSignature);
 
-  const ts = signature.ts;
+  const ts =
+    signature.ts;
+
   const receivedSignature =
     signature.v1;
 
@@ -223,12 +238,9 @@ export default async (req) => {
       receivedSignature
     )
   ) {
-    console.warn(
-      "❌ Firma Mercado Pago inválida",
-      {
-        data_id: dataId,
-      }
-    );
+    console.warn("❌ Firma inválida", {
+      order_id: dataId,
+    });
 
     return json(
       {
@@ -239,145 +251,246 @@ export default async (req) => {
     );
   }
 
-  console.log(
-    "✅ Firma del webhook válida"
-  );
-
   /*
-   * IMPORTANTE:
-   * No confiamos en el status que viene
-   * dentro del webhook.
-   *
-   * Consultamos la order directamente
-   * a Mercado Pago.
+   * 1. CONSULTAMOS LA ORDER REAL
    */
-  let order;
+  let mpOrder;
 
   try {
-    order = await getMercadoPagoOrder(
-      dataId,
-      accessToken
-    );
+    mpOrder =
+      await getMercadoPagoOrder(
+        dataId,
+        accessToken
+      );
   } catch (error) {
-    console.error(
-      "❌ No se pudo verificar la order",
-      error.message
-    );
-
-    /*
-     * Respondemos 500 para que Mercado Pago
-     * pueda volver a intentar la notificación.
-     */
     return json(
       {
         ok: false,
-        error:
-          "No se pudo verificar la order",
+        error: "No se pudo verificar la order",
       },
       500
     );
   }
 
-  const orderStatus =
-    order?.status || "";
-
-  const orderStatusDetail =
-    order?.status_detail || "";
-
   const orderId =
-    order?.id || dataId;
+    mpOrder?.id || dataId;
+
+  const status =
+    mpOrder?.status || "";
+
+  const statusDetail =
+    mpOrder?.status_detail || "";
 
   const externalReference =
-    order?.external_reference || null;
+    mpOrder?.external_reference || "";
 
-  const total =
-    Number(
-      order?.total_amount ??
-      order?.total_paid_amount ??
-      0
-    );
+  const paidTotal =
+    getPaidTotal(mpOrder);
 
-  console.log(
-    "🔎 Order verificada directamente con Mercado Pago",
-    {
-      order_id: orderId,
-      status: orderStatus,
-      status_detail: orderStatusDetail,
-      external_reference:
-        externalReference,
-      total,
-    }
-  );
+  console.log("🔎 Order Mercado Pago", {
+    order_id: orderId,
+    status,
+    status_detail: statusDetail,
+    external_reference: externalReference,
+    paid_total: paidTotal,
+  });
 
+  /*
+   * 2. SOLO SEGUIMOS SI MP CONFIRMA
+   *    QUE ESTÁ ACREDITADO
+   */
   const paid =
-    orderStatus === "processed" &&
-    orderStatusDetail === "accredited";
+    status === "processed" &&
+    statusDetail === "accredited";
 
   if (!paid) {
-    console.log(
-      "ℹ️ Order recibida pero todavía no acreditada",
+    return json({
+      ok: true,
+      verified: true,
+      paid: false,
+      order_id: orderId,
+      status,
+      status_detail: statusDetail,
+    });
+  }
+
+  /*
+   * 3. TIENE QUE EXISTIR external_reference
+   */
+  if (!externalReference) {
+    console.error(
+      "❌ Pago sin external_reference",
       {
         order_id: orderId,
-        status: orderStatus,
-        status_detail:
-          orderStatusDetail,
+      }
+    );
+
+    return json(
+      {
+        ok: false,
+        error: "Orden sin referencia MAFIA",
+      },
+      400
+    );
+  }
+
+  /*
+   * 4. BUSCAMOS EL PEDIDO ORIGINAL DE MAFIA
+   */
+  const mafiaOrder =
+    await getOrderByReference(
+      externalReference
+    );
+
+  if (!mafiaOrder) {
+    console.error(
+      "❌ Pedido MAFIA no encontrado",
+      {
+        order_id: orderId,
+        external_reference:
+          externalReference,
+      }
+    );
+
+    return json(
+      {
+        ok: false,
+        error:
+          "Pedido MAFIA no encontrado",
+      },
+      404
+    );
+  }
+
+  /*
+   * 5. COMPARAMOS EL TOTAL QUE DEBÍA PAGAR
+   *    VS LO QUE REALMENTE PAGÓ EN MP
+   */
+  const expectedTotal =
+    Number(mafiaOrder.total || 0);
+
+  if (
+    !totalsMatch(
+      expectedTotal,
+      paidTotal
+    )
+  ) {
+    console.error(
+      "🚨 MONTO NO COINCIDE",
+      {
+        order_id: orderId,
+        external_reference:
+          externalReference,
+        expected_total:
+          expectedTotal,
+        paid_total:
+          paidTotal,
+      }
+    );
+
+    return json(
+      {
+        ok: false,
+        error:
+          "El monto pagado no coincide con el pedido",
+      },
+      409
+    );
+  }
+
+  /*
+   * 6. EVITAMOS PROCESAR DOS VECES
+   */
+  if (mafiaOrder.processed) {
+    console.log(
+      "ℹ️ Pedido ya procesado anteriormente",
+      {
+        order_id: orderId,
+        external_reference:
+          externalReference,
       }
     );
 
     return json({
       ok: true,
       verified: true,
-      paid: false,
+      paid: true,
+      already_processed: true,
       order_id: orderId,
-      status: orderStatus,
-      status_detail:
-        orderStatusDetail,
+      external_reference:
+        externalReference,
     });
   }
 
   /*
-   * ACÁ TENEMOS EL PUNTO SEGURO.
-   *
-   * La firma era válida
-   * Y además Mercado Pago confirmó
-   * directamente que la order está pagada.
+   * 7. MARCAMOS EL PEDIDO COMO PAGADO
    */
+  await markOrderPaid({
+    reference:
+      externalReference,
 
-  console.log(
-    "💰 PAGO CONFIRMADO POR MERCADO PAGO",
-    {
-      order_id: orderId,
-      external_reference:
-        externalReference,
-      total,
-    }
-  );
+    mercadoPagoOrderId:
+      orderId,
+
+    paymentStatus:
+      status,
+
+    paymentStatusDetail:
+      statusDetail,
+
+    paidTotal,
+  });
 
   /*
-   * PRÓXIMO PASO:
+   * TODAVÍA NO ENVIAMOS A FUDO.
    *
-   * 1. Recuperar el pedido correspondiente
-   *    usando external_reference.
-   *
-   * 2. Comparar el total pagado con
-   *    el total calculado por MAFIA.
-   *
-   * 3. Evitar procesar dos veces
-   *    el mismo order_id.
-   *
-   * 4. Enviar recién ahí
-   *    la comanda a Fudo.
+   * Por ahora marcamos procesado para comprobar
+   * que la lógica completa funciona y evitar
+   * duplicados mientras estamos en TEST.
    */
+  await markOrderProcessed(
+    externalReference
+  );
+
+  console.log(
+    "✅ PEDIDO MAFIA VERIFICADO Y PAGADO",
+    {
+      order_id:
+        orderId,
+
+      external_reference:
+        externalReference,
+
+      expected_total:
+        expectedTotal,
+
+      paid_total:
+        paidTotal,
+
+      customer:
+        mafiaOrder?.customer?.name,
+
+      fulfillment:
+        mafiaOrder?.delivery_type,
+    }
+  );
 
   return json({
     ok: true,
     verified: true,
     paid: true,
-    order_id: orderId,
-    status: orderStatus,
-    status_detail:
-      orderStatusDetail,
+    amount_verified: true,
+    processed: true,
+
+    order_id:
+      orderId,
+
+    external_reference:
+      externalReference,
+
+    total:
+      paidTotal,
   });
 };
 
-// webhook verify-order v3
+// webhook mafia-order-validation v4
