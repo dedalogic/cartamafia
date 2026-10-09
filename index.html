@@ -1838,6 +1838,9 @@ window.addEventListener("focus", loadAvailability);
         onSubmit:(formData, additionalData)=>new Promise(async (resolve,reject)=>{
           const errEl=step.querySelector("#mpTestError"); errEl.textContent="Procesando pago de prueba…";
           try{
+            /* Cada envío real del formulario es un intento de pago nuevo.
+               La idempotency key debe cambiar si Mercado Pago genera un token nuevo. */
+            mpAttemptId = (crypto && crypto.randomUUID) ? crypto.randomUUID() : (Date.now()+"-"+Math.random().toString(16).slice(2));
             const r=await fetch(MP_CREATE_ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify({
               attempt_id:mpAttemptId,
               cart:clientCartSnapshot(),
