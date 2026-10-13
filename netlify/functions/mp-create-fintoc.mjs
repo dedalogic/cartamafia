@@ -1,17 +1,22 @@
 export default async (request) => {
   if (request.method !== "POST") {
     return new Response(
-      JSON.stringify({ ok: false, error: "Método no permitido" }),
+      JSON.stringify({
+        ok: false,
+        error: "Método no permitido"
+      }),
       {
         status: 405,
-        headers: { "content-type": "application/json" }
+        headers: {
+          "content-type": "application/json"
+        }
       }
     );
   }
 
   try {
     const accessToken =
-      process.env.MERCADOPAGO_ACCESS_TOKEN_FINT0C_PROD || "";
+      process.env.MERCADOPAGO_ACCESS_TOKEN_PROD_TEST_FINTOC || "";
 
     if (!accessToken) {
       return new Response(
@@ -21,7 +26,9 @@ export default async (request) => {
         }),
         {
           status: 500,
-          headers: { "content-type": "application/json" }
+          headers: {
+            "content-type": "application/json"
+          }
         }
       );
     }
@@ -39,7 +46,9 @@ export default async (request) => {
         }),
         {
           status: 400,
-          headers: { "content-type": "application/json" }
+          headers: {
+            "content-type": "application/json"
+          }
         }
       );
     }
@@ -52,7 +61,9 @@ export default async (request) => {
         }),
         {
           status: 400,
-          headers: { "content-type": "application/json" }
+          headers: {
+            "content-type": "application/json"
+          }
         }
       );
     }
@@ -87,6 +98,7 @@ export default async (request) => {
           "X-Idempotency-Key":
             `fintoc-${crypto.randomUUID()}`
         },
+
         body: JSON.stringify(payload)
       }
     );
@@ -94,29 +106,42 @@ export default async (request) => {
     const data = await response.json();
 
     if (!response.ok) {
-      console.error("Mercado Pago Fintoc error:", data);
+      console.error(
+        "Mercado Pago Fintoc error:",
+        data
+      );
 
       return new Response(
         JSON.stringify({
           ok: false,
-          error: "No se pudo crear el pago por transferencia",
+          error:
+            "No se pudo crear el pago por transferencia",
           details: data
         }),
         {
           status: response.status,
-          headers: { "content-type": "application/json" }
+          headers: {
+            "content-type": "application/json"
+          }
         }
       );
     }
 
     const redirectUrl =
-      data?.point_of_interaction?.transaction_data
+      data?.point_of_interaction
+        ?.transaction_data
         ?.external_resource_url ||
-      data?.transaction_details?.external_resource_url ||
-      data?.payment_method?.data?.external_resource_url;
+      data?.transaction_details
+        ?.external_resource_url ||
+      data?.payment_method
+        ?.data
+        ?.external_resource_url ||
+      null;
 
     const widgetToken =
-      data?.payment_method?.data?.external_reference_id ||
+      data?.payment_method
+        ?.data
+        ?.external_reference_id ||
       null;
 
     return new Response(
@@ -124,17 +149,21 @@ export default async (request) => {
         ok: true,
         payment_id: data.id,
         status: data.status,
-        redirect_url: redirectUrl || null,
+        redirect_url: redirectUrl,
         widget_token: widgetToken
       }),
       {
         status: 200,
-        headers: { "content-type": "application/json" }
+        headers: {
+          "content-type": "application/json"
+        }
       }
     );
-
   } catch (error) {
-    console.error("mp-create-fintoc:", error);
+    console.error(
+      "mp-create-fintoc:",
+      error
+    );
 
     return new Response(
       JSON.stringify({
@@ -143,7 +172,9 @@ export default async (request) => {
       }),
       {
         status: 500,
-        headers: { "content-type": "application/json" }
+        headers: {
+          "content-type": "application/json"
+        }
       }
     );
   }
