@@ -1,44 +1,4 @@
 export default async (request) => {
-  const url = new URL(request.url);
-  const accessToken = process.env.MERCADOPAGO_ACCESS_TOKEN || "";
-
-  // DEBUG TEMPORAL — no expone el token completo
-  if (request.method === "GET" && url.searchParams.get("debug") === "1") {
-    return new Response(
-      JSON.stringify(
-        {
-          ok: true,
-          netlify_context: process.env.CONTEXT || null,
-          branch: process.env.BRANCH || null,
-          deploy_prime_url: process.env.DEPLOY_PRIME_URL || null,
-          site_url: process.env.URL || null,
-
-          access_token_present: Boolean(accessToken),
-          access_token_length: accessToken.length,
-
-          access_token_start:
-            accessToken.length >= 7
-              ? accessToken.slice(0, 7) + "..."
-              : "NO TOKEN",
-
-          access_token_end:
-            accessToken.length >= 4
-              ? "..." + accessToken.slice(-4)
-              : "NO TOKEN"
-        },
-        null,
-        2
-      ),
-      {
-        status: 200,
-        headers: {
-          "content-type": "application/json",
-          "cache-control": "no-store"
-        }
-      }
-    );
-  }
-
   if (request.method !== "POST") {
     return new Response(
       JSON.stringify({ ok: false, error: "Método no permitido" }),
@@ -50,11 +10,14 @@ export default async (request) => {
   }
 
   try {
+    const accessToken =
+      process.env.MERCADOPAGO_ACCESS_TOKEN_FINT0C_PROD || "";
+
     if (!accessToken) {
       return new Response(
         JSON.stringify({
           ok: false,
-          error: "Mercado Pago no configurado"
+          error: "Mercado Pago Fintoc no configurado"
         }),
         {
           status: 500,
@@ -152,32 +115,24 @@ export default async (request) => {
       data?.transaction_details?.external_resource_url ||
       data?.payment_method?.data?.external_resource_url;
 
-    if (!redirectUrl) {
-      return new Response(
-        JSON.stringify({
-          ok: false,
-          error: "Mercado Pago no devolvió la URL de transferencia",
-          payment: data
-        }),
-        {
-          status: 502,
-          headers: { "content-type": "application/json" }
-        }
-      );
-    }
+    const widgetToken =
+      data?.payment_method?.data?.external_reference_id ||
+      null;
 
     return new Response(
       JSON.stringify({
         ok: true,
         payment_id: data.id,
         status: data.status,
-        redirect_url: redirectUrl
+        redirect_url: redirectUrl || null,
+        widget_token: widgetToken
       }),
       {
         status: 200,
         headers: { "content-type": "application/json" }
       }
     );
+
   } catch (error) {
     console.error("mp-create-fintoc:", error);
 
