@@ -1,13 +1,10 @@
 export default async (request) => {
   const url = new URL(request.url);
 
-  // DEBUG SEGURO: solo confirma si Netlify ve las variables
+  // DEBUG SEGURO
   if (request.method === "GET" && url.searchParams.get("debug") === "1") {
     return new Response(
       JSON.stringify({
-        fintoc_prod_present: Boolean(
-          process.env.MERCADOPAGO_ACCESS_TOKEN_PROD_TEST_FINTOC
-        ),
         normal_mp_present: Boolean(
           process.env.MERCADOPAGO_ACCESS_TOKEN
         )
@@ -39,13 +36,13 @@ export default async (request) => {
 
   try {
     const accessToken =
-      process.env.MERCADOPAGO_ACCESS_TOKEN_PROD_TEST_FINTOC || "";
+      process.env.MERCADOPAGO_ACCESS_TOKEN || "";
 
     if (!accessToken) {
       return new Response(
         JSON.stringify({
           ok: false,
-          error: "Mercado Pago Fintoc no configurado"
+          error: "Mercado Pago no configurado"
         }),
         {
           status: 500,
@@ -95,7 +92,9 @@ export default async (request) => {
 
     const payload = {
       transaction_amount: amount,
+
       description: "Pedido MAFIA",
+
       payment_method_id: "fintoc",
 
       payer: {
@@ -115,12 +114,14 @@ export default async (request) => {
       "https://api.mercadopago.com/v1/payments",
       {
         method: "POST",
+
         headers: {
           Authorization: `Bearer ${accessToken}`,
           "Content-Type": "application/json",
           "X-Idempotency-Key":
             `fintoc-${crypto.randomUUID()}`
         },
+
         body: JSON.stringify(payload)
       }
     );
@@ -128,17 +129,23 @@ export default async (request) => {
     const data = await response.json();
 
     if (!response.ok) {
-      console.error("Mercado Pago Fintoc error:", data);
+      console.error(
+        "Mercado Pago Fintoc error:",
+        data
+      );
 
       return new Response(
         JSON.stringify({
           ok: false,
+
           error:
             "No se pudo crear el pago por transferencia",
+
           details: data
         }),
         {
           status: response.status,
+
           headers: {
             "content-type": "application/json"
           }
@@ -150,29 +157,43 @@ export default async (request) => {
       data?.point_of_interaction
         ?.transaction_data
         ?.external_resource_url ||
+
       data?.transaction_details
         ?.external_resource_url ||
+
       data?.payment_method
         ?.data
         ?.external_resource_url ||
+
       null;
 
     const widgetToken =
       data?.payment_method
         ?.data
         ?.external_reference_id ||
+
       null;
 
     return new Response(
       JSON.stringify({
         ok: true,
+
         payment_id: data.id,
+
         status: data.status,
-        redirect_url: redirectUrl,
-        widget_token: widgetToken
+
+        status_detail:
+          data.status_detail || null,
+
+        redirect_url:
+          redirectUrl,
+
+        widget_token:
+          widgetToken
       }),
       {
         status: 200,
+
         headers: {
           "content-type": "application/json"
         }
@@ -180,7 +201,10 @@ export default async (request) => {
     );
 
   } catch (error) {
-    console.error("mp-create-fintoc:", error);
+    console.error(
+      "mp-create-fintoc:",
+      error
+    );
 
     return new Response(
       JSON.stringify({
@@ -189,6 +213,7 @@ export default async (request) => {
       }),
       {
         status: 500,
+
         headers: {
           "content-type": "application/json"
         }
