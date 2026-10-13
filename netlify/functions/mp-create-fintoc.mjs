@@ -1,4 +1,27 @@
 export default async (request) => {
+  const url = new URL(request.url);
+
+  // DEBUG SEGURO: solo confirma si Netlify ve las variables
+  if (request.method === "GET" && url.searchParams.get("debug") === "1") {
+    return new Response(
+      JSON.stringify({
+        fintoc_prod_present: Boolean(
+          process.env.MERCADOPAGO_ACCESS_TOKEN_PROD_TEST_FINTOC
+        ),
+        normal_mp_present: Boolean(
+          process.env.MERCADOPAGO_ACCESS_TOKEN
+        )
+      }),
+      {
+        status: 200,
+        headers: {
+          "content-type": "application/json",
+          "cache-control": "no-store"
+        }
+      }
+    );
+  }
+
   if (request.method !== "POST") {
     return new Response(
       JSON.stringify({
@@ -98,7 +121,6 @@ export default async (request) => {
           "X-Idempotency-Key":
             `fintoc-${crypto.randomUUID()}`
         },
-
         body: JSON.stringify(payload)
       }
     );
@@ -106,10 +128,7 @@ export default async (request) => {
     const data = await response.json();
 
     if (!response.ok) {
-      console.error(
-        "Mercado Pago Fintoc error:",
-        data
-      );
+      console.error("Mercado Pago Fintoc error:", data);
 
       return new Response(
         JSON.stringify({
@@ -159,11 +178,9 @@ export default async (request) => {
         }
       }
     );
+
   } catch (error) {
-    console.error(
-      "mp-create-fintoc:",
-      error
-    );
+    console.error("mp-create-fintoc:", error);
 
     return new Response(
       JSON.stringify({
