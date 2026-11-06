@@ -142,7 +142,8 @@ export function publicOrderView(o){
     created_at:o.created_at, paid_at:o.paid_at,
     delivery_type:o.delivery_type, address:o.address || "",
     items:o.cart.items.map(i => ({ name:i.name, detail:i.detail, quantity:i.quantity, unit_price:i.unit_price, total_amount:i.total_amount })),
-    subtotal:o.subtotal, delivery_fee:o.delivery_fee, total:o.total, payment_status:o.payment_status
+    subtotal:o.subtotal, delivery_fee:o.delivery_fee, total:o.total, payment_status:o.payment_status,
+    ratings:o.ratings || null
   };
 }
 

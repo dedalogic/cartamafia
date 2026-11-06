@@ -14,6 +14,6 @@ export default async (req) => {
     paid_at:o.paid_at, accepted_at:o.accepted_at || null, mp_order_id:o.mercado_pago_order_id, payment_status:o.payment_status, delivery_type:o.delivery_type, address:o.address, customer:o.customer,
     items:o.cart.items.map(i => ({ name:i.name, detail:i.detail, quantity:i.quantity, unit_price:i.unit_price, total_amount:i.total_amount })),
     subtotal:o.subtotal, delivery_fee:o.delivery_fee, total:o.total, paid_total:o.paid_total,
-    duplicate_payments:o.duplicate_payments || [], fudo_sent:!!o.fudo_sent
+    duplicate_payments:o.duplicate_payments || [], fudo_sent:!!o.fudo_sent, ratings:o.ratings || null
   })) });
 };
