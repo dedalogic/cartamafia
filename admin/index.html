@@ -313,6 +313,33 @@ main.wide{max-width:1240px}
 .go.ready{background:var(--s-listo);color:#fff}
 .go{background:#141313}
 .go.accept{background:var(--amber);color:#1a1200}
+
+/* v9: detalle compacto, producto primero */
+.d-head{margin-bottom:2px}
+.d-items{padding:6px 16px 12px!important;margin-top:10px}
+.it2{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+.it2:last-of-type{border-bottom:0}
+.pi{width:64px;height:64px;border-radius:12px;object-fit:cover;flex:none;background:#efe9da}
+.pi.ph0{display:block;background:repeating-linear-gradient(135deg,#efe9da 0 8px,#e6dfcc 8px 16px)}
+.it2 .nm{flex:1;min-width:0}
+.it2 .nm b{display:block;font-size:16px;line-height:1.25}
+.it2 .q{font-style:normal;color:var(--accent);font-weight:800}
+.it2 .nm small{display:block;margin-top:2px;color:var(--muted);font-size:13px;line-height:1.35}
+.it2 .p{font-weight:700;font-size:15px;flex:none}
+.d-tot{margin-top:8px!important;padding:10px 14px!important}
+.d-tot b{font-size:26px!important}
+.blk.cl{margin-top:10px;padding:12px 16px}
+.cl1{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}.cl1 b{font-size:16px}.cl1 span{color:var(--muted);font-size:14px}
+.cl2{margin-top:8px;font-size:15px;font-weight:600}
+.blk.cl .d-note{margin-top:10px;padding:10px 12px;background:#fff3c4;border:1px solid #f0d77a;border-radius:12px;color:#5c4400;font-weight:600}.blk.cl .d-note .d-lbl{color:#8a6a00}
+.more{margin-top:10px;font-size:13px;color:var(--muted)}
+.more summary{cursor:pointer;min-height:36px;display:flex;align-items:center;font-weight:600}
+.more .d-rows{margin-top:4px}.more .d-rows div{padding:8px 0;font-size:13px}
+.wabtn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1.5px solid #111!important;background:#fff!important;color:#111!important;font-weight:700!important}
+.wabtn svg{width:18px;height:18px;stroke:#111;fill:none}
+.undo{background:#fff5f5!important;border:1px solid #f0c4c9!important;color:#b0102a!important;font-weight:600!important}
+.sec{gap:10px;margin-top:10px}
+.otabs{gap:4px!important}.otab{padding:0 8px!important;font-size:12.5px!important;gap:4px!important}.otab b{min-width:20px!important;height:20px!important;font-size:11px!important}
 </style>
 </head>
 <body>
@@ -626,7 +653,7 @@ async function loadOrders(){
 }
 
 function vOrders(){
-  $("#view").innerHTML = `<div class="ord" id="ord"><section class="ocol"><div id="osound"></div><div class="otabs" id="otabs"></div><div class="olist" id="olist"></div></section><section class="dcol" id="dcol"></section></div>`;
+  $("#view").innerHTML = `<div class="ord" id="ord"><section class="ocol"><div class="otabs" id="otabs"></div><div class="olist" id="olist"></div></section><section class="dcol" id="dcol"></section></div>`;
   $("#otabs").onclick = e => { const b = e.target.closest("[data-tab]"); if (b){ S.tab = b.dataset.tab; S.sel = null; drawOrders(); } };
   $("#olist").onclick = e => { const r = e.target.closest("[data-ref]"); if (r){ S.sel = r.dataset.ref; drawOrders(); window.scrollTo(0, 0); } };
   $("#dcol").onclick = onDetailClick;
@@ -638,8 +665,6 @@ const avgStars = o => { const r = o.ratings && o.ratings.items; return r && r.le
 const tipoChip = o => o.delivery_type === "delivery" ? '<span class="tg del">Delivery</span>' : '<span class="tg ret">Retiro</span>';
 function drawOrders(){
   if (!$("#ord")) return;
-  $("#osound").innerHTML = soundOn ? "" : `<button class="soundoff" id="soundOn" type="button">${I.bellOff} Activar sonido de alerta</button>`;
-  const so = $("#soundOn"); if (so) so.onclick = () => setSound(true);
   $("#otabs").innerHTML = STATES.map(st => { const n = inTab(st).length; return `<button class="otab${st === "nuevo" && n ? " hot" : ""}" type="button" data-st="${st}" data-tab="${st}" aria-pressed="${S.tab === st}">${TAB[st]}<b>${n}</b></button>`; }).join("");
   const list = inTab(S.tab);
   $("#olist").innerHTML = list.length ? list.map(o => `<button class="orow${o.kitchen_status === "nuevo" ? " new" : ""}" type="button" data-st="${o.kitchen_status}" data-ref="${esc(o.reference)}" aria-current="${S.sel === o.reference}"><span class="n">#${esc(o.short_code)}</span><span class="t">${clp(o.paid_total ?? o.total)}</span><span class="s">${tipoChip(o)}${esc(o.customer.name)}</span><span class="w">${o.kitchen_status === "nuevo" ? ago(o.paid_at) : hhmm(o.paid_at)}</span><span class="i">${o.items.map(i => i.quantity + "× " + esc(i.name)).join(", ")}</span>${avgStars(o) ? `<span class="rt">${stars(avgStars(o))}</span>` : ""}</button>`).join("") : `<p class="none">Sin pedidos en “${TAB[S.tab]}”.</p>`;
@@ -666,35 +691,30 @@ function drawDetail(o){
   const box = $("#dcol"); if (!box) return;
   if (!o){ box.innerHTML = '<p class="none2">Elige un pedido para ver el detalle</p>'; return; }
   const c = o.customer || {}, del = o.delivery_type === "delivery", nx = NEXT[o.kitchen_status], prev = STATES[STATES.indexOf(o.kitchen_status) - 1];
-  const canMsg = !!c.phone && o.kitchen_status !== "nuevo", showMsg = canMsg && S.msgOpen === o.reference;
+  const canMsg = !!c.phone && o.kitchen_status !== "nuevo";
+  const imgOf = n => { const m = S.catalog.find(x => x.img && x.name === n) || S.catalog.find(x => x.img && (n.startsWith(x.name) || x.name.startsWith(n))); return m ? m.img : ""; };
   box.innerHTML = `
     <button class="d-back" id="dback" type="button">Volver a pedidos</button>
-    <div class="d-head"><span class="d-num">#${esc(o.short_code)}</span><span class="tg st-${o.kitchen_status}">${ST_LBL[o.kitchen_status]}</span>${tipoChip(o)}<span class="tg pay">Pagado</span><span class="d-meta">${new Date(o.paid_at).toLocaleDateString("es-CL", { day:"numeric", month:"short" })} ${hhmm(o.paid_at)}</span></div>
-    <div class="blk y"><div class="d-cust"><div class="cn"><b>${esc(c.name)}</b>${c.phone ? `<span>${esc(c.phone)}</span>` : ""}</div></div>
-    ${del ? `<div class="d-addr"><span class="d-lbl">Dirección</span>${esc(o.address)}${c.unit ? " · " + esc(c.unit) : ""}</div>` : ""}
-    ${c.notes ? `<div class="d-note"><span class="d-lbl">Observaciones</span>${esc(c.notes)}</div>` : ""}</div>
-    <div class="blk d-items">${o.items.map((i, ix) => { const rv = o.ratings && o.ratings.items && o.ratings.items.find(r => r.i === ix); return `<div class="it"><span class="q">${i.quantity}×</span><div class="nm">${esc(i.name)}${i.detail && i.detail.length ? `<small>${i.detail.map(esc).join(" · ")}</small>` : ""}${rv ? `<span class="rv">${stars(rv.stars)}${rv.comment ? `<em>“${esc(rv.comment)}”</em>` : ""}</span>` : ""}</div><span class="p">${clp(i.total_amount)}</span></div>`; }).join("")}
-      <div class="d-sum"><span>Subtotal</span><span>${clp(o.subtotal)}</span></div>
+    <div class="d-head"><span class="d-num">#${esc(o.short_code)}</span>${tipoChip(o)}<span class="d-meta">${hhmm(o.paid_at)}</span></div>
+    <div class="blk d-items">${o.items.map((i, ix) => { const rv = o.ratings && o.ratings.items && o.ratings.items.find(r => r.i === ix), im = imgOf(i.name); return `<div class="it2">${im ? `<img class="pi" src="${esc(im)}" alt="" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'pi ph0'}))">` : `<span class="pi ph0"></span>`}<div class="nm"><b><em class="q">${i.quantity}×</em> ${esc(i.name)}</b>${i.detail && i.detail.length ? `<small>${i.detail.map(esc).join(" · ")}</small>` : ""}${rv ? `<span class="rv">${stars(rv.stars)}${rv.comment ? `<em>“${esc(rv.comment)}”</em>` : ""}</span>` : ""}</div><span class="p">${clp(i.total_amount)}</span></div>`; }).join("")}
       ${del ? `<div class="d-sum"><span>Delivery</span><span>${clp(o.delivery_fee)}</span></div>` : ""}
       <div class="d-tot"><span>Total pagado</span><div><b>${clp(o.paid_total ?? o.total)}</b></div></div></div>
+    <div class="blk cl"><div class="cl1"><b>${esc(c.name)}</b>${c.phone ? `<span>${esc(c.phone)}</span>` : ""}</div>
+      ${del ? `<div class="cl2"><span class="d-lbl">Dirección</span>${esc(o.address)}${c.unit ? " · " + esc(c.unit) : ""}</div>` : ""}
+      ${c.notes ? `<div class="d-note"><span class="d-lbl">Nota del cliente</span>${esc(c.notes)}</div>` : ""}</div>
     ${(o.duplicate_payments || []).length ? `<div class="d-warn">Posible doble cobro en Mercado Pago. Revisa y devuelve si corresponde.</div>` : ""}
-    ${showMsg ? `<div class="wbox"><h3>Mensaje para el cliente</h3><textarea id="wtext" aria-label="Mensaje para el cliente">${esc(clientMsg(o))}</textarea><div class="wrow"><button type="button" class="wcopy" id="wcopy">Copiar mensaje</button><button type="button" class="wphone" id="wphone" data-phone="${esc(waNum(c.phone))}">Copiar teléfono</button></div></div>` : ""}
-    <div class="blk soft"><h3 class="d-h">Detalles de la compra</h3>
-    <dl class="d-rows">
-      <div><dt>Cliente</dt><dd>${esc(c.name)}</dd></div>
-      ${c.phone ? `<div><dt>Teléfono</dt><dd>${esc(c.phone)}</dd></div>` : ""}
-      ${c.email ? `<div><dt>Correo</dt><dd>${esc(c.email)}</dd></div>` : ""}
-      <div><dt>Entrega</dt><dd>${del ? "Delivery" : "Retiro en local"}${del ? `<small>${esc(o.address)}${c.unit ? " · " + esc(c.unit) : ""}</small>` : ""}</dd></div>
-      <div><dt>Pagado</dt><dd>${new Date(o.paid_at).toLocaleDateString("es-CL", { day:"numeric", month:"long" })} · ${hhmm(o.paid_at)}<small>${clp(o.paid_total ?? o.total)} · ${/^(processed|approved|accredited|paid)$/i.test(o.payment_status || "") || !o.payment_status ? "Aprobado" : esc(o.payment_status)}</small></dd></div>
-      <div><dt>Aceptado</dt><dd>${o.accepted_at ? hhmm(o.accepted_at) + `<small>${Math.max(0, Math.round((new Date(o.accepted_at) - new Date(o.paid_at)) / 60000))} min después del pago</small>` : "Aún no"}</dd></div>
-      <div><dt>Estado</dt><dd>${({ nuevo:"Nuevo", preparacion:"En preparación", listo:"Listo", entregado:"Entregado" })[o.kitchen_status] || o.kitchen_status}</dd></div>
-      <div><dt>N° de pedido</dt><dd>#${esc(o.short_code)}<small>${esc(o.reference)}</small></dd></div>
-      ${o.mp_order_id ? `<div><dt>ID Mercado Pago</dt><dd>${esc(o.mp_order_id)}</dd></div>` : ""}
-    </dl></div>
+    <details class="more"><summary>Más detalles</summary>
+      <dl class="d-rows">
+        ${c.email ? `<div><dt>Correo</dt><dd>${esc(c.email)}</dd></div>` : ""}
+        <div><dt>Pagado</dt><dd>${new Date(o.paid_at).toLocaleDateString("es-CL", { day:"numeric", month:"short" })} ${hhmm(o.paid_at)}<small>${/^(processed|approved|accredited|paid)$/i.test(o.payment_status || "") || !o.payment_status ? "Aprobado" : esc(o.payment_status)}</small></dd></div>
+        <div><dt>Aceptado</dt><dd>${o.accepted_at ? hhmm(o.accepted_at) + `<small>${Math.max(0, Math.round((new Date(o.accepted_at) - new Date(o.paid_at)) / 60000))} min después del pago</small>` : "Aún no"}</dd></div>
+        <div><dt>N° de pedido</dt><dd>#${esc(o.short_code)}<small>${esc(o.reference)}</small></dd></div>
+        ${o.mp_order_id ? `<div><dt>ID Mercado Pago</dt><dd>${esc(o.mp_order_id)}</dd></div>` : ""}
+      </dl></details>
     <div class="d-act">
       ${o.kitchen_status === "nuevo" ? `<p class="d-hint">Ingrésalo en Fudo y luego acepta</p>` : ""}
       ${nx ? `<button class="go ${nx[2]}" id="go" type="button" data-to="${nx[0]}">${nx[1]}</button>` : ""}
-      <div class="sec">${canMsg && !showMsg ? `<button type="button" class="wbtn" id="wgen">Mensaje WhatsApp</button>` : ""}${prev ? `<button type="button" class="ghost" id="undo" data-to="${prev}">Devolver a ${TAB[prev]}</button>` : ""}</div>
+      <div class="sec">${canMsg ? `<button type="button" class="wabtn" id="wa" data-phone="${esc(waNum(c.phone))}"><svg viewBox="0 0 24 24"><path d="M20.5 11.7a8.5 8.5 0 0 1-12.6 7.4L3.5 20.5l1.4-4.3A8.5 8.5 0 1 1 20.5 11.7Z"/><path d="M9 8.6c.3 2.6 2.4 4.9 5.3 6l1.2-1.1-1.6-1-.8.6c-.9-.4-1.7-1.2-2.1-2.1l.6-.8-1-1.6Z"/></svg>Contactar cliente</button>` : ""}${prev ? `<button type="button" class="undo" id="undo" data-to="${prev}">Devolver a ${TAB[prev]}</button>` : ""}</div>
     </div>`;
 }
 async function move(to){
@@ -703,15 +723,14 @@ async function move(to){
     await call(API.upd, { reference:o.reference, kitchen_status:to });
     o.kitchen_status = to; if (to !== "nuevo" && !o.accepted_at) o.accepted_at = new Date().toISOString();
     S.tab = to; S.today && (S.today.nuevos = pendingN());
-    if (to === "listo" || to === "entregado") S.msgOpen = o.reference; else S.sel = null;
+    if (to !== "listo" && to !== "entregado") S.sel = null;
     S.sig = ""; drawOrders(); syncAlarm(); drawNav();
   } catch(e){ toast(e.message); }
 }
 function onDetailClick(e){
   if (e.target.closest("#dback")){ S.sel = null; drawOrders(); return; }
-  if (e.target.closest("#wgen")){ S.msgOpen = S.sel; S.sig = ""; drawOrders(); return; }
-  if (e.target.closest("#wcopy")){ copyText($("#wtext").value).then(ok => toast(ok ? "Mensaje copiado" : "No se pudo copiar: selecciónalo y usa Ctrl+C", 2500)); return; }
-  const wp = e.target.closest("#wphone"); if (wp){ copyText(wp.dataset.phone).then(ok => toast(ok ? "Teléfono copiado" : "No se pudo copiar", 2500)); return; }
+  const wa = e.target.closest("#wa");
+  if (wa){ const o = S.orders.find(x => x.reference === S.sel); if (o) window.open("https://web.whatsapp.com/send?phone=" + wa.dataset.phone + "&text=" + encodeURIComponent(clientMsg(o)), "mafia_whatsapp"); return; }
   const b = e.target.closest("[data-to]"); if (b) move(b.dataset.to);
 }
 async function loadPay(){ try { S.pay = await call(API.pay, { action:"get" }); const v = route(); if (v === "pago") vPay(); else if (v === "inicio") vHome(); } catch(e){} }
