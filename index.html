@@ -975,23 +975,37 @@ html[data-mafia-cards="street-style"] .pd-ph::after{background:linear-gradient(t
 .okc path{stroke:#fff;stroke-width:3.2;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:40;stroke-dashoffset:40;animation:okdraw .45s .25s ease-out forwards}
 @keyframes okpop{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
 @keyframes okdraw{to{stroke-dashoffset:0}}
-.tk{background:#fff;color:#1A1917;border-radius:18px;padding:22px 20px 18px;margin:8px 0 14px;display:grid;gap:14px;font-size:14px}
-.tk-brand{font-family:var(--serif);font-size:30px;letter-spacing:.04em;line-height:1;color:#141312}
-.tk-num{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#6a655d}
-.tk-code{font-size:30px;font-weight:800;letter-spacing:.01em;line-height:1.05;margin-top:2px}
-.tk-meta{display:grid;gap:6px;padding:12px 0;border-top:1px dashed #cfc8bb;border-bottom:1px dashed #cfc8bb}
-.tk-meta div{display:flex;justify-content:space-between;gap:14px}
+.tk{background:#F6F0E2;color:#1A1917;border-radius:20px;margin:8px 0 14px;overflow:hidden;font-size:14px}
+.tk-band{display:flex;align-items:center;justify-content:center;gap:8px;padding:13px 16px;background:#14803F;color:#fff;font-weight:800;font-size:14px;letter-spacing:.1em;text-transform:uppercase}
+.tk-band.wait{background:#8A5A00}
+.tk-band svg{width:20px;height:20px}.tk-band path{stroke:#fff;stroke-width:3.4;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.tk-body{padding:20px 20px 18px;display:grid;gap:18px}
+.tk-numrow{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.tk-numlbl{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#6a655d}
+.tk-code{font-family:var(--serif);font-size:58px;line-height:.9;letter-spacing:.02em;color:#141312}
+.tk-head h3{margin:0;font-size:20px;line-height:1.2;font-weight:800}
+.tk-head p{margin:5px 0 0;color:#55514B;font-size:14px;line-height:1.4}
+.tk-track{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr)}
+.tk-track li{position:relative;display:grid;justify-items:center;gap:7px;font-size:12px;color:#625d55;text-align:center}
+.tk-track li:before{content:"";position:absolute;top:11px;left:-50%;right:50%;height:3px;background:#d9d1c1}
+.tk-track li:first-child:before{display:none}
+.tk-track .dot{position:relative;z-index:1;width:25px;height:25px;border-radius:50%;background:#d9d1c1;display:grid;place-items:center;color:#fff;font-size:13px;font-weight:800}
+.tk-track li.done{color:#13753f}.tk-track li.done .dot{background:#14803F}.tk-track li.done:before,.tk-track li.cur:before{background:#14803F}
+.tk-track li.cur{color:#141312;font-weight:800}.tk-track li.cur .dot{background:#C8102E;box-shadow:0 0 0 5px rgba(200,16,46,.2)}
+.tk-meta{display:grid;gap:7px;padding:14px 0;border-top:1px solid #ddd5c4;border-bottom:1px solid #ddd5c4}
+.tk-meta div{display:flex;justify-content:space-between;gap:16px}
 .tk-meta span{color:#6a655d}
-.tk-meta b{font-weight:600;text-align:right}
-.tk-stat{display:inline-flex;align-items:center;gap:6px;color:#13753f}
-.tk-items{display:grid;gap:12px}
+.tk-meta b{font-weight:700;text-align:right}
+.tk-items{display:grid;gap:13px}
 .tk-it{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:start}
-.tk-it .q{font-weight:700;min-width:22px}
-.tk-it small{display:block;color:#6a655d;font-size:12px;line-height:1.35;margin-top:2px}
-.tk-it .p{font-weight:600;white-space:nowrap}
-.tk-tot{display:grid;gap:6px;border-top:1px dashed #cfc8bb;padding-top:12px}
+.tk-it .q{font-weight:800;min-width:24px}
+.tk-it b{font-weight:700}
+.tk-it small{display:block;color:#6a655d;font-size:12px;line-height:1.4;margin-top:2px}
+.tk-it .p{font-weight:700;white-space:nowrap}
+.tk-tot{display:grid;gap:6px;border-top:1px solid #ddd5c4;padding-top:13px}
 .tk-tot div{display:flex;justify-content:space-between;gap:14px}
-.tk-tot .grand{font-size:19px;font-weight:800;padding-top:4px}
+.tk-tot .grand{font-size:20px;font-weight:800;padding-top:5px}
+.tk-live{margin:0;text-align:center;color:#a39d92;font-size:12px;line-height:1.4}
 .tk-help{margin:0;text-align:center;font-size:13px;color:#a39d92}
 .tk-help a{color:#F3EDE2;text-underline-offset:3px;display:inline-flex;align-items:center;min-height:44px}
 .pv-done{min-height:52px;border:0;border-radius:var(--r);background:#F3EDE2;color:#141312;font-weight:700;font-size:16px;margin-top:2px}
@@ -1000,6 +1014,50 @@ html[data-mafia-cards="street-style"] .pd-ph::after{background:linear-gradient(t
 .mo-item b{font-size:16px}
 .mo-item small{display:block;color:#a39d92;font-size:12px;margin-top:2px}
 .mo-empty{color:#a39d92;font-size:14px;padding:16px 0}
+
+.mypill{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:30;display:flex;align-items:center;gap:10px;min-height:50px;max-width:calc(100% - 28px);padding:0 20px;border-radius:999px;border:1.5px solid #F3EDE2;background:#0c0c0c;color:#F3EDE2;font-size:14px;font-weight:700;box-shadow:0 10px 28px rgba(0,0,0,.45);white-space:nowrap}
+.mypill[hidden]{display:none}
+.mypill i{width:9px;height:9px;border-radius:50%;background:#1FA45A;flex:none}
+.mypill.prep i{background:#E8AE2F;animation:pvpulse 1.2s infinite}.mypill.ready i{background:#C8102E;animation:pvpulse 1s infinite}
+@keyframes pvpulse{50%{opacity:.3}}
+.mypill span{overflow:hidden;text-overflow:ellipsis}
+
+
+/* ---- pantalla de pago: dos botones iguales con logo ---- */
+.pm-tiles[hidden]{display:none}
+.pm-tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:4px 0 14px}
+.pm-tile{width:100%;height:104px;display:grid;place-items:center;padding:12px;border:3px solid #fff;border-radius:16px;background:#fff;cursor:pointer;transition:border-color .15s,transform .1s}
+.pm-tile img{display:block;max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain}
+#mpWalletBtn img{height:74px}
+#cardToggle img{width:132px}
+.pm-tile:active{transform:scale(.98)}
+.pm-tile:focus-visible{outline:3px solid #F1E7D3;outline-offset:3px}
+.pm-tile:disabled{opacity:.55;cursor:default}
+.pm-tile[aria-expanded="true"]{border-color:#C8102E;box-shadow:0 0 0 3px rgba(200,16,46,.35)}
+.pm-cbody{padding:14px;border:1px solid #2f2c29;border-radius:var(--r);background:#141312}
+.pm-em{display:block;font-size:13px;color:#d9d2c3;margin-bottom:12px}
+.pm-em input{display:block;width:100%;margin-top:6px;padding:12px 13px;border-radius:var(--r);border:2px solid #fff;background:#fff;color:#1A1917;font-size:16px}
+.pm-em input:focus{outline:none;border-color:#C8102E}
+.paymode-link{justify-self:center}
+
+/* ---- carrito: jerarquía visual (fondo crema, tarjetas blancas) ---- */
+.drawer,.dh{background:#EDE5D3!important}
+.lines{padding:2px 16px 12px!important}
+.line{background:#fff;border:1px solid #DDD3BC!important;border-radius:12px;padding:10px 12px!important;margin-bottom:8px;box-shadow:0 1px 2px rgba(60,40,10,.06)}
+.line-name{font-size:15px;font-weight:700;color:#141313}
+.line-detail,.line small{color:#5f5a52!important}
+.line-total{font-weight:700;color:#141313}
+.line-thumb{border-color:#E6DCC6!important}
+.sug{margin:6px 0 4px;padding:12px;border-radius:12px;background:#FFF1C9;border:1px solid #E3BE55}
+.sug p{margin:0 0 8px;font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#8A1220}
+.sug-row{background:#fff;border:1px solid #EBD79C;border-radius:10px;padding:8px 8px 8px 12px}
+.sug-name{color:#141313;font-weight:600}.sug-price{color:#141313;font-weight:700}.sug-badge{color:#B3122A}
+.df{background:#fff!important;border-top:1px solid #DDD3BC!important;box-shadow:0 -8px 18px rgba(60,40,10,.10)}
+.seg>label>span{background:#fff;border:2px solid #D6CFBF;color:#141313}
+.seg-sub{color:#5f5a52}
+.seg input:checked + span{background:#141313!important;border-color:#141313!important;color:#fff}
+.seg input:checked + span .seg-sub{color:#e8e2d6}
+.total{font-size:20px!important;font-weight:700!important;color:#141313}
 </style>
 </head>
 <body>
@@ -1093,7 +1151,7 @@ html[data-mafia-cards="street-style"] .pd-ph::after{background:linear-gradient(t
     <div class="df">
       <div class="seg" id="deliverySelector" role="radiogroup" aria-label="Tipo de pedido">
         <label><input type="radio" name="tipo" value="delivery"><span><b class="seg-main">Delivery</b><small class="seg-sub" id="deliveryCost">+ $3.000 a $4.000</small></span></label>
-        <label><input type="radio" name="tipo" value="retiro"><span><b class="seg-main">Retiro en local</b><small class="seg-sub">Sin costo</small></span></label>
+        <label><input type="radio" name="tipo" value="retiro"><span><b class="seg-main">Retiro en local</b><small class="seg-sub">$0</small></span></label>
       </div>
       <p class="delivery-err" id="deliveryErr" aria-live="polite"></p>
       <div class="total"><span id="totalLabel">Subtotal</span><span id="total">$0</span></div>
@@ -1106,30 +1164,21 @@ html[data-mafia-cards="street-style"] .pd-ph::after{background:linear-gradient(t
   <div class="checkout-step" id="checkout2" hidden>
     <div class="df">
       <div class="step2-summary" id="step2Summary">Subtotal $0 · Entrega: Delivery</div>
-      <fieldset class="paychoice" id="payChoice" hidden>
-        <legend>¿Cómo quieres pagar?</legend>
-        <label class="pc-opt"><input type="radio" name="paymode" value="online"><span><b>Pagar online</b><small>Tarjeta de crédito o débito · Mercado Pago</small></span></label>
-        <label class="pc-opt"><input type="radio" name="paymode" value="whatsapp"><span><b>Pedir por WhatsApp</b><small>Confirmamos tu pedido y pagas por transferencia</small></span></label>
-        <p class="pay-note" id="payOnlineNote" hidden>Por ahora el delivery se pide por WhatsApp. El pago online está disponible para retiro en local.</p>
-      </fieldset>
       <label>Nombre
         <input id="cname" type="text" autocomplete="name" placeholder="Ej: Camila" required>
       </label>
-      <label id="emailWrap" hidden>Correo
-        <input id="cemail" type="email" autocomplete="email" inputmode="email" placeholder="Para enviarte el comprobante">
-      </label>
-      <label id="phoneWrap" hidden>Teléfono (opcional)
-        <input id="cphone" type="tel" autocomplete="tel" inputmode="tel" placeholder="+56 9 1234 5678">
+      <label id="phoneWrap" hidden>Teléfono
+        <input id="cphone" type="tel" autocomplete="tel" inputmode="tel" placeholder="+56 9 1234 5678" required>
       </label>
       <label id="addrWrap">Dirección
         <input id="caddr" type="text" autocomplete="street-address" placeholder="Calle, número, depto / sector" required>
       </label>
-      <label id="unitWrap" hidden>Depto / unidad (opcional)
-        <input id="cunit" type="text" autocomplete="address-line2" placeholder="Ej: Depto 502, torre B">
-      </label>
       <div>
-        <button class="note-toggle" id="noteToggle" type="button" aria-expanded="false" aria-controls="noteWrap">Agregar nota <span aria-hidden="true">+</span></button>
+        <button class="note-toggle" id="noteToggle" type="button" aria-expanded="false" aria-controls="noteWrap">Depto o indicaciones <span aria-hidden="true">+</span></button>
         <div class="note-wrap" id="noteWrap" hidden>
+          <label id="unitWrap" hidden>Depto / unidad
+            <input id="cunit" type="text" autocomplete="address-line2" placeholder="Ej: Depto 502, torre B">
+          </label>
           <textarea id="cnote" rows="2" aria-label="Notas opcionales" placeholder="Ej: sin cebolla"></textarea>
         </div>
       </div>
@@ -1140,13 +1189,14 @@ html[data-mafia-cards="street-style"] .pd-ph::after{background:linear-gradient(t
         <button type="button" class="copy" id="copyPay">Copiar datos</button>
       </div>
       <ol class="steps" id="steps" hidden></ol>
-      <button class="paybtn" id="payOnline" type="button" hidden>Pagar <span id="payOnlineAmt"></span></button>
+      <button class="paybtn" id="payOnline" type="button" hidden>Continuar al pago · <span id="payOnlineAmt"></span></button>
+      <button class="link-btn paymode-link" id="payModeLink" type="button" hidden></button>
       <button class="send" id="send" type="button" aria-label="Continuar en WhatsApp">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 11.7a8.5 8.5 0 0 1-12.6 7.4L3.5 20.5l1.4-4.3A8.5 8.5 0 1 1 20.5 11.7Z"/><path d="M8.7 8.1c.2-.4.4-.4.7-.4h.5c.2 0 .4 0 .5.4l.7 1.7c.1.3.1.5-.1.7l-.6.7c-.2.2-.2.4-.1.6.6 1.2 1.5 2.1 2.7 2.7.2.1.4.1.6-.1l.8-1c.2-.2.4-.3.7-.2l1.7.8c.3.1.4.3.4.5 0 .3-.2 1.5-.8 2.1-.6.6-1.5.9-2.5.6-1.1-.3-2.5-.8-4.2-2.3-1.4-1.2-2.4-2.8-2.7-3.8-.4-1-.1-2 .3-2.6Z"/></svg>
         <span>Continuar en WhatsApp</span>
       </button>
       <p class="wa-hint">Se abre WhatsApp con tu pedido ya escrito. Solo presiona enviar.</p>
-      <p class="checkout-info" id="orderStep">Confirmaremos tu pedido y te enviaremos el valor del delivery junto con los datos de transferencia. Una vez recibido el pago, comenzaremos a preparar tu orden.</p>
+      <p class="checkout-info" id="orderStep">Confirmaremos tu pedido y te enviaremos los datos de transferencia. Una vez recibido el pago, comenzaremos a preparar tu orden.</p>
       <a class="wa-fallback" id="waFallback" href="#" target="_blank" rel="noopener" hidden>¿No se abrió WhatsApp? Tócalo aquí</a>
     </div>
   </div>
@@ -1158,7 +1208,16 @@ html[data-mafia-cards="street-style"] .pd-ph::after{background:linear-gradient(t
   <section class="pv" id="pvForm" aria-labelledby="pvFormT">
     <div class="pv-head"><button class="pv-back" id="pvBack" type="button" aria-label="Volver a mis datos">←</button><h2 id="pvFormT" tabindex="-1">Pagar pedido</h2></div>
     <div class="pv-sum" id="pvSum"></div>
-    <div id="mpBrick"><p class="pv-load">Cargando medios de pago…</p></div>
+    <div class="pm-tiles" id="pmTiles">
+      <div id="mpWallet"><button class="pm-tile" id="mpWalletBtn" type="button" aria-label="Pagar con Mercado Pago"><img src="/assets/pay-mp.webp" alt="" width="84" height="82"></button></div>
+      <div id="pmCard"><button class="pm-tile" id="cardToggle" type="button" aria-expanded="false" aria-controls="cardBody" aria-label="Pagar con tarjeta de crédito o débito"><img src="/assets/pay-cards.webp" alt="" width="130" height="41"></button></div>
+    </div>
+    <div class="pm-cbody" id="cardBody" hidden>
+      <label class="pm-em">Correo
+        <input id="cemail" type="email" autocomplete="email" inputmode="email" placeholder="tu@correo.cl">
+      </label>
+      <div id="mpBrick"></div>
+    </div>
     <p class="pv-err" id="pvErr" role="alert"></p>
   </section>
   <section class="pv" id="pvProc" aria-live="polite">
@@ -1170,14 +1229,17 @@ html[data-mafia-cards="street-style"] .pd-ph::after{background:linear-gradient(t
   <section class="pv" id="pvTicket" aria-labelledby="pvTicketT">
     <h2 id="pvTicketT" class="sr" style="position:absolute;left:-9999px">Comprobante de tu pedido</h2>
     <div class="tk" id="tk"></div>
+    <p class="tk-live" id="tkLive">Esta pantalla se actualiza sola. Para volver a verla, toca «Mi pedido» en la carta.</p>
     <p class="tk-help" id="tkHelp"></p>
-    <button class="pv-done" id="pvDone" type="button">Listo</button>
+    <button class="pv-done" id="pvDone" type="button">Volver a la carta</button>
   </section>
   <section class="pv" id="pvOrders" aria-labelledby="pvOrdersT">
     <div class="pv-head"><button class="pv-back" id="moBack" type="button" aria-label="Cerrar mis pedidos">←</button><h2 id="pvOrdersT" tabindex="-1">Mis pedidos</h2></div>
     <div class="mo-list" id="moList"></div>
   </section>
 </div>
+
+<button class="mypill" id="myOrderPill" type="button" hidden><i aria-hidden="true"></i><span id="mpTxt"></span></button>
 
 <button class="admin-hotspot" id="adminHotspot" type="button" aria-label="Abrir administración"></button>
 <div class="admin-backdrop" id="adminBackdrop" hidden></div>
@@ -1205,7 +1267,7 @@ const CONFIG = {
 
   /* Datos para transferir (opcional). Si completas el N° de cuenta, la carta los muestra al final
      del pedido con el monto a transferir, y el cliente solo envía el comprobante. */
-  delivery: { min:3000, max:4000 },   // rango informado al cliente; nuestro equipo confirma el valor exacto
+  delivery: { fee:3500 },   // costo FIJO de delivery. El pago online lo toma del servidor (variable MAFIA_DELIVERY_FEE, por defecto 3500)
   transferencia: { titular:"", rut:"", banco:"", tipoCuenta:"", numeroCuenta:"", email:"" },
 
   /* --- Imagen y tipografía: solo deja los archivos en las carpetas y listo --- */
@@ -2262,16 +2324,14 @@ function syncTipo(){
   addr.required = d;
   const tl = $("#totalLabel"), dn = $("#dnote"), dc = $("#deliveryCost");
   tl.textContent = choice === "retiro" ? "Total" : "Subtotal";
-  if (dc) dc.textContent = (CONFIG.delivery && CONFIG.delivery.min && CONFIG.delivery.max)
-    ? "+ " + fmt(CONFIG.delivery.min) + " a " + fmt(CONFIG.delivery.max)
-    : "+ Por confirmar";
+  if (dc) dc.textContent = deliveryFee() ? "+ " + fmt(deliveryFee()) : "+ Por confirmar";
   dn.textContent = "";
   dn.hidden = true;
   const summary = $("#step2Summary");
-  if (summary) summary.textContent = d ? "Subtotal " + fmt(sum) + " · Entrega: Delivery" : "Total " + fmt(sum) + " · Retiro en local";
+  if (summary) summary.textContent = d ? "Productos " + fmt(sum) + " + delivery " + fmt(deliveryFee()) + " · Total " + fmt(sum + deliveryFee()) : "Total " + fmt(sum) + " · Retiro en local";
   const os = $("#orderStep");
   if (os) os.textContent = d
-    ? "Confirmaremos tu pedido y te enviaremos el valor del delivery junto con los datos de transferencia. Una vez recibido el pago, comenzaremos a preparar tu orden."
+    ? "Confirmaremos tu pedido y te enviaremos los datos de transferencia (el delivery cuesta " + fmt(deliveryFee()) + "). Una vez recibido el pago, comenzaremos a preparar tu orden."
     : "Confirmaremos tu pedido y te enviaremos los datos de transferencia. Una vez recibido el pago, comenzaremos a preparar tu orden.";
   $("#steps").innerHTML = "";
   syncPay();
@@ -2311,7 +2371,8 @@ $("#send").addEventListener("click", () => {
     "",
     ...ls.map(orderLine),
     "",
-    "Total: " + fmt(sum),
+    delivery ? "Delivery: " + fmt(deliveryFee()) : null,
+    "Total: " + fmt(sum + (delivery ? deliveryFee() : 0)),
     "Nombre: " + name,
     delivery ? "Delivery" : "Retiro en tienda",
     delivery ? "Dirección: " + addr : null,
@@ -2339,20 +2400,17 @@ const emailOk = v => /^[^\s@]{1,64}@[^\s@]{1,190}\.[^\s@]{2,}$/.test(v);
 var MPCFG = { enabled:false }, payMode = "whatsapp", payModeChosen = false;
 
 const onlineAllowed = () => !!(MPCFG && MPCFG.enabled && (tipo() === "retiro" || (tipo() === "delivery" && MPCFG.delivery_online)));
-const onlineFee = () => (tipo() === "delivery" && MPCFG && MPCFG.delivery_fee) ? MPCFG.delivery_fee : 0;
+function deliveryFee(){ return (MPCFG && MPCFG.delivery_fee) || (CONFIG.delivery && CONFIG.delivery.fee) || 0; }
+const onlineFee = () => tipo() === "delivery" ? deliveryFee() : 0;
 const onlineTotal = () => totals().sum + onlineFee();
 
 function syncPayMode(){
-  if (!MPCFG || !$("#payChoice")) return;
-  const box = $("#payChoice"), on = !!MPCFG.enabled, allowed = onlineAllowed(), delivery = tipo() !== "retiro";
-  box.hidden = !on;
+  if (!MPCFG || !$("#payModeLink")) return;
+  const on = !!MPCFG.enabled, allowed = onlineAllowed(), delivery = tipo() !== "retiro";
   if (!allowed) payMode = "whatsapp"; else if (!payModeChosen) payMode = "online";
-  const online = on && payMode === "online";
-  box.querySelector('input[value="online"]').disabled = !allowed;
-  box.querySelector('input[value="online"]').checked = online;
-  box.querySelector('input[value="whatsapp"]').checked = !online;
-  $("#payOnlineNote").hidden = !(on && !allowed);
-  $("#emailWrap").hidden = !online;
+  const online = on && payMode === "online", link = $("#payModeLink");
+  link.hidden = !(on && allowed);
+  link.textContent = online ? "Prefiero pedir por WhatsApp" : "Mejor pagar online con Mercado Pago";
   $("#phoneWrap").hidden = !online;
   $("#unitWrap").hidden = !(online && delivery);
   $("#payOnline").hidden = !online;
@@ -2363,13 +2421,13 @@ function syncPayMode(){
   $("#payOnlineAmt").textContent = fmt(onlineTotal());
   if (online){
     const s = totals().sum, f = onlineFee();
-    $("#step2Summary").textContent = delivery ? `Productos ${fmt(s)} + delivery ${fmt(f)} · Total ${fmt(s + f)}` : `Total ${fmt(s)} · Retiro en local`;
+    $("#step2Summary").textContent = delivery ? `Productos ${fmt(s)} + delivery ${fmt(f)} · Total ${fmt(s + f)}` : `Total ${fmt(s)} · Retiro en local $0`;
   }
 }
-document.querySelectorAll('input[name="paymode"]').forEach(r => r.addEventListener("change", () => {
-  payMode = r.value; payModeChosen = true; syncPayMode();
+$("#payModeLink").addEventListener("click", () => {
+  payMode = payMode === "online" ? "whatsapp" : "online"; payModeChosen = true; syncPayMode();
   track("payment_method_selected", { method:payMode, ...cartAnalytics() });
-}));
+});
 
 fetch(FN + "mp-test-config", { cache:"no-store" }).then(r => r.ok ? r.json() : null).then(c => {
   if (c && c.enabled && c.public_key){ MPCFG = c; syncTipo(); }
@@ -2381,7 +2439,7 @@ function collectOnline(){
   const addr = $("#caddr").value.trim(), unit = $("#cunit").value.trim(), note = $("#cnote").value.trim(), delivery = tipo() === "delivery";
   const bad = (msg, el) => { err.textContent = msg; el.focus(); return null; };
   if (name.length < 2) return bad("Escribe tu nombre.", $("#cname"));
-  if (!emailOk(email)) return bad("Escribe un correo válido para enviarte el comprobante.", $("#cemail"));
+  if (phone.replace(/\D/g, "").length < 8) return bad("Escribe tu teléfono para avisarte de tu pedido.", $("#cphone"));
   if (delivery && addr.length < 5) return bad("Escribe tu dirección para el delivery.", $("#caddr"));
   err.textContent = ""; saveProfile();
   return { delivery_type:tipo(), customer:{ name, email, phone, address:delivery ? addr : "", unit:delivery ? unit : "", notes:note } };
@@ -2391,16 +2449,27 @@ function collectOnline(){
 let PG = null;
 const VIEWS = ["pvForm", "pvProc", "pvOk", "pvTicket", "pvOrders"];
 function showView(id){
+  if (id !== "pvTicket") stopTicketPoll();
   VIEWS.forEach(v => document.getElementById(v).classList.toggle("on", v === id));
   $("#payScreen").scrollTop = 0;
   const h = document.getElementById(id).querySelector("h2"); if (h) h.focus({ preventScroll:true });
 }
-function openPayScreen(){ $("#payScreen").hidden = false; document.body.style.overflow = "hidden"; }
-function closePayScreen(){
+function openPayScreen(){
+  if ($("#payScreen").hidden){ try { history.pushState({ mafiaPay:1 }, ""); } catch(e){} }
+  $("#payScreen").hidden = false; document.body.style.overflow = "hidden";
+}
+function hidePayScreen(){
   try { PG && PG.brick && PG.brick.unmount(); } catch(e){}
   if (PG) PG.brick = null;
-  $("#payScreen").hidden = true; document.body.style.overflow = "";
+  stopTicketPoll(); $("#payScreen").hidden = true; document.body.style.overflow = ""; syncPill();
 }
+/* El botón "atrás" del celular cierra esta pantalla en vez de salir de la carta (salvo mientras se procesa el pago). */
+function closePayScreen(){ if (history.state && history.state.mafiaPay) history.back(); else hidePayScreen(); }
+window.addEventListener("popstate", () => {
+  if ($("#payScreen").hidden) return;
+  if (PG && PG.busy){ try { history.pushState({ mafiaPay:1 }, ""); } catch(e){} return; }
+  hidePayScreen();
+});
 const showPayError = msg => { $("#pvErr").textContent = msg; };
 
 function loadMpSdk(){
@@ -2417,11 +2486,22 @@ function startOnlinePayment(){
   $("#pvSum").innerHTML = `<div class="row"><span>Productos (${count})</span><b>${fmt(sum)}</b></div>` +
     (form.delivery_type === "delivery" ? `<div class="row"><span>Delivery</span><b>${fmt(fee)}</b></div>` : `<div class="row"><span>Retiro en local</span><b>Sin costo</b></div>`) +
     `<div class="row tot"><span>Total a pagar</span><span>${fmt(total)}</span></div>`;
-  showPayError("");
+  PG.total = total; showPayError(""); $("#mpWalletBtn").disabled = false;
+  $("#pmTiles").hidden = false; setCardOpen(false);
   openPayScreen(); showView("pvForm");
   track("payment_started", { fulfillment:form.delivery_type, order_total:total, ...cartAnalytics() });
-  mountBrick(total);
 }
+function setCardOpen(open){
+  $("#cardToggle").setAttribute("aria-expanded", String(open));
+  $("#cardBody").hidden = !open;
+  if (!open){ try { PG && PG.brick && PG.brick.unmount(); } catch(e){} if (PG) PG.brick = null; $("#mpBrick").innerHTML = ""; }
+}
+$("#cardToggle").addEventListener("click", () => {
+  if (!PG || PG.busy) return;
+  const open = $("#cardToggle").getAttribute("aria-expanded") !== "true";
+  setCardOpen(open);
+  if (open){ track("payment_card_opened", {}); mountBrick(PG.total); try { $("#cemail").focus({ preventScroll:true }); } catch(e){} }
+});
 
 async function mountBrick(total){
   const box = $("#mpBrick"); box.innerHTML = '<p class="pv-load">Cargando medios de pago…</p>';
@@ -2429,7 +2509,7 @@ async function mountBrick(total){
     await loadMpSdk();
     PG.mp = PG.mp || new MercadoPago(MPCFG.public_key, { locale:"es-CL" });
     PG.brick = await PG.mp.bricks().create("payment", "mpBrick", {
-      initialization:{ amount:total, payer:{ email:PG.form.customer.email } },
+      initialization:{ amount:total, payer:{ email: emailOk($("#cemail").value.trim()) ? $("#cemail").value.trim() : undefined } },
       customization:{
         paymentMethods:{ creditCard:"all", debitCard:"all", maxInstallments:1 },     /* sin cuotas: el monto pagado debe ser igual al pedido */
         visual:{ style:{ theme:"dark" } }
@@ -2452,6 +2532,9 @@ const newAttemptId = () => (window.crypto && crypto.randomUUID) ? crypto.randomU
 function submitPayment(selected, formData){
   return new Promise(async (resolve, reject) => {
     if (PG.busy) return reject();
+    const em = ($("#cemail").value.trim() || (formData.payer && formData.payer.email) || "").trim();
+    if (!emailOk(em)){ showPayError("Escribe tu correo para continuar."); try { $("#cemail").focus(); } catch(e){} return reject(); }
+    PG.form.customer.email = em; try { saveProfile(); } catch(e){}
     PG.busy = true; showPayError(""); const t0 = Date.now(); showView("pvProc");
     const fail = msg => { PG.busy = false; showView("pvForm"); showPayError(msg); reject(); };
     try {
@@ -2476,6 +2559,25 @@ function submitPayment(selected, formData){
   });
 }
 
+/* "Pagar con Mercado Pago": el cliente va a Mercado Pago (app o web) y vuelve a la carta con ?mp=... */
+$("#mpWalletBtn").addEventListener("click", async () => {
+  if (!PG || PG.busy) return;
+  const btn = $("#mpWalletBtn"); PG.busy = true; btn.disabled = true; showPayError("");
+  try {
+    try { PG.brick && PG.brick.unmount(); } catch(e){} PG.brick = null;
+    const res = await fetch(FN + "mp-create-preference", {
+      method:"POST", headers:{ "Content-Type":"application/json" },
+      body:JSON.stringify({ items:Object.entries(cart).map(([key, qty]) => ({ key, qty })), delivery_type:PG.form.delivery_type, customer:PG.form.customer, reference:PG.reference, status_key:PG.status_key })
+    });
+    const data = await res.json().catch(() => ({}));
+    if (data.reference){ PG.reference = data.reference; PG.status_key = data.status_key; PG.shortCode = data.short_code; lsSet(LS_PENDING, { reference:data.reference, key:data.status_key, at:Date.now(), wallet:1 }); }
+    if (data.ok && data.paid){ PG.busy = false; return finishPaid(Date.now()); }
+    if (!data.ok || !data.init_point){ PG.busy = false; btn.disabled = false; return showPayError(data.error || "No pudimos abrir Mercado Pago. Inténtalo de nuevo."); }
+    track("payment_wallet_redirect", { order_total:data.total });
+    window.location.href = data.init_point;
+  } catch(e){ console.error(e); PG.busy = false; btn.disabled = false; showPayError("No pudimos conectar. Revisa tu conexión e inténtalo de nuevo."); }
+});
+
 async function fetchOrder(ref, key){
   const r = await fetch(FN + "mp-order-status?ref=" + encodeURIComponent(ref) + "&key=" + encodeURIComponent(key), { cache:"no-store" });
   if (!r.ok) throw new Error("status " + r.status);
@@ -2492,7 +2594,8 @@ async function waitForApproval(t0){
     } catch(e){}
   }
   /* sigue sin confirmarse: se evita que el cliente pague dos veces */
-  try { PG.brick && PG.brick.unmount(); } catch(e){} PG.brick = null; $("#mpBrick").innerHTML = ""; PG.busy = false; showView("pvForm");
+  try { PG.brick && PG.brick.unmount(); } catch(e){} PG.brick = null; $("#mpBrick").innerHTML = ""; PG.busy = false;
+  $("#pmTiles").hidden = true; $("#cardBody").hidden = true; showView("pvForm");
   $("#pvErr").innerHTML = "Estamos confirmando tu pago con Mercado Pago. <b>No vuelvas a pagar.</b> Si tu banco ya hizo el cobro, escríbenos por " +
     `<a style="color:#fff" href="https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent("Hola MAFIA, necesito ayuda con mi pedido " + (PG.shortCode ? "#" + PG.shortCode : "(pago en revisión)") + ".")}" target="_blank" rel="noopener">WhatsApp</a>.`;
 }
@@ -2505,33 +2608,56 @@ async function finishPaid(t0){
   track("payment_approved", { order_total:order ? order.total : 0, short_code:order ? order.short_code : "" });
   cart = {}; save(); renderCart();
   await sleep(2200);
-  if (order){ rememberOrder(order); try { localStorage.removeItem(LS_PENDING); } catch(e){} renderTicket(order); showView("pvTicket"); }
+  if (order){ rememberOrder(order); try { localStorage.removeItem(LS_PENDING); } catch(e){} openTicket(order, PG.status_key); }
   else { closePayScreen(); }
   PG.busy = false;
 }
 
-/* ---------- Comprobante (ticket) ---------- */
+/* ---------- Comprobante y seguimiento del pedido ---------- */
+const STAGES = ["Pagado", "Preparando", "Listo", "Entregado"];
+const STAGE_OF = { nuevo:0, preparacion:1, listo:2, entregado:3 };
+function stageText(o){
+  const del = o.delivery_type === "delivery", s = o.kitchen_status;
+  if (!o.paid) return ["Esperando la confirmación del pago", "Mercado Pago aún no confirma tu pago. No vuelvas a pagar."];
+  if (s === "preparacion") return ["Estamos preparando tu pedido", "Ya está en cocina."];
+  if (s === "listo") return del ? ["Tu pedido está listo", "Está listo para salir a reparto."] : ["Tu pedido está listo", "Ya puedes retirarlo en el local."];
+  if (s === "entregado") return ["Pedido entregado", "¡Buen provecho!"];
+  return ["Recibimos tu pedido", "La cocina lo confirmará en unos minutos."];
+}
 function renderTicket(o){
   const when = new Date(o.paid_at || o.created_at).toLocaleString("es-CL", { day:"numeric", month:"short", year:"numeric", hour:"2-digit", minute:"2-digit" });
-  const delivery = o.delivery_type === "delivery";
-  const stateTxt = !o.paid ? "Pendiente" : (o.kitchen_status && o.kitchen_status !== "nuevo" ? o.kitchen_label : "Pagado");
+  const delivery = o.delivery_type === "delivery", st = o.paid ? (STAGE_OF[o.kitchen_status] ?? 0) : -1, [h, sub] = stageText(o);
   $("#tk").innerHTML = `
-    <div><div class="tk-brand">MAFIA</div></div>
-    <div><div class="tk-num">Número de pedido</div><div class="tk-code">#${esc(o.short_code)}</div></div>
-    <div class="tk-meta">
-      <div><span>Fecha</span><b>${esc(when)}</b></div>
-      <div><span>Entrega</span><b>${delivery ? "Delivery" : "Retiro en local"}</b></div>
-      ${delivery && o.address ? `<div><span>Dirección</span><b>${esc(o.address)}</b></div>` : ""}
-      <div><span>Estado</span><b class="tk-stat">${o.paid ? "✓ " : ""}${esc(stateTxt)}</b></div>
-    </div>
-    <div class="tk-items">${o.items.map(i => `<div class="tk-it"><span class="q">${i.quantity}×</span><div><b>${esc(i.name)}</b>${i.detail && i.detail.length ? `<small>${esc(i.detail.join(" · "))}</small>` : ""}</div><span class="p">${fmt(i.total_amount)}</span></div>`).join("")}</div>
-    <div class="tk-tot">
-      <div><span>Subtotal productos</span><span>${fmt(o.subtotal)}</span></div>
-      ${delivery ? `<div><span>Costo de delivery</span><span>${fmt(o.delivery_fee)}</span></div>` : ""}
-      <div class="grand"><span>Total pagado</span><span>${fmt(o.total)}</span></div>
+    <div class="tk-band${o.paid ? "" : " wait"}">${o.paid ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Pago confirmado' : "Pago pendiente"}</div>
+    <div class="tk-body">
+      <div class="tk-numrow"><span class="tk-numlbl">Pedido</span><span class="tk-code">#${esc(o.short_code)}</span></div>
+      <div class="tk-head"><h3>${esc(h)}</h3><p>${esc(sub)}</p></div>
+      ${st >= 0 ? `<ol class="tk-track" aria-label="Estado del pedido">${STAGES.map((n, i) => `<li class="${i < st || (i === st && st === 3) ? "done" : i === st ? "cur" : ""}"${i === st ? ' aria-current="step"' : ""}><span class="dot">${i < st || (i === st && st === 3) ? "✓" : ""}</span>${n}</li>`).join("")}</ol>` : ""}
+      <div class="tk-meta">
+        <div><span>Fecha</span><b>${esc(when)}</b></div>
+        <div><span>Entrega</span><b>${delivery ? "Delivery" : "Retiro en local"}</b></div>
+        ${delivery && o.address ? `<div><span>Dirección</span><b>${esc(o.address)}</b></div>` : ""}
+      </div>
+      <div class="tk-items">${o.items.map(i => `<div class="tk-it"><span class="q">${i.quantity}×</span><div><b>${esc(i.name)}</b>${i.detail && i.detail.length ? `<small>${esc(i.detail.join(" · "))}</small>` : ""}</div><span class="p">${fmt(i.total_amount)}</span></div>`).join("")}</div>
+      <div class="tk-tot">
+        <div><span>Productos</span><span>${fmt(o.subtotal)}</span></div>
+        ${delivery ? `<div><span>Delivery</span><span>${fmt(o.delivery_fee)}</span></div>` : ""}
+        <div class="grand"><span>Total pagado</span><span>${fmt(o.total)}</span></div>
+      </div>
     </div>`;
   const wa = "https://wa.me/" + CONFIG.whatsapp + "?text=" + encodeURIComponent("Hola MAFIA, necesito ayuda con mi pedido #" + o.short_code + ".");
   $("#tkHelp").innerHTML = `<a href="${wa}" target="_blank" rel="noopener">¿Necesitas ayuda con este pedido?</a>`;
+}
+let TK = null, tkTimer = null;
+function stopTicketPoll(){ clearInterval(tkTimer); tkTimer = null; }
+function openTicket(o, key){
+  TK = { reference:o.reference, key };
+  renderTicket(o); updateEntry(o); openPayScreen(); showView("pvTicket");
+  stopTicketPoll();
+  if (o.kitchen_status !== "entregado") tkTimer = setInterval(async () => {
+    if (document.hidden || !TK) return;
+    try { const n = await fetchOrder(TK.reference, TK.key); renderTicket(n); updateEntry(n); } catch(e){}
+  }, 8000);
 }
 $("#pvDone").addEventListener("click", () => { closePayScreen(); toggle(false); window.scrollTo({ top:0, behavior:"smooth" }); });
 $("#pvBack").addEventListener("click", () => { if (PG && PG.busy) return; closePayScreen(); setTimeout(() => $("#payOnline").focus(), 0); });
@@ -2543,13 +2669,35 @@ window.addEventListener("keydown", e => {
 }, true);
 $("#payOnline").addEventListener("click", startOnlinePayment);
 
-/* ---------- Mis pedidos (en este dispositivo) ---------- */
+/* ---------- Mis pedidos (en este dispositivo) y botón "Mi pedido" ---------- */
+const STAGE_LABEL = { nuevo:"Pagado", preparacion:"Preparando", listo:"Listo", entregado:"Entregado" };
 function rememberOrder(o){
   const list = lsGet(LS_ORDERS, []).filter(x => x.reference !== o.reference);
-  list.unshift({ reference:o.reference, key:PG && PG.reference === o.reference ? PG.status_key : (lsGet(LS_PENDING, null) || {}).key, short_code:o.short_code, at:o.paid_at || o.created_at, total:o.total });
+  list.unshift({ reference:o.reference, key:PG && PG.reference === o.reference ? PG.status_key : (lsGet(LS_PENDING, null) || {}).key, short_code:o.short_code, at:o.paid_at || o.created_at, total:o.total, st:o.kitchen_status || "nuevo" });
   lsSet(LS_ORDERS, list.filter(x => x.key).slice(0, 20));
-  syncMyOrders();
+  syncMyOrders(); syncPill();
 }
+function updateEntry(o){
+  const list = lsGet(LS_ORDERS, []), e = list.find(x => x.reference === o.reference);
+  if (e && e.st !== (o.kitchen_status || "nuevo")){ e.st = o.kitchen_status || "nuevo"; lsSet(LS_ORDERS, list); }
+  syncPill();
+}
+const activeOrder = () => lsGet(LS_ORDERS, []).find(x => x.st !== "entregado" && Date.now() - new Date(x.at).getTime() < 12 * 3600 * 1000);
+function syncPill(){
+  const a = activeOrder(), p = $("#myOrderPill"); if (!p) return;
+  p.hidden = !a || !$("#payScreen").hidden;
+  if (!a) return;
+  $("#mpTxt").textContent = "Mi pedido #" + a.short_code + " · " + (STAGE_LABEL[a.st] || "Pagado");
+  p.className = "mypill" + (a.st === "preparacion" ? " prep" : a.st === "listo" ? " ready" : "");
+}
+$("#myOrderPill").addEventListener("click", async () => {
+  const a = activeOrder(); if (!a) return;
+  try { openTicket(await fetchOrder(a.reference, a.key), a.key); } catch(e){ openMyOrders(); }
+});
+setInterval(async () => {
+  const a = activeOrder(); if (!a || document.hidden || !$("#payScreen").hidden) return;
+  try { updateEntry(await fetchOrder(a.reference, a.key)); } catch(e){}
+}, 20000);
 function syncMyOrders(){ const n = lsGet(LS_ORDERS, []).length, b = $("#myOrdersLink"); if (b){ b.hidden = !n; } }
 function openMyOrders(){
   const list = lsGet(LS_ORDERS, []);
@@ -2560,20 +2708,42 @@ $("#myOrdersLink").addEventListener("click", openMyOrders);
 $("#moBack").addEventListener("click", closePayScreen);
 $("#moList").addEventListener("click", async e => {
   const b = e.target.closest("[data-ref]"); if (!b) return;
-  try { const o = await fetchOrder(b.dataset.ref, b.dataset.key); renderTicket(o); showView("pvTicket"); }
+  try { const o = await fetchOrder(b.dataset.ref, b.dataset.key); openTicket(o, b.dataset.key); }
   catch(err){ b.querySelector("small").textContent = "No pudimos cargar este pedido"; }
 });
-syncMyOrders();
+syncMyOrders(); syncPill();
 
-/* Si el cliente recargó la página en medio de un pago, se retoma aquí. */
+/* Si el cliente recargó la página o volvió desde Mercado Pago, se retoma aquí. */
 (async function resume(){
+  const q = new URLSearchParams(location.search), back = q.get("mp");
+  if (back){ try { history.replaceState(history.state, "", location.pathname + location.hash); } catch(e){} }
   const p = lsGet(LS_PENDING, null);
   if (!p || !p.reference || Date.now() - (p.at || 0) > 2 * 3600 * 1000){ if (p) try { localStorage.removeItem(LS_PENDING); } catch(e){} return; }
+  const backFromMp = back === "success" || back === "pending" || back === "failure";
+  if (backFromMp){
+    PG = { reference:p.reference, status_key:p.key, busy:true, form:null, brick:null };
+    $("#pmTiles").hidden = true; $("#cardBody").hidden = true; $("#pvSum").innerHTML = "";
+    openPayScreen(); showView("pvProc");
+    const t0 = Date.now();
+    for (let i = 0; i < (back === "failure" ? 2 : 45); i++){
+      try { const o = await fetchOrder(p.reference, p.key); if (o.paid) return finishPaid(t0); if (o.problem === "amount_mismatch") break; } catch(e){}
+      await sleep(2000);
+    }
+    PG.busy = false; $("#mpBrick").innerHTML = ""; showView("pvForm");
+    if (back === "failure"){
+      try { localStorage.removeItem(LS_PENDING); } catch(e){}
+      $("#pvErr").textContent = "El pago no se completó. Tu carrito sigue igual: vuelve a tus datos y prueba de nuevo.";
+    } else {
+      $("#pvErr").innerHTML = "Estamos confirmando tu pago con Mercado Pago. <b>No vuelvas a pagar.</b> Si ya te cobraron, escríbenos por " +
+        `<a style="color:#fff" href="https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent("Hola MAFIA, necesito ayuda con mi pedido " + (p.reference ? "(pago en revisión)" : "") + ".")}" target="_blank" rel="noopener">WhatsApp</a>.`;
+    }
+    return;
+  }
   try {
     const o = await fetchOrder(p.reference, p.key);
     if (o.paid){
       PG = { reference:p.reference, status_key:p.key, busy:false };
-      cart = {}; save(); renderCart(); rememberOrder(o); renderTicket(o); openPayScreen(); showView("pvTicket");
+      cart = {}; save(); renderCart(); rememberOrder(o); openTicket(o, p.key);
       try { localStorage.removeItem(LS_PENDING); } catch(e){}
     }
   } catch(e){}

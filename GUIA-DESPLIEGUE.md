@@ -32,7 +32,7 @@ Este proyecto reemplaza el contenido de tu repo `dedalogic/cartamafia`. Trae:
 | `MERCADOPAGO_PUBLIC_KEY` | — | clave pública **TEST** | Se entrega al navegador para el formulario de pago. |
 | `MERCADOPAGO_WEBHOOK_SECRET` | — | secret del webhook TEST | Verifica que los avisos vienen de Mercado Pago. |
 | `MAFIA_ADMIN_PASSWORD` | tu clave | tu clave | Entra a `/caja` y `/admin`. |
-| `MAFIA_DELIVERY_FEE` | — | `3500` (ejemplo) | Costo de delivery en pesos, sin puntos. **Si no existe, el delivery no se puede pagar online** (el retiro sí) y el cliente usa WhatsApp para delivery. |
+| `MAFIA_DELIVERY_FEE` | (opcional) | (opcional) | Costo de delivery en pesos, sin puntos. **Si no la pones, el delivery cuesta $3.500 fijo.** Si cambias el valor, cambia también `delivery: { fee:3500 }` en el `CONFIG` de `index.html` para que el texto de la carta coincida. |
 | `MAFIA_MP_AMOUNT_FORMAT` | — | (no la pongas) | Solo si Mercado Pago rechaza el formato del monto; ver "Solución de problemas". |
 
 Después de cambiar variables hay que **volver a desplegar** el Preview.
@@ -50,9 +50,35 @@ Después de cambiar variables hay que **volver a desplegar** el Preview.
 
 1. Abre el Deploy Preview, agrega algo, elige **Retiro en local** → Continuar → **Pagar online**.
 2. Tarjeta de prueba: Visa `4168 8188 4444 7115` · vence `11/30` · CVV `123` · titular `APRO` · documento `123456789` · correo `test@testuser.com`.
-3. Verás "Procesando pago" → "Pago aprobado" → el ticket con el número `#MAF-1001`, `#MAF-1002`…
+3. Verás "Procesando pago" → "Pago aprobado" → el comprobante con el número de pedido `#0001`, `#0002`… (solo cifras).
 4. Entra a `/caja` con tu clave: el pedido aparece en **Nuevos** con PAGADO ✓.
 5. Prueba también: un titular distinto de `APRO` (rechazo con mensaje claro y reintento sin duplicar pedido), delivery (suma `MAFIA_DELIVERY_FEE`), y cerrar y reabrir "Mis pedidos".
+
+## 4b. Qué ve el cliente después de pagar
+
+- Un comprobante con banda verde **PAGO CONFIRMADO**, el número grande y una línea de avance **Pagado → Preparando → Listo → Entregado** que se actualiza sola cada pocos segundos, según lo que marquen las cajeras en `/caja`.
+- Al cerrar el comprobante ("Volver a la carta"), aparece abajo el botón **Mi pedido #0001 · Preparando** mientras el pedido esté en curso: lo vuelve a abrir cuando quiera. El botón desaparece al marcarse Entregado.
+- El botón "atrás" del celular cierra el comprobante sin sacar al cliente de la carta.
+- "Mis pedidos" (en el carrito) guarda los últimos pedidos pagados **en ese mismo dispositivo**. Si el cliente cambia de celular o borra los datos del navegador, no los ve.
+- El número de pedido es correlativo (0001, 0002…) y no se reinicia solo. Los pedidos de prueba hechos antes de este cambio conservan su código antiguo.
+
+## 4d. Datos que pide el pago (versión rápida)
+
+- Paso "Tus datos": solo **nombre, teléfono** y dirección (si es delivery). Depto e indicaciones quedan en un desplegable opcional.
+- El **correo** solo se pide si el cliente elige pagar con tarjeta, dentro de esa opción. Con la app de Mercado Pago no se pide.
+- Pantalla de pago: dos botones iguales con logo, **Mercado Pago** y **Visa / Mastercard**. El formulario de tarjeta aparece solo si se toca el segundo (logos en `assets/pay-mp.webp` y `assets/pay-cards.webp`).
+
+## 4c. Botón "Pagar con Mercado Pago" (cuenta o app)
+
+- En la pantalla de pago aparece arriba un botón azul **Pagar con Mercado Pago**; debajo sigue el pago con tarjeta.
+- Al tocarlo el cliente va a Mercado Pago (si tiene la app, el celular suele abrirla), paga con su cuenta o sus tarjetas guardadas y vuelve a la carta, que muestra el ticket.
+- No necesita llaves nuevas: usa las mismas variables de Netlify.
+- **En Mercado Pago Developers → Webhooks** deben estar marcados **Order (Mercado Pago)** y **Pagos (legacy)**, con la URL `https://TU-SITIO/.netlify/functions/mp-webhook`.
+- Seguridad: el monto lo calcula el servidor; el pedido se marca pagado solo si el pago está `approved` + `accredited` y por el MISMO monto. Si el aviso tarda, la carta consulta directamente a Mercado Pago.
+- Medios excluidos: boleta/ticket, cajero y transferencia. Sin cuotas. El link de pago vence en 60 minutos.
+- Si Mercado Pago no devuelve al cliente a la carta, la URL base se puede fijar con la variable opcional `MAFIA_PUBLIC_URL` (ej. `https://mi-sitio.netlify.app`).
+- Para probar: usa un **comprador de prueba** (Developers → Cuentas de prueba) con saldo. Tu cuenta real y su Face ID no sirven en modo prueba.
+- Si dos pagos aprobados llegan para el mismo pedido, la caja lo deja registrado en `duplicate_payments` para revisarlo en Mercado Pago.
 
 ## 5. Cómo funciona el pago (resumen)
 
@@ -62,9 +88,16 @@ Después de cambiar variables hay que **volver a desplegar** el Preview.
 4. La orden pasa a pagada solo si Mercado Pago confirma `processed` + `accredited` **y** el monto pagado es igual al de la orden. Lo decide el webhook o, si éste demora, la consulta del propio cliente (misma regla, consultando directo a Mercado Pago).
 5. El pedido aparece en `/caja`. `fudo_sent` queda en `false`: se comanda a mano en Fudo (Fudo no habilitó la API de pedidos externos).
 
-## 6. Panel de caja (`/caja`)
+## 6. Panel de pedidos (`/caja`)
 
-Estados: **Nuevo → En preparación → Listo → Entregado** (con botón para volver atrás). Se actualiza solo cada 8 segundos, resalta pedidos nuevos y puede sonar (botón "Sonido", queda apagado por defecto porque el navegador exige un toque para permitirlo). Muestra número, PAGADO ✓, delivery/retiro, cliente, dirección, productos con opciones, observaciones, subtotal, delivery y total pagado. Si Mercado Pago llegara a cobrar dos veces el mismo pedido, la tarjeta muestra una alerta roja. Tiene botón de imprimir.
+Lista simple a la izquierda y detalle del pedido a la derecha (en el celular, al tocar un pedido se abre el detalle). Pestañas: **Nuevos → Preparación → Listos → Entregados**.
+
+- Mientras haya pedidos **sin aceptar** suena una alarma cada 5 segundos, el título de la pestaña parpadea y aparece un aviso "N pedidos por aceptar". Se apaga al apretar **Aceptar pedido** (se guarda la hora de aceptación).
+- Flujo de la cajera: ve el pedido, lo ingresa en Fudo y aprueba con **Aceptar pedido**.
+- El sonido se activa al entrar con la clave. Si se recarga la página, hay que tocar "activar el sonido" (el navegador lo exige). Mantiene la pantalla encendida mientras el sonido esté activo.
+- El detalle muestra nombre, teléfono, correo, dirección, productos con opciones, observaciones y totales. Abajo: Llamar, WhatsApp al cliente, Imprimir, Volver al estado anterior y "Datos de pago" con el número de pedido y el ID de Mercado Pago (útil para devoluciones).
+- Si Mercado Pago llegara a cobrar dos veces el mismo pedido, aparece una alerta roja.
+- Se actualiza solo cada 7 segundos. El aviso de emergencia por WhatsApp (vía n8n) queda para una etapa posterior.
 
 ## 7. Cambiar precios, platos y textos
 
@@ -74,7 +107,7 @@ Si cambias el `id` de un plato, revisa `/admin` (disponibilidad), que lee el cat
 
 ## 8. Costo de delivery con Google
 
-`netlify/functions/_mafia-delivery.mjs` es el punto de conexión: hoy usa la tarifa fija `MAFIA_DELIVERY_FEE`. Cuando exista el módulo de Google Places, reemplaza el cuerpo de `computeDeliveryFee({ address })` para que devuelva `{ ok:true, fee }`. El módulo de pago solo necesita subtotal, delivery y total; el ticket y la caja ya los muestran. En la carta, `mp-test-config` entrega hoy una tarifa única; cuando el cálculo sea por dirección habrá que pedirlo antes de mostrar el total (pendiente de ese módulo).
+`netlify/functions/_mafia-delivery.mjs` es el punto de conexión: hoy usa la tarifa fija `MAFIA_DELIVERY_FEE`. Cuando exista el módulo de Google Places, reemplaza el cuerpo de `computeDeliveryFee({ address })` para que devuelva `{ ok:true, fee }`. El módulo de pago solo necesita subtotal, delivery y total; el ticket y el panel ya los muestran. En la carta, `mp-test-config` entrega hoy una tarifa única; cuando el cálculo sea por dirección habrá que pedirlo antes de mostrar el total (pendiente de ese módulo).
 
 ## 9. Pasar a producción (cuando todo esté validado)
 
