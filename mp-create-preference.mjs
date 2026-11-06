@@ -4,7 +4,8 @@ import { json, readJson } from "./_auth.mjs";
 import { readAvailability } from "./_availability.mjs";
 import { validateCart, PricingError } from "./_mafia-pricing.mjs";
 import { computeDeliveryFee } from "./_mafia-delivery.mjs";
-import { getOrderByReference, savePendingOrder, recordPreference, statusKeyOk, publicOrderView } from "./_mafia-orders.mjs";
+import { getOrderByReference, savePendingOrder, statusKeyOk, publicOrderView } from "./_mafia-orders.mjs";
+import { recordPreference } from "./_mafia-pay.mjs";
 import { mpEnabled, mpConfigured, mpFetch, amountString } from "./_mp.mjs";
 
 const EMAIL = /^[^\s@]{1,64}@[^\s@]{1,190}\.[^\s@]{2,}$/;
@@ -48,7 +49,7 @@ export default async (req) => {
   const minimal = {
     items:[{ id:order.reference, title:`Pedido MAFIA ${order.short_code}`, quantity:1, currency_id:"CLP", unit_price:Number(amountString(order.total)) }],
     external_reference:order.reference,
-    notification_url:`${origin}/.netlify/functions/mp-webhook`,
+    notification_url:`${origin}/.netlify/functions/mp-pay-webhook`,
     back_urls:{ success:`${origin}/?mp=success`, failure:`${origin}/?mp=failure`, pending:`${origin}/?mp=pending` },
     auto_return:"approved"
   };

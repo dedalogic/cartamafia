@@ -2578,8 +2578,8 @@ $("#mpWalletBtn").addEventListener("click", async () => {
   } catch(e){ console.error(e); PG.busy = false; btn.disabled = false; showPayError("No pudimos conectar. Revisa tu conexión e inténtalo de nuevo."); }
 });
 
-async function fetchOrder(ref, key){
-  const r = await fetch(FN + "mp-order-status?ref=" + encodeURIComponent(ref) + "&key=" + encodeURIComponent(key), { cache:"no-store" });
+async function fetchOrder(ref, key, wallet){
+  const r = await fetch(FN + (wallet ? "mp-pay-status" : "mp-order-status") + "?ref=" + encodeURIComponent(ref) + "&key=" + encodeURIComponent(key), { cache:"no-store" });
   if (!r.ok) throw new Error("status " + r.status);
   return r.json();
 }
@@ -2726,7 +2726,7 @@ syncMyOrders(); syncPill();
     openPayScreen(); showView("pvProc");
     const t0 = Date.now();
     for (let i = 0; i < (back === "failure" ? 2 : 45); i++){
-      try { const o = await fetchOrder(p.reference, p.key); if (o.paid) return finishPaid(t0); if (o.problem === "amount_mismatch") break; } catch(e){}
+      try { const o = await fetchOrder(p.reference, p.key, true); if (o.paid) return finishPaid(t0); if (o.problem === "amount_mismatch") break; } catch(e){}
       await sleep(2000);
     }
     PG.busy = false; $("#mpBrick").innerHTML = ""; showView("pvForm");

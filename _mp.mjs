@@ -1,7 +1,7 @@
 // Ayudantes de Mercado Pago (Orders API). El Access Token solo existe aquí, en el servidor.
 import { createHmac } from "node:crypto";
 import { safeEqual } from "./_auth.mjs";
-import { getOrderByReference, markOrderPaid, markPaymentPaid, markOrderProcessed, totalsMatch } from "./_mafia-orders.mjs";
+import { getOrderByReference, markOrderPaid, markOrderProcessed, totalsMatch } from "./_mafia-orders.mjs";
 
 const API = "https://api.mercadopago.com";
 
@@ -28,32 +28,6 @@ export async function getMpOrder(id){
   const r = await mpFetch(`/v1/orders/${encodeURIComponent(id)}`);
   if (!r.ok) throw Object.assign(new Error(`Mercado Pago respondió ${r.status} al consultar la orden`), { code:"mp_lookup", status:r.status });
   return r.data;
-}
-
-export async function getMpPayment(id){
-  const r = await mpFetch(`/v1/payments/${encodeURIComponent(id)}`);
-  if (!r.ok) throw Object.assign(new Error(`Mercado Pago respondió ${r.status} al consultar el pago`), { code:"mp_lookup", status:r.status });
-  return r.data;
-}
-export async function searchPaymentsByRef(reference){
-  const r = await mpFetch(`/v1/payments/search?external_reference=${encodeURIComponent(reference)}&sort=date_created&criteria=desc&limit=10`);
-  if (!r.ok) throw Object.assign(new Error(`Mercado Pago respondió ${r.status} al buscar pagos`), { code:"mp_lookup", status:r.status });
-  return r.data?.results || [];
-}
-
-// Misma regla que la Order: solo approved + accredited, referencia conocida y MISMO monto.
-export async function reconcilePayment(payment){
-  const reference = payment?.external_reference;
-  if (!reference) return { outcome:"no_reference" };
-  const order = await getOrderByReference(reference);
-  if (!order) return { outcome:"not_found", reference };
-  if (payment.status !== "approved" || payment.status_detail !== "accredited")
-    return { outcome:"ignored", reference, status:payment.status, status_detail:payment.status_detail };
-  const paid = Number(payment.transaction_amount);
-  if (!totalsMatch(order.total, paid)) return { outcome:"mismatch", reference, expected:order.total, paid };
-  const r = await markPaymentPaid(reference, { paymentId:payment.id, status:payment.status, statusDetail:payment.status_detail, paidTotal:paid });
-  await markOrderProcessed(reference);
-  return { outcome: r.changed ? "paid" : "already", reference };
 }
 
 export function paidAmountOf(mpOrder){

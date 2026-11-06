@@ -92,10 +92,6 @@ export async function savePendingOrder({ cart, customer, delivery_type, delivery
   return order;
 }
 
-export function recordPreference(reference, preferenceId){
-  return updateOrder(reference, o => { o.attempts = (o.attempts || 0) + 1; o.mp_preference_id = preferenceId; o.payment_flow = o.payment_flow || "checkout_pro"; });
-}
-
 export function recordAttempt(reference, { mpOrderId, status, statusDetail }){
   return updateOrder(reference, o => {
     o.attempts = (o.attempts || 0) + 1;
@@ -117,25 +113,6 @@ export function markOrderPaid(reference, { mpOrderId, status, statusDetail, paid
     }
     o.status = "paid"; o.paid_at = new Date().toISOString();
     o.mercado_pago_order_id = mpOrderId || o.mercado_pago_order_id;
-    o.payment_status = status; o.payment_status_detail = statusDetail; o.paid_total = paidTotal;
-    o.kitchen_status = "nuevo";
-  });
-}
-
-// Pago por "Pagar con Mercado Pago" (Checkout Pro): se identifica por el ID del pago, no de la Order.
-export function markPaymentPaid(reference, { paymentId, status, statusDetail, paidTotal }){
-  const pid = String(paymentId);
-  return updateOrder(reference, o => {
-    if (o.status === "paid"){
-      if (o.mp_payment_id && o.mp_payment_id !== pid){
-        o.duplicate_payments = [...new Set([...(o.duplicate_payments || []), pid])];   // otro pago aprobado para el mismo pedido: revisar en Mercado Pago
-        return;
-      }
-      if (!o.mp_payment_id && !o.mercado_pago_order_id) o.mp_payment_id = pid; else return false;
-      return;
-    }
-    o.status = "paid"; o.paid_at = new Date().toISOString(); o.payment_flow = "checkout_pro";
-    o.mp_payment_id = pid;
     o.payment_status = status; o.payment_status_detail = statusDetail; o.paid_total = paidTotal;
     o.kitchen_status = "nuevo";
   });
