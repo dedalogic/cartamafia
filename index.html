@@ -9,7 +9,7 @@
 <link rel="icon" type="image/png" href="/favicon.png?v=mafia-20261003-2">
 <link rel="shortcut icon" type="image/png" href="/favicon.png?v=mafia-20261003-2">
 <link rel="apple-touch-icon" href="/favicon.png?v=mafia-20261003-2">
-<link rel="preload" href="/fonts/PestoMafio.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="preload" href="/PestoMafio.ttf" as="font" type="font/ttf" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
@@ -24,7 +24,7 @@
     })
 </script>
 <style>
-@font-face{font-family:"Pesto Mafio";src:url("/fonts/PestoMafio.ttf") format("truetype");font-style:normal;font-weight:400;font-display:block}
+@font-face{font-family:"Pesto Mafio";src:url("/PestoMafio.ttf") format("truetype");font-style:normal;font-weight:400;font-display:block}
 :root{
   --bg:#0c0c0c; --surface:#161514; --line:#2a2826;
   --text:#f3ede2; --muted:#a39d92;
@@ -868,7 +868,7 @@ html[data-mafia-cards="street-style"] #combos .item{border-color:rgba(200,16,46,
 /* === v40 · fondo rojo amigable, logo blanco, tarjetas grises, negro y beige === */
 :root{--bg:#A82A25;--surface:#EEECE9;--line:#D6D2CC;--text:#1A1917;--muted:#55514B;--red:#C8102E;--red-hi:#B80F2A}
 html{color-scheme:light}
-html{background:#A82A25 url(/assets/textura.png) repeat}
+html{background:#A82A25 url(/textura.png) repeat}
 body{background:transparent!important;color:#fff}
 .online-note,.online-note *,.combo-people-filter .pf-label,#foot,#foot *{color:#fff!important}
 .nav{background:#141313;border-bottom:1px solid #141313}
@@ -1071,13 +1071,13 @@ html[data-mafia-cards="street-style"] .pd-ph::after{background:linear-gradient(t
   <div class="mafia-slider">
     <div class="mafia-track" id="mafiaTrack">
       <a class="mafia-slide art" href="#combos" aria-label="Nuevo Combo Familiar">
-        <img src="/assets/banner-nuevo-combo-familiar.webp" alt="Nuevo Combo Familiar">
+        <img src="/banner-nuevo-combo-familiar.webp" alt="Nuevo Combo Familiar">
       </a>
       <a class="mafia-slide art" href="#combos" aria-label="Nuevo Combo Padrinos">
-        <img src="/assets/banner-nuevo-combo-padrinos.webp" alt="Nuevo Combo Padrinos">
+        <img src="/banner-nuevo-combo-padrinos.webp" alt="Nuevo Combo Padrinos">
       </a>
       <a class="mafia-slide art" href="#nuestras-pastas" aria-label="Nuevas Pastas">
-        <img src="/assets/banner-nuevas-pastas.webp" alt="Nuevas Pastas">
+        <img src="/banner-nuevas-pastas.webp" alt="Nuevas Pastas">
       </a>
     </div>
     <button class="mafia-arr prev" id="mafiaPrev" type="button" aria-label="Banner anterior">‹</button>
@@ -1127,7 +1127,7 @@ html[data-mafia-cards="street-style"] .pd-ph::after{background:linear-gradient(t
 <div class="mafia-pop" id="mafiaPop" role="dialog" aria-modal="true" aria-label="Promoción MAFIA">
   <div class="mafia-pop-card">
     <button class="mafia-pop-x" id="mafiaPopX" type="button" aria-label="Cerrar">×</button>
-    <img src="/assets/popup.webp" alt="">
+    <img src="/popup.webp" alt="">
     <div class="mafia-pop-info">
       <b id="mafiaPopT">Promoción</b>
       <span id="mafiaPopS"></span>
@@ -1271,15 +1271,15 @@ const CONFIG = {
   transferencia: { titular:"", rut:"", banco:"", tipoCuenta:"", numeroCuenta:"", email:"" },
 
   /* --- Imagen y tipografía: solo deja los archivos en las carpetas y listo --- */
-  logo: "/assets/logo-mafia-blanco.webp",                // archivo junto a este HTML (png, svg, webp). Si no existe, se muestra el nombre en texto
-  fotosCarpeta: "/fotos/",                // fotos junto a este archivo: <id del plato>.<extensión> (ej: margarita.jpg). Si las pones en una carpeta, escribe "fotos/"
+  logo: "/logo-mafia-blanco.webp",                // archivo junto a este HTML (png, svg, webp). Si no existe, se muestra el nombre en texto
+  fotosCarpeta: "/",                // fotos junto a este archivo: <id del plato>.<extensión> (ej: margarita.jpg). Si las pones en una carpeta, escribe "fotos/"
   fotosExtension: "webp",           // jpg, png o webp (usa la misma para todas)
-  fuenteTitulos: "/fonts/PestoMafio.ttf",  // archivo junto a este HTML (woff2, woff, ttf u otf). Vacío = Playfair Display
+  fuenteTitulos: "/PestoMafio.ttf",  // archivo junto a este HTML (woff2, woff, ttf u otf). Vacío = Playfair Display
   fuenteTextos: "",                // ej: "fuentes/textos.woff2"   Vacío = Inter
 
   /* --- Diseño: aquí se deja la opción que elijas --- */
   diseno: { foto:"grid", tipografia:"contrast", cta:"sheet", desc:"full" },   // foto: lista | hero | grid · tipografia: actual | contrast | weight · cta (combo): actual | toggle | tag | sheet · desc: full | one | none
-  popup: { activo:false, titulo:"Promo de la semana", texto:"Escribe aquí tu mensaje.", boton:"Ver carta", imagen:"/assets/popup.webp" },   // activo:true muestra el popup al entrar
+  popup: { activo:false, titulo:"Promo de la semana", texto:"Escribe aquí tu mensaje.", boton:"Ver carta", imagen:"/popup.webp" },   // activo:true muestra el popup al entrar
   opciones: false                  // true = muestra el botón "Opciones de diseño" para probar las variantes
 };
 
