@@ -83,11 +83,11 @@ const MENU = [
       suggest:{ ids:["top-bbq", "top-pomodoro", "top-parmigiano", "top-ketchup"] } },
   ]},
   { id:"nuestras-pastas", name:"Nuestras Pastas", items:[
-    { id:"np-bolognesa-albondigas", name:"La Bolognesa del Don", desc:"Fetuccini con salsa Bolognesa, 3 albóndigas y Parmigiano.", price:11990, img:"/np-bolognesa-albondigas.webp" },
-    { id:"np-alfredo-gravy", name:"Alfredo Gravy", desc:"Fetuccini en salsa Alfredo con pollo y gravy.", price:9990, img:"/np-alfredo-gravy.webp" },
-    { id:"np-pesto-lemon", name:"Pesto Limón", desc:"Fetuccini al pesto con pollo Lemon Pepper.", price:9990, img:"/np-pesto-lemon.webp" },
-    { id:"np-carne-vino-ajo", name:"Carne al Vino & Ajo Parmigiano", desc:"Fetuccini con carne al vino, ajo y Parmigiano.", price:10490, img:"/np-carne-vino-ajo.webp" },
-    { id:"np-mechada-mafia", name:"Fetuccini con Carne Mechada en Salsa Mafia", desc:"Fetuccini con carne mechada y Salsa Mafia.", price:10490, img:"/np-mechada-mafia.webp" }
+    { id:"np-bolognesa-albondigas", name:"La Bolognesa del Don", desc:"Fetuccini con salsa Bolognesa, 3 albóndigas y Parmigiano.", price:10490, img:"/np-bolognesa-albondigas.webp" },
+    { id:"np-alfredo-gravy", name:"Alfredo Gravy", desc:"Fetuccini en salsa Alfredo con pollo y gravy.", price:9490, img:"/np-alfredo-gravy.webp" },
+    { id:"np-pesto-lemon", name:"Pesto Limón", desc:"Fetuccini al pesto con pollo Lemon Pepper.", price:9490, img:"/np-pesto-lemon.webp" },
+    { id:"np-carne-vino-ajo", name:"Carne al Vino & Ajo Parmigiano", desc:"Fetuccini con carne al vino, ajo y Parmigiano.", price:9990, img:"/np-carne-vino-ajo.webp" },
+    { id:"np-mechada-mafia", name:"Fetuccini con Carne Mechada en Salsa Mafia", desc:"Fetuccini con carne mechada y Salsa Mafia.", price:10990, img:"/np-mechada-mafia.webp" }
   ]},
 
   { id:"pastas", name:"Arma tu Pasta", note:"Elige tu salsa. Agrega proteína si quieres.", items:[
