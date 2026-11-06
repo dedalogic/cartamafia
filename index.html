@@ -1074,6 +1074,37 @@ html[data-mafia-cards="street-style"] .pd-ph::after{background:linear-gradient(t
 #sNombre,#sDir{display:grid;gap:12px}
 .pv .prog{margin:2px 0 14px}
 /* pedido hecho, simple */
+@media(max-width:899px){.drawer.s2{height:min(640px,88dvh)}}
+.drawer.s2 #checkout2{flex:1 1 auto;display:flex;flex-direction:column;min-height:0}
+.drawer.s2 #checkout2 .df{flex:1 1 auto;display:flex;flex-direction:column;gap:12px}
+.drawer.s2 #stepNext,.drawer.s2 #payOnline,.drawer.s2 #send{margin-top:auto}
+/* ---- pago y comprobante: misma hoja, tipografía y animación que los pasos ---- */
+@keyframes pvfade{from{opacity:0}to{opacity:1}}
+.payscreen{background:rgba(0,0,0,.6);align-items:center;justify-content:flex-end;overflow:hidden;color:#141313;font-family:var(--sans)}
+.payscreen:not([hidden]){animation:pvfade .2s ease-out}
+.pv{flex:none;width:min(520px,100%);height:min(640px,88dvh);margin:0 auto;padding:0 0 calc(20px + env(safe-area-inset-bottom,0px));background:#fff;border-radius:var(--r) var(--r) 0 0;overflow-y:auto;overscroll-behavior:contain}
+.pv.on{animation:checkoutIn .28s ease-out}
+.pv>:not(.pv-head){margin-left:20px;margin-right:20px}
+.pv-head{flex:none;min-height:76px;margin:0;padding:20px;background:#EDE5D3;gap:10px}
+.pv-head h2{font-family:var(--sans);font-weight:700;font-size:22px;letter-spacing:0;color:#141313}
+.pv-back{width:44px;height:44px;border-radius:var(--r);border:1px solid #D6CBB4;background:#F3ECDC;color:#141313}
+.pv .prog{margin-top:14px}
+.pv-sum{margin-top:14px;border-color:#DDD3BC;background:#fff;color:#5f5a52}
+.pv-sum .tot{color:#141313;border-top-color:#DDD3BC}
+.pm-tile{border:2px solid #D6CFBF;transition:border-color .15s,box-shadow .15s,transform .1s}
+.pm-tile[aria-expanded="true"],.pm-tile.sel{border-color:#C8102E;box-shadow:0 0 0 3px rgba(200,16,46,.18)}
+.pm-cbody{border-color:#DDD3BC;background:#fff;padding:0}
+#mpBrick{margin-top:0}
+.pv-err{background:#FDE8EA;border-color:#F2B8C0;color:#8A1220}
+.pv-load,.mo-empty{color:#6b6559}
+.mo-item{background:#fff;border-color:#DDD3BC;color:#141313}.mo-item small{color:#6b6559}
+.pv-center h2{font-family:var(--sans);font-weight:800;font-size:26px;letter-spacing:0;color:#141313}
+.pv-center p{color:#6b6559}
+.spin{border-color:#E6DCC6;border-top-color:#C8102E}
+.tk{background:#F6F0E2}
+.tk-help{color:#6b6559}.tk-help a{color:#141313}
+.pv-done{background:#C8102E;color:#fff}
+@media(min-width:900px){.payscreen{align-items:stretch}.pv{width:420px;height:100%;margin:0 0 0 auto;border-radius:0}}
 .tk-live{display:none}
 .tk-ok{display:grid;justify-items:center;gap:4px;text-align:center;padding:6px 0 4px}
 .tk-ck{width:72px;height:72px;border-radius:50%;background:#14803F;display:grid;place-items:center;margin-bottom:8px}
@@ -2122,6 +2153,7 @@ function showCheckoutStep(n, animate=true){
   a.hidden = n !== 1; b.hidden = n !== 2;
   $("#drawerTitle").textContent = n === 1 ? "Tu pedido" : "";
   back.hidden = n !== 2;
+  drawer.classList.toggle("s2", n === 2);
   const el = n === 1 ? a : b;
   el.classList.remove("in");
   if (animate){ void el.offsetWidth; el.classList.add("in"); }
@@ -2552,12 +2584,13 @@ function startOnlinePayment(){
     (form.delivery_type === "delivery" ? `<div class="row"><span>Delivery</span><b>${fmt(fee)}</b></div>` : "") +
     `<div class="row tot"><span>Total</span><span>${fmt(total)}</span></div>`;
   renderProg($("#pvProg"), tipo() === "retiro" ? 2 : 3);
-  PG.total = total; showPayError(""); $("#mpWalletBtn").disabled = false;
+  PG.total = total; showPayError(""); $("#mpWalletBtn").disabled = false; $("#mpWalletBtn").classList.remove("sel");
   $("#pmTiles").hidden = false; setCardOpen(false);
   openPayScreen(); showView("pvForm");
   track("payment_started", { fulfillment:form.delivery_type, order_total:total, ...cartAnalytics() });
 }
 function setCardOpen(open){
+  if (PG) PG.mountId = (PG.mountId || 0) + 1;
   $("#cardToggle").setAttribute("aria-expanded", String(open));
   $("#cardBody").hidden = !open;
   if (!open){ try { PG && PG.brick && PG.brick.unmount(); } catch(e){} if (PG) PG.brick = null; $("#mpBrick").innerHTML = ""; }
@@ -2567,19 +2600,21 @@ $("#cardToggle").addEventListener("click", () => {
   showPayError("");
   const open = $("#cardToggle").getAttribute("aria-expanded") !== "true";
   setCardOpen(open);
-  if (open){ track("payment_card_opened", {}); mountBrick(PG.total); }
+  if (open){ $("#mpWalletBtn").classList.remove("sel"); track("payment_card_opened", {}); mountBrick(PG.total); }
 });
 
 async function mountBrick(total){
   const box = $("#mpBrick"); box.innerHTML = '<p class="pv-load">Cargando medios de pago…</p>';
+  const my = PG.mountId = (PG.mountId || 0) + 1;
   try {
     await loadMpSdk();
+    if (!PG || PG.mountId !== my) return;
     PG.mp = PG.mp || new MercadoPago(MPCFG.public_key, { locale:"es-CL" });
-    PG.brick = await PG.mp.bricks().create("payment", "mpBrick", {
+    const made = await PG.mp.bricks().create("payment", "mpBrick", {
       initialization:{ amount:total, payer:{ email: emailOk($("#cemail").value.trim()) ? $("#cemail").value.trim() : undefined } },
       customization:{
         paymentMethods:{ creditCard:"all", debitCard:"all", maxInstallments:1 },     /* sin cuotas: el monto pagado debe ser igual al pedido */
-        visual:{ style:{ theme:"dark" } }
+        visual:{ style:{ theme:"default" } }
       },
       callbacks:{
         onReady:() => { const l = box.querySelector(".pv-load"); if (l) l.remove(); },
@@ -2587,6 +2622,8 @@ async function mountBrick(total){
         onError:e => { console.error("Payment Brick", e); showPayError("No pudimos cargar el formulario de pago. Vuelve atrás e inténtalo de nuevo."); }
       }
     });
+    if (!PG || PG.mountId !== my || $("#cardBody").hidden){ try { made.unmount(); } catch(e){} return; }
+    PG.brick = made;
   } catch(e){
     console.error(e); box.innerHTML = "";
     showPayError("No pudimos cargar Mercado Pago. Revisa tu conexión o vuelve atrás y pide por WhatsApp.");
@@ -2629,7 +2666,7 @@ function submitPayment(selected, formData){
 /* "Pagar con Mercado Pago": el cliente va a Mercado Pago (app o web) y vuelve a la carta con ?mp=... */
 $("#mpWalletBtn").addEventListener("click", async () => {
   if (!PG || PG.busy) return;
-  const btn = $("#mpWalletBtn"); PG.busy = true; btn.disabled = true; showPayError("");
+  const btn = $("#mpWalletBtn"); setCardOpen(false); btn.classList.add("sel"); PG.busy = true; btn.disabled = true; showPayError("");
   try {
     const res = await fetch(FN + "mp-create-preference", {
       method:"POST", headers:{ "Content-Type":"application/json" },
@@ -2638,10 +2675,10 @@ $("#mpWalletBtn").addEventListener("click", async () => {
     const data = await res.json().catch(() => ({ error:"El servidor no respondió como se esperaba.", detail:"HTTP " + res.status }));
     if (data.reference){ PG.reference = data.reference; PG.status_key = data.status_key; PG.shortCode = data.short_code; lsSet(LS_PENDING, { reference:data.reference, key:data.status_key, at:Date.now(), wallet:1 }); }
     if (data.ok && data.paid){ PG.busy = false; return finishPaid(Date.now()); }
-    if (!data.ok || !data.init_point){ PG.busy = false; btn.disabled = false; return showPayError((data.error || "No pudimos abrir Mercado Pago. Inténtalo de nuevo.") + (data.detail ? " (" + data.detail + ")" : "")); }
+    if (!data.ok || !data.init_point){ PG.busy = false; btn.disabled = false; btn.classList.remove("sel"); return showPayError((data.error || "No pudimos abrir Mercado Pago. Inténtalo de nuevo.") + (data.detail ? " (" + data.detail + ")" : "")); }
     track("payment_wallet_redirect", { order_total:data.total });
     window.location.href = data.init_point;
-  } catch(e){ console.error(e); PG.busy = false; btn.disabled = false; showPayError("No pudimos conectar. Revisa tu conexión e inténtalo de nuevo."); }
+  } catch(e){ console.error(e); PG.busy = false; btn.disabled = false; btn.classList.remove("sel"); showPayError("No pudimos conectar. Revisa tu conexión e inténtalo de nuevo."); }
 });
 
 async function fetchOrder(ref, key, wallet){
@@ -2741,6 +2778,11 @@ window.addEventListener("keydown", e => {
   else if ($("#pvOrders").classList.contains("on") || $("#pvTicket").classList.contains("on")) closePayScreen();
 }, true);
 $("#payOnline").addEventListener("click", startOnlinePayment);
+window.addEventListener("pageshow", e => {
+  if (!e.persisted || !PG || $("#payScreen").hidden) return;
+  PG.busy = false; const w = $("#mpWalletBtn"); w.disabled = false; w.classList.remove("sel");
+  if ($("#pvProc").classList.contains("on") && !PG.finished) showView("pvForm");
+});
 
 /* ---------- Mis pedidos (en este dispositivo) y botón "Mi pedido" ---------- */
 const STAGE_LABEL = { nuevo:"Pagado", preparacion:"Preparando", listo:"Listo", entregado:"Entregado" };
