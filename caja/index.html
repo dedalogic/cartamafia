@@ -26,14 +26,14 @@ a{color:inherit}
 /* estructura */
 .app{display:grid;grid-template-columns:minmax(320px,400px) 1fr;min-height:100vh}
 .side{border-right:1px solid var(--line);display:flex;flex-direction:column;min-height:100vh}
-.bar{display:flex;align-items:center;justify-content:space-between;padding:16px 18px 8px}
+.bar{display:flex;align-items:center;justify-content:space-between;padding:10px 16px 4px}
 .bar h1{margin:0;font-size:18px;font-weight:600;letter-spacing:.01em}
 .icons{display:flex;gap:4px}
 .ib{height:40px;min-width:40px;padding:0 10px;border:0;background:none;border-radius:10px;color:var(--muted);font-size:13px}
 .ib[aria-pressed="true"]{color:var(--green)}
 .ib:hover{background:#1c1a17}
 .tabs{display:flex;gap:18px;padding:0 18px;border-bottom:1px solid var(--line);overflow-x:auto}
-.tab{flex:none;height:46px;border:0;background:none;color:var(--muted);font-size:14px;position:relative;padding:0}
+.tab{flex:none;height:42px;border:0;background:none;color:var(--muted);font-size:14px;position:relative;padding:0}
 .tab[aria-pressed="true"]{color:var(--text);font-weight:600}
 .tab[aria-pressed="true"]:after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--text)}
 .tab i{font-style:normal;margin-left:5px;color:var(--muted);font-weight:400}
@@ -44,51 +44,64 @@ a{color:inherit}
 .enable{margin:12px 18px 0;height:44px;border:1px dashed #4a4439;border-radius:12px;background:none;color:var(--muted);font-size:13px}
 
 .list{flex:1;overflow-y:auto;padding:6px 0 30px}
-.row{display:grid;grid-template-columns:1fr auto;gap:2px 12px;width:100%;padding:14px 18px;border:0;border-bottom:1px solid var(--line);background:none;text-align:left}
+.row{display:grid;grid-template-columns:1fr auto;gap:1px 12px;width:100%;padding:10px 16px;border:0;border-bottom:1px solid var(--line);background:none;text-align:left}
 .row:hover{background:#171513}
 .row[aria-current="true"]{background:#1b1916}
-.row .n{font-size:17px;font-weight:700}
-.row .t{font-size:17px;font-weight:600;text-align:right}
+.row .n{font-size:16px;font-weight:700}
+.row .t{font-size:16px;font-weight:600;text-align:right}
 .row .s{font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .row .w{font-size:13px;color:var(--muted);text-align:right}
 .row.new .n:before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--amber);margin-right:9px;vertical-align:2px}
 .empty{padding:60px 20px;text-align:center;color:var(--muted);font-size:14px}
 
-.detail{padding:26px clamp(18px,4vw,48px) 60px;max-width:760px;width:100%}
+.detail{padding:14px 16px 24px;max-width:560px;width:100%}
 .none{display:grid;place-items:center;height:60vh;color:var(--muted);font-size:14px}
-.back{display:none;height:44px;margin:0 0 10px -10px;padding:0 10px;border:0;background:none;color:var(--muted);font-size:15px}
-.d-top{display:flex;justify-content:space-between;align-items:flex-start;gap:14px}
-.d-num{font-size:34px;font-weight:800;line-height:1}
-.d-time{margin-top:8px;color:var(--muted);font-size:14px}
-.paid{color:var(--green);font-size:14px;font-weight:600;white-space:nowrap;padding-top:6px}
-.block{margin-top:26px;padding-top:20px;border-top:1px solid var(--line)}
-.who{display:grid;gap:5px;font-size:15px}
-.who b{font-size:18px;font-weight:600}
-.who .m{color:var(--muted)}
-.who a{text-underline-offset:3px}
-.kind{margin-top:12px;font-size:15px}
-.kind b{font-weight:600}
-.items{display:grid;gap:16px}
-.it{display:grid;grid-template-columns:34px 1fr auto;gap:6px;align-items:baseline}
-.it .q{font-weight:700;font-size:17px}
-.it .nm{font-size:16px;font-weight:600}
-.it small{display:block;margin-top:3px;color:var(--muted);font-size:14px;line-height:1.45;font-weight:400}
-.it .p{color:var(--muted);font-size:15px}
-.note{margin-top:22px;padding:2px 0 2px 14px;border-left:3px solid var(--amber);font-size:15px;line-height:1.45}
-.note small{display:block;color:var(--amber);font-size:12px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
-.tot{display:grid;gap:6px;font-size:15px;color:var(--muted)}
-.tot div{display:flex;justify-content:space-between}
-.tot .g{color:var(--text);font-size:20px;font-weight:700;margin-top:4px}
-.go{display:block;width:100%;height:56px;margin-top:26px;border:0;border-radius:14px;background:var(--text);color:#141312;font-size:17px;font-weight:700}
+.back{display:none;height:36px;margin:0 0 6px -8px;padding:0 8px;border:0;background:none;color:var(--muted);font-size:14px}
+.d-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.d-num{font-size:30px;font-weight:800;line-height:1;margin-right:2px}
+.chip{padding:5px 10px;border-radius:8px;font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap}
+.chip.paid{background:#16482f;color:#6ff0ae}
+.chip.del{background:var(--amber);color:#2a1d00}
+.chip.ret{background:#dfe9ff;color:#14233f}
+.d-time{margin-left:auto;color:var(--muted);font-size:13px}
+.cust{display:flex;align-items:center;gap:10px;margin-top:12px;padding:10px 12px;background:var(--panel);border:1px solid #34302a;border-radius:12px}
+.cust .cn{flex:1;min-width:0}
+.cust b{display:block;font-size:16px;font-weight:700}
+.cust span{display:block;margin-top:2px;color:var(--muted);font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pill{flex:none;height:38px;padding:0 14px;display:inline-flex;align-items:center;border:1px solid #4a4439;border-radius:10px;background:#1f1c18;color:var(--text);font-size:14px;font-weight:600;text-decoration:none}
+.addr{margin-top:8px;padding:9px 12px;border-radius:10px;background:#2a2010;color:#ffd98a;font-size:14px;font-weight:600;line-height:1.35}
+.card{margin-top:12px;background:#efe7d6;color:#17140f;border-radius:12px;padding:4px 14px}
+.it{display:grid;grid-template-columns:30px 1fr auto;gap:6px;align-items:baseline;padding:10px 0;border-bottom:1px solid #d6ccb6}
+.it .q{font-weight:800;font-size:16px}
+.it .nm{font-size:15px;font-weight:700}
+.it small{display:block;margin-top:2px;color:#5d5546;font-size:13px;line-height:1.35;font-weight:500}
+.it .p{font-size:14px;font-weight:600}
+.tot{display:flex;justify-content:space-between;align-items:baseline;padding:10px 0 8px}
+.tot span{font-size:13px;color:#5d5546;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.tot b{font-size:22px;font-weight:800}
+.tot small{display:block;font-size:12px;color:#5d5546;font-weight:500;text-align:right}
+.note{margin-top:10px;padding:9px 12px;border-radius:10px;background:#3a2c0a;color:#ffe3a0;font-size:14px;line-height:1.4}
+.note small{display:block;color:var(--amber);font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;margin-bottom:2px}
+.warn{margin-top:10px;padding:10px 12px;border-radius:10px;background:#3a1218;color:#ffc9d0;font-size:13px}
+.actions{position:sticky;bottom:0;margin:12px -16px -24px;padding:10px 16px calc(12px + env(safe-area-inset-bottom));background:var(--bg);border-top:1px solid var(--line)}
+.hint{margin:0 0 8px;color:var(--amber);font-size:13px;font-weight:600;text-align:center}
+.go{display:block;width:100%;height:54px;border:0;border-radius:12px;background:var(--text);color:#141312;font-size:17px;font-weight:800;letter-spacing:.01em}
 .go.accept{background:var(--amber);color:#2a1d00}
-.hint{margin:10px 0 0;text-align:center;color:var(--muted);font-size:13px}
-.links{display:flex;flex-wrap:wrap;gap:4px 20px;justify-content:center;margin-top:18px}
-.links a,.links button{height:44px;display:inline-flex;align-items:center;border:0;background:none;color:var(--muted);font-size:14px;text-decoration:none;padding:0}
-.links a:hover,.links button:hover{color:var(--text)}
-details{margin-top:22px;color:var(--muted);font-size:13px}
-details summary{cursor:pointer;min-height:36px;display:flex;align-items:center}
-details code{display:block;margin-top:6px;word-break:break-all;color:var(--text);font-size:12px}
-.warn{margin-top:20px;padding:12px 14px;border-radius:10px;background:#3a1218;color:#ffc9d0;font-size:14px}
+.go.ready{background:var(--green);color:#04170d}
+.sec{display:flex;gap:8px;margin-top:8px}
+.sec>*{flex:1;height:44px;display:inline-flex;align-items:center;justify-content:center;border-radius:10px;font-size:14px;font-weight:700;text-decoration:none;cursor:pointer}
+.wbtn{border:2px solid var(--green);background:none;color:#6ff0ae}
+.sec .ghost{border:1px solid #4a4439;background:#1f1c18;color:var(--text);font-weight:600}
+.wbox{margin-top:12px}
+.wbox h3{margin:0 0 6px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.wbox textarea{display:block;width:100%;min-height:150px;padding:12px;border:1px solid #34302a;border-radius:12px;background:var(--panel);color:var(--text);font:inherit;font-size:14px;line-height:1.45;resize:vertical}
+.wrow{display:flex;gap:8px;margin-top:8px}
+.wrow button{flex:1;height:46px;border:0;border-radius:10px;font-size:15px;font-weight:800;cursor:pointer}
+.wcopy{background:var(--green);color:#04170d}
+.wphone{background:#2a2622;color:var(--text);font-weight:600!important}
+details{margin-top:14px;color:var(--muted);font-size:12px}
+details summary{cursor:pointer;min-height:30px;display:flex;align-items:center}
+details code{display:block;margin-top:4px;word-break:break-all;color:var(--text);font-size:12px}
 .msg{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:#3a1218;color:#ffc9d0;padding:10px 16px;border-radius:999px;font-size:13px}
 
 @media (max-width:860px){
@@ -96,10 +109,10 @@ details code{display:block;margin-top:6px;word-break:break-all;color:var(--text)
   .side{border-right:0}
   .detail{display:none}
   .app.open .side{display:none}
-  .app.open .detail{display:block;padding-top:12px}
+  .app.open .detail{display:block;padding-top:8px}
   .back{display:inline-flex;align-items:center}
 }
-@media print{body{background:#fff;color:#000}.side,.back,.go,.links,.hint,.msg,details{display:none!important}.app{display:block}.detail{display:block!important;color:#000}.d-time,.it small,.who .m,.tot,.it .p{color:#333}.block{border-color:#bbb}}
+@media print{body{background:#fff;color:#000}.side,.back,.actions,.msg,details{display:none!important}.app{display:block}.detail{display:block!important;color:#000}.d-time,.it small,.who .m,.tot,.it .p{color:#333}.block{border-color:#bbb}}
 </style>
 </head>
 <body>
@@ -197,44 +210,61 @@ function draw(){
 }
 const waNum = p => { let d = String(p || "").replace(/\D/g, ""); if (d.length === 9 && d[0] === "9") d = "56" + d; return d; };
 
+let msgOpen = null;                                  /* referencia del pedido con el mensaje abierto */
+function clientMsg(o){
+  const c = o.customer || {}, del = o.delivery_type === "delivery", st = o.kitchen_status, name = (c.name || "").trim().split(/\s+/)[0] || "";
+  const items = o.items.map(i => `• ${i.quantity}× ${i.name}${i.detail && i.detail.length ? " (" + i.detail.join(", ") + ")" : ""}`).join("\n");
+  const resumen = `Pedido #${o.short_code}\n${items}\nTotal pagado: ${fmt(o.paid_total ?? o.total)}`;
+  const hola = `Hola ${name}, `;
+  if (st === "entregado") return `${hola}confirmamos la entrega de tu pedido #${o.short_code}. ¡Gracias por pedir en MAFIA! Si hubo algún problema con tu pedido, respóndenos por aquí y lo resolvemos.`;
+  if (st === "listo") return del
+    ? `${hola}tu pedido está listo y acaba de salir del local hacia ${o.address}${c.unit ? " (" + c.unit + ")" : ""}.\n\n${resumen}\n\nPor favor confírmanos por este mismo chat cuando lo recibas. ¡Gracias por pedir en MAFIA!`
+    : `${hola}tu pedido está listo para retirar en el local.\n\n${resumen}\n\nTe esperamos. ¡Gracias por pedir en MAFIA!`;
+  return `${hola}recibimos tu pedido y ya lo estamos preparando.\n\n${resumen}\n\nTe avisamos por aquí apenas ${del ? "salga del local" : "esté listo para retirar"}. ¡Gracias por pedir en MAFIA!`;
+}
+async function copyText(t){
+  try { await navigator.clipboard.writeText(t); return true; }
+  catch(e){ const ta = document.createElement("textarea"); ta.value = t; ta.style.position = "fixed"; ta.style.opacity = "0"; document.body.appendChild(ta); ta.select(); let ok = false; try { ok = document.execCommand("copy"); } catch(_){} ta.remove(); return ok; }
+}
 function drawDetail(){
   const o = orders.find(x => x.reference === sel), box = $("#detail"), app = $("#app");
   if (!o){ app.classList.remove("open"); box.innerHTML = '<p class="none">Elige un pedido para ver el detalle</p>'; return; }
   const c = o.customer || {}, del = o.delivery_type === "delivery", nx = NEXT[o.kitchen_status], prev = STATES[STATES.indexOf(o.kitchen_status) - 1];
-  const wa = waNum(c.phone);
+  const canMsg = !!c.phone && o.kitchen_status !== "nuevo", showMsg = canMsg && msgOpen === o.reference;
+  const tcls = nx ? (nx[2] || (nx[0] === "listo" ? "ready" : "")) : "";
   box.innerHTML = `
     <button class="back" id="back" type="button">← Pedidos</button>
-    <div class="d-top"><div><div class="d-num">#${esc(o.short_code)}</div><div class="d-time">${day(o.paid_at)} · ${hhmm(o.paid_at)}</div></div><div class="paid">✓ Pagado</div></div>
-    <div class="block who">
-      <b>${esc(c.name)}</b>
-      ${c.phone ? `<a href="tel:${esc(c.phone)}">${esc(c.phone)}</a>` : ""}
-      ${c.email ? `<span class="m">${esc(c.email)}</span>` : ""}
-      <div class="kind"><b>${del ? "Delivery" : "Retiro en local"}</b>${del ? `<br><span class="m">${esc(o.address)}${c.unit ? " · " + esc(c.unit) : ""}</span>` : ""}</div>
-    </div>
-    <div class="block"><div class="items">${o.items.map(i => `<div class="it"><span class="q">${i.quantity}×</span><div class="nm">${esc(i.name)}${i.detail && i.detail.length ? `<small>${i.detail.map(esc).join("<br>")}</small>` : ""}</div><span class="p">${fmt(i.total_amount)}</span></div>`).join("")}</div>
-      ${c.notes ? `<div class="note"><small>Observaciones</small>${esc(c.notes)}</div>` : ""}</div>
-    <div class="block tot"><div><span>Subtotal</span><span>${fmt(o.subtotal)}</span></div>${del ? `<div><span>Delivery</span><span>${fmt(o.delivery_fee)}</span></div>` : ""}<div class="g"><span>Total pagado</span><span>${fmt(o.paid_total ?? o.total)}</span></div></div>
+    <div class="d-head"><span class="d-num">#${esc(o.short_code)}</span><span class="chip paid">✓ Pagado</span><span class="chip ${del ? "del" : "ret"}">${del ? "Delivery" : "Retiro"}</span><span class="d-time">${day(o.paid_at)} · ${hhmm(o.paid_at)}</span></div>
+    <div class="cust"><div class="cn"><b>${esc(c.name)}</b>${c.phone ? `<span>${esc(c.phone)}</span>` : ""}</div>${c.phone ? `<a class="pill" href="tel:${esc(c.phone)}">Llamar</a>` : ""}</div>
+    ${del ? `<div class="addr">📍 ${esc(o.address)}${c.unit ? " · " + esc(c.unit) : ""}</div>` : ""}
+    ${c.notes ? `<div class="note"><small>Observaciones</small>${esc(c.notes)}</div>` : ""}
+    <div class="card">${o.items.map(i => `<div class="it"><span class="q">${i.quantity}×</span><div class="nm">${esc(i.name)}${i.detail && i.detail.length ? `<small>${i.detail.map(esc).join(" · ")}</small>` : ""}</div><span class="p">${fmt(i.total_amount)}</span></div>`).join("")}
+      <div class="tot"><span>Total pagado</span><div><b>${fmt(o.paid_total ?? o.total)}</b>${del ? `<small>incluye delivery ${fmt(o.delivery_fee)}</small>` : ""}</div></div></div>
     ${o.duplicate_payments.length ? `<div class="warn">Posible doble cobro en Mercado Pago. Revisa y devuelve si corresponde.</div>` : ""}
-    ${nx ? `<button class="go ${nx[2] || ""}" id="go" type="button" data-to="${nx[0]}">${nx[1]}</button>` : ""}
-    ${o.kitchen_status === "nuevo" ? `<p class="hint">Ingrésalo en Fudo y luego acepta.</p>` : ""}
-    <div class="links">
-      ${c.phone ? `<a href="tel:${esc(c.phone)}">Llamar</a><a href="https://wa.me/${wa}" target="_blank" rel="noopener">WhatsApp</a>` : ""}
-      <button type="button" id="print">Imprimir</button>
-      ${prev ? `<button type="button" id="undo" data-to="${prev}">Volver a ${TAB[prev].toLowerCase()}</button>` : ""}
-    </div>
-    <details><summary>Datos de pago</summary><code>Pedido: ${esc(o.reference)}</code><code>Mercado Pago: ${esc(o.mp_order_id || "—")}</code>${o.accepted_at ? `<code>Aceptado: ${hhmm(o.accepted_at)}</code>` : ""}</details>`;
+    ${showMsg ? `<div class="wbox"><h3>Mensaje para el cliente</h3><textarea id="wtext" aria-label="Mensaje para el cliente">${esc(clientMsg(o))}</textarea><div class="wrow"><button type="button" class="wcopy" id="wcopy">Copiar mensaje</button><button type="button" class="wphone" id="wphone" data-phone="${esc(waNum(c.phone))}">Copiar teléfono</button></div></div>` : ""}
+    <details><summary>Datos de pago</summary><code>Pedido: ${esc(o.reference)}</code><code>Mercado Pago: ${esc(o.mp_order_id || "—")}</code>${o.accepted_at ? `<code>Aceptado: ${hhmm(o.accepted_at)}</code>` : ""}</details>
+    <div class="actions">
+      ${o.kitchen_status === "nuevo" ? `<p class="hint">Ingrésalo en Fudo y luego acepta</p>` : ""}
+      ${nx ? `<button class="go ${tcls}" id="go" type="button" data-to="${nx[0]}">${nx[1]}</button>` : ""}
+      <div class="sec">
+        ${canMsg && !showMsg ? `<button type="button" class="wbtn" id="wgen">Mensaje WhatsApp</button>` : ""}
+        ${prev ? `<button type="button" class="ghost" id="undo" data-to="${prev}">← ${TAB[prev]}</button>` : ""}
+      </div>
+    </div>`;
   app.classList.add("open");
 }
 async function move(to){
   const o = orders.find(x => x.reference === sel); if (!o) return;
-  try { await api("orders-update", { reference:o.reference, kitchen_status:to }); o.kitchen_status = to; if (to !== "nuevo" && !o.accepted_at) o.accepted_at = new Date().toISOString(); tab = to; sel = null; draw(); syncAlarm(); }
+  try { await api("orders-update", { reference:o.reference, kitchen_status:to }); o.kitchen_status = to; if (to !== "nuevo" && !o.accepted_at) o.accepted_at = new Date().toISOString(); tab = to; if (to === "listo" || to === "entregado"){ msgOpen = o.reference; } else { sel = null; } draw(); syncAlarm(); }
   catch(e){ toast(e.message); }
 }
 $("#tabs").addEventListener("click", e => { const b = e.target.closest("[data-tab]"); if (b){ tab = b.dataset.tab; sel = null; draw(); } });
 $("#list").addEventListener("click", e => { const r = e.target.closest("[data-ref]"); if (r){ sel = r.dataset.ref; draw(); window.scrollTo(0, 0); } });
 $("#detail").addEventListener("click", e => {
   if (e.target.closest("#back")){ sel = null; draw(); return; }
-  if (e.target.closest("#print")){ window.print(); return; }
+  if (e.target.closest("#wgen")){ msgOpen = sel; drawDetail(); return; }
+  if (e.target.closest("#wcopy")){ copyText($("#wtext").value).then(ok => toast(ok ? "Mensaje copiado" : "No se pudo copiar: selecciónalo y usa Ctrl+C")); return; }
+  const wp = e.target.closest("#wphone"); if (wp){ copyText(wp.dataset.phone).then(ok => toast(ok ? "Teléfono copiado" : "No se pudo copiar")); return; }
   const b = e.target.closest("[data-to]"); if (b) move(b.dataset.to);
 });
 $("#sound").addEventListener("click", () => setSound(!soundOn));
