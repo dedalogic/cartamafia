@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>MAFIA · Caja</title>
+<link rel="icon" href="/favicon.png">
+<style>
+:root{--bg:#0e0d0c;--card:#181614;--line:#34302b;--text:#f3ede2;--muted:#b3aca0;--red:#d4122f;--green:#2fae6b;--amber:#e0a526;--r:14px}
+*{box-sizing:border-box}
+html{background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+body{margin:0;min-height:100vh;background:var(--bg)}
+button,input{font:inherit}
+.wrap{width:min(1100px,100%);margin:auto;padding:16px 16px 60px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.top h1{font-size:24px;margin:0;letter-spacing:.02em}
+.top-r{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.btn{min-height:44px;padding:0 16px;border-radius:var(--r);border:1px solid var(--line);background:none;color:var(--text);cursor:pointer}
+.btn.on{border-color:var(--green);color:var(--green)}
+.login{max-width:380px;margin:60px auto;display:grid;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px}
+.login input{width:100%;min-height:48px;margin-top:6px;border-radius:var(--r);border:1px solid var(--line);padding:0 12px;background:#fff;color:#111;font-size:16px}
+.login label{font-size:13px;color:var(--muted)}
+.primary{min-height:48px;border:0;border-radius:var(--r);background:var(--red);color:#fff;font-weight:700;cursor:pointer}
+.msg{min-height:20px;font-size:13px;color:var(--muted)}.msg.err{color:#ff8b9a}
+[hidden]{display:none!important}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:12px}
+.tab{flex:none;min-height:46px;padding:0 16px;border-radius:999px;border:1px solid var(--line);background:none;color:var(--muted);cursor:pointer;white-space:nowrap}
+.tab[aria-pressed="true"]{background:var(--text);color:#141312;border-color:var(--text);font-weight:700}
+.tab i{font-style:normal;margin-left:6px;opacity:.85}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:14px;align-items:start}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:grid;gap:12px}
+.card.fresh{border-color:var(--amber);box-shadow:0 0 0 2px rgba(224,165,38,.35)}
+.c-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.c-num{font-size:26px;font-weight:800;line-height:1}
+.c-time{font-size:12px;color:var(--muted);margin-top:4px}
+.paid{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:rgba(47,174,107,.16);color:var(--green);font-weight:700;font-size:13px;white-space:nowrap}
+.kind{display:inline-block;padding:5px 10px;border-radius:8px;font-weight:700;font-size:13px;letter-spacing:.04em;text-transform:uppercase;background:#2a2622}
+.kind.delivery{background:#3a2a10;color:#ffcf6b}
+.who{display:grid;gap:3px;font-size:14px}
+.who span{color:var(--muted)}
+.who a{color:var(--text)}
+.items{display:grid;gap:10px;border-top:1px dashed var(--line);border-bottom:1px dashed var(--line);padding:12px 0}
+.it{display:grid;grid-template-columns:34px 1fr auto;gap:8px}
+.it .q{font-weight:800;font-size:17px}
+.it b{font-size:15px}
+.it small{display:block;color:var(--muted);font-size:13px;line-height:1.4;margin-top:2px}
+.note{padding:10px 12px;border-radius:10px;background:#2a2112;border:1px solid #5a4415;color:#ffe2a1;font-size:14px}
+.tot{display:grid;gap:4px;font-size:14px;color:var(--muted)}
+.tot div{display:flex;justify-content:space-between}
+.tot .g{color:var(--text);font-size:17px;font-weight:800}
+.warn{padding:10px 12px;border-radius:10px;background:#3b1016;border:1px solid #7a2230;color:#ffd6dc;font-size:13px}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.adv{flex:1;min-height:50px;border:0;border-radius:var(--r);background:var(--green);color:#06210f;font-weight:800;font-size:15px;cursor:pointer}
+.adv.prep{background:var(--amber);color:#2a1d00}
+.adv.done{background:#3a3631;color:var(--text)}
+.mini{min-height:50px;padding:0 14px;border-radius:var(--r);border:1px solid var(--line);background:none;color:var(--muted);cursor:pointer}
+.empty{padding:50px 0;text-align:center;color:var(--muted)}
+.state{font-size:12px;color:var(--muted)}
+@media print{body{background:#fff;color:#000}.top,.tabs,.actions,.msg{display:none}.card{border:1px solid #000;break-inside:avoid;background:#fff;color:#000}.it small,.who span,.c-time,.tot{color:#333}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <form class="login" id="login" autocomplete="off">
+    <h1 style="margin:0">Caja MAFIA</h1>
+    <label>Clave de administrador<input id="pw" type="password" autocomplete="current-password" required></label>
+    <button class="primary" type="submit">Entrar</button>
+    <p class="msg" id="loginMsg" role="alert"></p>
+  </form>
+
+  <section id="app" hidden>
+    <div class="top">
+      <h1>Pedidos pagados</h1>
+      <div class="top-r">
+        <span class="state" id="sync" aria-live="polite"></span>
+        <button class="btn" id="sound" type="button" aria-pressed="false">🔔 Sonido: apagado</button>
+        <button class="btn" id="logout" type="button">Salir</button>
+      </div>
+    </div>
+    <div class="tabs" id="tabs" role="group" aria-label="Filtrar por estado"></div>
+    <p class="msg" id="msg" role="alert"></p>
+    <div class="grid" id="grid"></div>
+  </section>
+</main>
+<script>
+const FN = "/.netlify/functions/";
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt = n => "$" + new Intl.NumberFormat("es-CL").format(n);
+const STATES = ["nuevo", "preparacion", "listo", "entregado"];
+const LABEL = { nuevo:"Nuevos", preparacion:"En preparación", listo:"Listos", entregado:"Entregados" };
+const NEXT = { nuevo:["preparacion", "Pasar a En preparación", "prep"], preparacion:["listo", "Marcar Listo", ""], listo:["entregado", "Marcar Entregado", "done"] };
+let pw = "", orders = [], tab = "nuevo", seen = null, timer = null, soundOn = false, audio = null, fresh = new Set();
+try { pw = sessionStorage.getItem("mafia_caja_pw") || ""; } catch(e){}
+
+async function api(name, body){
+  const r = await fetch(FN + name, { method:"POST", cache:"no-store", headers:{ "Content-Type":"application/json" }, body:JSON.stringify({ password:pw, ...body }) });
+  const d = await r.json().catch(() => ({}));
+  if (!r.ok) throw Object.assign(new Error(d.error || "Error de conexión"), { status:r.status });
+  return d;
+}
+function beep(){
+  if (!soundOn) return;
+  try {
+    audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+    [880, 1175, 1480].forEach((f, i) => { const o = audio.createOscillator(), g = audio.createGain(); o.frequency.value = f; o.connect(g); g.connect(audio.destination);
+      const t = audio.currentTime + i * .18; g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.25, t + .02); g.gain.exponentialRampToValueAtTime(.0001, t + .16); o.start(t); o.stop(t + .17); });
+  } catch(e){}
+}
+async function load(first){
+  try {
+    const d = await api("orders-list", { days:3 });
+    const known = new Set(orders.map(o => o.reference));
+    orders = d.orders;
+    if (seen !== null){ const nw = orders.filter(o => !known.has(o.reference)); if (nw.length){ nw.forEach(o => fresh.add(o.reference)); beep(); } }
+    seen = true;
+    $("#sync").textContent = "Actualizado " + new Date().toLocaleTimeString("es-CL", { hour:"2-digit", minute:"2-digit", second:"2-digit" });
+    $("#msg").textContent = ""; draw();
+  } catch(e){
+    if (e.status === 401){ logout(); $("#loginMsg").textContent = "Clave incorrecta"; return; }
+    $("#msg").textContent = "Sin conexión, reintentando…"; $("#msg").className = "msg err";
+  }
+}
+function draw(){
+  $("#tabs").innerHTML = STATES.map(s => `<button class="tab" type="button" data-tab="${s}" aria-pressed="${tab === s}">${LABEL[s]}<i>${orders.filter(o => o.kitchen_status === s).length}</i></button>`).join("");
+  const list = orders.filter(o => o.kitchen_status === tab).sort((a, b) => tab === "entregado" ? b.paid_at.localeCompare(a.paid_at) : a.paid_at.localeCompare(b.paid_at));
+  $("#grid").innerHTML = list.length ? list.map(card).join("") : `<p class="empty">No hay pedidos en “${LABEL[tab]}”.</p>`;
+}
+function card(o){
+  const del = o.delivery_type === "delivery", c = o.customer || {}, nx = NEXT[o.kitchen_status];
+  const time = new Date(o.paid_at).toLocaleString("es-CL", { day:"numeric", month:"short", hour:"2-digit", minute:"2-digit" });
+  return `<article class="card${fresh.has(o.reference) ? " fresh" : ""}" data-ref="${esc(o.reference)}">
+    <div class="c-top"><div><div class="c-num">PEDIDO #${esc(o.short_code)}</div><div class="c-time">${esc(time)}</div></div><span class="paid">PAGADO ✓</span></div>
+    <div><span class="kind ${del ? "delivery" : ""}">${del ? "Delivery" : "Retiro en local"}</span></div>
+    <div class="who"><b>${esc(c.name)}</b>${c.phone ? `<a href="tel:${esc(c.phone)}">${esc(c.phone)}</a>` : ""}${c.email ? `<span>${esc(c.email)}</span>` : ""}${del ? `<span>📍 ${esc(o.address)}${c.unit ? " · " + esc(c.unit) : ""}</span>` : ""}</div>
+    <div class="items">${o.items.map(i => `<div class="it"><span class="q">${i.quantity}×</span><div><b>${esc(i.name)}</b>${i.detail && i.detail.length ? `<small>${i.detail.map(esc).join("<br>")}</small>` : ""}</div><span>${fmt(i.total_amount)}</span></div>`).join("")}</div>
+    ${c.notes ? `<div class="note"><b>Observaciones:</b> ${esc(c.notes)}</div>` : ""}
+    <div class="tot"><div><span>Subtotal</span><span>${fmt(o.subtotal)}</span></div>${del ? `<div><span>Delivery</span><span>${fmt(o.delivery_fee)}</span></div>` : ""}<div class="g"><span>Total pagado</span><span>${fmt(o.paid_total ?? o.total)}</span></div></div>
+    ${o.duplicate_payments.length ? `<div class="warn">⚠ Posible doble cobro en Mercado Pago (${o.duplicate_payments.map(esc).join(", ")}). Revisar y devolver si corresponde.</div>` : ""}
+    <div class="actions">${nx ? `<button class="adv ${nx[2]}" type="button" data-adv="${nx[0]}">${nx[1]}</button>` : ""}
+      ${o.kitchen_status !== "nuevo" ? `<button class="mini" type="button" data-adv="${STATES[STATES.indexOf(o.kitchen_status) - 1]}" aria-label="Volver al estado anterior">↩</button>` : ""}
+      <button class="mini" type="button" data-print aria-label="Imprimir pedido">🖨</button></div>
+  </article>`;
+}
+$("#tabs").addEventListener("click", e => { const b = e.target.closest("[data-tab]"); if (b){ tab = b.dataset.tab; draw(); } });
+$("#grid").addEventListener("click", async e => {
+  const art = e.target.closest("[data-ref]"); if (!art) return;
+  fresh.delete(art.dataset.ref);
+  if (e.target.closest("[data-print]")){ document.querySelectorAll(".card").forEach(c => c.hidden = c !== art); window.print(); document.querySelectorAll(".card").forEach(c => c.hidden = false); return; }
+  const b = e.target.closest("[data-adv]"); if (!b) return;
+  b.disabled = true;
+  try { await api("orders-update", { reference:art.dataset.ref, kitchen_status:b.dataset.adv }); const o = orders.find(x => x.reference === art.dataset.ref); if (o) o.kitchen_status = b.dataset.adv; draw(); }
+  catch(err){ $("#msg").textContent = err.message; $("#msg").className = "msg err"; b.disabled = false; }
+});
+function start(){ $("#login").hidden = true; $("#app").hidden = false; load(); clearInterval(timer); timer = setInterval(load, 8000); }
+function logout(){ pw = ""; try { sessionStorage.removeItem("mafia_caja_pw"); } catch(e){} clearInterval(timer); orders = []; seen = null; $("#app").hidden = true; $("#login").hidden = false; $("#pw").value = ""; }
+$("#login").addEventListener("submit", async e => {
+  e.preventDefault(); pw = $("#pw").value; $("#loginMsg").textContent = "Comprobando…";
+  try { await api("orders-list", { days:1 }); try { sessionStorage.setItem("mafia_caja_pw", pw); } catch(e){} $("#loginMsg").textContent = ""; start(); }
+  catch(err){ $("#loginMsg").textContent = err.status === 401 ? "Clave incorrecta" : err.message; pw = ""; }
+});
+$("#logout").addEventListener("click", logout);
+$("#sound").addEventListener("click", () => { soundOn = !soundOn; $("#sound").setAttribute("aria-pressed", soundOn); $("#sound").classList.toggle("on", soundOn); $("#sound").textContent = "🔔 Sonido: " + (soundOn ? "encendido" : "apagado"); if (soundOn) beep(); });
+document.addEventListener("visibilitychange", () => { if (!document.hidden && pw) load(); });
+if (pw) start();
+</script>
+</body>
+</html>
