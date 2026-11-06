@@ -1,6 +1,6 @@
 import { openStore } from "./_store.mjs";
 import { MENU, sauceId } from "./_menu.mjs";
-import { safeEqual } from "./_auth.mjs";
+import { roleOf } from "./_mafia-roles.mjs";
 
 const STORE = "mafia-menu";
 const KEY = "availability-v2";
@@ -11,7 +11,7 @@ const CATALOG = (() => {
   const add = x => { if (!seen.has(x.id)){ seen.add(x.id); list.push(x); } };
   for (const cat of MENU){
     for (const it of cat.items){
-      add({ id:it.id, name:it.name, category:cat.name, ...(it.options ? { options:it.options.map(o => o.label) } : {}) });
+      add({ id:it.id, name:it.name, category:cat.name, img:it.img || "", ...(it.options ? { options:it.options.map(o => o.label) } : {}) });
     }
   }
   for (const it of IDX_ALL()){
@@ -70,12 +70,13 @@ export default async (req) => {
   try { body = await req.json(); }
   catch { return response({error:"Solicitud inválida"},400); }
 
-  if (typeof body?.password !== "string" || !safeEqual(body.password, password)){
+  const role = roleOf(body?.password);
+  if (!role){
     return response({error:"Credencial incorrecta"},401);
   }
 
   if (body.action === "login"){
-    return response({ ...(await readState(store)), catalog:CATALOG });
+    return response({ ...(await readState(store)), catalog:CATALOG, role });
   }
 
   if (body.action === "set"){

@@ -1,11 +1,12 @@
 // Panel de caja: pedidos pagados recientes. Requiere la clave de administrador.
-import { json, readJson, checkAdmin } from "./_auth.mjs";
+import { json, readJson } from "./_auth.mjs";
+import { checkStaff } from "./_mafia-roles.mjs";
 import { listPaidOrders, KITCHEN_LABELS } from "./_mafia-orders.mjs";
 
 export default async (req) => {
   if (req.method !== "POST") return json({ error:"Método no permitido" }, 405);
   const body = await readJson(req);
-  const bad = checkAdmin(body); if (bad) return bad;
+  const bad = checkStaff(body); if (bad) return bad;
   const days = Math.min(Math.max(parseInt(body.days, 10) || 2, 1), 14);
   const orders = await listPaidOrders({ days });
   return json({ now:new Date().toISOString(), labels:KITCHEN_LABELS, orders:orders.map(o => ({
