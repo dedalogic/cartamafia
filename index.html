@@ -2565,12 +2565,11 @@ $("#mpWalletBtn").addEventListener("click", async () => {
   if (!PG || PG.busy) return;
   const btn = $("#mpWalletBtn"); PG.busy = true; btn.disabled = true; showPayError("");
   try {
-    try { PG.brick && PG.brick.unmount(); } catch(e){} PG.brick = null;
     const res = await fetch(FN + "mp-create-preference", {
       method:"POST", headers:{ "Content-Type":"application/json" },
       body:JSON.stringify({ items:Object.entries(cart).map(([key, qty]) => ({ key, qty })), delivery_type:PG.form.delivery_type, customer:PG.form.customer, reference:PG.reference, status_key:PG.status_key })
     });
-    const data = await res.json().catch(() => ({}));
+    const data = await res.json().catch(() => ({ error:"El servidor no respondió como se esperaba.", detail:"HTTP " + res.status }));
     if (data.reference){ PG.reference = data.reference; PG.status_key = data.status_key; PG.shortCode = data.short_code; lsSet(LS_PENDING, { reference:data.reference, key:data.status_key, at:Date.now(), wallet:1 }); }
     if (data.ok && data.paid){ PG.busy = false; return finishPaid(Date.now()); }
     if (!data.ok || !data.init_point){ PG.busy = false; btn.disabled = false; return showPayError((data.error || "No pudimos abrir Mercado Pago. Inténtalo de nuevo.") + (data.detail ? " (" + data.detail + ")" : "")); }
