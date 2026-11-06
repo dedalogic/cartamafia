@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>MAFIA · Pedidos</title>
+<link rel="icon" href="/favicon.png">
+<style>
+:root{--bg:#0d0c0b;--panel:#141311;--line:#262320;--text:#f3ede2;--muted:#9d968a;--amber:#e8ae2f;--green:#35b274;--red:#d4122f}
+*{box-sizing:border-box}
+html{background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100vh;background:var(--bg)}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+[hidden]{display:none!important}
+a{color:inherit}
+
+/* acceso */
+.login{max-width:340px;margin:18vh auto 0;padding:0 20px;display:grid;gap:14px}
+.login h1{margin:0 0 6px;font-size:22px;font-weight:600}
+.login input{width:100%;height:50px;border-radius:12px;border:1px solid var(--line);background:#fff;color:#111;padding:0 14px;font-size:16px}
+.login button{height:50px;border:0;border-radius:12px;background:var(--text);color:#141312;font-weight:700}
+.login p{margin:0;min-height:18px;font-size:13px;color:#ff8b9a}
+
+/* estructura */
+.app{display:grid;grid-template-columns:minmax(320px,400px) 1fr;min-height:100vh}
+.side{border-right:1px solid var(--line);display:flex;flex-direction:column;min-height:100vh}
+.bar{display:flex;align-items:center;justify-content:space-between;padding:16px 18px 8px}
+.bar h1{margin:0;font-size:18px;font-weight:600;letter-spacing:.01em}
+.icons{display:flex;gap:4px}
+.ib{height:40px;min-width:40px;padding:0 10px;border:0;background:none;border-radius:10px;color:var(--muted);font-size:13px}
+.ib[aria-pressed="true"]{color:var(--green)}
+.ib:hover{background:#1c1a17}
+.tabs{display:flex;gap:18px;padding:0 18px;border-bottom:1px solid var(--line);overflow-x:auto}
+.tab{flex:none;height:46px;border:0;background:none;color:var(--muted);font-size:14px;position:relative;padding:0}
+.tab[aria-pressed="true"]{color:var(--text);font-weight:600}
+.tab[aria-pressed="true"]:after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--text)}
+.tab i{font-style:normal;margin-left:5px;color:var(--muted);font-weight:400}
+.tab.hot i{color:var(--amber);font-weight:700}
+.alert{display:flex;align-items:center;gap:10px;margin:12px 18px 0;padding:12px 14px;border-radius:12px;background:#2a2010;color:#ffd98a;font-size:14px;font-weight:600}
+.alert .dot{width:9px;height:9px;border-radius:50%;background:var(--amber);animation:pulse 1s infinite}
+@keyframes pulse{50%{opacity:.25}}
+.enable{margin:12px 18px 0;height:44px;border:1px dashed #4a4439;border-radius:12px;background:none;color:var(--muted);font-size:13px}
+
+.list{flex:1;overflow-y:auto;padding:6px 0 30px}
+.row{display:grid;grid-template-columns:1fr auto;gap:2px 12px;width:100%;padding:14px 18px;border:0;border-bottom:1px solid var(--line);background:none;text-align:left}
+.row:hover{background:#171513}
+.row[aria-current="true"]{background:#1b1916}
+.row .n{font-size:17px;font-weight:700}
+.row .t{font-size:17px;font-weight:600;text-align:right}
+.row .s{font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .w{font-size:13px;color:var(--muted);text-align:right}
+.row.new .n:before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--amber);margin-right:9px;vertical-align:2px}
+.empty{padding:60px 20px;text-align:center;color:var(--muted);font-size:14px}
+
+.detail{padding:26px clamp(18px,4vw,48px) 60px;max-width:760px;width:100%}
+.none{display:grid;place-items:center;height:60vh;color:var(--muted);font-size:14px}
+.back{display:none;height:44px;margin:0 0 10px -10px;padding:0 10px;border:0;background:none;color:var(--muted);font-size:15px}
+.d-top{display:flex;justify-content:space-between;align-items:flex-start;gap:14px}
+.d-num{font-size:34px;font-weight:800;line-height:1}
+.d-time{margin-top:8px;color:var(--muted);font-size:14px}
+.paid{color:var(--green);font-size:14px;font-weight:600;white-space:nowrap;padding-top:6px}
+.block{margin-top:26px;padding-top:20px;border-top:1px solid var(--line)}
+.who{display:grid;gap:5px;font-size:15px}
+.who b{font-size:18px;font-weight:600}
+.who .m{color:var(--muted)}
+.who a{text-underline-offset:3px}
+.kind{margin-top:12px;font-size:15px}
+.kind b{font-weight:600}
+.items{display:grid;gap:16px}
+.it{display:grid;grid-template-columns:34px 1fr auto;gap:6px;align-items:baseline}
+.it .q{font-weight:700;font-size:17px}
+.it .nm{font-size:16px;font-weight:600}
+.it small{display:block;margin-top:3px;color:var(--muted);font-size:14px;line-height:1.45;font-weight:400}
+.it .p{color:var(--muted);font-size:15px}
+.note{margin-top:22px;padding:2px 0 2px 14px;border-left:3px solid var(--amber);font-size:15px;line-height:1.45}
+.note small{display:block;color:var(--amber);font-size:12px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
+.tot{display:grid;gap:6px;font-size:15px;color:var(--muted)}
+.tot div{display:flex;justify-content:space-between}
+.tot .g{color:var(--text);font-size:20px;font-weight:700;margin-top:4px}
+.go{display:block;width:100%;height:56px;margin-top:26px;border:0;border-radius:14px;background:var(--text);color:#141312;font-size:17px;font-weight:700}
+.go.accept{background:var(--amber);color:#2a1d00}
+.hint{margin:10px 0 0;text-align:center;color:var(--muted);font-size:13px}
+.links{display:flex;flex-wrap:wrap;gap:4px 20px;justify-content:center;margin-top:18px}
+.links a,.links button{height:44px;display:inline-flex;align-items:center;border:0;background:none;color:var(--muted);font-size:14px;text-decoration:none;padding:0}
+.links a:hover,.links button:hover{color:var(--text)}
+details{margin-top:22px;color:var(--muted);font-size:13px}
+details summary{cursor:pointer;min-height:36px;display:flex;align-items:center}
+details code{display:block;margin-top:6px;word-break:break-all;color:var(--text);font-size:12px}
+.warn{margin-top:20px;padding:12px 14px;border-radius:10px;background:#3a1218;color:#ffc9d0;font-size:14px}
+.msg{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:#3a1218;color:#ffc9d0;padding:10px 16px;border-radius:999px;font-size:13px}
+
+@media (max-width:860px){
+  .app{grid-template-columns:1fr}
+  .side{border-right:0}
+  .detail{display:none}
+  .app.open .side{display:none}
+  .app.open .detail{display:block;padding-top:12px}
+  .back{display:inline-flex;align-items:center}
+}
+@media print{body{background:#fff;color:#000}.side,.back,.go,.links,.hint,.msg,details{display:none!important}.app{display:block}.detail{display:block!important;color:#000}.d-time,.it small,.who .m,.tot,.it .p{color:#333}.block{border-color:#bbb}}
+</style>
+</head>
+<body>
+<main class="loginwrap" id="loginwrap"><form class="login" id="login" autocomplete="off">
+  <h1>Pedidos MAFIA</h1>
+  <input id="pw" type="password" autocomplete="current-password" placeholder="Clave" aria-label="Clave de administrador" required>
+  <button type="submit">Entrar</button>
+  <p id="loginMsg" role="alert"></p>
+</form></main>
+
+<div class="app" id="app" hidden>
+  <section class="side" aria-label="Lista de pedidos">
+    <div class="bar">
+      <h1>Pedidos</h1>
+      <div class="icons">
+        <button class="ib" id="sound" type="button" aria-pressed="false" aria-label="Alertas de sonido">🔔 Sonido</button>
+        <button class="ib" id="logout" type="button">Salir</button>
+      </div>
+    </div>
+    <div class="tabs" id="tabs"></div>
+    <div class="alert" id="alert" hidden><span class="dot"></span><span id="alertTxt"></span></div>
+    <button class="enable" id="enable" type="button" hidden>Toca para activar el sonido de alerta</button>
+    <div class="list" id="list"></div>
+  </section>
+  <main class="detail" id="detail" aria-live="polite"></main>
+</div>
+<div class="msg" id="msg" role="alert" hidden></div>
+
+<script>
+const FN = "/.netlify/functions/";
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt = n => "$" + new Intl.NumberFormat("es-CL").format(n);
+const hhmm = d => new Date(d).toLocaleTimeString("es-CL", { hour:"2-digit", minute:"2-digit" });
+const day = d => new Date(d).toLocaleDateString("es-CL", { day:"numeric", month:"short" });
+const STATES = ["nuevo", "preparacion", "listo", "entregado"];
+const TAB = { nuevo:"Nuevos", preparacion:"Preparación", listo:"Listos", entregado:"Entregados" };
+const NEXT = { nuevo:["preparacion", "Aceptar pedido", "accept"], preparacion:["listo", "Marcar listo"], listo:["entregado", "Marcar entregado"] };
+let pw = "", orders = [], tab = "nuevo", sel = null, timer = null, alarm = null, soundOn = false, ctx = null, lock = null, known = null, flash = null;
+try { pw = sessionStorage.getItem("mafia_caja_pw") || ""; } catch(e){}
+
+async function api(name, body){
+  const r = await fetch(FN + name, { method:"POST", cache:"no-store", headers:{ "Content-Type":"application/json" }, body:JSON.stringify({ password:pw, ...body }) });
+  const d = await r.json().catch(() => ({}));
+  if (!r.ok) throw Object.assign(new Error(d.error || "Sin conexión"), { status:r.status });
+  return d;
+}
+const toast = t => { const m = $("#msg"); m.textContent = t; m.hidden = !t; if (t) setTimeout(() => m.hidden = true, 3500); };
+
+/* ---- sonido y pantalla encendida ---- */
+function audioReady(){ try { ctx = ctx || new (window.AudioContext || window.webkitAudioContext)(); if (ctx.state === "suspended") ctx.resume(); return ctx.state !== "closed"; } catch(e){ return false; } }
+function ring(){
+  if (!soundOn || !audioReady()) return;
+  [880, 1175, 1480].forEach((f, i) => { const o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.value = f; o.connect(g); g.connect(ctx.destination);
+    const t = ctx.currentTime + i * .2; g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.3, t + .02); g.gain.exponentialRampToValueAtTime(.0001, t + .18); o.start(t); o.stop(t + .19); });
+}
+async function keepAwake(){ try { if (navigator.wakeLock && !lock) { lock = await navigator.wakeLock.request("screen"); lock.addEventListener("release", () => lock = null); } } catch(e){} }
+function setSound(on){ soundOn = on; if (on){ audioReady(); keepAwake(); } $("#sound").setAttribute("aria-pressed", on); $("#sound").textContent = on ? "🔔 Sonido activo" : "🔕 Sonido apagado"; $("#enable").hidden = on || !pw; syncAlarm(); }
+
+/* mientras haya pedidos sin aceptar: alerta visible, título parpadeando y sonido cada pocos segundos */
+function pending(){ return orders.filter(o => o.kitchen_status === "nuevo"); }
+function syncAlarm(){
+  const n = pending().length;
+  $("#alert").hidden = !n; $("#alertTxt").textContent = n === 1 ? "1 pedido por aceptar" : n + " pedidos por aceptar";
+  clearInterval(alarm); clearInterval(flash);
+  if (n){
+    if (soundOn){ ring(); alarm = setInterval(ring, 5000); }
+    let on = false; flash = setInterval(() => { on = !on; document.title = on ? `(${n}) ¡Pedido nuevo!` : "MAFIA · Pedidos"; }, 1000);
+  } else document.title = "MAFIA · Pedidos";
+}
+
+/* ---- datos ---- */
+async function load(){
+  try {
+    const d = await api("orders-list", { days:3 });
+    const prev = known; orders = d.orders;
+    const fresh = prev ? orders.filter(o => !prev.has(o.reference)) : [];
+    known = new Set(orders.map(o => o.reference));
+    if (fresh.length) tab = "nuevo";
+    draw(); syncAlarm();
+  } catch(e){
+    if (e.status === 401){ logout(); $("#loginMsg").textContent = "Clave incorrecta"; return; }
+    toast("Sin conexión, reintentando…");
+  }
+}
+const inTab = s => orders.filter(o => o.kitchen_status === s).sort((a, b) => s === "entregado" ? b.paid_at.localeCompare(a.paid_at) : a.paid_at.localeCompare(b.paid_at));
+
+function draw(){
+  $("#tabs").innerHTML = STATES.map(s => { const n = inTab(s).length; return `<button class="tab${s === "nuevo" && n ? " hot" : ""}" type="button" data-tab="${s}" aria-pressed="${tab === s}">${TAB[s]}<i>${n}</i></button>`; }).join("");
+  const list = inTab(tab);
+  $("#list").innerHTML = list.length ? list.map(o => `<button class="row${o.kitchen_status === "nuevo" ? " new" : ""}" type="button" data-ref="${esc(o.reference)}" aria-current="${sel === o.reference}">
+      <span class="n">#${esc(o.short_code)}</span><span class="t">${fmt(o.paid_total ?? o.total)}</span>
+      <span class="s">${esc(o.customer.name)} · ${o.delivery_type === "delivery" ? "Delivery" : "Retiro"}</span><span class="w">${hhmm(o.paid_at)}</span></button>`).join("") : `<p class="empty">Sin pedidos en “${TAB[tab]}”.</p>`;
+  drawDetail();
+}
+const waNum = p => { let d = String(p || "").replace(/\D/g, ""); if (d.length === 9 && d[0] === "9") d = "56" + d; return d; };
+
+function drawDetail(){
+  const o = orders.find(x => x.reference === sel), box = $("#detail"), app = $("#app");
+  if (!o){ app.classList.remove("open"); box.innerHTML = '<p class="none">Elige un pedido para ver el detalle</p>'; return; }
+  const c = o.customer || {}, del = o.delivery_type === "delivery", nx = NEXT[o.kitchen_status], prev = STATES[STATES.indexOf(o.kitchen_status) - 1];
+  const wa = waNum(c.phone);
+  box.innerHTML = `
+    <button class="back" id="back" type="button">← Pedidos</button>
+    <div class="d-top"><div><div class="d-num">#${esc(o.short_code)}</div><div class="d-time">${day(o.paid_at)} · ${hhmm(o.paid_at)}</div></div><div class="paid">✓ Pagado</div></div>
+    <div class="block who">
+      <b>${esc(c.name)}</b>
+      ${c.phone ? `<a href="tel:${esc(c.phone)}">${esc(c.phone)}</a>` : ""}
+      ${c.email ? `<span class="m">${esc(c.email)}</span>` : ""}
+      <div class="kind"><b>${del ? "Delivery" : "Retiro en local"}</b>${del ? `<br><span class="m">${esc(o.address)}${c.unit ? " · " + esc(c.unit) : ""}</span>` : ""}</div>
+    </div>
+    <div class="block"><div class="items">${o.items.map(i => `<div class="it"><span class="q">${i.quantity}×</span><div class="nm">${esc(i.name)}${i.detail && i.detail.length ? `<small>${i.detail.map(esc).join("<br>")}</small>` : ""}</div><span class="p">${fmt(i.total_amount)}</span></div>`).join("")}</div>
+      ${c.notes ? `<div class="note"><small>Observaciones</small>${esc(c.notes)}</div>` : ""}</div>
+    <div class="block tot"><div><span>Subtotal</span><span>${fmt(o.subtotal)}</span></div>${del ? `<div><span>Delivery</span><span>${fmt(o.delivery_fee)}</span></div>` : ""}<div class="g"><span>Total pagado</span><span>${fmt(o.paid_total ?? o.total)}</span></div></div>
+    ${o.duplicate_payments.length ? `<div class="warn">Posible doble cobro en Mercado Pago. Revisa y devuelve si corresponde.</div>` : ""}
+    ${nx ? `<button class="go ${nx[2] || ""}" id="go" type="button" data-to="${nx[0]}">${nx[1]}</button>` : ""}
+    ${o.kitchen_status === "nuevo" ? `<p class="hint">Ingrésalo en Fudo y luego acepta.</p>` : ""}
+    <div class="links">
+      ${c.phone ? `<a href="tel:${esc(c.phone)}">Llamar</a><a href="https://wa.me/${wa}" target="_blank" rel="noopener">WhatsApp</a>` : ""}
+      <button type="button" id="print">Imprimir</button>
+      ${prev ? `<button type="button" id="undo" data-to="${prev}">Volver a ${TAB[prev].toLowerCase()}</button>` : ""}
+    </div>
+    <details><summary>Datos de pago</summary><code>Pedido: ${esc(o.reference)}</code><code>Mercado Pago: ${esc(o.mp_order_id || "—")}</code>${o.accepted_at ? `<code>Aceptado: ${hhmm(o.accepted_at)}</code>` : ""}</details>`;
+  app.classList.add("open");
+}
+async function move(to){
+  const o = orders.find(x => x.reference === sel); if (!o) return;
+  try { await api("orders-update", { reference:o.reference, kitchen_status:to }); o.kitchen_status = to; if (to !== "nuevo" && !o.accepted_at) o.accepted_at = new Date().toISOString(); tab = to; sel = null; draw(); syncAlarm(); }
+  catch(e){ toast(e.message); }
+}
+$("#tabs").addEventListener("click", e => { const b = e.target.closest("[data-tab]"); if (b){ tab = b.dataset.tab; sel = null; draw(); } });
+$("#list").addEventListener("click", e => { const r = e.target.closest("[data-ref]"); if (r){ sel = r.dataset.ref; draw(); window.scrollTo(0, 0); } });
+$("#detail").addEventListener("click", e => {
+  if (e.target.closest("#back")){ sel = null; draw(); return; }
+  if (e.target.closest("#print")){ window.print(); return; }
+  const b = e.target.closest("[data-to]"); if (b) move(b.dataset.to);
+});
+$("#sound").addEventListener("click", () => setSound(!soundOn));
+$("#enable").addEventListener("click", () => setSound(true));
+
+function start(){ $("#loginwrap").hidden = true; $("#app").hidden = false; drawDetail(); load(); clearInterval(timer); timer = setInterval(load, 7000); }
+function logout(){ pw = ""; try { sessionStorage.removeItem("mafia_caja_pw"); } catch(e){} clearInterval(timer); clearInterval(alarm); clearInterval(flash); document.title = "MAFIA · Pedidos"; orders = []; known = null; sel = null; setSound(false); $("#app").hidden = true; $("#loginwrap").hidden = false; $("#pw").value = ""; $("#enable").hidden = true; }
+$("#login").addEventListener("submit", async e => {
+  e.preventDefault(); pw = $("#pw").value; $("#loginMsg").textContent = "";
+  audioReady();                                     /* el toque de "Entrar" permite activar el sonido */
+  try { await api("orders-list", { days:1 }); try { sessionStorage.setItem("mafia_caja_pw", pw); } catch(e){} start(); setSound(true); }
+  catch(err){ $("#loginMsg").textContent = err.status === 401 ? "Clave incorrecta" : err.message; pw = ""; }
+});
+$("#logout").addEventListener("click", logout);
+document.addEventListener("visibilitychange", () => { if (!document.hidden && pw){ load(); if (soundOn) keepAwake(); } });
+if (pw) { start(); $("#enable").hidden = false; }
+</script>
+</body>
+</html>

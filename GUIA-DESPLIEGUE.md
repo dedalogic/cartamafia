@@ -66,7 +66,7 @@ Después de cambiar variables hay que **volver a desplegar** el Preview.
 
 - Paso "Tus datos": solo **nombre, teléfono** y dirección (si es delivery). Depto e indicaciones quedan en un desplegable opcional.
 - El **correo** solo se pide si el cliente elige pagar con tarjeta, dentro de esa opción. Con la app de Mercado Pago no se pide.
-- Pantalla de pago: dos botones iguales con logo, **Mercado Pago** y **Visa / Mastercard**. El formulario de tarjeta aparece solo si se toca el segundo (logos en `assets/pay-mp.webp` y `assets/pay-cards.webp`).
+- Pantalla de pago: dos botones iguales con logo, **Mercado Pago** y **Visa / Mastercard**. El formulario de tarjeta aparece solo si se toca el segundo.
 
 ## 4c. Botón "Pagar con Mercado Pago" (cuenta o app)
 
@@ -75,7 +75,7 @@ Después de cambiar variables hay que **volver a desplegar** el Preview.
 - No necesita llaves nuevas: usa las mismas variables de Netlify.
 - **En Mercado Pago Developers → Webhooks** deben estar marcados **Order (Mercado Pago)** y **Pagos (legacy)**, con la URL `https://TU-SITIO/.netlify/functions/mp-webhook`.
 - Seguridad: el monto lo calcula el servidor; el pedido se marca pagado solo si el pago está `approved` + `accredited` y por el MISMO monto. Si el aviso tarda, la carta consulta directamente a Mercado Pago.
-- Medios excluidos: boleta/ticket, cajero y transferencia. Sin cuotas. El link de pago vence en 60 minutos.
+- Medios excluidos: boleta/ticket, cajero y transferencia. Sin cuotas.
 - Si Mercado Pago no devuelve al cliente a la carta, la URL base se puede fijar con la variable opcional `MAFIA_PUBLIC_URL` (ej. `https://mi-sitio.netlify.app`).
 - Para probar: usa un **comprador de prueba** (Developers → Cuentas de prueba) con saldo. Tu cuenta real y su Face ID no sirven en modo prueba.
 - Si dos pagos aprobados llegan para el mismo pedido, la caja lo deja registrado en `duplicate_payments` para revisarlo en Mercado Pago.

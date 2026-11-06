@@ -45,17 +45,25 @@ export default async (req) => {
   const order = await savePendingOrder({ cart, customer, delivery_type, delivery_fee:fee, address, existing });
 
   const origin = (process.env.MAFIA_PUBLIC_URL || new URL(req.url).origin).replace(/\/+$/, "");
-  const mp = await mpFetch("/checkout/preferences", { method:"POST", body:{
-    items:[{ id:order.reference, title:`Pedido MAFIA ${order.short_code}`, description:`Pedido MAFIA ${order.short_code}`, quantity:1, currency_id:"CLP", unit_price:Number(amountString(order.total)) }],
-    payer:{ ...(customer.email ? { email:customer.email } : {}), name:customer.name },
+  const minimal = {
+    items:[{ id:order.reference, title:`Pedido MAFIA ${order.short_code}`, quantity:1, currency_id:"CLP", unit_price:Number(amountString(order.total)) }],
     external_reference:order.reference,
     notification_url:`${origin}/.netlify/functions/mp-webhook`,
     back_urls:{ success:`${origin}/?mp=success`, failure:`${origin}/?mp=failure`, pending:`${origin}/?mp=pending` },
-    auto_return:"approved",
-    binary_mode:true,                                                    // solo aprobado o rechazado (sin pagos "pendientes")
+    auto_return:"approved"
+  };
+  // Versión completa; si Mercado Pago rechaza algún campo opcional, se reintenta con la mínima.
+  const full = { ...minimal,
+    payer:{ ...(customer.email ? { email:customer.email } : {}), name:customer.name },
+    binary_mode:true,
     payment_methods:{ installments:1, excluded_payment_types:[{ id:"ticket" }, { id:"atm" }, { id:"bank_transfer" }] },
     statement_descriptor:"MAFIA"
-  }});
+  };
+  let mp = await mpFetch("/checkout/preferences", { method:"POST", body:full });
+  if (!mp.ok && mp.status >= 400 && mp.status < 500 && mp.status !== 401 && mp.status !== 403){
+    console.error("MP preference (completa) rechazada", mp.status, JSON.stringify(mp.data)?.slice(0, 600));
+    mp = await mpFetch("/checkout/preferences", { method:"POST", body:minimal });
+  }
 
   const out = { reference:order.reference, short_code:order.short_code, status_key:order.status_key, total:order.total };
   if (!mp.ok || !mp.data?.id || !mp.data?.init_point){
