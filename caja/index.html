@@ -243,7 +243,6 @@ function drawDetail(){
     ${o.kitchen_status === "nuevo" ? `<p class="hint">Ingrésalo en Fudo y luego acepta.</p>` : ""}
     <div class="links">
       ${c.phone ? `<a href="tel:${esc(c.phone)}">Llamar</a>` : ""}
-      <button type="button" id="print">Imprimir</button>
       ${prev ? `<button type="button" id="undo" data-to="${prev}">Volver a ${TAB[prev].toLowerCase()}</button>` : ""}
     </div>
     ${c.phone && o.kitchen_status !== "nuevo" ? `<div class="wmsg"><h3>Mensaje para el cliente</h3>${msgOpen === o.reference
@@ -261,7 +260,6 @@ $("#tabs").addEventListener("click", e => { const b = e.target.closest("[data-ta
 $("#list").addEventListener("click", e => { const r = e.target.closest("[data-ref]"); if (r){ sel = r.dataset.ref; draw(); window.scrollTo(0, 0); } });
 $("#detail").addEventListener("click", e => {
   if (e.target.closest("#back")){ sel = null; draw(); return; }
-  if (e.target.closest("#print")){ window.print(); return; }
   if (e.target.closest("#wgen")){ msgOpen = sel; drawDetail(); return; }
   if (e.target.closest("#wcopy")){ copyText($("#wtext").value).then(ok => toast(ok ? "Mensaje copiado" : "No se pudo copiar: selecciónalo y usa Ctrl+C")); return; }
   const wp = e.target.closest("#wphone"); if (wp){ copyText(wp.dataset.phone).then(ok => toast(ok ? "Teléfono copiado" : "No se pudo copiar")); return; }
