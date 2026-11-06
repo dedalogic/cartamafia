@@ -7,13 +7,14 @@ import { computeDeliveryFee } from "./_mafia-delivery.mjs";
 import { getOrderByReference, savePendingOrder, statusKeyOk, publicOrderView } from "./_mafia-orders.mjs";
 import { recordPreference } from "./_mafia-pay.mjs";
 import { mpEnabled, mpConfigured, mpFetch, amountString } from "./_mp.mjs";
+import { readPaySwitch } from "./_mafia-switch.mjs";
 
 const EMAIL = /^[^\s@]{1,64}@[^\s@]{1,190}\.[^\s@]{2,}$/;
 const clean = (v, max) => String(v ?? "").replace(/[\u0000-\u001f\u007f]/g, " ").trim().slice(0, max);
 
 export default async (req) => {
   if (req.method !== "POST") return json({ error:"Método no permitido" }, 405);
-  if (!mpEnabled() || !mpConfigured()) return json({ error:"El pago online no está disponible por ahora." }, 403);
+  if (!mpEnabled() || !mpConfigured() || !(await readPaySwitch())) return json({ error:"El pago online no está disponible por ahora." }, 403);
   const body = await readJson(req);
   if (!body) return json({ error:"Solicitud inválida" }, 400);
 

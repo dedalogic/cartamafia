@@ -2,10 +2,11 @@
 // La clave pública no es secreta; el Access Token nunca sale del servidor.
 import { json } from "./_auth.mjs";
 import { mpEnabled, mpConfigured } from "./_mp.mjs";
+import { readPaySwitch } from "./_mafia-switch.mjs";
 import { deliveryFlatFee } from "./_mafia-delivery.mjs";
 
 export default async () => {
-  const enabled = mpEnabled() && mpConfigured() && !!process.env.MERCADOPAGO_PUBLIC_KEY;
+  const enabled = mpEnabled() && mpConfigured() && !!process.env.MERCADOPAGO_PUBLIC_KEY && (await readPaySwitch());
   const fee = deliveryFlatFee();
   return json({
     enabled,
