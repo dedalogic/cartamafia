@@ -81,6 +81,14 @@ a{color:inherit}
 .tot .g{color:var(--text);font-size:20px;font-weight:700;margin-top:4px}
 .go{display:block;width:100%;height:56px;margin-top:26px;border:0;border-radius:14px;background:var(--text);color:#141312;font-size:17px;font-weight:700}
 .go.accept{background:var(--amber);color:#2a1d00}
+.wmsg{margin-top:26px;padding-top:20px;border-top:1px solid var(--line)}
+.wmsg h3{margin:0 0 10px;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.wbtn{display:block;width:100%;height:50px;border:2px solid var(--text);border-radius:14px;background:none;color:var(--text);font-size:16px;font-weight:600;cursor:pointer}
+.wbox textarea{display:block;width:100%;min-height:270px;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--text);font:inherit;font-size:15px;line-height:1.5;resize:vertical}
+.wrow{display:flex;gap:10px;margin-top:10px}
+.wrow button{flex:1;height:50px;border:0;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer}
+.wcopy{background:var(--green);color:#04170d}
+.wphone{background:#2a2622;color:var(--text);font-weight:600!important}
 .hint{margin:10px 0 0;text-align:center;color:var(--muted);font-size:13px}
 .links{display:flex;flex-wrap:wrap;gap:4px 20px;justify-content:center;margin-top:18px}
 .links a,.links button{height:44px;display:inline-flex;align-items:center;border:0;background:none;color:var(--muted);font-size:14px;text-decoration:none;padding:0}
@@ -197,6 +205,22 @@ function draw(){
 }
 const waNum = p => { let d = String(p || "").replace(/\D/g, ""); if (d.length === 9 && d[0] === "9") d = "56" + d; return d; };
 
+let msgOpen = null;                                  /* referencia del pedido con el mensaje abierto */
+function clientMsg(o){
+  const c = o.customer || {}, del = o.delivery_type === "delivery", st = o.kitchen_status, name = (c.name || "").trim().split(/\s+/)[0] || "";
+  const items = o.items.map(i => `• ${i.quantity}× ${i.name}${i.detail && i.detail.length ? " (" + i.detail.join(", ") + ")" : ""}`).join("\n");
+  const resumen = `Pedido #${o.short_code}\n${items}\nTotal pagado: ${fmt(o.paid_total ?? o.total)}`;
+  const hola = `Hola ${name}, `;
+  if (st === "entregado") return `${hola}confirmamos la entrega de tu pedido #${o.short_code}. ¡Gracias por pedir en MAFIA! Si hubo algún problema con tu pedido, respóndenos por aquí y lo resolvemos.`;
+  if (st === "listo") return del
+    ? `${hola}tu pedido está listo y acaba de salir del local hacia ${o.address}${c.unit ? " (" + c.unit + ")" : ""}.\n\n${resumen}\n\nPor favor confírmanos por este mismo chat cuando lo recibas. ¡Gracias por pedir en MAFIA!`
+    : `${hola}tu pedido está listo para retirar en el local.\n\n${resumen}\n\nTe esperamos. ¡Gracias por pedir en MAFIA!`;
+  return `${hola}recibimos tu pedido y ya lo estamos preparando.\n\n${resumen}\n\nTe avisamos por aquí apenas ${del ? "salga del local" : "esté listo para retirar"}. ¡Gracias por pedir en MAFIA!`;
+}
+async function copyText(t){
+  try { await navigator.clipboard.writeText(t); return true; }
+  catch(e){ const ta = document.createElement("textarea"); ta.value = t; ta.style.position = "fixed"; ta.style.opacity = "0"; document.body.appendChild(ta); ta.select(); let ok = false; try { ok = document.execCommand("copy"); } catch(_){} ta.remove(); return ok; }
+}
 function drawDetail(){
   const o = orders.find(x => x.reference === sel), box = $("#detail"), app = $("#app");
   if (!o){ app.classList.remove("open"); box.innerHTML = '<p class="none">Elige un pedido para ver el detalle</p>'; return; }
@@ -218,23 +242,27 @@ function drawDetail(){
     ${nx ? `<button class="go ${nx[2] || ""}" id="go" type="button" data-to="${nx[0]}">${nx[1]}</button>` : ""}
     ${o.kitchen_status === "nuevo" ? `<p class="hint">Ingrésalo en Fudo y luego acepta.</p>` : ""}
     <div class="links">
-      ${c.phone ? `<a href="tel:${esc(c.phone)}">Llamar</a><a href="https://wa.me/${wa}" target="_blank" rel="noopener">WhatsApp</a>` : ""}
-      <button type="button" id="print">Imprimir</button>
+      ${c.phone ? `<a href="tel:${esc(c.phone)}">Llamar</a>` : ""}
       ${prev ? `<button type="button" id="undo" data-to="${prev}">Volver a ${TAB[prev].toLowerCase()}</button>` : ""}
     </div>
+    ${c.phone && o.kitchen_status !== "nuevo" ? `<div class="wmsg"><h3>Mensaje para el cliente</h3>${msgOpen === o.reference
+      ? `<div class="wbox"><textarea id="wtext" aria-label="Mensaje para el cliente">${esc(clientMsg(o))}</textarea><div class="wrow"><button type="button" class="wcopy" id="wcopy">Copiar mensaje</button><button type="button" class="wphone" id="wphone" data-phone="${esc(waNum(c.phone))}">Copiar teléfono</button></div><p class="hint">Pégalo en WhatsApp. Puedes editarlo antes de copiar.</p></div>`
+      : `<button type="button" class="wbtn" id="wgen">Crear mensaje de WhatsApp</button>`}</div>` : ""}
     <details><summary>Datos de pago</summary><code>Pedido: ${esc(o.reference)}</code><code>Mercado Pago: ${esc(o.mp_order_id || "—")}</code>${o.accepted_at ? `<code>Aceptado: ${hhmm(o.accepted_at)}</code>` : ""}</details>`;
   app.classList.add("open");
 }
 async function move(to){
   const o = orders.find(x => x.reference === sel); if (!o) return;
-  try { await api("orders-update", { reference:o.reference, kitchen_status:to }); o.kitchen_status = to; if (to !== "nuevo" && !o.accepted_at) o.accepted_at = new Date().toISOString(); tab = to; sel = null; draw(); syncAlarm(); }
+  try { await api("orders-update", { reference:o.reference, kitchen_status:to }); o.kitchen_status = to; if (to !== "nuevo" && !o.accepted_at) o.accepted_at = new Date().toISOString(); tab = to; if (to === "listo" || to === "entregado"){ msgOpen = o.reference; } else { sel = null; } draw(); syncAlarm(); }
   catch(e){ toast(e.message); }
 }
 $("#tabs").addEventListener("click", e => { const b = e.target.closest("[data-tab]"); if (b){ tab = b.dataset.tab; sel = null; draw(); } });
 $("#list").addEventListener("click", e => { const r = e.target.closest("[data-ref]"); if (r){ sel = r.dataset.ref; draw(); window.scrollTo(0, 0); } });
 $("#detail").addEventListener("click", e => {
   if (e.target.closest("#back")){ sel = null; draw(); return; }
-  if (e.target.closest("#print")){ window.print(); return; }
+  if (e.target.closest("#wgen")){ msgOpen = sel; drawDetail(); return; }
+  if (e.target.closest("#wcopy")){ copyText($("#wtext").value).then(ok => toast(ok ? "Mensaje copiado" : "No se pudo copiar: selecciónalo y usa Ctrl+C")); return; }
+  const wp = e.target.closest("#wphone"); if (wp){ copyText(wp.dataset.phone).then(ok => toast(ok ? "Teléfono copiado" : "No se pudo copiar")); return; }
   const b = e.target.closest("[data-to]"); if (b) move(b.dataset.to);
 });
 $("#sound").addEventListener("click", () => setSound(!soundOn));
