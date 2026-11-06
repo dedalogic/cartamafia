@@ -3,5 +3,9 @@
   "private": true,
   "dependencies": {
     "@netlify/blobs": "^11.1.1"
+  },
+  "scripts": {
+    "test": "node --test test/backend.test.mjs",
+    "demo": "node test/dev-server.mjs"
   }
 }

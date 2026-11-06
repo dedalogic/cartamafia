@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-mafia-cards="street-style">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Carta · MAFIA</title>
 <meta name="description" content="Carta digital de MAFIA. Pizzas, pastas, proteínas y combos.">
-<meta name="theme-color" content="#0c0c0c">
+<meta name="theme-color" content="#A82A25">
 <link rel="icon" type="image/png" href="/favicon.png?v=mafia-20261003-2">
 <link rel="shortcut icon" type="image/png" href="/favicon.png?v=mafia-20261003-2">
 <link rel="apple-touch-icon" href="/favicon.png?v=mafia-20261003-2">
-<link rel="preload" href="Pesto%20Mafio.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="preload" href="/fonts/PestoMafio.ttf" as="font" type="font/ttf" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
@@ -24,7 +24,7 @@
     })
 </script>
 <style>
-@font-face{font-family:"Pesto Mafio";src:url("./Pesto Mafio.ttf") format("truetype");font-style:normal;font-weight:400;font-display:block}
+@font-face{font-family:"Pesto Mafio";src:url("/fonts/PestoMafio.ttf") format("truetype");font-style:normal;font-weight:400;font-display:block}
 :root{
   --bg:#0c0c0c; --surface:#161514; --line:#2a2826;
   --text:#f3ede2; --muted:#a39d92;
@@ -435,73 +435,572 @@ html[data-layout="grid"][data-desc="none"] .cat:not(.compact) .hd{min-height:28p
 .admin-actions{display:flex;justify-content:flex-end;margin-top:14px}.admin-logout{min-height:44px;padding:0 12px;border:1px solid var(--line);border-radius:var(--r);background:none;color:var(--muted)}
 
 
-/* ---------- Mercado Pago TEST (solo se activa por variable de entorno en Netlify) ---------- */
-.mp-test-pill{display:inline-flex;align-items:center;gap:6px;min-height:28px;padding:0 9px;border:1px solid #5b533f;border-radius:999px;background:#2b2618;color:#ffe580;font-size:11px;font-weight:700;letter-spacing:.05em}
-.mp-test-step{padding:0 20px 24px;overflow-y:auto;flex:1 1 auto}
-.mp-test-card{margin:0 0 12px;padding:14px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
-.mp-test-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}.mp-test-title b{font-size:14px}.mp-test-title small{color:var(--muted)}
-.mp-test-total{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:12px}.mp-test-total span{color:var(--muted);font-size:13px}.mp-test-total b{font-size:22px}
-.mp-test-note{margin:8px 0 0;color:var(--muted);font-size:11px;line-height:1.45}
-.mp-test-error{margin:10px 0 0;color:#ff8a8a;font-size:12px;line-height:1.45}.mp-test-error:empty{display:none}
-.mp-test-back{width:100%;min-height:46px;margin-top:10px;border:1px solid var(--line);border-radius:var(--r);background:none;color:var(--text);font-weight:600}
-.mp-test-success{text-align:center;padding:24px 10px}.mp-test-check{display:grid;place-items:center;width:58px;height:58px;margin:0 auto 12px;border-radius:50%;background:#2f9e62;color:#fff;font-size:30px}.mp-test-success h3{font:400 26px/1.05 var(--serif);margin-bottom:6px}.mp-test-success p{color:var(--muted);font-size:13px}.mp-test-order{margin-top:14px;padding:12px;border:1px solid var(--line);border-radius:var(--r);text-align:left;font-size:12px}.mp-test-order div{display:flex;justify-content:space-between;gap:10px;padding:3px 0}.mp-test-order span{color:var(--muted)}
+/* === PREVIEW: tarjetas estilo Street Flags, identidad MAFIA === */
+html[data-mafia-cards="street-style"] .cat:not(.compact) .list{
+  grid-template-columns:1fr;gap:14px;margin-top:18px
+}
+@media(min-width:820px){
+  html[data-mafia-cards="street-style"] .cat:not(.compact) .list{
+    grid-template-columns:repeat(2,minmax(0,1fr));gap:16px
+  }
+}
+html[data-mafia-cards="street-style"] .cat:not(.compact) .item{
+  display:grid;grid-template-columns:clamp(118px,34vw,158px) minmax(0,1fr);
+  grid-template-rows:auto 1fr;gap:8px 16px;align-items:start;
+  min-height:178px;padding:14px;border:1px solid var(--line);border-radius:20px;
+  background:var(--surface);box-shadow:0 10px 28px rgba(0,0,0,.18)
+}
+html[data-mafia-cards="street-style"] .cat:not(.compact) .item:last-child{
+  border-bottom:1px solid var(--line)
+}
+html[data-mafia-cards="street-style"] .cat:not(.compact) .hd{
+  grid-column:2;grid-row:1;gap:7px;min-width:0
+}
+html[data-mafia-cards="street-style"] .cat:not(.compact) .hd h3{
+  font:400 23px/1.03 var(--serif);letter-spacing:.02em;color:var(--text)
+}
+html[data-mafia-cards="street-style"] .cat:not(.compact) .desc{
+  max-width:none;color:var(--muted);font-size:13.5px;line-height:1.45;
+  display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden
+}
+html[data-mafia-cards="street-style"] .cat:not(.compact) .media{
+  grid-column:1;grid-row:1 / span 2;width:100%;height:auto;min-height:150px;
+  align-self:stretch;overflow:hidden;border-radius:16px;background:#100f0e;
+  box-shadow:0 7px 20px rgba(0,0,0,.28)
+}
+html[data-mafia-cards="street-style"] .cat:not(.compact) .media .zoom{
+  position:absolute;inset:0;width:100%;height:100%;overflow:hidden;border-radius:16px
+}
+html[data-mafia-cards="street-style"] .cat:not(.compact) .media img{
+  position:absolute;inset:0;width:100%;height:100%;border-radius:16px;
+  object-fit:cover;object-position:center;transition:transform .28s ease
+}
+@media(hover:hover){
+  html[data-mafia-cards="street-style"] .cat:not(.compact) .media:hover img{
+    transform:scale(1.025)
+  }
+}
+html[data-mafia-cards="street-style"] .cat:not(.compact) .row2{
+  grid-column:2;grid-row:2;align-self:end;justify-content:flex-start;
+  gap:8px;margin-top:7px;min-height:40px
+}
+html[data-mafia-cards="street-style"] .cat:not(.compact) .act{margin-left:0;width:auto}
+html[data-mafia-cards="street-style"] .cat:not(.compact) .add{
+  width:auto;min-width:112px;min-height:42px;padding:0 18px;border-radius:12px;
+  box-shadow:0 7px 16px rgba(0,0,0,.22)
+}
+html[data-mafia-cards="street-style"] .cat:not(.compact) .stp{
+  width:124px;height:42px;border-radius:12px
+}
+html[data-mafia-cards="street-style"] .cat:not(.compact) .fmt{
+  display:inline-flex;width:auto;gap:3px;padding:3px;border:1px solid var(--line);
+  border-radius:12px;background:#0f0e0d
+}
+html[data-mafia-cards="street-style"] .cat:not(.compact) .fmt button{
+  min-height:34px;min-width:54px;padding:0 10px;border:0;border-radius:9px;
+  color:var(--muted);font-size:12.5px;font-weight:700
+}
+html[data-mafia-cards="street-style"] .cat:not(.compact) .fmt button[aria-pressed="true"]{
+  background:var(--red);color:#fff
+}
+html[data-mafia-cards="street-style"] .cat:not(.compact) .item:has(.pick),
+html[data-mafia-cards="street-style"] .cat:not(.compact) .item:has(.fmt){
+  grid-template-rows:auto auto auto
+}
+html[data-mafia-cards="street-style"] .cat:not(.compact) .item:has(.pick) .media,
+html[data-mafia-cards="street-style"] .cat:not(.compact) .item:has(.fmt) .media{
+  grid-row:1 / span 3
+}
+html[data-mafia-cards="street-style"] .cat:not(.compact) .item:has(.pick) .pick{
+  grid-column:2;grid-row:2;margin-top:4px
+}
+html[data-mafia-cards="street-style"] .cat:not(.compact) .item:has(.pick) .row2,
+html[data-mafia-cards="street-style"] .cat:not(.compact) .item:has(.fmt) .row2{
+  grid-column:2;grid-row:3
+}
+html[data-mafia-cards="street-style"] .cat:not(.compact) .item:has(.fmt):not(:has(.pick)) .row2{
+  grid-row:2 / span 2;flex-direction:row;flex-wrap:wrap;align-items:center
+}
+
+/* ficha de producto */
+html[data-mafia-cards="street-style"] .lb{
+  background:rgba(0,0,0,.70);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);padding:16px
+}
+html[data-mafia-cards="street-style"] .pd{
+  position:relative;width:min(440px,100%);max-height:calc(100dvh - 32px);
+  overflow-y:auto;background:var(--surface);border:1px solid var(--line);
+  border-radius:26px;box-shadow:0 24px 70px rgba(0,0,0,.58);
+  animation:mafiaPdIn .38s cubic-bezier(.2,1.1,.4,1) both
+}
+@keyframes mafiaPdIn{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:none}}
+html[data-mafia-cards="street-style"] .pd-x{
+  position:sticky;top:14px;z-index:5;display:grid;place-items:center;width:44px;height:44px;
+  margin:14px 0 -58px 14px;padding:0;border:1px solid rgba(255,255,255,.14);
+  border-radius:50%;background:rgba(12,12,12,.72);backdrop-filter:blur(8px);color:#fff;font-size:18px
+}
+html[data-mafia-cards="street-style"] .pd-ph{
+  position:relative;width:100%;aspect-ratio:1/1;max-height:54dvh;overflow:hidden;background:#0c0c0c
+}
+html[data-mafia-cards="street-style"] .pd-ph img{display:block;width:100%;height:100%;object-fit:cover}
+html[data-mafia-cards="street-style"] .pd-ph::after{
+  content:"";position:absolute;inset:0;background:linear-gradient(to bottom,rgba(22,21,20,0) 58%,var(--surface) 100%)
+}
+html[data-mafia-cards="street-style"] .pd-body{
+  position:relative;z-index:2;margin-top:-36px;padding:0 22px 24px;display:grid;gap:10px
+}
+html[data-mafia-cards="street-style"] .pd-cat{
+  font-style:normal;font:400 13px/1 var(--serif);letter-spacing:.13em;text-transform:uppercase;color:var(--red-hi)
+}
+html[data-mafia-cards="street-style"] .pd-body h3{
+  margin:0;font:400 34px/1.02 var(--serif);letter-spacing:.01em;color:var(--text)
+}
+html[data-mafia-cards="street-style"] .pd-d{margin:0;color:var(--muted);font-size:15px;line-height:1.5}
+html[data-mafia-cards="street-style"] .pd-row{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:9px
+}
+html[data-mafia-cards="street-style"] .pd-pr{color:var(--text);font:700 25px/1 var(--sans)}
+html[data-mafia-cards="street-style"] .pd-add{
+  width:auto;min-width:150px;min-height:48px;padding:0 22px;border-radius:13px;font-size:15px
+}
+@media(max-width:520px){
+  html[data-mafia-cards="street-style"] .cat:not(.compact) .item{
+    grid-template-columns:120px minmax(0,1fr);min-height:164px;gap:7px 13px;padding:12px;border-radius:18px
+  }
+  html[data-mafia-cards="street-style"] .cat:not(.compact) .hd h3{font-size:21px}
+  html[data-mafia-cards="street-style"] .cat:not(.compact) .desc{font-size:12.5px;-webkit-line-clamp:3}
+  html[data-mafia-cards="street-style"] .cat:not(.compact) .fmt button{
+    min-width:47px;padding:0 7px;font-size:11.5px
+  }
+}
 
 
-/* ---------- Mercado Pago TEST v3: transición de pago clara ---------- */
-.mp-test-card{position:relative}
-.mp-test-processing{
-  min-height:360px;display:grid;place-items:center;text-align:center;padding:34px 18px
+/* === v2 · tarjetas amplias + banner + popup === */
+html[data-mafia-cards="street-style"] #menu .cat:not(.compact) .list{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  gap:16px!important;
 }
-.mp-test-processing-inner{display:grid;justify-items:center;gap:14px;max-width:300px}
-.mp-test-spinner{
-  width:54px;height:54px;border-radius:50%;
-  border:4px solid #342f2b;border-top-color:var(--red);
-  animation:mpSpin .8s linear infinite
+@media(min-width:780px){
+  html[data-mafia-cards="street-style"] #menu .cat:not(.compact) .list{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
 }
-@keyframes mpSpin{to{transform:rotate(360deg)}}
-.mp-test-processing h3{font:400 27px/1.08 var(--serif);margin:0}
-.mp-test-processing p{margin:0;color:var(--muted);font-size:13px;line-height:1.45}
-.mp-test-processing .mp-test-amount{font-size:22px;font-weight:700;color:var(--text)}
-.mp-test-success{
-  min-height:420px;display:grid;align-content:center;text-align:center;padding:34px 18px
+html[data-mafia-cards="street-style"] #menu #combos .item h3,
+html[data-mafia-cards="street-style"] #menu .cat:not(.compact) .item h3{
+  white-space:normal!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+  overflow-wrap:normal!important;
+  word-break:normal!important;
 }
-.mp-test-check{
-  width:74px;height:74px;margin:0 auto 16px;font-size:38px;
-  box-shadow:0 0 0 8px rgba(47,158,98,.10)
+html[data-mafia-cards="street-style"] #menu #combos .desc,
+html[data-mafia-cards="street-style"] #menu .cat:not(.compact) .desc{
+  display:block!important;
+  -webkit-line-clamp:unset!important;
+  overflow:visible!important;
 }
-.mp-test-success h3{font:400 30px/1.05 var(--serif);margin:0 0 8px}
-.mp-test-success p{max-width:32ch;margin:0 auto;color:var(--muted);font-size:14px;line-height:1.45}
-.mp-test-order{margin-top:20px}
-.mp-test-primary{
-  width:100%;min-height:50px;margin-top:14px;border:0;border-radius:var(--r);
-  background:var(--red);color:#fff;font-weight:700
+html[data-mafia-cards="street-style"] #menu .cat:not(.compact) .item{
+  min-width:0!important;
+  width:100%!important;
 }
-.mp-test-primary:hover{background:var(--red-hi)}
-.mp-test-result-note{
-  margin-top:12px!important;font-size:12px!important;color:var(--muted)!important
+html[data-mafia-cards="street-style"] #menu .cat:not(.compact) .hd{
+  min-width:0!important;
+}
+@media(min-width:1040px){
+  html[data-mafia-cards="street-style"] #menu .cat:not(.compact) .item{
+    grid-template-columns:176px minmax(0,1fr)!important;
+    min-height:208px!important;
+    padding:16px!important;
+    gap:10px 18px!important;
+  }
+}
+@media(max-width:560px){
+  html[data-mafia-cards="street-style"] #menu .cat:not(.compact) .item{
+    grid-template-columns:122px minmax(0,1fr)!important;
+  }
+}
+
+/* Banner / carrusel */
+.mafia-hero{
+  width:min(1160px,calc(100% - 32px));
+  margin:0 auto 18px;
+  position:relative;
+}
+.mafia-slider{
+  position:relative;
+  overflow:hidden;
+  border:1px solid var(--line);
+  border-radius:20px;
+  background:var(--surface);
+  box-shadow:0 14px 38px rgba(0,0,0,.28);
+}
+.mafia-track{
+  display:flex;
+  overflow-x:auto;
+  scroll-snap-type:x mandatory;
+  scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;
+}
+.mafia-track::-webkit-scrollbar{display:none}
+.mafia-slide{
+  position:relative;
+  flex:0 0 100%;
+  aspect-ratio:2.55/1;
+  min-height:150px;
+  scroll-snap-align:start;
+  overflow:hidden;
+  background:#151412;
+}
+.mafia-slide img{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;
+}
+.mafia-slide::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(90deg,rgba(0,0,0,.56),rgba(0,0,0,.08) 62%,rgba(0,0,0,.04));
+}
+.mafia-slide-copy{
+  position:absolute;left:clamp(18px,4vw,42px);top:50%;z-index:2;
+  transform:translateY(-50%);max-width:54%;
+}
+.mafia-slide-kicker{
+  display:block;margin-bottom:5px;color:#fff;font:400 14px/1 var(--serif);
+  letter-spacing:.12em;text-transform:uppercase;opacity:.88
+}
+.mafia-slide-title{
+  display:block;color:#fff;font:400 clamp(30px,5vw,58px)/.92 var(--serif);
+  text-shadow:0 2px 16px rgba(0,0,0,.35)
+}
+.mafia-slide-sub{
+  display:block;margin-top:9px;color:rgba(255,255,255,.86);font-size:13px;line-height:1.35
+}
+.mafia-dots{
+  display:flex;justify-content:center;gap:6px;margin-top:9px
+}
+.mafia-dots button{
+  width:8px;height:8px;padding:0;border:0;border-radius:99px;background:#4b4742;
+  transition:width .2s,background .2s
+}
+.mafia-dots button.on{width:24px;background:var(--red)}
+.mafia-arr{
+  position:absolute;top:50%;z-index:3;transform:translateY(-50%);
+  width:42px;height:42px;padding:0;border:1px solid rgba(255,255,255,.15);
+  border-radius:50%;background:rgba(12,12,12,.68);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-family:Arial,sans-serif;font-size:0;line-height:1;
+  backdrop-filter:blur(7px)
+}
+.mafia-arr::before{
+  content:"";display:block;width:10px;height:10px;
+  border-top:2.5px solid currentColor;border-right:2.5px solid currentColor;
+}
+.mafia-arr.prev::before{transform:translateX(2px) rotate(-135deg)}
+.mafia-arr.next::before{transform:translateX(-2px) rotate(45deg)}
+.mafia-arr.prev{left:10px}.mafia-arr.next{right:10px}
+@media(max-width:640px){
+  .mafia-hero{width:calc(100% - 24px);margin-bottom:8px}
+  .mafia-slide{aspect-ratio:1.75/1;min-height:190px}
+  .mafia-slide-copy{max-width:62%;left:18px}
+  .mafia-slide-title{font-size:34px}
+  .mafia-arr{display:none}
+}
+
+/* Popup promocional */
+.mafia-pop{
+  position:fixed;inset:0;z-index:180;display:grid;place-items:center;padding:18px;
+  background:rgba(0,0,0,.66);-webkit-backdrop-filter:blur(9px);backdrop-filter:blur(9px);
+  opacity:0;pointer-events:none;transition:opacity .25s ease
+}
+.mafia-pop.on{opacity:1;pointer-events:auto}
+.mafia-pop-card{
+  position:relative;width:min(440px,92vw);overflow:hidden;border:1px solid var(--line);
+  border-radius:24px;background:var(--surface);box-shadow:0 30px 80px rgba(0,0,0,.58);
+  transform:translateY(16px) scale(.97);transition:transform .32s cubic-bezier(.2,1.1,.4,1)
+}
+.mafia-pop.on .mafia-pop-card{transform:none}
+.mafia-pop-card img{display:block;width:100%;height:auto;max-height:70dvh;object-fit:cover}
+.mafia-pop-x{
+  position:absolute;top:12px;right:12px;z-index:2;width:42px;height:42px;border:0;border-radius:50%;
+  background:rgba(12,12,12,.72);color:#fff;font-size:23px;display:grid;place-items:center
+}
+.mafia-pop-info{padding:16px 18px 18px}
+.mafia-pop-info b{display:block;font:400 28px/1 var(--serif)}
+.mafia-pop-info span{display:block;margin-top:6px;color:var(--muted);font-size:13px}
+.mafia-pop-cta{
+  width:100%;min-height:46px;margin-top:14px;border:0;border-radius:12px;background:var(--red);color:#fff;font-weight:700
 }
 
 
-/* ---------- Preparación Wallets (Apple Pay / Google Pay) ---------- */
-.wallet-area{display:grid;gap:10px;margin-bottom:12px}
-.wallet-area[hidden],.wallet-btn[hidden],.wallet-sep[hidden]{display:none!important}
-.wallet-btn{width:100%;min-height:48px;border:0;border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700}
-.wallet-apple{background:#fff;color:#000}
-.wallet-google{background:#fff;color:#111}
-.wallet-sep{display:flex;align-items:center;gap:10px;margin:4px 0 10px;color:var(--muted);font-size:11px}
-.wallet-sep::before,.wallet-sep::after{content:"";flex:1;height:1px;background:var(--line)}
-.wallet-card-title{margin:0 0 8px;font-size:12px;color:var(--muted)}
-.mp-test-data{margin:0 0 12px;padding:12px;border:1px solid #5b533f;border-radius:var(--r);background:#211d14;color:var(--text)}
-.mp-test-data-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
-.mp-test-data-head b{font-size:12px;color:#ffe580;letter-spacing:.03em}
-.mp-test-copyall{min-height:34px;padding:0 10px;border:1px solid #6f654d;border-radius:10px;background:none;color:#ffe580;font-size:11px;font-weight:700}
-.mp-test-data-grid{display:grid;gap:5px;font-size:11px}
-.mp-test-data-row{display:flex;justify-content:space-between;gap:12px}
-.mp-test-data-row span{color:var(--muted)}
-.mp-test-data-row code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--text);font-size:11px;text-align:right}
+/* Combo principal */
+html[data-mafia-cards="street-style"] #combos .item[data-id="combo-famiglia"]{
+  border-color:rgba(208,14,48,.55);
+  box-shadow:0 12px 34px rgba(208,14,48,.12),0 10px 28px rgba(0,0,0,.20);
+}
+html[data-mafia-cards="street-style"] #combos .item[data-id="combo-famiglia"] .hd h3::after{
+  content:"PARA 3–4";
+  display:inline-flex;align-items:center;min-height:24px;margin-left:8px;padding:0 8px;
+  border-radius:7px;background:var(--red);color:#fff;
+  font:700 10px/1 var(--sans);letter-spacing:.06em;vertical-align:middle;
+}
 
+
+.fam-dist{display:grid;gap:9px}
+.fam-row{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:62px;padding:9px 11px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.025)}
+.fam-name{font-weight:700;line-height:1.2;min-width:0}
+.fam-total{margin:9px 2px 0;color:var(--muted);font-size:12px;text-align:right}
+.fam-total b{color:var(--text)}
+#pizzas .item .hd h3::after{content:"40 CM";display:inline-flex;margin-left:7px;padding:4px 7px;border-radius:7px;background:#2a2825;color:var(--muted);font:700 9px/1 var(--sans);letter-spacing:.08em;vertical-align:middle}
+
+
+#combos .item[data-id="combo-mafioso"] .hd h3::after{
+  content:"1 PERSONA";display:inline-flex;margin-left:8px;padding:4px 7px;border-radius:7px;
+  background:#2b2926;color:var(--muted);font:700 9px/1 var(--sans);letter-spacing:.07em;vertical-align:middle
+}
+#combos .item[data-id="combo-complices"] .hd h3::after{
+  content:"2 PERSONAS";display:inline-flex;margin-left:8px;padding:4px 7px;border-radius:7px;
+  background:#2b2926;color:var(--muted);font:700 9px/1 var(--sans);letter-spacing:.07em;vertical-align:middle
+}
+
+
+#combos .item[data-id="combo-del-don"] .hd h3::after{
+  content:"1 PERSONA";display:inline-flex;margin-left:8px;padding:4px 7px;border-radius:7px;
+  background:#2b2926;color:var(--muted);font:700 9px/1 var(--sans);letter-spacing:.07em;vertical-align:middle
+}
+#combos .item[data-id="combo-del-don"]{
+  border-color:rgba(208,14,48,.36);
+}
+
+
+#combos .item[data-id="combo-duo-del-don"] .hd h3::after{
+  content:"2 PERSONAS";display:inline-flex;margin-left:8px;padding:4px 7px;border-radius:7px;
+  background:#2b2926;color:var(--muted);font:700 9px/1 var(--sans);letter-spacing:.07em;vertical-align:middle
+}
+
+
+
+/* v12 · COMBOS con filtro por cantidad de personas */
+#combos .combo-people-filter{
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  margin:14px 0 8px;
+}
+#combos .pf-label{
+  display:inline-flex;align-items:center;gap:7px;
+  margin-right:2px;color:var(--muted);font-size:13px;
+}
+#combos .pf-icon{width:18px;height:18px;display:block}
+#combos .pf-btn{
+  height:36px;min-width:42px;padding:0 12px;
+  border:1px solid var(--line);border-radius:999px;
+  background:var(--surface);color:var(--muted);
+  font:700 13px/1 var(--sans);cursor:pointer;
+}
+#combos .pf-btn[aria-pressed="true"]{
+  background:var(--red);border-color:var(--red);color:#fff;
+}
+#combos .item[hidden]{display:none!important}
+
+/* todas las tarjetas de combos con exactamente la misma estructura */
+html[data-mafia-cards="street-style"] #combos .item{
+  margin-top:0!important;
+  width:100%!important;
+  min-width:0!important;
+  min-height:208px!important;
+  grid-template-columns:176px minmax(0,1fr)!important;
+  grid-template-rows:auto 1fr!important;
+  gap:10px 18px!important;
+  padding:16px!important;
+}
+html[data-mafia-cards="street-style"] #combos .item .media{
+  grid-column:1!important;
+  grid-row:1 / span 2!important;
+  width:100%!important;
+  min-height:176px!important;
+  align-self:stretch!important;
+}
+html[data-mafia-cards="street-style"] #combos .item .hd{
+  grid-column:2!important;
+  grid-row:1!important;
+  min-width:0!important;
+}
+html[data-mafia-cards="street-style"] #combos .item .row2{
+  grid-column:2!important;
+  grid-row:2!important;
+  align-self:end!important;
+}
+html[data-mafia-cards="street-style"] #combos .item::before{content:none!important}
+@media(max-width:560px){
+  html[data-mafia-cards="street-style"] #combos .item{
+    min-height:164px!important;
+    grid-template-columns:122px minmax(0,1fr)!important;
+    gap:7px 13px!important;
+    padding:12px!important;
+  }
+  html[data-mafia-cards="street-style"] #combos .item .media{
+    min-height:140px!important;
+  }
+}
+
+
+#combos .combo-people-filter .pf-label{width:100%;margin-bottom:2px;font-weight:600;color:var(--text)}
+#combos .combo-people-filter .pf-btn{min-width:auto;padding:0 14px}
+
+
+/* === v17 · correcciones === */
+#pizzas .item .hd h3::after{content:none!important;display:none!important}
+#combos .item .hd h3::after{content:none!important;display:none!important}
+.mafia-slide.art{display:block;aspect-ratio:1920/819;min-height:0;text-decoration:none}
+.mafia-slide.art::after{display:none}
+.mafia-slide.art img{object-fit:cover}
+@media(max-width:640px){.mafia-slide.art{aspect-ratio:1920/819;min-height:0}}
+.mafia-hero{margin-bottom:14px}
+.brand .logo{max-width:72%;max-height:clamp(58px,17vw,96px)}
+html[data-mafia-cards="street-style"] .cat:not(.compact) .item{
+  background:#1a1918!important;border-color:#3a3632!important;
+  box-shadow:0 10px 28px rgba(0,0,0,.30)!important
+}
+html[data-mafia-cards="street-style"] #combos .item{border-color:rgba(200,16,46,.55)!important}
+@media(min-width:1040px){
+  html[data-mafia-cards="street-style"] #menu .cat:not(.compact) .item{
+    grid-template-columns:164px minmax(0,1fr)!important;min-height:196px!important
+  }
+  html[data-mafia-cards="street-style"] #menu .cat:not(.compact) .desc{font-size:14px!important}
+}
+
+/* === v40 · fondo rojo amigable, logo blanco, tarjetas grises, negro y beige === */
+:root{--bg:#A82A25;--surface:#EEECE9;--line:#D6D2CC;--text:#1A1917;--muted:#55514B;--red:#C8102E;--red-hi:#B80F2A}
+html{color-scheme:light}
+html{background:#A82A25 url(/assets/textura.png) repeat}
+body{background:transparent!important;color:#fff}
+.online-note,.online-note *,.combo-people-filter .pf-label,#foot,#foot *{color:#fff!important}
+.nav{background:#141313;border-bottom:1px solid #141313}
+.nav a{border-color:#4a4642;color:#F1E7D3;background:transparent}
+.nav a:hover{border-color:#F1E7D3;color:#fff}
+.nav a[aria-current="true"]{background:#C8102E;border-color:#C8102E;color:#fff}
+.cartbtn{background:#F1E7D3;border-color:#F1E7D3;color:#141313}
+.cartbtn::before{background:linear-gradient(to left,#141313,transparent)}
+.cbadge{background:#C8102E;color:#fff;border-color:#141313}
+.cat h2{color:#F4EDDF!important}
+.cat h2::after{display:none!important}
+.cat .note,.combo-people-filter,.combo-people-filter *:not(button){color:#fff}
+#combos .combo-people-filter{display:flex!important;align-items:center;flex-wrap:wrap;gap:8px;margin:8px 0 16px}
+#combos .combo-people-filter .pf-label{width:auto!important;margin:0 6px 0 0!important;font-size:13px;font-weight:500!important;opacity:.92;color:#F4EDDF!important}
+#combos .pf-icon{display:none!important}
+@media(max-width:600px){#combos .combo-people-filter .pf-label{width:100%!important;margin:0 0 -2px!important}}
+#combos .combo-people-filter .pf-btn{min-height:32px!important;height:32px!important;padding:0 14px!important;font-size:13px!important;font-weight:500!important;background:transparent!important;border:1px solid rgba(244,237,223,.6)!important;color:#F4EDDF!important;box-shadow:none!important}
+#combos .combo-people-filter .pf-btn:hover{border-color:#F4EDDF!important}
+#combos .combo-people-filter .pf-btn[aria-pressed="true"]{background:#F4EDDF!important;border-color:#F4EDDF!important;color:#141313!important}
+html[data-mafia-cards="street-style"] .cat:not(.compact) .item,html[data-mafia-cards="street-style"] #combos .item,html[data-mafia-cards="street-style"] #combos .item[data-id="combo-del-don"]{
+  --text:#fff;--muted:#fff;--line:#3a3633;
+  background:#121110!important;border:2px solid #E6D8BC!important;color:#fff;
+  box-shadow:0 10px 24px rgba(80,15,10,.35)!important}
+html[data-mafia-cards="street-style"] .cat:not(.compact) .media{background:#0c0b0a;box-shadow:0 5px 14px rgba(0,0,0,.4)}
+html[data-mafia-cards="street-style"] .cat:not(.compact) .fmt{background:#0f0e0d;color:#fff}
+.item h3,.item .hd h3{color:#F03450!important}
+.item .desc{color:#fff!important}
+.item .add,.item .stp{background:#C8102E;color:#fff}
+.item .add:hover{background:#e0213f}
+.item .opts button{background:transparent;color:#fff;border-color:#4a4642}
+.item .opts button[aria-pressed="true"],.item .sh-opt[aria-checked="true"]{background:rgba(255,255,255,.12);border-color:#E6D8BC}
+.item .of{border-color:#4a4642;background:transparent}
+.cat.compact .item h3,.cat.compact .item .hd h3,.cat.compact .name{color:#fff!important}
+.cat.compact .desc,.cat.compact .item p{color:#fff!important;opacity:1!important}
+.cat.compact .item{border-color:rgba(255,255,255,.35)!important;--line:rgba(255,255,255,.35)}
+.cat.compact .add,.cat.compact .stp{background:#F1E7D3;color:#141313}
+.cat.compact .add:hover{background:#fff}
+.cat.compact .stp *{color:#141313}
+.mafia-slider{border:3px solid transparent!important;background:linear-gradient(#141313,#141313) padding-box,linear-gradient(135deg,#F6DF9A 0%,#D4AF5A 35%,#B8913A 55%,#F2D88C 80%,#C9A24A 100%) border-box!important;box-shadow:0 12px 28px rgba(80,15,10,.40)}
+.mafia-slide{background:#141313}
+.mafia-dots{gap:0;margin-top:2px}
+.mafia-dots button{box-sizing:content-box;width:8px;height:8px;padding:8px;background:#F1E7D3;background-clip:content-box;border-radius:99px}
+.mafia-dots button.on{width:24px;background:#141313;background-clip:content-box}
+.mafia-arr{background:rgba(20,19,19,.8);color:#fff;border-color:rgba(255,255,255,.2)}
+.suggest{background:#F1E7D3;color:#1c1813}
+.sg-top b{color:#1c1813}.sg-x{color:#55514B}
+.drawer,.dh,.df{background:#F6F0E2;color:#1A1917}
+.df input:not([type="radio"]),.df textarea{background:#fff;border-color:#D6D2CC;color:#1A1917}
+.sheet,.lab{background:#F6F0E2;border-color:#D6D2CC;color:#1A1917}
+.sheet .sh-opt,.sheet .sh-chk{background:#EEECE9;border-color:#D6D2CC}
+.sheet .sh-opt[aria-checked="true"],.sheet .sh-chk[aria-checked="true"],.sheet .sh-opt.sh-extra[data-selected="true"]{background:#fff;border-color:#141313}
+.line-thumb,.sh-thumb{background:#fff}
+.seg input:checked + span{background:#EEECE9}
+.send{box-shadow:0 -10px 14px #F6F0E2}
+.pk-err,.delivery-err{color:#B3261E}
+.lb-x{background:#fff;border-color:#D6D2CC;color:#1A1917}
+html[data-mafia-cards="street-style"] .pd{background:#F6F0E2}
+html[data-mafia-cards="street-style"] .pd-ph::after{background:linear-gradient(to bottom,transparent 58%,#F6F0E2 100%)}
+.fam-row{background:rgba(0,0,0,.04)}
+.mafia-pop-card{background:#F6F0E2;color:#1A1917}
+.mafia-pop-info b,.mafia-pop-info span,.mafia-pop-info p{color:#1A1917}
+.mafia-pop-cta{background:#141313;color:#fff}
+
+/* ---------- Pago online (Mercado Pago) ---------- */
+#send[hidden],#payOnline[hidden],.wa-hint[hidden],#orderStep[hidden],#pay[hidden],#emailWrap[hidden],#phoneWrap[hidden],#unitWrap[hidden],#payChoice[hidden],#myOrdersLink[hidden],#payOnlineNote[hidden]{display:none!important}
+.paychoice{border:0;margin:0;padding:0;display:grid;gap:8px}
+.paychoice legend{font-size:12px;color:var(--muted);padding:0;margin-bottom:6px}
+.pc-opt{position:relative;display:block}
+.pc-opt input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer}
+.pc-opt span{display:grid;gap:2px;padding:12px 14px 12px 44px;min-height:56px;border:2px solid var(--line);border-radius:var(--r);background:#fff;color:#1A1917;position:relative}
+.pc-opt span:before{content:"";position:absolute;left:14px;top:50%;width:18px;height:18px;margin-top:-9px;border-radius:50%;border:2px solid #8a8378;background:#fff}
+.pc-opt b{font-size:15px;font-weight:600}
+.pc-opt small{font-size:12px;color:#55514B}
+.pc-opt input:checked+span{border-color:#C8102E;background:#fff}
+.pc-opt input:checked+span:before{border-color:#C8102E;background:radial-gradient(#C8102E 0 45%,#fff 50%)}
+.pc-opt input:focus-visible+span{outline:3px solid #1A1917;outline-offset:2px}
+.pc-opt input:disabled+span{opacity:.5}
+.pay-note{font-size:12px;line-height:1.4;color:var(--muted);margin:0}
+.paybtn{position:sticky;bottom:calc(12px + env(safe-area-inset-bottom,0px));box-shadow:0 -10px 14px #F6F0E2;padding:15px;border:0;border-radius:var(--r);background:#C8102E;color:#fff;font-weight:700;font-size:16px;min-height:52px;display:flex;align-items:center;justify-content:center;gap:8px}
+.paybtn:hover{background:#B80F2A}
+.link-btn{background:none;border:0;padding:0 4px;min-height:44px;font:inherit;font-size:13px;color:var(--text);text-decoration:underline;text-underline-offset:3px;text-align:center}
+
+.payscreen{position:fixed;inset:0;z-index:200;background:#0c0c0c;color:#F3EDE2;display:flex;flex-direction:column;overflow-y:auto;overscroll-behavior:contain}
+.payscreen[hidden]{display:none}
+.pv{display:none;flex:1;flex-direction:column;width:min(520px,100%);margin:0 auto;padding:18px 18px calc(24px + env(safe-area-inset-bottom,0px))}
+.pv.on{display:flex}
+.pv-head{display:flex;align-items:center;gap:8px;min-height:48px;margin-bottom:6px}
+.pv-back{width:44px;height:44px;border-radius:50%;border:1px solid #3a3733;background:none;color:#F3EDE2;font-size:20px}
+.pv-head h2{font-family:var(--serif);font-weight:400;font-size:28px;letter-spacing:.02em;margin:0;color:#F3EDE2}
+.pv-sum{margin:6px 0 14px;padding:14px;border:1px solid #2f2c29;border-radius:var(--r);display:grid;gap:6px;font-size:14px;color:#cfc8bb}
+.pv-sum .row{display:flex;justify-content:space-between;gap:12px}
+.pv-sum .tot{font-size:18px;color:#fff;font-weight:700;border-top:1px solid #2f2c29;padding-top:8px;margin-top:2px}
+.pv-err{margin:10px 0 0;padding:12px 14px;border-radius:var(--r);background:#3b1016;border:1px solid #7a2230;color:#ffd6dc;font-size:14px}
+.pv-err:empty{display:none}
+#mpBrick{min-height:120px;margin-top:6px}
+.pv-load{color:#a39d92;font-size:14px;padding:20px 0}
+.pv-center{margin:auto;display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;padding:30px 0}
+.pv-center h2{font-family:var(--serif);font-weight:400;font-size:34px;margin:0;letter-spacing:.02em;color:#fff}
+.pv-center p{margin:0;color:#a39d92;font-size:15px}
+.spin{width:54px;height:54px;border-radius:50%;border:3px solid #2a2826;border-top-color:#F3EDE2;animation:pvspin 1s linear infinite;margin-bottom:8px}
+@keyframes pvspin{to{transform:rotate(360deg)}}
+.okc{width:96px;height:96px;border-radius:50%;background:#1FA45A;display:grid;place-items:center;margin-bottom:8px;animation:okpop .5s cubic-bezier(.2,1.4,.4,1) both}
+.okc svg{width:48px;height:48px}
+.okc path{stroke:#fff;stroke-width:3.2;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:40;stroke-dashoffset:40;animation:okdraw .45s .25s ease-out forwards}
+@keyframes okpop{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes okdraw{to{stroke-dashoffset:0}}
+.tk{background:#fff;color:#1A1917;border-radius:18px;padding:22px 20px 18px;margin:8px 0 14px;display:grid;gap:14px;font-size:14px}
+.tk-brand{font-family:var(--serif);font-size:30px;letter-spacing:.04em;line-height:1;color:#141312}
+.tk-num{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#6a655d}
+.tk-code{font-size:30px;font-weight:800;letter-spacing:.01em;line-height:1.05;margin-top:2px}
+.tk-meta{display:grid;gap:6px;padding:12px 0;border-top:1px dashed #cfc8bb;border-bottom:1px dashed #cfc8bb}
+.tk-meta div{display:flex;justify-content:space-between;gap:14px}
+.tk-meta span{color:#6a655d}
+.tk-meta b{font-weight:600;text-align:right}
+.tk-stat{display:inline-flex;align-items:center;gap:6px;color:#13753f}
+.tk-items{display:grid;gap:12px}
+.tk-it{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:start}
+.tk-it .q{font-weight:700;min-width:22px}
+.tk-it small{display:block;color:#6a655d;font-size:12px;line-height:1.35;margin-top:2px}
+.tk-it .p{font-weight:600;white-space:nowrap}
+.tk-tot{display:grid;gap:6px;border-top:1px dashed #cfc8bb;padding-top:12px}
+.tk-tot div{display:flex;justify-content:space-between;gap:14px}
+.tk-tot .grand{font-size:19px;font-weight:800;padding-top:4px}
+.tk-help{margin:0;text-align:center;font-size:13px;color:#a39d92}
+.tk-help a{color:#F3EDE2;text-underline-offset:3px;display:inline-flex;align-items:center;min-height:44px}
+.pv-done{min-height:52px;border:0;border-radius:var(--r);background:#F3EDE2;color:#141312;font-weight:700;font-size:16px;margin-top:2px}
+.mo-list{display:grid;gap:10px;margin:8px 0}
+.mo-item{display:flex;justify-content:space-between;align-items:center;gap:12px;width:100%;min-height:60px;padding:12px 14px;border:1px solid #2f2c29;border-radius:var(--r);background:#161514;color:#F3EDE2;text-align:left;font:inherit}
+.mo-item b{font-size:16px}
+.mo-item small{display:block;color:#a39d92;font-size:12px;margin-top:2px}
+.mo-empty{color:#a39d92;font-size:14px;padding:16px 0}
 </style>
-<script src="https://sdk.mercadopago.com/js/v2"></script>
 </head>
 <body>
 
@@ -509,6 +1008,26 @@ html[data-layout="grid"][data-desc="none"] .cat:not(.compact) .hd{min-height:28p
   <h1 class="brand" id="brand">MAFIA</h1>
   <p class="online-note"><b>CARTA EXCLUSIVA ONLINE</b>
 </header>
+
+<section class="mafia-hero" id="mafiaHero" aria-label="Novedades MAFIA">
+  <div class="mafia-slider">
+    <div class="mafia-track" id="mafiaTrack">
+      <a class="mafia-slide art" href="#combos" aria-label="Nuevo Combo Familiar">
+        <img src="/assets/banner-nuevo-combo-familiar.webp" alt="Nuevo Combo Familiar">
+      </a>
+      <a class="mafia-slide art" href="#combos" aria-label="Nuevo Combo Padrinos">
+        <img src="/assets/banner-nuevo-combo-padrinos.webp" alt="Nuevo Combo Padrinos">
+      </a>
+      <a class="mafia-slide art" href="#nuestras-pastas" aria-label="Nuevas Pastas">
+        <img src="/assets/banner-nuevas-pastas.webp" alt="Nuevas Pastas">
+      </a>
+    </div>
+    <button class="mafia-arr prev" id="mafiaPrev" type="button" aria-label="Banner anterior">‹</button>
+    <button class="mafia-arr next" id="mafiaNext" type="button" aria-label="Banner siguiente">›</button>
+  </div>
+  <div class="mafia-dots" id="mafiaDots" aria-label="Posición del carrusel"></div>
+</section>
+
 
 <nav class="nav" aria-label="Categorías de la carta">
   <div class="nav-in">
@@ -529,14 +1048,38 @@ html[data-layout="grid"][data-desc="none"] .cat:not(.compact) .hd{min-height:28p
 </div>
 <div class="shbd" id="shbd" hidden></div>
 <div class="sheet" id="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="sh-t"></div>
-<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Foto del plato">
-  <button class="lb-x" id="lbx" type="button" aria-label="Cerrar foto">✕</button>
-  <figure><img id="lbi" alt=""><figcaption id="lbc"></figcaption></figure>
+<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Detalle del producto">
+  <div class="pd" id="pd">
+    <button class="pd-x" id="lbx" type="button" aria-label="Cerrar">✕</button>
+    <div class="pd-ph"><img id="lbi" alt=""></div>
+    <div class="pd-body">
+      <i class="pd-cat" id="lbcat"></i>
+      <h3 id="lbt"></h3>
+      <p class="pd-d" id="lbd"></p>
+      <div class="pd-row">
+        <b class="pd-pr" id="lbp"></b>
+        <button class="add pd-add" id="lba" type="button">Agregar</button>
+      </div>
+    </div>
+  </div>
 </div>
 <div class="sr" id="live" role="status" aria-live="polite"></div>
 
+
+<div class="mafia-pop" id="mafiaPop" role="dialog" aria-modal="true" aria-label="Promoción MAFIA">
+  <div class="mafia-pop-card">
+    <button class="mafia-pop-x" id="mafiaPopX" type="button" aria-label="Cerrar">×</button>
+    <img src="/assets/popup.webp" alt="">
+    <div class="mafia-pop-info">
+      <b id="mafiaPopT">Promoción</b>
+      <span id="mafiaPopS"></span>
+      <button class="mafia-pop-cta" id="mafiaPopCta" type="button">Ver promoción</button>
+    </div>
+  </div>
+</div>
+
 <div class="scrim" id="scrim"></div>
-<aside class="drawer" id="drawer" role="dialog" aria-label="Tu pedido" inert>
+<div class="drawer" id="drawer" role="dialog" aria-label="Tu pedido" inert>
   <div class="dh">
     <div class="dh-main">
       <button class="head-back" id="backCheckout" type="button" aria-label="Volver a tu pedido" hidden>←</button>
@@ -556,17 +1099,33 @@ html[data-layout="grid"][data-desc="none"] .cat:not(.compact) .hd{min-height:28p
       <div class="total"><span id="totalLabel">Subtotal</span><span id="total">$0</span></div>
       <p class="dnote" id="dnote" hidden></p>
       <button class="next" id="nextCheckout" type="button">Continuar</button>
+      <button class="link-btn" id="myOrdersLink" type="button" hidden>Mis pedidos</button>
     </div>
   </div>
 
   <div class="checkout-step" id="checkout2" hidden>
     <div class="df">
       <div class="step2-summary" id="step2Summary">Subtotal $0 · Entrega: Delivery</div>
+      <fieldset class="paychoice" id="payChoice" hidden>
+        <legend>¿Cómo quieres pagar?</legend>
+        <label class="pc-opt"><input type="radio" name="paymode" value="online"><span><b>Pagar online</b><small>Tarjeta de crédito o débito · Mercado Pago</small></span></label>
+        <label class="pc-opt"><input type="radio" name="paymode" value="whatsapp"><span><b>Pedir por WhatsApp</b><small>Confirmamos tu pedido y pagas por transferencia</small></span></label>
+        <p class="pay-note" id="payOnlineNote" hidden>Por ahora el delivery se pide por WhatsApp. El pago online está disponible para retiro en local.</p>
+      </fieldset>
       <label>Nombre
         <input id="cname" type="text" autocomplete="name" placeholder="Ej: Camila" required>
       </label>
+      <label id="emailWrap" hidden>Correo
+        <input id="cemail" type="email" autocomplete="email" inputmode="email" placeholder="Para enviarte el comprobante">
+      </label>
+      <label id="phoneWrap" hidden>Teléfono (opcional)
+        <input id="cphone" type="tel" autocomplete="tel" inputmode="tel" placeholder="+56 9 1234 5678">
+      </label>
       <label id="addrWrap">Dirección
         <input id="caddr" type="text" autocomplete="street-address" placeholder="Calle, número, depto / sector" required>
+      </label>
+      <label id="unitWrap" hidden>Depto / unidad (opcional)
+        <input id="cunit" type="text" autocomplete="address-line2" placeholder="Ej: Depto 502, torre B">
       </label>
       <div>
         <button class="note-toggle" id="noteToggle" type="button" aria-expanded="false" aria-controls="noteWrap">Agregar nota <span aria-hidden="true">+</span></button>
@@ -581,6 +1140,7 @@ html[data-layout="grid"][data-desc="none"] .cat:not(.compact) .hd{min-height:28p
         <button type="button" class="copy" id="copyPay">Copiar datos</button>
       </div>
       <ol class="steps" id="steps" hidden></ol>
+      <button class="paybtn" id="payOnline" type="button" hidden>Pagar <span id="payOnlineAmt"></span></button>
       <button class="send" id="send" type="button" aria-label="Continuar en WhatsApp">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 11.7a8.5 8.5 0 0 1-12.6 7.4L3.5 20.5l1.4-4.3A8.5 8.5 0 1 1 20.5 11.7Z"/><path d="M8.7 8.1c.2-.4.4-.4.7-.4h.5c.2 0 .4 0 .5.4l.7 1.7c.1.3.1.5-.1.7l-.6.7c-.2.2-.2.4-.1.6.6 1.2 1.5 2.1 2.7 2.7.2.1.4.1.6-.1l.8-1c.2-.2.4-.3.7-.2l1.7.8c.3.1.4.3.4.5 0 .3-.2 1.5-.8 2.1-.6.6-1.5.9-2.5.6-1.1-.3-2.5-.8-4.2-2.3-1.4-1.2-2.4-2.8-2.7-3.8-.4-1-.1-2 .3-2.6Z"/></svg>
         <span>Continuar en WhatsApp</span>
@@ -590,9 +1150,34 @@ html[data-layout="grid"][data-desc="none"] .cat:not(.compact) .hd{min-height:28p
       <a class="wa-fallback" id="waFallback" href="#" target="_blank" rel="noopener" hidden>¿No se abrió WhatsApp? Tócalo aquí</a>
     </div>
   </div>
-</aside>
+</div>
 
 
+
+<div class="payscreen" id="payScreen" role="dialog" aria-modal="true" aria-label="Pago del pedido" hidden>
+  <section class="pv" id="pvForm" aria-labelledby="pvFormT">
+    <div class="pv-head"><button class="pv-back" id="pvBack" type="button" aria-label="Volver a mis datos">←</button><h2 id="pvFormT" tabindex="-1">Pagar pedido</h2></div>
+    <div class="pv-sum" id="pvSum"></div>
+    <div id="mpBrick"><p class="pv-load">Cargando medios de pago…</p></div>
+    <p class="pv-err" id="pvErr" role="alert"></p>
+  </section>
+  <section class="pv" id="pvProc" aria-live="polite">
+    <div class="pv-center"><div class="spin" aria-hidden="true"></div><h2 id="pvProcT" tabindex="-1">Procesando pago</h2><p>Validando tu transacción</p></div>
+  </section>
+  <section class="pv" id="pvOk" aria-live="polite">
+    <div class="pv-center"><div class="okc" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M13 25.5l7.5 7.5L35 17"/></svg></div><h2 id="pvOkT" tabindex="-1">Pago aprobado</h2><p>Pedido confirmado</p></div>
+  </section>
+  <section class="pv" id="pvTicket" aria-labelledby="pvTicketT">
+    <h2 id="pvTicketT" class="sr" style="position:absolute;left:-9999px">Comprobante de tu pedido</h2>
+    <div class="tk" id="tk"></div>
+    <p class="tk-help" id="tkHelp"></p>
+    <button class="pv-done" id="pvDone" type="button">Listo</button>
+  </section>
+  <section class="pv" id="pvOrders" aria-labelledby="pvOrdersT">
+    <div class="pv-head"><button class="pv-back" id="moBack" type="button" aria-label="Cerrar mis pedidos">←</button><h2 id="pvOrdersT" tabindex="-1">Mis pedidos</h2></div>
+    <div class="mo-list" id="moList"></div>
+  </section>
+</div>
 
 <button class="admin-hotspot" id="adminHotspot" type="button" aria-label="Abrir administración"></button>
 <div class="admin-backdrop" id="adminBackdrop" hidden></div>
@@ -609,6 +1194,7 @@ html[data-layout="grid"][data-desc="none"] .cat:not(.compact) .hd{min-height:28p
   <p class="admin-status" id="adminStatus" aria-live="polite"></p>
 </section>
 
+<script src="/menu-data.js"></script>
 <script>
 /* =====================================================================
    CONFIGURACIÓN — edita solo esta parte
@@ -623,14 +1209,15 @@ const CONFIG = {
   transferencia: { titular:"", rut:"", banco:"", tipoCuenta:"", numeroCuenta:"", email:"" },
 
   /* --- Imagen y tipografía: solo deja los archivos en las carpetas y listo --- */
-  logo: "logo.png",                // archivo junto a este HTML (png, svg, webp). Si no existe, se muestra el nombre en texto
-  fotosCarpeta: "",                // fotos junto a este archivo: <id del plato>.<extensión> (ej: margarita.jpg). Si las pones en una carpeta, escribe "fotos/"
-  fotosExtension: "jpg",           // jpg, png o webp (usa la misma para todas)
-  fuenteTitulos: "Pesto Mafio.ttf",  // archivo junto a este HTML (woff2, woff, ttf u otf). Vacío = Playfair Display
+  logo: "/assets/logo-mafia-blanco.webp",                // archivo junto a este HTML (png, svg, webp). Si no existe, se muestra el nombre en texto
+  fotosCarpeta: "/fotos/",                // fotos junto a este archivo: <id del plato>.<extensión> (ej: margarita.jpg). Si las pones en una carpeta, escribe "fotos/"
+  fotosExtension: "webp",           // jpg, png o webp (usa la misma para todas)
+  fuenteTitulos: "/fonts/PestoMafio.ttf",  // archivo junto a este HTML (woff2, woff, ttf u otf). Vacío = Playfair Display
   fuenteTextos: "",                // ej: "fuentes/textos.woff2"   Vacío = Inter
 
   /* --- Diseño: aquí se deja la opción que elijas --- */
   diseno: { foto:"grid", tipografia:"contrast", cta:"sheet", desc:"full" },   // foto: lista | hero | grid · tipografia: actual | contrast | weight · cta (combo): actual | toggle | tag | sheet · desc: full | one | none
+  popup: { activo:false, titulo:"Promo de la semana", texto:"Escribe aquí tu mensaje.", boton:"Ver carta", imagen:"/assets/popup.webp" },   // activo:true muestra el popup al entrar
   opciones: false                  // true = muestra el botón "Opciones de diseño" para probar las variantes
 };
 
@@ -638,121 +1225,7 @@ const CONFIG = {
    - name, desc, img (URL de la foto; si queda vacío se muestra un recuadro)
    - price (precio único)  O  options: [{label, price}] para tamaños/variantes
    LOS PRECIOS Y DESCRIPCIONES DE ABAJO SON DE EJEMPLO: reemplázalos por los reales. */
-const MENU = [
-  { id:"combos", name:"Combos", items:[
-    { id:"pizza-combo-info", name:"Hazla combo", desc:"En 40 y 60 cm: palitos + bebida 1.5 L por +$5.000", img:"pizza-combo-info.png", infoOnly:true, jump:"pizzas" },
-    { id:"promo-alfredo", name:"Promo Fetuccini Alfredo", desc:"Fetuccini + bebida mini", price:7990, img:"combo-alfredo.png",
-      bundleChoices:[
-        { label:"Elige tu bebida mini", short:"Bebida", list:["Coca-Cola Original","Coca-Cola Zero","Sprite","Fanta"] }
-      ] },
-    { id:"combo-indecisos", name:"Combo Indecisos", desc:"Slice + fetuccini + bebida mini", price:11990, img:"combo-indecisos.png",
-      bundleChoices:[
-        { label:"Elige tu slice", short:"Slice", list:["Tony Pepperoni","Margarita","Napolitana"] },
-        { label:"Elige la salsa del Fetuccini", short:"Salsa", list:["Alfredo","Pesto","Bolognesa"] },
-        { label:"Elige tu bebida mini", short:"Bebida", list:["Coca-Cola Original","Coca-Cola Zero","Sprite","Fanta"] }
-      ] },
-    { id:"combo-soprano", name:"Combo Soprano", desc:"Fetuccini + albóndigas + cremita + bebida mini", price:9990, img:"combo-soprano.png",
-      bundleChoices:[
-        { label:"Elige la salsa del Fetuccini", short:"Salsa", list:["Alfredo","Pesto","Bolognesa"] },
-        { label:"Elige tu bebida mini", short:"Bebida", list:["Coca-Cola Original","Coca-Cola Zero"] }
-      ] }
-  ]},
-  { id:"entradas", name:"Entradas", items:[
-    { id:"palitos", name:"Palitos de ajo", desc:"6 Palitos de Ajo cubiertos con Salsa Garlic y Queso Parmigiano. Incluye Salsa Pomodoro New York.", price:3990, img:"palitos-ajo.png",
-      extras:{ label:"Agrega una salsa", ids:["top-pomodoro","top-bbq"] } },
-    { id:"cremita-zapallo", name:"Crema de Zapallo", desc:"Crema casera de Zapallo con Palitos de Ajo y Queso Parmigiano.", price:5990, img:"", foto:"cremita-zapallo" }
-  ]},
-  { id:"pizzas", name:"Pizzas", items:[
-    { id:"tgm", name:"The Good Meat", desc:"Carne Mechada, Tocino, Salsa Pomodoro New York y Queso Mozzarella.",
-      options:[{label:"Slice",price:5490},{label:"40 cm",price:16990},{label:"60 cm",price:24990}], img:"",
-      combo:{ byOption:{
-        0:{ extra:500, desc:"+ Bebida mini" },
-        1:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" },
-        2:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" } } },
-      suggest:{ ids:["top-bbq", "top-pomodoro", "top-parmigiano", "top-ketchup"] } },
-    { id:"pepperoni", name:"Tony Pepperoni", desc:"Pepperoni Americano Ultradelgado, Salsa Pomodoro New York y Queso Mozzarella.",
-      options:[{label:"Slice",price:5490},{label:"40 cm",price:16990},{label:"60 cm",price:24990}], img:"",
-      combo:{ byOption:{
-        0:{ extra:500, desc:"+ Bebida mini" },
-        1:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" },
-        2:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" } } },
-      suggest:{ ids:["top-bbq", "top-pomodoro", "top-parmigiano", "top-ketchup"] } },
-    { id:"pollo-bbq", name:"Il Traditore", desc:"Pollo BBQ, Tocino, Cebolla Morada, Salsa BBQ y Queso Mozzarella.",
-      options:[{label:"Slice",price:5490},{label:"40 cm",price:16990},{label:"60 cm",price:24990}], img:"",
-      combo:{ byOption:{
-        0:{ extra:500, desc:"+ Bebida mini" },
-        1:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" },
-        2:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" } } },
-      suggest:{ ids:["top-bbq", "top-pomodoro", "top-parmigiano", "top-ketchup"] } },
-    { id:"napolitana", name:"Napolitana", desc:"Jamón, Tomate, Aceitunas de la Zona, Salsa Pomodoro New York, Queso Mozzarella y Orégano.",
-      options:[{label:"Slice",price:4490},{label:"40 cm",price:14990},{label:"60 cm",price:20990}], img:"",
-      combo:{ byOption:{
-        0:{ extra:500, desc:"+ Bebida mini" },
-        1:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" },
-        2:{ extra:4000, desc:"+ Palitos de ajo + Bebida 1.5 L" } } },
-      suggest:{ ids:["top-bbq", "top-pomodoro", "top-parmigiano", "top-ketchup"] } },
-    { id:"margarita", name:"Margarita", desc:"Salsa Pomodoro New York, Queso Mozzarella y Albahaca Fresca.",
-      options:[{label:"Slice",price:4490},{label:"40 cm",price:14990},{label:"60 cm",price:20990}], img:"",
-      combo:{ byOption:{
-        0:{ extra:500, desc:"+ Bebida mini" },
-        1:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" },
-        2:{ extra:4000, desc:"+ Palitos de ajo + Bebida 1.5 L" } } },
-      suggest:{ ids:["top-bbq", "top-pomodoro", "top-parmigiano", "top-ketchup"] } },
-    { id:"ajillo", name:"Al Ajillo Boss", desc:"Camarones al Ajillo, Pimentón Rojo, Salsa Pomodoro New York, Queso Mozzarella y Perejil Fresco.",
-      options:[{label:"Slice",price:5490},{label:"40 cm",price:16990},{label:"60 cm",price:24990}], img:"",
-      combo:{ byOption:{
-        0:{ extra:500, desc:"+ Bebida mini" },
-        1:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" },
-        2:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" } } },
-      suggest:{ ids:["top-bbq", "top-pomodoro", "top-parmigiano", "top-ketchup"] } },
-    { id:"funghi", name:"Funghi", desc:"Champiñones y Callampas Deshidratadas, Salsa Bechamel, Queso Mozzarella, Queso Parmigiano y Perejil Fresco.",
-      options:[{label:"Slice",price:4490},{label:"40 cm",price:14990},{label:"60 cm",price:20990}], img:"",
-      combo:{ byOption:{
-        0:{ extra:500, desc:"+ Bebida mini" },
-        1:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" },
-        2:{ extra:4000, desc:"+ Palitos de ajo + Bebida 1.5 L" } } },
-      suggest:{ ids:["top-bbq", "top-pomodoro", "top-parmigiano", "top-ketchup"] } },
-    { id:"chocleta", name:"La Chocleta", desc:"Choclo, queso y albahaca.",
-      options:[{label:"Slice",price:4490},{label:"40 cm",price:14990},{label:"60 cm",price:20990}], img:"",
-      combo:{ byOption:{
-        0:{ extra:500, desc:"+ Bebida mini" },
-        1:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" },
-        2:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" } } },
-      suggest:{ ids:["top-bbq", "top-pomodoro", "top-parmigiano", "top-ketchup"] } }
-  ]},
-  { id:"pastas", name:"Pastas", items:[
-    { id:"fetuccini", name:"Fetuccini", desc:"", price:7990, img:"", foto:"fetuccini-alfredo", photoBy:{ Alfredo:"fetuccini-alfredo", Pesto:"fetuccini-pesto", Bolognesa:"fetuccini-bolognesa.png" },
-      pick:{ label:"Elige tu salsa", short:"Salsa", list:["Alfredo","Pesto","Bolognesa"], hidden:["Vodka","Garlic","Picante","Lemon Pepper","Aglio Parmigiano"] },
-      pickInSheet:true,
-      priceByPick:{ Alfredo:7990, Pesto:7990, Bolognesa:8990 },
-      combo:{ all:{ extra:500, desc:"+ Bebida mini" } },
-      extras:{ label:"No olvides agregar tu proteína", ids:["albondigas", "pollo-gravy"] },
-      suggest:{ ids:["albondigas","pollo-gravy"] } },
-    { id:"bucatini", name:"Bucatini", desc:"", price:7990, img:"", foto:"bucatini-pesto.png", photoBy:{ Alfredo:"bucatini-alfredo.png", Pesto:"bucatini-pesto.png", Bolognesa:"bucatini-bolognesa.jpg" },
-      pick:{ label:"Elige tu salsa", short:"Salsa", list:["Alfredo","Pesto","Bolognesa"], hidden:["Vodka","Garlic","Picante","Lemon Pepper","Aglio Parmigiano"] },
-      pickInSheet:true,
-      priceByPick:{ Alfredo:7990, Pesto:7990, Bolognesa:8990 },
-      combo:{ all:{ extra:500, desc:"+ Bebida mini" } },
-      extras:{ label:"No olvides agregar tu proteína", ids:["albondigas", "pollo-gravy"] },
-      suggest:{ ids:["albondigas","pollo-gravy"] } }
-  ]},
-  { id:"proteinas", name:"Proteínas", note:"Agrégalas a tu pasta.", items:[
-    { id:"albondigas", name:"Albóndigas", desc:"3 Albóndigas de carne de vacuno, cocinadas y servidas en su salsa.", price:2990, img:"Albondigas.jpeg" },
-    { id:"pollo-gravy", name:"Pollo con Gravy", desc:"Pollo al horno con Salsa Gravy.", price:2990, img:"pollo-gravy.jpeg" }
-  ]},
-  { id:"toppings", name:"Toppings", items:[
-    { id:"top-bbq", name:"BBQ", price:990, img:"bbq.jpeg" },
-    { id:"top-pomodoro", name:"Pomodoro New York", price:990, img:"pomodoro.jpeg" },
-    { id:"top-parmigiano", name:"Parmigiano", price:1290, img:"parmigiano.png" },
-    { id:"top-ketchup", name:"Ketchup", price:990, img:"ketchup.jpeg" }
-  ]},
-  { id:"bebidas", name:"Bebidas", compact:true, items:[
-    { id:"beb-350", name:"Bebida mini", desc:"Coca-Cola Original, Coca-Cola Zero, Sprite o Fanta.", price:1800, img:"", drinkChoice:{ label:"Elige tu bebida mini", list:["Coca-Cola Original","Coca-Cola Zero","Sprite","Fanta"], suffix:"" } },
-    { id:"beb-15", name:"Bebida 1.5 L", desc:"Coca-Cola Original o Zero.", price:3990, img:"", drinkChoice:{ label:"Elige tu bebida", list:["Coca-Cola Original","Coca-Cola Zero"], suffix:"1.5 L" } },
-    { id:"agua", name:"Agua mineral 500 ml", desc:"Con o sin gas.", price:2000, img:"", drinkChoice:{ label:"Elige tu agua", list:["Con gas","Sin gas"], suffix:"" } },
-    { id:"jugo", name:"Néctar en botella", desc:"Durazno, Piña o Naranja.", price:2490, img:"", drinkChoice:{ label:"Elige tu néctar", list:["Durazno","Piña","Naranja"], suffix:"" } }
-  ]}
-];
+/* El menú vive en /menu-data.js (única fuente: carta y servidor leen el mismo archivo). */
 
 
 /* =====================================================================
@@ -761,6 +1234,7 @@ const MENU = [
 const $ = (s, r=document) => r.querySelector(s);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const fmt = n => "$" + new Intl.NumberFormat("es-CL").format(n);
+
 const IDX = {};
 const CATOF = {};
 MENU.forEach(c => c.items.forEach(i => { IDX[i.id] = i; CATOF[i.id] = c.id; }));
@@ -894,32 +1368,36 @@ const basePrice = (it, o, pi=-1) => {
 };
 const unitPrice = (it, o, c, pi=-1) => basePrice(it, o, pi) + (c && comboOf(it, o) ? comboOf(it, o).extra : 0);
 const AUTO_PHOTO_IDS = new Set(["tgm","pepperoni","pollo-bbq","napolitana","margarita","ajillo","funghi","chocleta"]);
+const PREVIEW_ASSETS = {};
+MENU.forEach(c => c.items.forEach(i => { if (i.img && PREVIEW_ASSETS[i.img]) i.img = PREVIEW_ASSETS[i.img]; }));
 const assetPath = f => {
+  if (f && PREVIEW_ASSETS[f]) return PREVIEW_ASSETS[f];
+  if (f) for (const e of [".jpg",".png",".jpeg",".webp"]) if (PREVIEW_ASSETS[f+e]) return PREVIEW_ASSETS[f+e];
   if (!f || CONFIG.fotosCarpeta == null) return "";
   return CONFIG.fotosCarpeta + f + (/\.[a-z0-9]{2,5}(?:[?#].*)?$/i.test(f) ? "" : "." + CONFIG.fotosExtension);
 };
 const photoSrc = (it, pi=-1) => {
-  if (it.img) return it.img;
+  if (it.img) return PREVIEW_ASSETS[it.img] || it.img;
   const picked = pickName(it, pi);
   const f = (it.photoBy && picked && it.photoBy[picked]) || it.foto || (AUTO_PHOTO_IDS.has(it.id) ? it.id : "");
   return assetPath(f);
 };
 const CART_PHOTO_OVERRIDES = {
-  "top-bbq":"bbq.jpeg",
-  "top-ketchup":"ketchup.jpeg",
-  "top-pomodoro":"pomodoro.jpeg",
-  "top-parmigiano":"parmigiano.png"
+  "top-bbq":"bbq.webp",
+  "top-ketchup":"ketchup.webp",
+  "top-pomodoro":"pomodoro.webp",
+  "top-parmigiano":"parmigiano.webp"
 };
 const cartPhotoSrc = l => CART_PHOTO_OVERRIDES[l.it.id] ? assetPath(CART_PHOTO_OVERRIDES[l.it.id]) : l.thumb;
 
 function itemHTML(it, compact, eager=false){
   const s = S(it.id);
-  const src = it.img || assetPath(it.foto || it.id);
+  const src = it.img ? (PREVIEW_ASSETS[it.img] || it.img) : assetPath(it.foto || it.id);
   const media = src
     ? `<button class="zoom" type="button" aria-label="Ver foto de ${esc(it.name)}"><img class="dish" src="${esc(src)}" alt="" loading="${eager ? "eager" : "lazy"}" fetchpriority="${eager ? "high" : "auto"}" decoding="async"></button>`
     : `<div class="ph" aria-hidden="true"></div>`;
   if (it.infoOnly){
-    return `<article class="item" data-id="${esc(it.id)}">
+    return `<article class="item" data-id="${esc(it.id)}"${it.people ? ` data-people="${it.people}"` : ""}>
       <div class="hd"><h3>${esc(it.name)}</h3>${it.desc ? `<p class="desc">${esc(it.desc)}</p>` : ""}</div>
       ${compact ? "" : `<div class="media">${media}</div>`}
       <div class="row2">
@@ -934,7 +1412,7 @@ function itemHTML(it, compact, eager=false){
       <p class="pk-t">${esc(it.pick.label)}</p>
       <div class="opts">${it.pick.list.map((n, i) => `<button type="button" data-pick="${i}" aria-pressed="${i === s.p}">${esc(n)}</button>`).join("")}</div>
       <p class="pk-err" hidden>Elige una opción para agregar.</p></div>` : "";
-  return `<article class="item${compact ? " nopic" : ""}" data-id="${esc(it.id)}">
+  return `<article class="item${compact ? " nopic" : ""}" data-id="${esc(it.id)}"${it.people ? ` data-people="${it.people}"` : ""}>
     <div class="hd"><h3>${esc(it.name)}</h3>${it.desc ? `<p class="desc">${esc(it.desc)}</p>` : ""}</div>
     ${compact ? "" : `<div class="media">${media}${it.combo ? `<button class="tag" type="button" role="switch" aria-checked="false" data-combo hidden></button>` : ""}</div>`}
     ${pk}
@@ -942,7 +1420,7 @@ function itemHTML(it, compact, eager=false){
       <div class="offer" hidden aria-live="polite"></div>
       ${it.combo ? `<button class="tog" type="button" role="switch" aria-checked="false" data-combo hidden></button>` : ""}
       <div class="act">
-        <button class="add" type="button" data-add aria-label="Agregar ${esc(it.name)} al pedido"><span class="pl" aria-hidden="true">+</span><span class="ap"></span></button>
+        ${it.pendingPrice ? `<button class="add" type="button" disabled><span class="ap">Precio por definir</span></button>` : `<button class="add" type="button" data-add ><span class="pl" aria-hidden="true">+</span><span style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap">Agregar ${esc(it.name)} al pedido: </span><span class="ap"></span></button>`}
         <div class="stp" hidden role="group" aria-label="Cantidad de ${esc(it.name)}">
           <button type="button" data-dec="" aria-label="Quitar uno de ${esc(it.name)}">−</button><span>1</span><button type="button" data-inc="" aria-label="Agregar uno de ${esc(it.name)}">+</button>
         </div>
@@ -977,7 +1455,7 @@ function keyFor(id){
 }
 function syncCard(card){
   const id = card.dataset.id, it = IDX[id], s = S(id), o = it.options ? s.o : 0, cb = comboOf(it, o);
-  if (it.infoOnly || !card.querySelector(".add")) return;
+  if (it.infoOnly || it.pendingPrice || !card.querySelector(".add")) return;
   if (s.c && (!cb || !PRE())) s.c = false;                 /* el interruptor solo existe si hay combo y la variante lo usa */
   const k = keyFor(id);
   let q = 0, kinc = k, kdec = k;
@@ -1051,10 +1529,19 @@ function setOffer(id, k){
 }
 function pop(el){ if (!el) return; el.classList.remove("pop"); void el.offsetWidth; el.classList.add("pop"); }
 
-$("#nav").innerHTML = MENU.map(c => `<li><a href="#${c.id}">${esc(c.name)}</a></li>`).join("");
-$("#menu").innerHTML = MENU.map((c, ci) => `<section class="cat${c.compact ? " compact" : ""}" id="${c.id}" aria-labelledby="h-${c.id}">
+$("#nav").innerHTML = MENU.filter(c => !c.hidden).map(c => `<li><a href="#${c.id}">${esc(c.name)}</a></li>`).join("");
+$("#menu").innerHTML = MENU.filter(c => !c.hidden).map((c, ci) => `<section class="cat${c.compact ? " compact" : ""}" id="${c.id}" aria-labelledby="h-${c.id}">
   <h2 id="h-${c.id}">${esc(c.name)}</h2>
   ${c.note ? `<p class="note">${esc(c.note)}</p>` : ""}
+  ${c.id === "combos" ? `<div class="combo-people-filter" aria-label="Filtrar combos por cantidad de personas">
+    <span class="pf-label">
+      <svg class="pf-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7" r="3.1" fill="currentColor"/><path d="M5.4 20c.3-4.4 2.8-6.6 6.6-6.6s6.3 2.2 6.6 6.6H5.4Z" fill="currentColor"/></svg>
+      ¿Para cuántas personas?
+    </span>
+    <button type="button" class="pf-btn" data-people-filter="1" aria-pressed="false">1 persona</button>
+    <button type="button" class="pf-btn" data-people-filter="2" aria-pressed="false">2 personas</button>
+    <button type="button" class="pf-btn" data-people-filter="4" aria-pressed="false">3 o más</button>
+  </div>` : ""}
   <div class="list">${c.items.map(i => itemHTML(i, c.compact, ci === 0)).join("")}</div>
 </section>`).join("");
 
@@ -1195,11 +1682,12 @@ navUl.addEventListener("click", e => {
 function spy(){
   ticking = false; if (lock) return;
   const limit = navEl.offsetHeight + 80;
-  let cur = MENU[0].id;
-  for (const c of MENU){
+  const VIS = MENU.filter(c => !c.hidden);
+  let cur = VIS[0].id;
+  for (const c of VIS){
     if (document.getElementById("h-" + c.id).getBoundingClientRect().top <= limit) cur = c.id;
   }
-  if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) cur = MENU[MENU.length - 1].id;
+  if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) cur = VIS[VIS.length - 1].id;
   if (cur !== activeId) setActive(cur);
 }
 window.addEventListener("scroll", () => { if (!ticking){ ticking = true; requestAnimationFrame(spy); } }, { passive:true });
@@ -1255,7 +1743,7 @@ const sugRow = (id, badge="") => `<div class="sug-row"><div class="sug-copy"><di
 function panelSuggest(ls){
   if (!ls.length) return "";
 
-  const pastaProductIds = new Set(["fetuccini","bucatini","promo-alfredo","combo-indecisos","combo-soprano"]);
+  const pastaProductIds = new Set(["fetuccini","bucatini","promo-alfredo"]);
   const hasPasta = ls.some(l => pastaProductIds.has(l.it.id));
   const hasPizza = ls.some(l => CATOF[l.it.id] === "pizzas");
   const beverageIds = new Set(["beb-350","beb-15","agua","jugo"]);
@@ -1273,7 +1761,6 @@ function panelSuggest(ls){
   /* Pastas: prioriza proteínas; si falta bebida, la sugiere de forma sutil. Máximo 2 sugerencias. */
   if (hasPasta){
     let proteins = availableMissing(["albondigas","pollo-gravy"]);
-    if (ls.some(l => l.it.id === "combo-soprano")) proteins = proteins.filter(id => id !== "albondigas");
     if (!hasDrink && isProductAvailable("beb-350") && !inCart("beb-350")){
       if (proteins.length) suggestions.push({ id:proteins[0], badge:"Para tu pasta" });
       suggestions.push({ id:"beb-350", badge:"Para acompañar" });
@@ -1471,7 +1958,7 @@ document.addEventListener("click", e => {
     const itx = IDX[shCtx.id], px = +t.dataset.shPick;
     S(shCtx.id).p = px;
     track("sauce_selected", {product_id:shCtx.id,sauce:itx.pick.list[px]});
-    shCtx.stage = "customize";
+    shCtx.stage = "proteins";
     shCtx.invalid = "";
     const cardx = document.querySelector('.item[data-id="' + shCtx.id + '"]');
     if (cardx){ swapPhoto(cardx); syncCard(cardx); }
@@ -1484,11 +1971,34 @@ document.addEventListener("click", e => {
   if (t.hasAttribute("data-sh-next") && shCtx){
     const itx = IDX[shCtx.id], ox = itx.options ? S(shCtx.id).o : 0;
     const needDrink = !!itx.drinkChoice || (shCtx.c === 1 && comboNeedsDrink(itx, ox));
-    if (needDrink && shCtx.drink < 0){ shCtx.invalid = "drink"; drawSheet(); const f = $("[data-sh-drink]"); if (f) f.focus(); return; }
-    shCtx.stage = "proteins"; shCtx.invalid = ""; drawSheet(); const f = $("[data-sh-ex-inc]") || $("[data-sh-add]"); if (f) f.focus(); return;
+    shCtx.stage = "customize"; shCtx.invalid = ""; drawSheet(); const f = $('[data-sh-c="0"]') || $("[data-sh-add]"); if (f) f.focus(); return;
   }
-  if (t.hasAttribute("data-sh-protein-back") && shCtx){ shCtx.stage = "customize"; drawSheet(); const f = $('[data-sh-c="' + shCtx.c + '"]') || $("[data-sh-next]"); if (f) f.focus(); return; }
-  if (t.dataset.shBundleGroup !== undefined && shCtx){ const gi = +t.dataset.shBundleGroup, vi = +t.dataset.shBundleValue; shCtx.bundle[gi] = vi; shCtx.invalid = ""; const itx = IDX[shCtx.id], last = !itx.bundleChoices || gi >= itx.bundleChoices.length - 1; if (!last) shCtx.step = gi + 1; drawSheet(); const f = last ? $('[data-sh-bundle-group="' + gi + '"][data-sh-bundle-value="' + vi + '"]') : $('[data-sh-bundle-group="' + (gi + 1) + '"]'); if (f) f.focus(); return; }
+  if (t.hasAttribute("data-sh-pick-back") && shCtx){ shCtx.stage = "pick"; shCtx.invalid = ""; drawSheet(); const f = $('[data-sh-pick][aria-checked="true"]') || $("[data-sh-pick]"); if (f) f.focus(); return; }
+  if (t.hasAttribute("data-sh-protein-back") && shCtx){ shCtx.stage = "proteins"; drawSheet(); const f = $("[data-sh-ex-inc]") || $("[data-sh-next]"); if (f) f.focus(); return; }
+  if (t.dataset.shBundleGroup !== undefined && shCtx){
+    const gi = +t.dataset.shBundleGroup, vi = +t.dataset.shBundleValue;
+    shCtx.bundle[gi] = vi; shCtx.invalid = "";
+    const itx = IDX[shCtx.id];
+    if (itx.id === "combo-famiglia" && gi === 1){ shCtx.bundle[2] = 0; shCtx.step = 2; drawSheet(); return; }
+    const last = !itx.bundleChoices || gi >= itx.bundleChoices.length - (itx.combo ? 0 : 1);
+    if (!last) shCtx.step = gi + 1;
+    drawSheet(); return;
+  }
+  if (t.dataset.shSliceInc !== undefined && shCtx && shCtx.id === "combo-famiglia"){
+    const dist = [[3,3],[4,2],[2,4],[5,1],[1,5]], cur = dist[shCtx.bundle[2] < 0 ? 0 : shCtx.bundle[2]] || [3,3];
+    let a=cur[0], b=cur[1], side=+t.dataset.shSliceInc;
+    if(side===0 && a<5){a++;b--;} else if(side===1 && b<5){b++;a--;}
+    const ni=dist.findIndex(x=>x[0]===a&&x[1]===b); if(ni>=0)shCtx.bundle[2]=ni; drawSheet(); return;
+  }
+  if (t.dataset.shSliceDec !== undefined && shCtx && shCtx.id === "combo-famiglia"){
+    const dist = [[3,3],[4,2],[2,4],[5,1],[1,5]], cur = dist[shCtx.bundle[2] < 0 ? 0 : shCtx.bundle[2]] || [3,3];
+    let a=cur[0], b=cur[1], side=+t.dataset.shSliceDec;
+    if(side===0 && a>1){a--;b++;} else if(side===1 && b>1){b--;a++;}
+    const ni=dist.findIndex(x=>x[0]===a&&x[1]===b); if(ni>=0)shCtx.bundle[2]=ni; drawSheet(); return;
+  }
+  if (t.hasAttribute("data-sh-dist-next") && shCtx && shCtx.id === "combo-famiglia"){
+    shCtx.step = 3; drawSheet(); return;
+  }
   if (t.dataset.shExInc !== undefined && shCtx){ const x = t.dataset.shExInc; shCtx.ex[x] = (shCtx.ex[x] || 0) + 1; track("extra_added",{parent_product_id:shCtx.id,extra_id:x,extra_name:IDX[x] ? IDX[x].name : x,extra_type:(x==="albondigas"||x==="pollo-gravy")?"protein":"extra"}); drawSheet(); const f = $('[data-sh-ex-inc="' + x + '"]'); if (f) f.focus(); return; }
   if (t.dataset.shExDec !== undefined && shCtx){ const x = t.dataset.shExDec, q = shCtx.ex[x] || 0; if (q <= 1) delete shCtx.ex[x]; else shCtx.ex[x] = q - 1; track("extra_removed",{parent_product_id:shCtx.id,extra_id:x,extra_name:IDX[x] ? IDX[x].name : x,extra_type:(x==="albondigas"||x==="pollo-gravy")?"protein":"extra"}); drawSheet(); const f = $('[data-sh-ex-dec="' + x + '"]'); if (f && !f.disabled) f.focus(); else { const g = $('[data-sh-ex-inc="' + x + '"]'); if (g) g.focus(); } return; }
   if (t.hasAttribute("data-sh-prev") && shCtx){ shCtx.step = Math.max(0, (shCtx.step || 0) - 1); drawSheet(); const f = $('[data-sh-bundle-group="' + shCtx.step + '"]'); if (f) f.focus(); return; }
@@ -1570,8 +2080,8 @@ function sheetTotal(){
 function drawSheet(){
   const it = IDX[shCtx.id], s = S(it.id), o = it.options ? s.o : 0, cb = comboOf(it, o);
   if (it.pickInSheet && shCtx.stage === "pick"){
-    const choices = it.pick.list.map((name, i) => ({name, i})).filter(x => isSauceAvailable(x.name)).map(x => `<button type="button" class="sh-opt" role="radio" aria-checked="false" data-sh-pick="${x.i}"><span class="rd" aria-hidden="true"></span><span class="tx"><b>${esc(x.name)}</b></span><i>${fmt(basePrice(it, o, x.i))}</i></button>`).join("");
-    $("#sheet").innerHTML = `<div class="sh-h"><div><b id="sh-t">${esc(it.name)}</b><span>${esc(it.pick.label)}</span></div><button class="x" type="button" data-sh-x aria-label="Cerrar">✕</button></div><div class="sh-step"><div class="sh-ex" role="radiogroup" aria-label="${esc(it.pick.label)}"><p class="sh-lab">${esc(it.pick.label)}</p><div class="sh-g">${choices}</div></div></div>`;
+    const choices = it.pick.list.map((name, i) => ({name, i})).filter(x => isSauceAvailable(x.name)).map(x => `<button type="button" class="sh-opt" role="radio" aria-checked="${s.p === x.i}" data-sh-pick="${x.i}"><span class="rd" aria-hidden="true"></span><span class="tx"><b>${esc(x.name)}</b></span><i>${fmt(basePrice(it, o, x.i))}</i></button>`).join("");
+    $("#sheet").innerHTML = `<div class="sh-h"><div><b id="sh-t">${esc(it.name)}</b><span>${esc(it.pick.label)}</span></div><button class="x" type="button" data-sh-x aria-label="Cerrar">✕</button></div><div class="sh-progress"><span></span><span>Paso 1 de 3</span></div><div class="sh-step"><div class="sh-ex" role="radiogroup" aria-label="${esc(it.pick.label)}"><p class="sh-lab">${esc(it.pick.label)}</p><div class="sh-g">${choices}</div></div></div>`;
     return;
   }
   const size = it.options ? it.options[o].label : "";
@@ -1582,24 +2092,37 @@ function drawSheet(){
       <button type="button" class="sh-opt" role="radio" aria-checked="${shCtx.c === 0}" data-sh-c="0"><span class="rd" aria-hidden="true"></span><span class="tx"><b>Solo ${esc(it.name)}</b></span><i>${fmt(base)}</i></button>
       <button type="button" class="sh-opt" role="radio" aria-checked="${shCtx.c === 1}" data-sh-c="1"><span class="rd" aria-hidden="true"></span><span class="tx"><b>Hazla combo</b><small>${esc(cb.desc.replace(/^\+\s*/, ""))}</small></span><i>${fmt(base + cb.extra)}</i></button>
     </div>` : "";
-  const ex = it.extras ? `<div class="sh-ex" role="group" aria-label="${esc(it.extras.label)}"><p class="sh-lab">${esc(it.extras.label)} <small>(opcional)</small></p>
+  const ex = it.extras ? `<div class="sh-ex" role="group" aria-label="${esc(it.extras.label)}"><p class="sh-lab">${esc(it.extras.label)}</p>
       <div class="sh-g">${it.extras.ids.map(id => { const q = shCtx.ex[id] || 0;
         return `<div class="sh-opt sh-extra" role="group" aria-label="${esc(IDX[id].name)}" data-sh-extra="${esc(id)}" data-selected="${q > 0}"><span class="rd" aria-hidden="true"></span>${IDX[id].img ? `<img class="sh-thumb" src="${esc(IDX[id].img)}" alt="" onerror="this.style.display=\'none\'">` : ""}<span class="tx"><b>${esc(IDX[id].name)}</b><small>+ ${fmt(IDX[id].price)} c/u</small></span><span class="sh-qty"><button type="button" data-sh-ex-dec="${esc(id)}" aria-label="Quitar ${esc(IDX[id].name)}"${q ? "" : " disabled"}>−</button><span>${q}</span><button type="button" data-sh-ex-inc="${esc(id)}" aria-label="Agregar ${esc(IDX[id].name)}">+</button></span></div>`; }).join("")}</div></div>` : "";
   const needDrink = !!it.drinkChoice || (shCtx.c === 1 && comboNeedsDrink(it, o));
   const drinkLabel = (it.drinkChoice && it.drinkChoice.label) || (comboDrinkKind(it, o) === "mini" ? "Elige tu bebida mini" : "Elige tu bebida");
   const drink = needDrink ? `<div class="sh-ex${shCtx.invalid === "drink" ? " is-missing" : ""}" role="radiogroup" aria-label="${esc(drinkLabel)}" aria-invalid="${shCtx.invalid === "drink"}"><p class="sh-lab">${esc(drinkLabel)}</p>
       <div class="exg">${drinkChoices(it, o, shCtx.c).map((name, i) => `<button type="button" class="sh-chk" role="radio" aria-checked="${shCtx.drink === i}" data-sh-drink="${i}"><span class="tx"><b>${esc(name)}</b>${drinkSuffix(it, o, shCtx.c) ? `<small>${esc(drinkSuffix(it, o, shCtx.c))}</small>` : ""}</span><span class="bx" aria-hidden="true">${shCtx.drink === i ? "✓" : ""}</span></button>`).join("")}</div></div>` : "";
-  /* Para pastas: primero Solo/Combo + bebida; después proteínas. */
+  const radiosPasta = cb ? `<div role="radiogroup" aria-label="Bebida mini" class="sh-g">
+      <button type="button" class="sh-opt" role="radio" aria-checked="${shCtx.c === 1}" data-sh-c="1"><span class="rd" aria-hidden="true"></span><span class="tx"><b>Agregar bebida mini</b></span><i>+ ${fmt(cb.extra)}</i></button>
+      <button type="button" class="sh-opt" role="radio" aria-checked="${shCtx.c === 0}" data-sh-c="0"><span class="rd" aria-hidden="true"></span><span class="tx"><b>Seguir sin bebida</b></span></button>
+    </div>` : "";
+  /* Para pastas: salsa, proteína y bebida. */
   if (it.pickInSheet && it.extras && shCtx.stage === "customize"){
     $("#sheet").innerHTML = `<div class="sh-h"><div><b id="sh-t">${esc(it.name)}</b>${lab ? `<span>${esc(lab)}</span>` : ""}</div><button class="x" type="button" data-sh-x aria-label="Cerrar">✕</button></div>
-      ${radios}${drink}
-      <button type="button" class="add sh-add" data-sh-next>Continuar</button>`;
+      <div class="sh-progress"><span><button type="button" class="sh-back" data-sh-protein-back aria-label="Volver">←</button></span><span>Paso 3 de 3 · Bebida</span></div>
+      ${radiosPasta}${drink}
+      <button type="button" class="add sh-add" data-sh-add>+ Agregar · ${fmt(sheetTotal())}</button>`;
     return;
   }
   if (it.pickInSheet && it.extras && shCtx.stage === "proteins"){
     $("#sheet").innerHTML = `<div class="sh-h"><div><b id="sh-t">${esc(it.name)}</b>${lab ? `<span>${esc(lab)}</span>` : ""}</div><button class="x" type="button" data-sh-x aria-label="Cerrar">✕</button></div>
-      <div class="sh-progress"><span><button type="button" class="sh-back" data-sh-protein-back aria-label="Volver">←</button></span><span>Proteína opcional</span></div>
+      <div class="sh-progress"><span><button type="button" class="sh-back" data-sh-pick-back aria-label="Volver">←</button></span><span>Paso 2 de 3 · Proteína</span></div>
       ${ex}
+      <button type="button" class="add sh-add" data-sh-next>Continuar</button>`;
+    return;
+  }
+  if (it.bundleChoices && it.bundleChoices.length && cb && (shCtx.step || 0) >= it.bundleChoices.length){
+    const nn = it.bundleChoices.length + 1;
+    $("#sheet").innerHTML = `<div class="sh-h"><div><b id="sh-t">${esc(it.name)}</b></div><button class="x" type="button" data-sh-x aria-label="Cerrar">✕</button></div>
+      <div class="sh-step"><div class="sh-progress"><span><button type="button" class="sh-back" data-sh-prev aria-label="Volver">←</button></span><span>${nn} de ${nn}</span></div>
+      ${radios}${drink}</div>
       <button type="button" class="add sh-add" data-sh-add>+ Agregar · ${fmt(sheetTotal())}</button>`;
     return;
   }
@@ -1609,9 +2132,28 @@ function drawSheet(){
     const gi = Math.max(0, Math.min(shCtx.step || 0, totalSteps - 1));
     const g = it.bundleChoices[gi];
     bundleDone = shCtx.bundle.every(v => v >= 0);
-    bundle = `<div class="sh-step"><div class="sh-progress"><span>${gi > 0 ? `<button type="button" class="sh-back" data-sh-prev aria-label="Volver">←</button>` : ""}</span><span>${gi + 1} de ${totalSteps}</span></div><div class="sh-ex${shCtx.invalid === "bundle" ? " is-missing" : ""}" role="radiogroup" aria-label="${esc(g.label)}" aria-invalid="${shCtx.invalid === "bundle"}"><p class="sh-lab">${esc(g.label)}</p><div class="sh-g">${g.list.map((name, vi) => ({name, vi})).filter(x => !/salsa/i.test(g.label || "") || isSauceAvailable(x.name)).map(x => `<button type="button" class="sh-opt" role="radio" aria-checked="${shCtx.bundle[gi] === x.vi}" data-sh-bundle-group="${gi}" data-sh-bundle-value="${x.vi}"><span class="rd" aria-hidden="true"></span><span class="tx"><b>${esc(x.name)}</b></span></button>`).join("")}</div></div></div>`;
+    if (it.id === "combo-famiglia" && gi === 2){
+      const dist = [[3,3],[4,2],[2,4],[5,1],[1,5]];
+      if (shCtx.bundle[2] < 0) shCtx.bundle[2] = 0;
+      const q = dist[shCtx.bundle[2]] || dist[0];
+      const f1 = it.bundleChoices[0].list[shCtx.bundle[0]] || "Sabor 1";
+      const f2 = it.bundleChoices[1].list[shCtx.bundle[1]] || "Sabor 2";
+      bundle = `<div class="sh-step"><div class="sh-progress"><span><button type="button" class="sh-back" data-sh-prev aria-label="Volver">←</button></span><span>${gi + 1} de ${totalSteps}</span></div>
+        <div class="sh-ex"><p class="sh-lab">Tus 6 slices <small>Mitad y mitad por defecto</small></p>
+          <div class="fam-dist">
+            <div class="fam-row"><span class="fam-name">${esc(f1)}</span><span class="sh-qty"><button type="button" data-sh-slice-dec="0"${q[0] <= 1 ? " disabled" : ""}>−</button><span>${q[0]}</span><button type="button" data-sh-slice-inc="0"${q[0] >= 5 ? " disabled" : ""}>+</button></span></div>
+            <div class="fam-row"><span class="fam-name">${esc(f2)}</span><span class="sh-qty"><button type="button" data-sh-slice-dec="1"${q[1] <= 1 ? " disabled" : ""}>−</button><span>${q[1]}</span><button type="button" data-sh-slice-inc="1"${q[1] >= 5 ? " disabled" : ""}>+</button></span></div>
+          </div>
+          <p class="fam-total">Total: <b>6 slices</b></p>
+        </div>
+        <button type="button" class="add sh-add" data-sh-dist-next>Continuar</button>
+      </div>`;
+    } else {
+      const blocked = it.id === "combo-famiglia" && gi === 1 && shCtx.bundle[0] >= 0 ? it.bundleChoices[0].list[shCtx.bundle[0]] : null;
+      bundle = `<div class="sh-step"><div class="sh-progress"><span>${gi > 0 ? `<button type="button" class="sh-back" data-sh-prev aria-label="Volver">←</button>` : ""}</span><span>${gi + 1} de ${totalSteps + (cb ? 1 : 0)}</span></div><div class="sh-ex${shCtx.invalid === "bundle" ? " is-missing" : ""}" role="radiogroup" aria-label="${esc(g.label)}" aria-invalid="${shCtx.invalid === "bundle"}"><p class="sh-lab">${esc(g.label)}</p><div class="sh-g">${g.list.map((name, vi) => ({name, vi})).filter(x => (!blocked || x.name !== blocked) && (!/salsa/i.test(g.label || "") || isSauceAvailable(x.name))).map(x => `<button type="button" class="sh-opt" role="radio" aria-checked="${shCtx.bundle[gi] === x.vi}" data-sh-bundle-group="${gi}" data-sh-bundle-value="${x.vi}"><span class="rd" aria-hidden="true"></span><span class="tx"><b>${esc(x.name)}</b></span></button>`).join("")}</div></div></div>`;
+    }
   }
-  const showAdd = !it.bundleChoices || !it.bundleChoices.length || ((shCtx.step || 0) === it.bundleChoices.length - 1);
+  const showAdd = !it.bundleChoices || !it.bundleChoices.length || ((shCtx.step || 0) === it.bundleChoices.length - 1 && !cb);
   $("#sheet").innerHTML = `<div class="sh-h"><div><b id="sh-t">${esc(it.name)}</b>${lab ? `<span>${esc(lab)}</span>` : ""}</div><button class="x" type="button" data-sh-x aria-label="Cerrar">✕</button></div>
     ${it.bundleChoices && it.bundleChoices.length ? bundle : `${radios}${drink}${ex}`}
     ${showAdd ? `<button type="button" class="add sh-add" data-sh-add>+ Agregar · ${fmt(sheetTotal())}</button>` : ""}`;
@@ -1627,17 +2169,46 @@ function openSheet(id){
 function closeSheet(){ shCtx = null; $("#sheet").hidden = true; $("#shbd").hidden = true; if (shFrom && shFrom.focus) shFrom.focus(); }
 $("#shbd").addEventListener("click", closeSheet);
 
-/* ---------- Foto ampliada ---------- */
+/* ---------- Ficha de producto ---------- */
 const lb = $("#lb"); let lbFrom = null;
 function openLb(btn){
   const card = btn.closest(".item"), it = IDX[card.dataset.id], img = btn.querySelector("img");
-  $("#lbi").src = img.currentSrc || img.src; $("#lbi").alt = it.name;
-  $("#lbc").innerHTML = esc(it.name) + (it.desc ? "<small>" + esc(it.desc) + "</small>" : "");
-  lbFrom = btn; lb.hidden = false; document.body.style.overflow = "hidden"; $("#lbx").focus();
+  const s = S(it.id), o = it.options ? s.o : 0;
+  const cat = MENU.find(c => c.id === CATOF[it.id]);
+
+  $("#lbi").src = img.currentSrc || img.src;
+  $("#lbi").alt = it.name;
+  $("#lbcat").textContent = cat ? cat.name : "";
+  $("#lbt").textContent = it.name;
+  $("#lbd").textContent = it.desc || "";
+  $("#lbd").hidden = !it.desc;
+
+  let priceText = "";
+  if (it.pickInSheet && it.priceByPick && s.p < 0){
+    priceText = "Desde " + fmt(Math.min(...Object.values(it.priceByPick)));
+  } else {
+    priceText = fmt(unitPrice(it, o, PRE() && s.c, s.p));
+  }
+  $("#lbp").textContent = it.pendingPrice ? "Precio por definir" : priceText;
+  $("#lba").dataset.id = it.id;
+  $("#lba").disabled = !!it.pendingPrice;
+  $("#lba").textContent = it.pendingPrice ? "Próximamente" : (it.infoOnly ? "Ver" : "Agregar");
+
+  lbFrom = btn;
+  lb.hidden = false;
+  document.body.style.overflow = "hidden";
+  $("#lbx").focus();
 }
 function closeLb(){ lb.hidden = true; document.body.style.overflow = ""; if (lbFrom) lbFrom.focus(); }
 $("#lbx").addEventListener("click", closeLb);
-lb.addEventListener("click", e => { if (e.target === lb || e.target.tagName === "FIGURE") closeLb(); });
+$("#lba").addEventListener("click", () => {
+  const id = $("#lba").dataset.id;
+  const card = id && document.querySelector('.item[data-id="' + id + '"]');
+  const original = card && card.querySelector("[data-add], [data-jump]");
+  closeLb();
+  if (original) original.click();
+});
+lb.addEventListener("click", e => { if (e.target === lb) closeLb(); });
 
 /* ---------- Datos del cliente (se recuerdan para la próxima vez) ---------- */
 const PROFILE = "carta_cliente_v1";
@@ -1645,12 +2216,15 @@ try {
   const p = JSON.parse(localStorage.getItem(PROFILE)) || {};
   if (p.name) $("#cname").value = p.name;
   if (p.addr) $("#caddr").value = p.addr;
+  if (p.unit) $("#cunit").value = p.unit;
+  if (p.phone) $("#cphone").value = p.phone;
+  if (p.email) $("#cemail").value = p.email;
 } catch(e){}
 function saveProfile(){
-  try { localStorage.setItem(PROFILE, JSON.stringify({ name: $("#cname").value.trim(), addr: $("#caddr").value.trim() })); } catch(e){}
+  try { localStorage.setItem(PROFILE, JSON.stringify({ name: $("#cname").value.trim(), addr: $("#caddr").value.trim(), unit: $("#cunit").value.trim(), phone: $("#cphone").value.trim(), email: $("#cemail").value.trim() })); } catch(e){}
 }
 $("#cname").addEventListener("change", saveProfile);
-$("#caddr").addEventListener("change", saveProfile);
+["#caddr","#cunit","#cphone","#cemail"].forEach(id => $(id).addEventListener("change", saveProfile));
 $("#noteToggle").addEventListener("click", () => {
   const btn = $("#noteToggle"), wrap = $("#noteWrap"), open = btn.getAttribute("aria-expanded") === "true";
   btn.setAttribute("aria-expanded", String(!open)); wrap.hidden = open;
@@ -1701,6 +2275,7 @@ function syncTipo(){
     : "Confirmaremos tu pedido y te enviaremos los datos de transferencia. Una vez recibido el pago, comenzaremos a preparar tu orden.";
   $("#steps").innerHTML = "";
   syncPay();
+  if (typeof syncPayMode === "function") syncPayMode();
 }
 document.querySelectorAll('input[name="tipo"]').forEach(r => r.addEventListener("change", () => {
   const er = $("#deliveryErr"), seg = $("#deliverySelector");
@@ -1719,7 +2294,7 @@ $("#send").addEventListener("click", () => {
   if (delivery && addr.length < 5){ err.textContent = "Escribe tu dirección para el delivery."; $("#caddr").focus(); return; }
   err.textContent = "";
   track("whatsapp_click", {fulfillment:delivery ? "delivery" : "retiro", order_total:sum, cart_items:ls.reduce((a,l)=>a+l.qty,0), product_ids:ls.map(l=>l.it.id)});
-  try { localStorage.setItem(PROFILE, JSON.stringify({ name, addr })); } catch(e){}
+  saveProfile();
 
   const orderLine = l => {
     const bits = [l.it.name];
@@ -1746,6 +2321,263 @@ $("#send").addEventListener("click", () => {
   const fallback = $("#waFallback"); fallback.href = waUrl; fallback.hidden = false;
   window.open(waUrl, "_blank", "noopener");
 });
+
+
+
+/* =====================================================================
+   PAGO ONLINE CON MERCADO PAGO (Checkout API + Orders API, Payment Brick)
+   - Las claves secretas viven solo en Netlify. Aquí solo se usa la clave PÚBLICA que entrega el servidor.
+   - El total lo recalcula el servidor: lo que se ve aquí es informativo.
+   ===================================================================== */
+const WALLETS = { applePay:false, googlePay:false };   // pausados: no activar hasta completar Apple Pay y confirmar Google Pay con Mercado Pago
+const FN = "/.netlify/functions/";
+const LS_ORDERS = "carta_pedidos_v1", LS_PENDING = "carta_pago_pendiente_v1";
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const lsGet = (k, d) => { try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch(e){ return d; } };
+const lsSet = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} };
+const emailOk = v => /^[^\s@]{1,64}@[^\s@]{1,190}\.[^\s@]{2,}$/.test(v);
+var MPCFG = { enabled:false }, payMode = "whatsapp", payModeChosen = false;
+
+const onlineAllowed = () => !!(MPCFG && MPCFG.enabled && (tipo() === "retiro" || (tipo() === "delivery" && MPCFG.delivery_online)));
+const onlineFee = () => (tipo() === "delivery" && MPCFG && MPCFG.delivery_fee) ? MPCFG.delivery_fee : 0;
+const onlineTotal = () => totals().sum + onlineFee();
+
+function syncPayMode(){
+  if (!MPCFG || !$("#payChoice")) return;
+  const box = $("#payChoice"), on = !!MPCFG.enabled, allowed = onlineAllowed(), delivery = tipo() !== "retiro";
+  box.hidden = !on;
+  if (!allowed) payMode = "whatsapp"; else if (!payModeChosen) payMode = "online";
+  const online = on && payMode === "online";
+  box.querySelector('input[value="online"]').disabled = !allowed;
+  box.querySelector('input[value="online"]').checked = online;
+  box.querySelector('input[value="whatsapp"]').checked = !online;
+  $("#payOnlineNote").hidden = !(on && !allowed);
+  $("#emailWrap").hidden = !online;
+  $("#phoneWrap").hidden = !online;
+  $("#unitWrap").hidden = !(online && delivery);
+  $("#payOnline").hidden = !online;
+  $("#send").hidden = online;
+  document.querySelector(".wa-hint").hidden = online;
+  $("#orderStep").hidden = online;
+  $("#pay").hidden = online || !hasPay;
+  $("#payOnlineAmt").textContent = fmt(onlineTotal());
+  if (online){
+    const s = totals().sum, f = onlineFee();
+    $("#step2Summary").textContent = delivery ? `Productos ${fmt(s)} + delivery ${fmt(f)} · Total ${fmt(s + f)}` : `Total ${fmt(s)} · Retiro en local`;
+  }
+}
+document.querySelectorAll('input[name="paymode"]').forEach(r => r.addEventListener("change", () => {
+  payMode = r.value; payModeChosen = true; syncPayMode();
+  track("payment_method_selected", { method:payMode, ...cartAnalytics() });
+}));
+
+fetch(FN + "mp-test-config", { cache:"no-store" }).then(r => r.ok ? r.json() : null).then(c => {
+  if (c && c.enabled && c.public_key){ MPCFG = c; syncTipo(); }
+}).catch(() => {});
+
+/* ---------- Datos del cliente ---------- */
+function collectOnline(){
+  const err = $("#err"), name = $("#cname").value.trim(), email = $("#cemail").value.trim(), phone = $("#cphone").value.trim();
+  const addr = $("#caddr").value.trim(), unit = $("#cunit").value.trim(), note = $("#cnote").value.trim(), delivery = tipo() === "delivery";
+  const bad = (msg, el) => { err.textContent = msg; el.focus(); return null; };
+  if (name.length < 2) return bad("Escribe tu nombre.", $("#cname"));
+  if (!emailOk(email)) return bad("Escribe un correo válido para enviarte el comprobante.", $("#cemail"));
+  if (delivery && addr.length < 5) return bad("Escribe tu dirección para el delivery.", $("#caddr"));
+  err.textContent = ""; saveProfile();
+  return { delivery_type:tipo(), customer:{ name, email, phone, address:delivery ? addr : "", unit:delivery ? unit : "", notes:note } };
+}
+
+/* ---------- Pantallas de pago ---------- */
+let PG = null;
+const VIEWS = ["pvForm", "pvProc", "pvOk", "pvTicket", "pvOrders"];
+function showView(id){
+  VIEWS.forEach(v => document.getElementById(v).classList.toggle("on", v === id));
+  $("#payScreen").scrollTop = 0;
+  const h = document.getElementById(id).querySelector("h2"); if (h) h.focus({ preventScroll:true });
+}
+function openPayScreen(){ $("#payScreen").hidden = false; document.body.style.overflow = "hidden"; }
+function closePayScreen(){
+  try { PG && PG.brick && PG.brick.unmount(); } catch(e){}
+  if (PG) PG.brick = null;
+  $("#payScreen").hidden = true; document.body.style.overflow = "";
+}
+const showPayError = msg => { $("#pvErr").textContent = msg; };
+
+function loadMpSdk(){
+  if (window.MercadoPago) return Promise.resolve();
+  return new Promise((ok, fail) => {
+    const s = document.createElement("script"); s.src = "https://sdk.mercadopago.com/js/v2"; s.onload = ok; s.onerror = () => fail(new Error("sdk")); document.head.appendChild(s);
+  });
+}
+
+function startOnlinePayment(){
+  const form = collectOnline(); if (!form) return;
+  PG = { form, reference:null, status_key:null, brick:null, busy:false, mp:null };
+  const sum = totals().sum, fee = onlineFee(), total = sum + fee, count = totals().count;
+  $("#pvSum").innerHTML = `<div class="row"><span>Productos (${count})</span><b>${fmt(sum)}</b></div>` +
+    (form.delivery_type === "delivery" ? `<div class="row"><span>Delivery</span><b>${fmt(fee)}</b></div>` : `<div class="row"><span>Retiro en local</span><b>Sin costo</b></div>`) +
+    `<div class="row tot"><span>Total a pagar</span><span>${fmt(total)}</span></div>`;
+  showPayError("");
+  openPayScreen(); showView("pvForm");
+  track("payment_started", { fulfillment:form.delivery_type, order_total:total, ...cartAnalytics() });
+  mountBrick(total);
+}
+
+async function mountBrick(total){
+  const box = $("#mpBrick"); box.innerHTML = '<p class="pv-load">Cargando medios de pago…</p>';
+  try {
+    await loadMpSdk();
+    PG.mp = PG.mp || new MercadoPago(MPCFG.public_key, { locale:"es-CL" });
+    PG.brick = await PG.mp.bricks().create("payment", "mpBrick", {
+      initialization:{ amount:total, payer:{ email:PG.form.customer.email } },
+      customization:{
+        paymentMethods:{ creditCard:"all", debitCard:"all", maxInstallments:1 },     /* sin cuotas: el monto pagado debe ser igual al pedido */
+        visual:{ style:{ theme:"dark" } }
+      },
+      callbacks:{
+        onReady:() => { const l = box.querySelector(".pv-load"); if (l) l.remove(); },
+        onSubmit:({ selectedPaymentMethod, formData }) => submitPayment(selectedPaymentMethod, formData),
+        onError:e => { console.error("Payment Brick", e); showPayError("No pudimos cargar el formulario de pago. Vuelve atrás e inténtalo de nuevo."); }
+      }
+    });
+  } catch(e){
+    console.error(e); box.innerHTML = "";
+    showPayError("No pudimos cargar Mercado Pago. Revisa tu conexión o vuelve atrás y pide por WhatsApp.");
+  }
+}
+
+const newAttemptId = () => (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : (Date.now().toString(16) + "-" + Math.random().toString(16).slice(2, 12) + "-attempt");
+
+/* Cada envío real del formulario genera un identificador de intento NUEVO (nunca se reutiliza la idempotency key). */
+function submitPayment(selected, formData){
+  return new Promise(async (resolve, reject) => {
+    if (PG.busy) return reject();
+    PG.busy = true; showPayError(""); const t0 = Date.now(); showView("pvProc");
+    const fail = msg => { PG.busy = false; showView("pvForm"); showPayError(msg); reject(); };
+    try {
+      const res = await fetch(FN + "mp-create-order", {
+        method:"POST", headers:{ "Content-Type":"application/json" },
+        body:JSON.stringify({
+          items:Object.entries(cart).map(([key, qty]) => ({ key, qty })),
+          delivery_type:PG.form.delivery_type, customer:PG.form.customer,
+          reference:PG.reference, status_key:PG.status_key, attempt_id:newAttemptId(),
+          payment:{ token:formData.token, payment_method_id:formData.payment_method_id, payment_method_type:selected || formData.payment_method_type,
+                    installments:formData.installments || 1, payer:formData.payer }
+        })
+      });
+      const data = await res.json().catch(() => ({}));
+      if (data.reference){ PG.reference = data.reference; PG.status_key = data.status_key; PG.shortCode = data.short_code; lsSet(LS_PENDING, { reference:data.reference, key:data.status_key, at:Date.now() }); }
+      if (data.ok && data.paid){ resolve(); return finishPaid(t0); }
+      if (data.ok && data.pending){ resolve(); return waitForApproval(t0); }
+      track("payment_failed", { reason:data.error || ("http_" + res.status) });
+      if (data.status === "failed" || res.status === 402) PG.status_key = data.status_key || PG.status_key;
+      return fail(data.error || "No pudimos procesar el pago. Inténtalo de nuevo.");
+    } catch(e){ console.error(e); return fail("No pudimos conectar. Revisa tu conexión e inténtalo de nuevo."); }
+  });
+}
+
+async function fetchOrder(ref, key){
+  const r = await fetch(FN + "mp-order-status?ref=" + encodeURIComponent(ref) + "&key=" + encodeURIComponent(key), { cache:"no-store" });
+  if (!r.ok) throw new Error("status " + r.status);
+  return r.json();
+}
+
+async function waitForApproval(t0){
+  for (let i = 0; i < 45; i++){
+    await sleep(2000);
+    try {
+      const o = await fetchOrder(PG.reference, PG.status_key);
+      if (o.paid) return finishPaid(t0);
+      if (o.problem === "amount_mismatch") break;
+    } catch(e){}
+  }
+  /* sigue sin confirmarse: se evita que el cliente pague dos veces */
+  try { PG.brick && PG.brick.unmount(); } catch(e){} PG.brick = null; $("#mpBrick").innerHTML = ""; PG.busy = false; showView("pvForm");
+  $("#pvErr").innerHTML = "Estamos confirmando tu pago con Mercado Pago. <b>No vuelvas a pagar.</b> Si tu banco ya hizo el cobro, escríbenos por " +
+    `<a style="color:#fff" href="https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent("Hola MAFIA, necesito ayuda con mi pedido " + (PG.shortCode ? "#" + PG.shortCode : "(pago en revisión)") + ".")}" target="_blank" rel="noopener">WhatsApp</a>.`;
+}
+
+async function finishPaid(t0){
+  const wait = Math.max(0, 2200 - (Date.now() - t0)); if (wait) await sleep(wait);   /* "Procesando" dura un momento: evita un salto brusco */
+  let order;
+  try { order = await fetchOrder(PG.reference, PG.status_key); } catch(e){ await sleep(1500); order = await fetchOrder(PG.reference, PG.status_key).catch(() => null); }
+  showView("pvOk");
+  track("payment_approved", { order_total:order ? order.total : 0, short_code:order ? order.short_code : "" });
+  cart = {}; save(); renderCart();
+  await sleep(2200);
+  if (order){ rememberOrder(order); try { localStorage.removeItem(LS_PENDING); } catch(e){} renderTicket(order); showView("pvTicket"); }
+  else { closePayScreen(); }
+  PG.busy = false;
+}
+
+/* ---------- Comprobante (ticket) ---------- */
+function renderTicket(o){
+  const when = new Date(o.paid_at || o.created_at).toLocaleString("es-CL", { day:"numeric", month:"short", year:"numeric", hour:"2-digit", minute:"2-digit" });
+  const delivery = o.delivery_type === "delivery";
+  const stateTxt = !o.paid ? "Pendiente" : (o.kitchen_status && o.kitchen_status !== "nuevo" ? o.kitchen_label : "Pagado");
+  $("#tk").innerHTML = `
+    <div><div class="tk-brand">MAFIA</div></div>
+    <div><div class="tk-num">Número de pedido</div><div class="tk-code">#${esc(o.short_code)}</div></div>
+    <div class="tk-meta">
+      <div><span>Fecha</span><b>${esc(when)}</b></div>
+      <div><span>Entrega</span><b>${delivery ? "Delivery" : "Retiro en local"}</b></div>
+      ${delivery && o.address ? `<div><span>Dirección</span><b>${esc(o.address)}</b></div>` : ""}
+      <div><span>Estado</span><b class="tk-stat">${o.paid ? "✓ " : ""}${esc(stateTxt)}</b></div>
+    </div>
+    <div class="tk-items">${o.items.map(i => `<div class="tk-it"><span class="q">${i.quantity}×</span><div><b>${esc(i.name)}</b>${i.detail && i.detail.length ? `<small>${esc(i.detail.join(" · "))}</small>` : ""}</div><span class="p">${fmt(i.total_amount)}</span></div>`).join("")}</div>
+    <div class="tk-tot">
+      <div><span>Subtotal productos</span><span>${fmt(o.subtotal)}</span></div>
+      ${delivery ? `<div><span>Costo de delivery</span><span>${fmt(o.delivery_fee)}</span></div>` : ""}
+      <div class="grand"><span>Total pagado</span><span>${fmt(o.total)}</span></div>
+    </div>`;
+  const wa = "https://wa.me/" + CONFIG.whatsapp + "?text=" + encodeURIComponent("Hola MAFIA, necesito ayuda con mi pedido #" + o.short_code + ".");
+  $("#tkHelp").innerHTML = `<a href="${wa}" target="_blank" rel="noopener">¿Necesitas ayuda con este pedido?</a>`;
+}
+$("#pvDone").addEventListener("click", () => { closePayScreen(); toggle(false); window.scrollTo({ top:0, behavior:"smooth" }); });
+$("#pvBack").addEventListener("click", () => { if (PG && PG.busy) return; closePayScreen(); setTimeout(() => $("#payOnline").focus(), 0); });
+window.addEventListener("keydown", e => {
+  if (e.key !== "Escape" || $("#payScreen").hidden) return;
+  e.stopImmediatePropagation();
+  if (!(PG && PG.busy) && ($("#pvForm").classList.contains("on"))) closePayScreen();
+  else if ($("#pvOrders").classList.contains("on") || $("#pvTicket").classList.contains("on")) closePayScreen();
+}, true);
+$("#payOnline").addEventListener("click", startOnlinePayment);
+
+/* ---------- Mis pedidos (en este dispositivo) ---------- */
+function rememberOrder(o){
+  const list = lsGet(LS_ORDERS, []).filter(x => x.reference !== o.reference);
+  list.unshift({ reference:o.reference, key:PG && PG.reference === o.reference ? PG.status_key : (lsGet(LS_PENDING, null) || {}).key, short_code:o.short_code, at:o.paid_at || o.created_at, total:o.total });
+  lsSet(LS_ORDERS, list.filter(x => x.key).slice(0, 20));
+  syncMyOrders();
+}
+function syncMyOrders(){ const n = lsGet(LS_ORDERS, []).length, b = $("#myOrdersLink"); if (b){ b.hidden = !n; } }
+function openMyOrders(){
+  const list = lsGet(LS_ORDERS, []);
+  $("#moList").innerHTML = list.length ? list.map(x => `<button type="button" class="mo-item" data-ref="${esc(x.reference)}" data-key="${esc(x.key)}"><span><b>#${esc(x.short_code)}</b><small>${esc(new Date(x.at).toLocaleString("es-CL", { day:"numeric", month:"short", hour:"2-digit", minute:"2-digit" }))}</small></span><b>${fmt(x.total)}</b></button>`).join("") : '<p class="mo-empty">Aún no tienes pedidos pagados en este dispositivo.</p>';
+  openPayScreen(); showView("pvOrders");
+}
+$("#myOrdersLink").addEventListener("click", openMyOrders);
+$("#moBack").addEventListener("click", closePayScreen);
+$("#moList").addEventListener("click", async e => {
+  const b = e.target.closest("[data-ref]"); if (!b) return;
+  try { const o = await fetchOrder(b.dataset.ref, b.dataset.key); renderTicket(o); showView("pvTicket"); }
+  catch(err){ b.querySelector("small").textContent = "No pudimos cargar este pedido"; }
+});
+syncMyOrders();
+
+/* Si el cliente recargó la página en medio de un pago, se retoma aquí. */
+(async function resume(){
+  const p = lsGet(LS_PENDING, null);
+  if (!p || !p.reference || Date.now() - (p.at || 0) > 2 * 3600 * 1000){ if (p) try { localStorage.removeItem(LS_PENDING); } catch(e){} return; }
+  try {
+    const o = await fetchOrder(p.reference, p.key);
+    if (o.paid){
+      PG = { reference:p.reference, status_key:p.key, busy:false };
+      cart = {}; save(); renderCart(); rememberOrder(o); renderTicket(o); openPayScreen(); showView("pvTicket");
+      try { localStorage.removeItem(LS_PENDING); } catch(e){}
+    }
+  } catch(e){}
+})();
 
 
 /* ---------- Opciones de diseño (solo en la versión de prueba) ---------- */
@@ -1777,325 +2609,90 @@ setInterval(loadAvailability, 5000);
 document.addEventListener("visibilitychange", () => { if (!document.hidden) loadAvailability(); });
 window.addEventListener("focus", loadAvailability);
 
-</script>
 
-<script>
-/* =====================================================================
-   MERCADO PAGO TEST — oculto por defecto.
-   Se activa solo si /.netlify/functions/mp-test-config devuelve enabled:true.
-   En producción, si MAFIA_MP_TEST_ENABLED no está en true, el flujo WhatsApp
-   original permanece exactamente igual.
-   ===================================================================== */
+/* ---------- Preview: carrusel + popup promocional ---------- */
 (function(){
-  const MP_CONFIG_ENDPOINT = "/.netlify/functions/mp-test-config";
-  const MP_CREATE_ENDPOINT = "/.netlify/functions/mp-create-order";
-  const MP_STATUS_ENDPOINT = "/.netlify/functions/mp-order-status";
-  let mpTest = { enabled:false, publicKey:"" };
-  const WALLETS = { applePay:false, googlePay:false };
-  let mpInstance = null, mpBricks = null, mpController = null, mpAttemptId = "";
-
-  const money = n => "$" + new Intl.NumberFormat("es-CL").format(Number(n)||0);
-  const sendBtn = document.getElementById("send");
-  const checkout2 = document.getElementById("checkout2");
-  const drawerEl = document.getElementById("drawer");
-  const drawerTitle = document.getElementById("drawerTitle");
-  const backCheckoutBtn = document.getElementById("backCheckout");
-
-  async function loadMpTestConfig(){
-    try{
-      const r = await fetch(MP_CONFIG_ENDPOINT + "?t=" + Date.now(), {cache:"no-store", headers:{"Accept":"application/json"}});
-      if(!r.ok) return;
-      const d = await r.json();
-      if(!d || !d.enabled || !d.publicKey) return;
-      mpTest = d;
-      enableMpTestUI();
-    }catch(e){}
-  }
-
-  function enableMpTestUI(){
-    if(!sendBtn) return;
-    sendBtn.setAttribute("aria-label", "Pagar con Mercado Pago en ambiente de prueba");
-    sendBtn.innerHTML = '<span>Pagar con Mercado Pago</span><span class="mp-test-pill">TEST</span>';
-    const hint = document.querySelector(".wa-hint"); if(hint) hint.textContent = "Ambiente privado de prueba. No afecta la carta pública mientras la variable TEST esté desactivada en Production.";
-    const info = document.getElementById("orderStep"); if(info) info.textContent = "En esta versión privada probaremos el pago dentro de MAFIA. El pedido solo se confirmará cuando Mercado Pago responda como acreditado.";
-  }
-
-  function validCustomer(){
-    const name = document.getElementById("cname").value.trim();
-    const addr = document.getElementById("caddr").value.trim();
-    const delivery = tipo() === "delivery";
-    const err = document.getElementById("err");
-    if(!name){ err.textContent="Escribe tu nombre."; document.getElementById("cname").focus(); return null; }
-    if(delivery && addr.length < 5){ err.textContent="Escribe tu dirección para el delivery."; document.getElementById("caddr").focus(); return null; }
-    err.textContent="";
-    return { name, addr, note:document.getElementById("cnote").value.trim(), fulfillment:delivery?"delivery":"retiro" };
-  }
-
-  function applePayAvailable(){
-    if(!WALLETS.applePay) return false;
-    try{return !!(window.ApplePaySession && ApplePaySession.canMakePayments());}catch(e){return false;}
-  }
-  function googlePayAvailable(){ return !!WALLETS.googlePay; }
-  function syncWalletUI(step){
-    if(!step) return;
-    const apple=step.querySelector("#applePayBtn"), google=step.querySelector("#googlePayBtn");
-    const showApple=applePayAvailable(), showGoogle=googlePayAvailable(), any=showApple||showGoogle;
-    const area=step.querySelector("#walletArea"), sep=step.querySelector("#walletSep");
-    if(area) area.hidden=!any;
-    if(apple) apple.hidden=!showApple;
-    if(google) google.hidden=!showGoogle;
-    if(sep) sep.hidden=!any;
-  }
-  function testPaymentDataText(){
-    return ["Visa: 4168 8188 4444 7115","Vencimiento: 11/30","CVV: 123","Titular: APRO","Documento: 123456789","Email: test@testuser.com"].join("\n");
-  }
-
-  function ensureMpStep(){
-    let step = document.getElementById("mpTestStep");
-    if(step) return step;
-    step = document.createElement("section");
-    step.id="mpTestStep";
-    step.className="mp-test-step";
-    step.hidden=true;
-    step.innerHTML = `
-      <div class="mp-test-card">
-        <div class="mp-test-title"><b>Pago seguro</b><span class="mp-test-pill">MERCADO PAGO · TEST</span></div>
-        <div class="mp-test-total"><span>Total a pagar</span><b id="mpTestTotal">$0</b></div>
-
-        <div class="wallet-area" id="walletArea" hidden>
-          <button type="button" class="wallet-btn wallet-apple" id="applePayBtn" hidden> Pay</button>
-          <button type="button" class="wallet-btn wallet-google" id="googlePayBtn" hidden>Google Pay</button>
-        </div>
-        <div class="wallet-sep" id="walletSep" hidden><span>o paga con tarjeta</span></div>
-
-        <div class="mp-test-data">
-          <div class="mp-test-data-head"><b>DATOS DE PRUEBA</b><button type="button" class="mp-test-copyall" id="mpCopyTestData">Copiar</button></div>
-          <div class="mp-test-data-grid">
-            <div class="mp-test-data-row"><span>Visa</span><code>4168 8188 4444 7115</code></div>
-            <div class="mp-test-data-row"><span>Vence</span><code>11/30</code></div>
-            <div class="mp-test-data-row"><span>CVV</span><code>123</code></div>
-            <div class="mp-test-data-row"><span>Titular</span><code>APRO</code></div>
-            <div class="mp-test-data-row"><span>Documento</span><code>123456789</code></div>
-            <div class="mp-test-data-row"><span>Email</span><code>test@testuser.com</code></div>
-          </div>
-        </div>
-
-        <p class="wallet-card-title">Tarjeta de crédito o débito</p>
-        <div id="cardPaymentBrick_container"></div>
-        <p class="mp-test-note">Los datos de la tarjeta son capturados y tokenizados por Mercado Pago. MAFIA no recibe ni almacena el número completo ni el CVV.</p>
-        <p class="mp-test-error" id="mpTestError" role="alert"></p>
-      </div>
-      <button type="button" class="mp-test-back" id="mpTestBack">← Volver a tus datos</button>`;
-    drawerEl.appendChild(step);
-    step.querySelector("#mpTestBack").addEventListener("click", closePaymentStep);
-    const copyTest=step.querySelector("#mpCopyTestData");
-    if(copyTest) copyTest.addEventListener("click",async()=>{
-      try{await navigator.clipboard.writeText(testPaymentDataText());copyTest.textContent="Copiado ✓";}
-      catch(e){copyTest.textContent="No se pudo copiar";}
-      setTimeout(()=>copyTest.textContent="Copiar",1400);
-    });
-    const appleBtn=step.querySelector("#applePayBtn");
-    if(appleBtn) appleBtn.addEventListener("click",()=>{const e=step.querySelector("#mpTestError");if(e)e.textContent="Apple Pay está preparado pero aún no está habilitado.";});
-    const googleBtn=step.querySelector("#googlePayBtn");
-    if(googleBtn) googleBtn.addEventListener("click",()=>{const e=step.querySelector("#mpTestError");if(e)e.textContent="Google Pay está preparado pero aún no está habilitado.";});
-    syncWalletUI(step);
-    return step;
-  }
-
-  async function destroyBrick(){
-    try{ if(mpController && typeof mpController.unmount === "function") await mpController.unmount(); }catch(e){}
-    mpController=null;
-  }
-
-  async function closePaymentStep(){
-    const step=document.getElementById("mpTestStep"); if(step) step.hidden=true;
-    await destroyBrick();
-    checkout2.hidden=false;
-    drawerTitle.textContent="Tus datos";
-    backCheckoutBtn.hidden=false;
-    drawerEl.scrollTop=0;
-  }
-
-  function clientCartSnapshot(){
-    return JSON.parse(JSON.stringify(cart || {}));
-  }
-
-  function showPaymentProcessing(total){
-    const step=ensureMpStep();
-    step.innerHTML=`<div class="mp-test-card mp-test-processing">
-      <div class="mp-test-processing-inner">
-        <div class="mp-test-spinner" aria-hidden="true"></div>
-        <h3>Procesando tu pago</h3>
-        <div class="mp-test-amount">${money(total)}</div>
-        <p>No cierres esta ventana. Estamos esperando la confirmación de Mercado Pago.</p>
-      </div>
-    </div>`;
-    drawerTitle.textContent="Procesando pago";
-    backCheckoutBtn.hidden=true;
-    drawerEl.scrollTop=0;
-  }
-
-  async function openPaymentStep(customer){
-    const step=ensureMpStep();
-    checkout2.hidden=true;
-    step.hidden=false;
-    drawerTitle.textContent="Pagar";
-    backCheckoutBtn.hidden=true;
-    drawerEl.scrollTop=0;
-    const total=totals().sum;
-    step.querySelector("#mpTestTotal").textContent=money(total);
-    step.querySelector("#mpTestError").textContent="";
-    syncWalletUI(step);
-    mpAttemptId = (crypto && crypto.randomUUID) ? crypto.randomUUID() : (Date.now()+"-"+Math.random().toString(16).slice(2));
-
-    if(!window.MercadoPago){ step.querySelector("#mpTestError").textContent="No se pudo cargar Mercado Pago.js."; return; }
-    await destroyBrick();
-    if(!mpInstance){ mpInstance = new MercadoPago(mpTest.publicKey, {locale:"es-CL"}); mpBricks = mpInstance.bricks(); }
-
-    const settings={
-      initialization:{ amount:Number(total) },
-      callbacks:{
-        onReady:()=>{},
-        onSubmit:(formData, additionalData)=>new Promise(async (resolve,reject)=>{
-          const errEl=step.querySelector("#mpTestError");
-          if(errEl) errEl.textContent="";
-          const submittedTotal=total;
-          try{
-            /* Cada envío real del formulario es un intento de pago nuevo.
-               La idempotency key debe cambiar si Mercado Pago genera un token nuevo. */
-            mpAttemptId = (crypto && crypto.randomUUID) ? crypto.randomUUID() : (Date.now()+"-"+Math.random().toString(16).slice(2));
-
-            /* No cerramos el flujo ni volvemos al carrito: mostramos un estado
-               claro de procesamiento mientras el backend espera a Mercado Pago. */
-            await destroyBrick();
-            showPaymentProcessing(submittedTotal);
-
-            const r=await fetch(MP_CREATE_ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify({
-              attempt_id:mpAttemptId,
-              cart:clientCartSnapshot(),
-              customer:{name:customer.name,address:customer.addr,note:customer.note},
-              fulfillment:customer.fulfillment,
-              payment:{
-                token:formData.token,
-                payment_method_id:formData.payment_method_id,
-                installments:formData.installments,
-                payer:formData.payer || {},
-                payment_type_id:(additionalData && additionalData.paymentTypeId) || formData.payment_type_id || ""
-              }
-            })});
-            const d=await r.json().catch(()=>({}));
-            if(!r.ok || !d.ok) throw new Error(d.error || "No se pudo procesar el pago");
-            errEl.textContent="";
-            resolve();
-            showPaymentResult(d);
-          }catch(err){
-            reject(err);
-            /* Si falla la orden, devolvemos al formulario con el mensaje visible. */
-            try{
-              await openPaymentStep(customer);
-              const restored=document.getElementById("mpTestError");
-              if(restored) restored.textContent=err.message || "No se pudo procesar el pago";
-            }catch(_){}
-          }
-        }),
-        onError:(error)=>{ const e=document.getElementById("mpTestError"); if(e) e.textContent="Mercado Pago informó un error en el formulario. Revisa los datos e intenta nuevamente."; console.error(error); }
-      }
+  const tr = document.getElementById("mafiaTrack");
+  const dots = document.getElementById("mafiaDots");
+  if (tr && dots){
+    const slides = Array.from(tr.children);
+    if (slides.length < 2){ document.getElementById("mafiaPrev")?.remove(); document.getElementById("mafiaNext")?.remove(); dots.remove(); }
+    let idx = 0, timer = null;
+    const go = i => {
+      idx = (i + slides.length) % slides.length;
+      tr.scrollTo({left:tr.clientWidth * idx, behavior:"smooth"});
+      dots.querySelectorAll("button").forEach((b,n)=>b.classList.toggle("on",n===idx));
     };
-    mpController = await mpBricks.create("cardPayment","cardPaymentBrick_container",settings);
-  }
-
-  function showPaymentResult(d){
-    const step=ensureMpStep();
-    const processed=d.status==="processed" && d.status_detail==="accredited";
-    const pending=d.status==="processing" || d.status==="action_required" || d.status==="created";
-
-    drawerTitle.textContent = processed ? "Pedido confirmado" : (pending ? "Confirmando pago" : "Pago no aprobado");
-    backCheckoutBtn.hidden=true;
-
-    if(processed){
-      try{ cart={}; save(); }catch(e){}
-      track("payment_test_processed",{order_id:d.order_id,order_total:d.total||0});
+    if (slides.length > 1) slides.forEach((_,i)=>{
+      const b=document.createElement("button");
+      b.type="button"; b.setAttribute("aria-label","Ir al banner "+(i+1));
+      b.addEventListener("click",()=>go(i)); dots.appendChild(b);
+    });
+    dots.firstElementChild?.classList.add("on");
+    document.getElementById("mafiaPrev")?.addEventListener("click",()=>go(idx-1));
+    document.getElementById("mafiaNext")?.addEventListener("click",()=>go(idx+1));
+    tr.addEventListener("scroll",()=>{
+      clearTimeout(timer);
+      timer=setTimeout(()=>{
+        const n=Math.round(tr.scrollLeft/Math.max(1,tr.clientWidth));
+        idx=Math.max(0,Math.min(slides.length-1,n));
+        dots.querySelectorAll("button").forEach((b,i)=>b.classList.toggle("on",i===idx));
+      },80);
+    },{passive:true});
+    if (slides.length > 1 && !(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches)){
+      let hold = false, auto = null;
+      const start = () => { clearInterval(auto); auto = setInterval(() => { if (!hold && !document.hidden) go(idx + 1); }, 5000); };
+      const slider = tr.closest(".mafia-slider") || tr;
+      ["mouseenter","focusin","touchstart","pointerdown"].forEach(ev => slider.addEventListener(ev, () => { hold = true; }, {passive:true}));
+      ["mouseleave","focusout"].forEach(ev => slider.addEventListener(ev, () => { hold = false; start(); }));
+      ["touchend","touchcancel"].forEach(ev => slider.addEventListener(ev, () => { setTimeout(() => { hold = false; start(); }, 4000); }, {passive:true}));
+      start();
     }
-
-    step.innerHTML=`<div class="mp-test-card mp-test-success" data-result="${processed?'approved':(pending?'pending':'failed')}">
-      <div class="mp-test-check" style="background:${processed?'#2f9e62':(pending?'#b98820':'#b73d4c')};box-shadow:0 0 0 8px ${processed?'rgba(47,158,98,.10)':(pending?'rgba(185,136,32,.10)':'rgba(183,61,76,.10)')}">${processed?'✓':(pending?'…':'!')}</div>
-      <h3>${processed?'¡Pago aprobado!':(pending?'Estamos confirmando tu pago':'No pudimos aprobar el pago')}</h3>
-      <p>${processed
-        ? 'Tu pago fue acreditado correctamente y tu pedido quedó confirmado.'
-        : (pending
-          ? 'Mercado Pago todavía está procesando la orden. Puedes consultar el estado en unos segundos.'
-          : 'No se realizó el cobro. Puedes volver e intentar con otra tarjeta de prueba.')}</p>
-
-      <div class="mp-test-order">
-        <div><span>Pedido</span><b>${esc(d.order_id||'—')}</b></div>
-        <div><span>Estado</span><b>${esc(d.status||'—')}</b></div>
-        <div><span>Total</span><b>${money(d.total||0)}</b></div>
-      </div>
-
-      ${processed
-        ? `<p class="mp-test-result-note">En producción, desde aquí el pedido seguirá automáticamente al local/Fudo.</p>
-           <button type="button" class="mp-test-primary" id="mpResultBack">Volver al menú</button>`
-        : pending
-          ? `<button type="button" class="mp-test-primary" id="mpCheckStatus">Consultar estado</button>
-             <button type="button" class="mp-test-back" id="mpResultBack">Volver</button>`
-          : `<button type="button" class="mp-test-primary" id="mpResultBack">Intentar nuevamente</button>`
-      }
-    </div>`;
-
-    drawerEl.scrollTop=0;
-
-    const back=step.querySelector("#mpResultBack");
-    if(back) back.addEventListener("click",()=>{
-      if(processed){
-        /* Mantiene visible la confirmación hasta que el usuario decide salir. */
-        try{ renderCart(); }catch(e){}
-        toggle(false,true);
-        showCheckoutStep(1,false);
-        step.hidden=true;
-      }else{
-        closePaymentStep();
-      }
-    });
-
-    const check=step.querySelector("#mpCheckStatus");
-    if(check) check.addEventListener("click",async()=>{
-      check.disabled=true; check.textContent="Consultando…";
-      try{
-        const r=await fetch(MP_STATUS_ENDPOINT+"?id="+encodeURIComponent(d.order_id),{cache:"no-store"});
-        const x=await r.json();
-        if(r.ok&&x.ok) showPaymentResult(x);
-        else throw new Error(x.error||"No se pudo consultar");
-      }catch(e){
-        check.disabled=false;
-        check.textContent="Consultar estado";
-        alert(e.message||"No se pudo consultar");
-      }
-    });
   }
 
-  /* Captura el click antes del listener WhatsApp original. Si TEST está apagado, no interviene. */
-  if(sendBtn){
-    sendBtn.addEventListener("click",function(e){
-      if(!mpTest.enabled) return;
-      e.preventDefault(); e.stopImmediatePropagation();
-      const customer=validCustomer(); if(!customer) return;
-      try{ saveProfile(); }catch(_){ }
-      track("payment_test_open",{fulfillment:customer.fulfillment,...cartAnalytics()});
-      openPaymentStep(customer).catch(err=>{const x=document.getElementById("mpTestError");if(x)x.textContent=err.message||"No se pudo iniciar Mercado Pago";});
-    },true);
-  }
-
-  /* Si estamos en el paso de pago, el botón de volver del header regresa a Tus datos. */
-  if(backCheckoutBtn){
-    backCheckoutBtn.addEventListener("click",function(e){
-      const step=document.getElementById("mpTestStep");
-      if(mpTest.enabled && step && !step.hidden){e.preventDefault();e.stopImmediatePropagation();closePaymentStep();}
-    },true);
-  }
-
-  loadMpTestConfig();
+  const pop=document.getElementById("mafiaPop");
+  const closePop=()=>pop?.classList.remove("on");
+  document.getElementById("mafiaPopX")?.addEventListener("click",closePop);
+  pop?.addEventListener("click",e=>{if(e.target===pop)closePop()});
+  document.getElementById("mafiaPopCta")?.addEventListener("click",closePop);
+  const PC=CONFIG.popup||{};
+  if(PC.activo){ const g=i=>document.getElementById(i); g("mafiaPopT").textContent=PC.titulo||""; g("mafiaPopS").textContent=PC.texto||""; g("mafiaPopCta").textContent=PC.boton||"Cerrar"; if(PC.imagen) pop.querySelector("img").src=PC.imagen; }
+  let seen=!PC.activo; try{ seen=seen||sessionStorage.getItem("mafiaPopSeen")==="1"; }catch(e){}
+  if(!seen){ setTimeout(()=>{ pop?.classList.add("on"); try{ sessionStorage.setItem("mafiaPopSeen","1"); }catch(e){} },700); }
 })();
-</script>
 
+
+/* ---------- Filtro de COMBOS por personas ---------- */
+document.addEventListener("click", e => {
+  const btn = e.target.closest("[data-people-filter]");
+  if (!btn) return;
+
+  const filter = btn.closest(".combo-people-filter");
+  const list = document.querySelector("#combos .list");
+  if (!filter || !list) return;
+
+  const selected = btn.dataset.peopleFilter;
+  const alreadyOn = btn.getAttribute("aria-pressed") === "true";
+
+  filter.querySelectorAll("[data-people-filter]").forEach(b => b.setAttribute("aria-pressed","false"));
+
+  if (alreadyOn){
+    list.querySelectorAll(".item[data-people]").forEach(card => card.hidden = false);
+    return;
+  }
+
+  btn.setAttribute("aria-pressed","true");
+
+  list.querySelectorAll(".item[data-people]").forEach(card => {
+    const p = Number(card.dataset.people || 0);
+    if (selected === "4"){
+      card.hidden = p < 3;
+    } else {
+      card.hidden = p !== Number(selected);
+    }
+  });
+});
+
+</script>
 </body>
 </html>

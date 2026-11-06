@@ -1,39 +1,25 @@
-import { getStore } from "@netlify/blobs";
+import { openStore } from "./_store.mjs";
+import { MENU, sauceId } from "./_menu.mjs";
+import { safeEqual } from "./_auth.mjs";
 
 const STORE = "mafia-menu";
 const KEY = "availability-v2";
 
-const CATALOG = [
-  { id:"pizza-combo-info", name:"Hazla combo", category:"Combos" },
-  { id:"promo-alfredo", name:"Promo Alfredo", category:"Combos" },
-  { id:"combo-indecisos", name:"Combo Indecisos", category:"Combos" },
-  { id:"combo-soprano", name:"Combo Soprano", category:"Combos" },
-  { id:"palitos", name:"Palitos de ajo", category:"Entradas" },
-  { id:"cremita-zapallo", name:"Cremita de Zapallo", category:"Entradas" },
-  { id:"tgm", name:"The Good Meat", category:"Pizzas", options:["Slice","40 cm","60 cm"] },
-  { id:"pepperoni", name:"Tony Pepperoni", category:"Pizzas", options:["Slice","40 cm","60 cm"] },
-  { id:"pollo-bbq", name:"Il Traditore", category:"Pizzas", options:["Slice","40 cm","60 cm"] },
-  { id:"napolitana", name:"Napolitana", category:"Pizzas", options:["Slice","40 cm","60 cm"] },
-  { id:"margarita", name:"Margarita", category:"Pizzas", options:["Slice","40 cm","60 cm"] },
-  { id:"ajillo", name:"Al Ajillo Boss", category:"Pizzas", options:["Slice","40 cm","60 cm"] },
-  { id:"funghi", name:"Funghi", category:"Pizzas", options:["Slice","40 cm","60 cm"] },
-  { id:"chocleta", name:"La Chocleta", category:"Pizzas", options:["Slice","40 cm","60 cm"] },
-  { id:"fetuccini", name:"Fetuccini", category:"Pastas" },
-  { id:"bucatini", name:"Bucatini", category:"Pastas" },
-  { id:"salsa-alfredo", name:"Alfredo", category:"Salsas" },
-  { id:"salsa-pesto", name:"Pesto", category:"Salsas" },
-  { id:"salsa-bolognesa", name:"Bolognesa", category:"Salsas" },
-  { id:"albondigas", name:"Albóndigas", category:"Proteínas" },
-  { id:"pollo-gravy", name:"Pollo con Gravy", category:"Proteínas" },
-  { id:"top-bbq", name:"BBQ", category:"Toppings" },
-  { id:"top-pomodoro", name:"Pomodoro New York", category:"Toppings" },
-  { id:"top-parmigiano", name:"Parmigiano", category:"Toppings" },
-  { id:"top-ketchup", name:"Ketchup", category:"Toppings" },
-  { id:"beb-350", name:"Bebida mini", category:"Bebidas" },
-  { id:"beb-15", name:"Bebida 1.5 L", category:"Bebidas" },
-  { id:"agua", name:"Agua mineral 500 ml", category:"Bebidas" },
-  { id:"jugo", name:"Néctar en botella", category:"Bebidas" }
-];
+// El catálogo sale solo del menú (menu-data.js): si agregas un plato ahí, aparece aquí automáticamente.
+const CATALOG = (() => {
+  const list = [], seen = new Set();
+  const add = x => { if (!seen.has(x.id)){ seen.add(x.id); list.push(x); } };
+  for (const cat of MENU){
+    for (const it of cat.items){
+      add({ id:it.id, name:it.name, category:cat.name, ...(it.options ? { options:it.options.map(o => o.label) } : {}) });
+    }
+  }
+  for (const it of IDX_ALL()){
+    if (it.pick) for (const name of it.pick.list) add({ id:sauceId(name), name, category:"Salsas" });
+  }
+  return list;
+})();
+function IDX_ALL(){ return MENU.flatMap(c => c.items); }
 
 const PRODUCT_IDS = new Set(CATALOG.map(x => x.id));
 const OPTIONS = Object.fromEntries(CATALOG.filter(x => x.options).map(x => [x.id, x.options.map((_,i) => String(i))]));
@@ -69,7 +55,7 @@ async function readState(store){
 }
 
 export default async (req) => {
-  const store = getStore({ name:STORE, consistency:"strong" });
+  const store = openStore(STORE);
 
   if (req.method === "GET"){
     return response(await readState(store));
@@ -84,7 +70,7 @@ export default async (req) => {
   try { body = await req.json(); }
   catch { return response({error:"Solicitud inválida"},400); }
 
-  if (typeof body?.password !== "string" || body.password !== password){
+  if (typeof body?.password !== "string" || !safeEqual(body.password, password)){
     return response({error:"Credencial incorrecta"},401);
   }
 

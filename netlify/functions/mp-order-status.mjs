@@ -1,14 +1,21 @@
-const json=(data,status=200)=>Response.json(data,{status,headers:{"Cache-Control":"no-store","Content-Type":"application/json; charset=utf-8"}});
-export default async (req)=>{
-  if(req.method!=="GET") return json({ok:false,error:"Método no permitido"},405);
-  if(process.env.MAFIA_MP_TEST_ENABLED!=="true") return json({ok:false,error:"Mercado Pago TEST está desactivado"},404);
-  const token=process.env.MERCADOPAGO_ACCESS_TOKEN; if(!token) return json({ok:false,error:"Access Token no configurado"},503);
-  const u=new URL(req.url), id=(u.searchParams.get("id")||"").trim();
-  if(!/^ORD[A-Za-z0-9_-]+$/.test(id)) return json({ok:false,error:"Order ID inválido"},400);
-  try{
-    const r=await fetch("https://api.mercadopago.com/v1/orders/"+encodeURIComponent(id),{headers:{"Accept":"application/json","Authorization":`Bearer ${token}`}});
-    const d=await r.json().catch(()=>({}));
-    if(!r.ok) return json({ok:false,error:d?.message||d?.error||"No se pudo consultar la order"},r.status>=500?502:400);
-    return json({ok:true,order_id:d.id||id,status:d.status||"",status_detail:d.status_detail||"",total:Number(d.total_amount||0)});
-  }catch{return json({ok:false,error:"No se pudo conectar con Mercado Pago"},502);}
+// El cliente consulta aquí si su pago quedó aprobado (y recibe los datos del ticket).
+// Si el webhook aún no llegó, se consulta directamente a Mercado Pago y se aplica la misma regla de validación.
+import { json } from "./_auth.mjs";
+import { getOrderByReference, statusKeyOk, publicOrderView } from "./_mafia-orders.mjs";
+import { getMpOrder, reconcileOrder, mpConfigured } from "./_mp.mjs";
+
+export default async (req) => {
+  if (req.method !== "GET") return json({ error:"Método no permitido" }, 405);
+  const url = new URL(req.url);
+  let order = await getOrderByReference(url.searchParams.get("ref"));
+  if (!order || !statusKeyOk(order, url.searchParams.get("key") || "")) return json({ error:"Pedido no encontrado" }, 404);
+
+  if (order.status === "pending" && order.mercado_pago_order_id && mpConfigured()){
+    try {
+      const rec = await reconcileOrder(await getMpOrder(order.mercado_pago_order_id));
+      if (rec.outcome === "paid" || rec.outcome === "already") order = await getOrderByReference(order.reference);
+      else if (rec.outcome === "mismatch") return json({ ...publicOrderView(order), problem:"amount_mismatch" });
+    } catch (e){ console.error("status lookup", e.message); }
+  }
+  return json(publicOrderView(order));
 };
