@@ -255,6 +255,64 @@ main.wide{max-width:1240px}
 }
 @media (min-width:1100px){.tiles{grid-template-columns:repeat(4,1fr)}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* v7: aire entre bloques, tonos amarillos pálidos, sin flechas */
+.blk{margin-top:16px;padding:18px 18px;border:1px solid var(--line);border-radius:16px;background:#fff}
+.blk.y{background:#fff8dc;border-color:#f3e2a0}
+.blk.soft{background:#fafaf8}
+.blk.d-items{padding:6px 18px 14px}
+.d-head{margin-top:4px;padding-bottom:2px;gap:10px 14px}
+.d-back{margin-bottom:10px}
+.d-cust b{font-size:18px}
+.d-addr{margin-top:16px;padding-top:14px;border-top:1px dashed #e6d38a;font-size:16px}
+.d-note{margin-top:14px;padding:10px 12px;border-left:0;border-radius:10px;background:#fff;font-size:14px}
+.pill{background:#fff;border:1px solid #e6d38a}
+.it{padding:14px 0}
+.d-sum{padding:10px 0 0}
+.d-tot{margin-top:14px;padding:14px 16px;border-radius:12px;background:#fff4cf}
+.d-tot span{color:var(--amberdk);font-weight:700}
+.d-h{margin:2px 0 8px;font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.d-rows div{padding:13px 0}
+.d-rows div:last-child{border-bottom:0}
+.d-act{margin-top:20px}
+.d-act .go{height:56px}
+.sec{gap:12px;margin-top:12px}
+.d-warn{margin-top:16px}
+.wbox{margin-top:16px;padding:16px;border-radius:16px;background:#fff8dc;border:1px solid #f3e2a0}
+.wbox textarea{border-color:#e6d38a}
+.wrow{gap:12px;margin-top:12px}
+.orow{padding:16px 10px}
+.orow.new{background:#fff8dc}
+.orow[aria-current=true]{background:#fff4cf}
+@media(min-width:980px){.d-act{padding-top:6px}}
+
+/* v8: color por estado, etiquetas y opiniones */
+:root{--s-nuevo:#e0a000;--s-preparacion:#2f6fdb;--s-listo:#14803f;--s-entregado:#8b8780}
+.tg{display:inline-flex;align-items:center;padding:3px 9px;border-radius:999px;font-size:11.5px;font-weight:700;line-height:1.3;white-space:nowrap}
+.tg.del{background:#e6eefc;color:#1f56b8}.tg.ret{background:#dff5ef;color:#0a7a69}
+.tg.pay{background:#dcf3e4;color:#14803f}
+.tg.st-nuevo{background:#fff1c2;color:#8a5a00}.tg.st-preparacion{background:#e6eefc;color:#1f56b8}.tg.st-listo{background:#dcf3e4;color:#14803f}.tg.st-entregado{background:#eee;color:#555}
+.d-head{align-items:center}
+.d-meta{width:100%;font-size:13px}
+.otabs{flex-wrap:wrap;overflow:visible;gap:8px;margin:0 0 10px;padding:0;border-bottom:0}
+.otab{height:38px;padding:0 12px;border-radius:999px;border:1px solid var(--line);background:#fff;font-size:13.5px;display:inline-flex;align-items:center;gap:6px}
+.otab b{margin:0;min-width:22px;height:22px;padding:0 6px;border-radius:11px;display:inline-grid;place-items:center;font-size:12px;font-weight:800;color:#fff;background:var(--c,#8b8780)}
+.otab[data-st=nuevo]{--c:var(--s-nuevo)}.otab[data-st=preparacion]{--c:var(--s-preparacion)}.otab[data-st=listo]{--c:var(--s-listo)}.otab[data-st=entregado]{--c:var(--s-entregado)}
+.otab[aria-pressed=true]{background:#141313;color:#fff;border-color:#141313}.otab[aria-pressed=true]:after{display:none}
+.otab.hot b{color:#fff}
+.orow{position:relative;background:#fff;border:1px solid var(--line)!important;border-radius:14px;margin-bottom:8px;padding:12px 14px 12px 18px!important;overflow:hidden;--c:#8b8780}
+.orow:before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--c)}
+.orow[data-st=nuevo]{--c:var(--s-nuevo)}.orow[data-st=preparacion]{--c:var(--s-preparacion)}.orow[data-st=listo]{--c:var(--s-listo)}.orow[data-st=entregado]{--c:var(--s-entregado)}
+.orow[aria-current=true],.orow.new[aria-current=true]{box-shadow:0 0 0 2px var(--c);background:#fff}
+.orow.new{background:#fff8dc}
+.orow .s{display:flex;align-items:center;gap:8px;color:#3a362f}
+.orow .rt{grid-column:1/-1}
+.orow.new .n:before{display:none}
+.stars{color:#f0a500;letter-spacing:1px;font-size:14px;white-space:nowrap}.stars s{color:#ddd;text-decoration:none}
+.rv{display:block;margin-top:4px}.rv em{display:block;margin-top:2px;font-size:12.5px;color:#55514b}
+.go.ready{background:var(--s-listo);color:#fff}
+.go{background:#141313}
+.go.accept{background:var(--amber);color:#1a1200}
 </style>
 </head>
 <body>
@@ -274,7 +332,7 @@ main.wide{max-width:1240px}
     <button class="ico menu" id="menuBtn" type="button" aria-label="Abrir menú" aria-expanded="false"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
     <h1 class="disp" id="title">Inicio</h1>
     <button class="ico" id="soundBtn" type="button" aria-label="Sonido de alertas" aria-pressed="false"></button>
-    <a class="carta" href="/" target="_blank" rel="noopener">Ver carta ↗</a>
+    <a class="carta" href="/" target="_blank" rel="noopener">Ver carta</a>
   </header>
 
   <div class="scrim" id="scrim"></div>
@@ -546,7 +604,7 @@ function syncAlarm(){
 function syncAlert(){
   const n = pendingN(), el = $("#alertbar");
   el.hidden = !n || route() === "pedidos";
-  el.innerHTML = '<span class="dot"></span>' + (n === 1 ? "1 pedido por aceptar" : n + " pedidos por aceptar") + ' <span style="margin-left:auto">Ver →</span>';
+  el.innerHTML = '<span class="dot"></span>' + (n === 1 ? "1 pedido por aceptar" : n + " pedidos por aceptar") + ' <span style="margin-left:auto;font-weight:800">Ver</span>';
 }
 $("#alertbar").onclick = () => { S.tab = "nuevo"; S.sel = null; location.hash = "#/pedidos"; };
 
@@ -574,16 +632,20 @@ function vOrders(){
   $("#dcol").onclick = onDetailClick;
   S.sig = ""; drawOrders();
 }
+const ST_LBL = { nuevo:"Nuevo", preparacion:"En preparación", listo:"Listo", entregado:"Entregado" };
+const stars = n => `<span class="stars" aria-label="${n} de 5">${[1,2,3,4,5].map(k => k <= n ? "★" : "<s>★</s>").join("")}</span>`;
+const avgStars = o => { const r = o.ratings && o.ratings.items; return r && r.length ? Math.round(r.reduce((t, x) => t + x.stars, 0) / r.length) : 0; };
+const tipoChip = o => o.delivery_type === "delivery" ? '<span class="tg del">Delivery</span>' : '<span class="tg ret">Retiro</span>';
 function drawOrders(){
   if (!$("#ord")) return;
   $("#osound").innerHTML = soundOn ? "" : `<button class="soundoff" id="soundOn" type="button">${I.bellOff} Activar sonido de alerta</button>`;
   const so = $("#soundOn"); if (so) so.onclick = () => setSound(true);
-  $("#otabs").innerHTML = STATES.map(st => { const n = inTab(st).length; return `<button class="otab${st === "nuevo" && n ? " hot" : ""}" type="button" data-tab="${st}" aria-pressed="${S.tab === st}">${TAB[st]}<b>${n}</b></button>`; }).join("");
+  $("#otabs").innerHTML = STATES.map(st => { const n = inTab(st).length; return `<button class="otab${st === "nuevo" && n ? " hot" : ""}" type="button" data-st="${st}" data-tab="${st}" aria-pressed="${S.tab === st}">${TAB[st]}<b>${n}</b></button>`; }).join("");
   const list = inTab(S.tab);
-  $("#olist").innerHTML = list.length ? list.map(o => `<button class="orow${o.kitchen_status === "nuevo" ? " new" : ""}" type="button" data-ref="${esc(o.reference)}" aria-current="${S.sel === o.reference}"><span class="n">#${esc(o.short_code)}</span><span class="t">${clp(o.paid_total ?? o.total)}</span><span class="s">${esc(o.customer.name)} · ${o.delivery_type === "delivery" ? "Delivery" : "Retiro"}</span><span class="w">${o.kitchen_status === "nuevo" ? ago(o.paid_at) : hhmm(o.paid_at)}</span><span class="i">${o.items.map(i => i.quantity + "× " + esc(i.name)).join(", ")}</span></button>`).join("") : `<p class="none">Sin pedidos en “${TAB[S.tab]}”.</p>`;
+  $("#olist").innerHTML = list.length ? list.map(o => `<button class="orow${o.kitchen_status === "nuevo" ? " new" : ""}" type="button" data-st="${o.kitchen_status}" data-ref="${esc(o.reference)}" aria-current="${S.sel === o.reference}"><span class="n">#${esc(o.short_code)}</span><span class="t">${clp(o.paid_total ?? o.total)}</span><span class="s">${tipoChip(o)}${esc(o.customer.name)}</span><span class="w">${o.kitchen_status === "nuevo" ? ago(o.paid_at) : hhmm(o.paid_at)}</span><span class="i">${o.items.map(i => i.quantity + "× " + esc(i.name)).join(", ")}</span>${avgStars(o) ? `<span class="rt">${stars(avgStars(o))}</span>` : ""}</button>`).join("") : `<p class="none">Sin pedidos en “${TAB[S.tab]}”.</p>`;
   $("#ord").classList.toggle("has-sel", !!S.sel && !!S.orders.find(x => x.reference === S.sel));
   const o = S.orders.find(x => x.reference === S.sel);
-  const sig = o ? JSON.stringify([o.reference, o.kitchen_status, o.duplicate_payments, S.msgOpen === o.reference]) : "";
+  const sig = o ? JSON.stringify([o.reference, o.kitchen_status, o.duplicate_payments, S.msgOpen === o.reference, o.ratings]) : "";
   if (sig !== S.sig || !o){ S.sig = sig; drawDetail(o); }          /* no se redibuja si nada cambió (así no se pierde un mensaje que estás editando) */
 }
 function clientMsg(o){
@@ -606,18 +668,18 @@ function drawDetail(o){
   const c = o.customer || {}, del = o.delivery_type === "delivery", nx = NEXT[o.kitchen_status], prev = STATES[STATES.indexOf(o.kitchen_status) - 1];
   const canMsg = !!c.phone && o.kitchen_status !== "nuevo", showMsg = canMsg && S.msgOpen === o.reference;
   box.innerHTML = `
-    <button class="d-back" id="dback" type="button">← Pedidos</button>
-    <div class="d-head"><span class="d-num">#${esc(o.short_code)}</span><span class="d-meta"><b>${del ? "Delivery" : "Retiro en local"}</b> · Pagado · ${new Date(o.paid_at).toLocaleDateString("es-CL", { day:"numeric", month:"short" })} ${hhmm(o.paid_at)}</span></div>
-    <div class="d-sec"><div class="d-cust"><div class="cn"><b>${esc(c.name)}</b>${c.phone ? `<span>${esc(c.phone)}</span>` : ""}</div>${c.phone ? `<a class="pill" href="tel:${esc(c.phone)}">Llamar</a>` : ""}</div>
+    <button class="d-back" id="dback" type="button">Volver a pedidos</button>
+    <div class="d-head"><span class="d-num">#${esc(o.short_code)}</span><span class="tg st-${o.kitchen_status}">${ST_LBL[o.kitchen_status]}</span>${tipoChip(o)}<span class="tg pay">Pagado</span><span class="d-meta">${new Date(o.paid_at).toLocaleDateString("es-CL", { day:"numeric", month:"short" })} ${hhmm(o.paid_at)}</span></div>
+    <div class="blk y"><div class="d-cust"><div class="cn"><b>${esc(c.name)}</b>${c.phone ? `<span>${esc(c.phone)}</span>` : ""}</div></div>
     ${del ? `<div class="d-addr"><span class="d-lbl">Dirección</span>${esc(o.address)}${c.unit ? " · " + esc(c.unit) : ""}</div>` : ""}
     ${c.notes ? `<div class="d-note"><span class="d-lbl">Observaciones</span>${esc(c.notes)}</div>` : ""}</div>
-    <div class="d-items">${o.items.map(i => `<div class="it"><span class="q">${i.quantity}×</span><div class="nm">${esc(i.name)}${i.detail && i.detail.length ? `<small>${i.detail.map(esc).join(" · ")}</small>` : ""}</div><span class="p">${clp(i.total_amount)}</span></div>`).join("")}
+    <div class="blk d-items">${o.items.map((i, ix) => { const rv = o.ratings && o.ratings.items && o.ratings.items.find(r => r.i === ix); return `<div class="it"><span class="q">${i.quantity}×</span><div class="nm">${esc(i.name)}${i.detail && i.detail.length ? `<small>${i.detail.map(esc).join(" · ")}</small>` : ""}${rv ? `<span class="rv">${stars(rv.stars)}${rv.comment ? `<em>“${esc(rv.comment)}”</em>` : ""}</span>` : ""}</div><span class="p">${clp(i.total_amount)}</span></div>`; }).join("")}
       <div class="d-sum"><span>Subtotal</span><span>${clp(o.subtotal)}</span></div>
       ${del ? `<div class="d-sum"><span>Delivery</span><span>${clp(o.delivery_fee)}</span></div>` : ""}
       <div class="d-tot"><span>Total pagado</span><div><b>${clp(o.paid_total ?? o.total)}</b></div></div></div>
     ${(o.duplicate_payments || []).length ? `<div class="d-warn">Posible doble cobro en Mercado Pago. Revisa y devuelve si corresponde.</div>` : ""}
     ${showMsg ? `<div class="wbox"><h3>Mensaje para el cliente</h3><textarea id="wtext" aria-label="Mensaje para el cliente">${esc(clientMsg(o))}</textarea><div class="wrow"><button type="button" class="wcopy" id="wcopy">Copiar mensaje</button><button type="button" class="wphone" id="wphone" data-phone="${esc(waNum(c.phone))}">Copiar teléfono</button></div></div>` : ""}
-    <h3 class="d-h">Detalles de la compra</h3>
+    <div class="blk soft"><h3 class="d-h">Detalles de la compra</h3>
     <dl class="d-rows">
       <div><dt>Cliente</dt><dd>${esc(c.name)}</dd></div>
       ${c.phone ? `<div><dt>Teléfono</dt><dd>${esc(c.phone)}</dd></div>` : ""}
@@ -628,11 +690,11 @@ function drawDetail(o){
       <div><dt>Estado</dt><dd>${({ nuevo:"Nuevo", preparacion:"En preparación", listo:"Listo", entregado:"Entregado" })[o.kitchen_status] || o.kitchen_status}</dd></div>
       <div><dt>N° de pedido</dt><dd>#${esc(o.short_code)}<small>${esc(o.reference)}</small></dd></div>
       ${o.mp_order_id ? `<div><dt>ID Mercado Pago</dt><dd>${esc(o.mp_order_id)}</dd></div>` : ""}
-    </dl>
+    </dl></div>
     <div class="d-act">
       ${o.kitchen_status === "nuevo" ? `<p class="d-hint">Ingrésalo en Fudo y luego acepta</p>` : ""}
       ${nx ? `<button class="go ${nx[2]}" id="go" type="button" data-to="${nx[0]}">${nx[1]}</button>` : ""}
-      <div class="sec">${canMsg && !showMsg ? `<button type="button" class="wbtn" id="wgen">Mensaje WhatsApp</button>` : ""}${prev ? `<button type="button" class="ghost" id="undo" data-to="${prev}">← ${TAB[prev]}</button>` : ""}</div>
+      <div class="sec">${canMsg && !showMsg ? `<button type="button" class="wbtn" id="wgen">Mensaje WhatsApp</button>` : ""}${prev ? `<button type="button" class="ghost" id="undo" data-to="${prev}">Devolver a ${TAB[prev]}</button>` : ""}</div>
     </div>`;
 }
 async function move(to){
