@@ -8,7 +8,8 @@ export const LOCAL_KEY = "local-v1";
 export const PHOTO_STORE = "mafia-local-photos";
 
 const ITEMS = MENU.flatMap(c => c.items.map(it => ({ it, cat:c })));
-const IDS = new Set(ITEMS.map(x => x.it.id));
+const LOCAL_ITEMS = Array.isArray(DEFAULTS.localItems) ? DEFAULTS.localItems : [];
+const IDS = new Set([...ITEMS.map(x => x.it.id), ...LOCAL_ITEMS.map(x => x.id)]);
 const CATS = new Set(MENU.map(c => c.id));
 const IMG_OK = s => typeof s === "string" && (/^\/fotos\/[\w./-]+$/.test(s) || /^\/\.netlify\/functions\/local-photo\?id=[\w-]+&v=\d+$/.test(s));
 
@@ -23,6 +24,9 @@ export function cleanLocal(raw = {}){
       if (typeof o.name === "string" && o.name.trim()) c.name = o.name.trim().slice(0, 80);
       if (typeof o.desc === "string") c.desc = o.desc.trim().slice(0, 400);
       if (typeof o.promo === "string") c.promo = o.promo.trim().slice(0, 120);
+      if (typeof o.sub === "string") c.sub = o.sub.trim().slice(0, 160);
+      if (typeof o.label === "string") c.label = o.label.trim().slice(0, 20);
+      if (IMG_OK(o.img2)) c.img2 = o.img2;
       if (o.img === null) c.img = null;                  // null = usar la foto de la carta online
       else if (IMG_OK(o.img)) c.img = o.img;
       if (Object.keys(c).length) overrides[id] = c;
@@ -37,6 +41,7 @@ export function cleanLocal(raw = {}){
 
 // Valores de partida + lo guardado (lo guardado manda).
 export function effective(stored, keepNull = false){
+  if (stored && stored.v !== DEFAULTS.version) stored = null;      // se cambió la base: vuelven los valores de partida
   const base = cleanLocal(DEFAULTS), s = stored ? cleanLocal(stored) : null;
   const overrides = {};
   for (const id of new Set([...Object.keys(base.overrides), ...Object.keys(s?.overrides || {})])){
@@ -57,15 +62,19 @@ export async function readLocal(forPanel = false){
 }
 export async function writeLocal(state){
   const clean = cleanLocal(state);   // conserva img:null (= volver a la foto de la carta online)
-  await openStore(LOCAL_STORE).setJSON(LOCAL_KEY, { ...clean, updatedAt:new Date().toISOString() });
-  return effective(clean, true);
+  await openStore(LOCAL_STORE).setJSON(LOCAL_KEY, { ...clean, v:DEFAULTS.version, updatedAt:new Date().toISOString() });
+  return effective({ ...clean, v:DEFAULTS.version }, true);
 }
 
 // Lista para el panel: cada producto con su valor online y su valor actual en el local.
 export function panelItems(){
-  return MENU.filter(c => !c.hidden).flatMap(c => c.items.map(it => ({
+  const catName = id => MENU.find(c => c.id === id)?.name || id;
+  const own = LOCAL_ITEMS.map(x => ({ id:x.id, category:catName(x.cat), categoryId:x.cat, name:x.name, desc:x.desc || "", price:x.price, img:x.img || "", byPick:false, local:true }));
+  const rest = MENU.filter(c => !c.hidden).flatMap(c => c.items.map(it => ({
     id:it.id, category:c.name, categoryId:c.id, name:it.name, desc:it.desc || "", price:it.price, img:it.img || (it.foto ? `/fotos/${it.foto}.webp` : ""),
     byPick: it.priceByPick ? true : false
   })));
+  // los productos propios del local van primero dentro de su sección
+  return [...own, ...rest].sort((a, b) => MENU.findIndex(c => c.id === a.categoryId) - MENU.findIndex(c => c.id === b.categoryId));
 }
 export const noteCategories = () => MENU.filter(c => !c.hidden).map(c => ({ id:c.id, name:c.name, note:c.note || "" }));
