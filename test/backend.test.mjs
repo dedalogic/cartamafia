@@ -391,6 +391,7 @@ test("carta local: valores de partida (60 cm, Padrinos oculto) sin guardar nada"
   assert.deepEqual(d.disabledProducts, ["combo-doble-capo"]);
   assert.equal(d.overrides.tgm.img, "/fotos/local/tgm.webp");
   assert.equal(d.notes.pizzas, "Formato único de 60 cm.");
+  assert.equal(d.overrides.tgm.promo, "Con Palitos de ajo");
 });
 
 test("carta local: solo el administrador puede cambiarla", async () => {
@@ -407,7 +408,7 @@ test("carta local: guarda interruptores, precio propio y volver a la foto online
   assert.equal(d.overrides.margarita.img, null);                       // el panel recuerda el "volver"
   assert.equal(d.overrides.funghi.img, "/fotos/local/funghi.webp");    // una URL ajena se ignora y queda la de partida
   const pub = await (await getLocal()).json();                          // la carta pública no ve null
-  assert.equal(pub.overrides.margarita, undefined);
+  assert.equal("img" in pub.overrides.margarita, false);
   assert.equal(pub.notes.pizzas, "Pizza de 60 cm");
   const panel = await (await post(localMenu, { password:"caja123", action:"login" })).json();
   assert.ok(panel.items.find(x => x.id === "ajillo") && panel.categories.length > 3);
