@@ -388,10 +388,13 @@ const getLocal = () => localMenu(new Request("https://example.test/x"));
 
 test("carta local: valores de partida (60 cm, Padrinos oculto) sin guardar nada", async () => {
   const d = await (await getLocal()).json();
-  assert.deepEqual(d.disabledProducts, ["combo-doble-capo"]);
+  assert.ok(d.disabledProducts.includes("combo-doble-capo") && d.disabledProducts.includes("combo-famiglia"));
   assert.equal(d.overrides.tgm.img, "/fotos/local/tgm.webp");
-  assert.equal(d.notes.pizzas, "Formato único de 60 cm.");
-  assert.equal(d.overrides.tgm.promo, "Con Palitos de ajo");
+  assert.equal(d.overrides.tgm.img2, "/fotos/local/slice-tgm.webp");
+  assert.equal(d.overrides.tgm.price, 5490);            // en el local la pizza se vende por slice
+  assert.equal(d.overrides.margarita.price, 4490);
+  assert.equal(d.overrides.funghi.sub, "Familiar con palitos y bebida: $24.990");
+  assert.match(d.notes.pizzas, /60 cm/);
 });
 
 test("carta local: solo el administrador puede cambiarla", async () => {
@@ -400,10 +403,10 @@ test("carta local: solo el administrador puede cambiarla", async () => {
 });
 
 test("carta local: guarda interruptores, precio propio y volver a la foto online", async () => {
-  const r = await post(localMenu, { password:"caja123", action:"set", disabledProducts:["combo-doble-capo", "tgm", "no-existe"],
+  const r = await post(localMenu, { password:"caja123", action:"set", disabledProducts:["combo-doble-capo", "tgm", "l-pesto-pollo", "no-existe"],
     overrides:{ pepperoni:{ price:19990, desc:"Sin cebolla" }, margarita:{ img:null }, funghi:{ img:"https://malo.test/x.png" } }, notes:{ pizzas:"Pizza de 60 cm" } });
   const d = await r.json();
-  assert.deepEqual(d.disabledProducts, ["combo-doble-capo", "tgm"]);
+  assert.deepEqual(d.disabledProducts, ["combo-doble-capo", "tgm", "l-pesto-pollo"]);   // acepta los productos propios del local
   assert.equal(d.overrides.pepperoni.price, 19990);
   assert.equal(d.overrides.margarita.img, null);                       // el panel recuerda el "volver"
   assert.equal(d.overrides.funghi.img, "/fotos/local/funghi.webp");    // una URL ajena se ignora y queda la de partida
@@ -412,6 +415,8 @@ test("carta local: guarda interruptores, precio propio y volver a la foto online
   assert.equal(pub.notes.pizzas, "Pizza de 60 cm");
   const panel = await (await post(localMenu, { password:"caja123", action:"login" })).json();
   assert.ok(panel.items.find(x => x.id === "ajillo") && panel.categories.length > 3);
+  assert.deepEqual(panel.items.filter(x => x.local).map(x => x.id), ["l-familiar", "l-slice-bebida", "l-pesto-pollo"]);
+  assert.equal(panel.items[0].id, "l-familiar");         // los combos del local van primero
 });
 
 test("carta local: sube una foto y la entrega", async () => {
@@ -426,4 +431,49 @@ test("carta local: sube una foto y la entrega", async () => {
   assert.equal((await post(localMenu, { password:"caja123", action:"photo", id:"ajillo", data:"data:text/html;base64,AAAA" })).status, 400);
   assert.equal((await post(localMenu, { password:"caja123", action:"photo", id:"../x", data:"data:image/jpeg;base64," + b64 })).status, 400);
   assert.equal((await localPhoto(new Request("https://example.test/x?id=nada"))).status, 404);
+});
+
+// ---------- mapa de pedidos ----------
+const geoFn = (await import(F + "orders-geo.mjs")).default;
+test("mapa: ubica direcciones de delivery, las guarda y agrupa por calle", async () => {
+  const hits = [], real = globalThis.fetch;
+  globalThis.fetch = async (url, init) => {
+    const u = new URL(url);
+    if (u.hostname !== "nominatim.openstreetmap.org") return real(url, init);
+    const q = u.searchParams.get("q"); hits.push(q);
+    if (/nadie/i.test(q)) return Response.json([]);
+    if (/genaro\s+gallo\s+2955/i.test(q)) return Response.json([{ lat:"-20.2330", lon:"-70.1400" }]);
+    if (/arturo prat/i.test(q) && /1020/.test(q)) return Response.json([]);          // sin número exacto
+    if (/arturo prat/i.test(q)) return Response.json([{ lat:"-20.2140", lon:"-70.1520" }]);   // calle sola
+    return Response.json([{ lat:"-33.4", lon:"-70.6" }]);                              // fuera de Iquique
+  };
+  for (const { key } of (await stores["mafia-orders"].list({ prefix:"orders/" })).blobs) await stores["mafia-orders"].delete(key);   // parte de cero
+  const now = Date.now();
+  const putOrder = async (code, address, type = "delivery") => {
+    const key = "orders/x-" + (now - 1000).toString(36) + "-" + code;
+    await stores["mafia-orders"].setJSON(key, { status:"paid", paid_at:new Date(now - 1000).toISOString(), delivery_type:type, address, total:10000, paid_total:10000 });
+  };
+  await putOrder("a1", "Genaro Gallo 2955");
+  await putOrder("a2", "genaro  gallo 2955 ");
+  await putOrder("a3", "Arturo Prat 1020, depto 4");
+  await putOrder("a4", "Nadie 55");
+  await putOrder("a5", "Av Santiago 100");
+  await putOrder("a6", "Retiro en local", "retiro");
+  try {
+    const r = await (await post(geoFn, { password:"caja123", days:7 })).json();
+    assert.equal(r.orders, 5);                       // el retiro no cuenta
+    assert.equal(r.addresses, 4);                    // las dos de Genaro Gallo son la misma
+    assert.equal(r.pending, 1);                      // se ubican de a 3 por llamada
+    const r2 = await (await post(geoFn, { password:"caja123", days:7 })).json();
+    assert.equal(r2.pending, 0);
+    const gg = r2.points.find(p => /genaro/i.test(p.address));
+    assert.equal(gg.count, 2); assert.equal(gg.approx, false);
+    const pr = r2.points.find(p => /prat/i.test(p.address));
+    assert.equal(pr.approx, true); assert.equal(pr.street, "arturo prat");
+    assert.equal(r2.failed.length, 2);               // Nadie 55 y la que cae fuera de Iquique
+    const n = hits.length;
+    await post(geoFn, { password:"caja123", days:7 });
+    assert.equal(hits.length, n);                    // lo ya ubicado no se vuelve a consultar
+    assert.equal((await post(geoFn, { password:"mala", days:7 })).status, 401);
+  } finally { globalThis.fetch = real; }
 });
