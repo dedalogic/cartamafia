@@ -558,7 +558,8 @@ window.addEventListener("beforeunload", e => { if (dirty){ e.preventDefault(); e
 
 
 /* ---------- carta local ---------- */
-function locEff(it){ const o = S.loc.over[it.id] || {}; return { name:o.name || it.name, desc:o.desc != null ? o.desc : it.desc, price:o.price != null ? o.price : it.price, img:o.img === null ? it.img : (o.img || it.img), own:o.price != null || (o.img && o.img !== it.img) || !!o.name || o.desc != null }; }
+const DEFAULT_PROMO_IDS = new Set(["tgm","pepperoni","pollo-bbq","napolitana","margarita","ajillo","funghi"]);
+function locEff(it){ const o = S.loc.over[it.id] || {}; return { name:o.name || it.name, desc:o.desc != null ? o.desc : it.desc, price:o.price != null ? o.price : it.price, img:o.img === null ? it.img : (o.img || it.img), promo:o.promo || "", own:o.price != null || !!o.promo || (o.img && o.img !== it.img) || !!o.name || o.desc != null }; }
 async function vLocal(){
   if (!S.loc){
     $("#view").innerHTML = '<p class="none">Cargando…</p>';
@@ -603,6 +604,7 @@ function editLocal(id){
     <div class="lph"><img id="lpv" src="${esc(e.img)}" alt=""><div><button class="btn alt" id="lpick" type="button">Cambiar foto</button><button class="ledit" id="lorig" type="button">Usar la foto de la carta online</button><input id="lfile" type="file" accept="image/*" hidden></div></div>
     <label class="lf">Nombre<input id="ln" value="${esc(e.name)}" maxlength="80"></label>
     <label class="lf">Descripción<textarea id="ld" maxlength="400">${esc(e.desc)}</textarea></label>
+    <label class="lf">Promo (opcional)<input id="lpr" value="${esc(e.promo)}" maxlength="120" placeholder="Ej: Con Palitos de ajo"></label>
     <label class="lf">Precio en el local${it.byPick ? " (reemplaza todos los precios del plato)" : ""}<input id="lp" inputmode="numeric" value="${e.price}"></label>
     <button class="btn" id="lok" type="button">Listo</button></div>`;
   document.body.appendChild(sh);
@@ -624,7 +626,9 @@ function editLocal(id){
     const ov = o();
     if (n && n !== it.name) ov.name = n; else delete ov.name;
     if (d !== (it.desc || "")) ov.desc = d; else delete ov.desc;
+    const pr = $("#lpr").value.trim(); if (pr) ov.promo = pr; else ov.promo = "";
     if (p !== "" && +p !== it.price) ov.price = +p; else delete ov.price;
+    if (ov.promo === "" && !(DEFAULT_PROMO_IDS.has(id))) delete ov.promo;
     if (!Object.keys(ov).length) delete L.over[id];
     markDirty(); close();
   };
@@ -769,7 +773,7 @@ async function loadDash(){
     const prevStart = start - span;
     S.dash = { days, start, cur:all.filter(x => new Date(x.paid_at).getTime() >= start), prev:all.filter(x => { const t = new Date(x.paid_at).getTime(); return t >= prevStart && t < start; }), unp:u };
     if (route() === "resumen") drawDash();
-  } catch(e){ toast(e.message); const b = $("#db"); if (b) b.innerHTML = '<p class="none">No se pudieron cargar los datos. Vuelve a intentarlo.</p>'; }
+  } catch(e){ toast(e.message); const b = $("#db"); if (b) b.innerHTML = `<p class="none">No se pudieron cargar los datos${e.status ? " (error " + e.status + ")" : ""}.<br>${esc(e.message || "")}<br><button class="btn" id="retryD" type="button" style="margin-top:12px">Reintentar</button></p>`, $("#retryD").onclick = () => { b.innerHTML = '<p class="none">Cargando…</p>'; loadDash(); }; }
 }
 function drawDash(){
   const D = S.dash, box = $("#db"); if (!D || !box) return;
