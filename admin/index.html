@@ -20,7 +20,7 @@ button,input,textarea{font:inherit;color:inherit}button{cursor:pointer}a{color:i
 [hidden]{display:none!important}
 svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
 .disp{font-family:var(--disp);font-weight:400;letter-spacing:.04em}
-.rec{margin:0 0 18px;padding:14px 16px;border:1px solid var(--line);border-radius:16px;background:#fffbe9}.rec b{font-size:14px}.rec1{display:flex;gap:8px;margin-top:10px}.rec1 input{flex:1;min-width:0;height:44px;padding:0 12px;border:1px solid var(--line);border-radius:12px;font:inherit;background:#fff}.rec1 button{height:44px;padding:0 18px;border:0;border-radius:12px;background:#111;color:#fff;font-weight:700;cursor:pointer}.rec .m{margin:8px 0 0;font-size:13px;color:var(--muted)}
+.rec{margin:0 0 18px;padding:14px 16px;border:1px solid var(--line);border-radius:16px;background:#fffbe9}.rec b{font-size:14px}.rec1{display:flex;gap:8px;margin-top:10px}.rec1 input{flex:1;min-width:0;height:44px;padding:0 12px;border:1px solid var(--line);border-radius:12px;font:inherit;background:#fff}.rec1 button{height:44px;padding:0 18px;border:0;border-radius:12px;background:#111;color:#fff;font-weight:700;cursor:pointer}.rec2{margin-top:10px;height:40px;padding:0 14px;border:1.5px solid #111;border-radius:12px;background:#fff;font-weight:700;cursor:pointer}.rec2:disabled{opacity:.5}.uact{display:flex;gap:8px;align-items:center}.chk{height:36px;padding:0 14px;border:0;border-radius:10px;background:#111;color:#fff;font-weight:700;cursor:pointer}.chk:disabled{opacity:.5}.chkmsg{margin:6px 0 0;font-size:13px}.rec .m{margin:8px 0 0;font-size:13px;color:var(--muted)}
 .none{padding:40px 10px;text-align:center;color:var(--muted);font-size:14px}
 
 /* acceso */
@@ -418,7 +418,7 @@ function drawNav(){
     item("pedidos", I.orders, "Pedidos", n ? `<span class="badge">${n}</span>` : "") +
     item("productos", I.box, "Productos") +
     (A ? item("resumen", I.chart, "Resumen") : "") +
-    (A ? item("pago", I.card, "Pago online") + item("sin-terminar", I.clock, "Compras sin terminar") : "") +
+    (A ? item("pago", I.card, "Pago online") + item("sin-terminar", I.clock, "Compras sin terminar", S.unp && S.unp.unpaid.some(x => x.review) ? '<span class="badge">!</span>' : "") : "") +
     `<div class="sep"></div><a href="/" target="_blank" rel="noopener">${I.menuBook}Ver carta</a>`;
 }
 const openMenu = on => { document.body.classList.toggle("menu-open", on); $("#menuBtn").setAttribute("aria-expanded", on); };
@@ -525,7 +525,7 @@ function vUnpaid(){
   $("#view").innerHTML = `
     <div class="view-h"><p>Personas que llegaron al paso de pago y no pagaron.</p></div>
     <div class="tabs" id="tabs">${[[1, "Hoy"], [7, "7 días"], [30, "30 días"]].map(([d, l]) => `<button type="button" data-d="${d}" aria-pressed="${S.unpDays === d}">${l}</button>`).join("")}</div>
-    <div class="rec"><b>¿Un pago aprobado no llegó al panel?</b><div class="rec1"><input id="recId" inputmode="numeric" placeholder="N.º de operación de Mercado Pago"><button type="button" id="recGo">Recuperar</button></div><p id="recMsg" class="m"></p></div>
+    <div class="rec"><b>¿Un pago aprobado no llegó al panel?</b><div class="rec1"><input id="recId" inputmode="numeric" placeholder="N.º de operación de Mercado Pago"><button type="button" id="recGo">Recuperar</button></div><p id="recMsg" class="m"></p><button type="button" id="chkAll" class="rec2">Revisar todos los pedidos de la lista</button></div>
     <div id="ub">${u ? "" : '<p class="none">Cargando…</p>'}</div>`;
   $("#recGo").onclick = async () => { const v = $("#recId").value.trim(), m = $("#recMsg"); if (!v) return; m.textContent = "Consultando Mercado Pago…"; try { const d = await call("/.netlify/functions/orders-recover", { payment_id:v }); m.textContent = d.message || "Listo"; if (d.ok) { $("#recId").value = ""; if (typeof loadOrders === "function") loadOrders(); } } catch(e){ m.textContent = e.message; } };
   $("#tabs").onclick = e => { const b = e.target.closest("[data-d]"); if (!b) return; S.unpDays = +b.dataset.d; S.unp = null; vUnpaid(); loadUnpaid(); };
@@ -536,10 +536,21 @@ function drawUnpaid(){
   const pct = u.started ? Math.round(u.paid * 100 / u.started) : 0;
   box.innerHTML = `
     <div class="stats"><div class="stat"><b>${u.started}</b><span>Llegaron a pagar</span></div><div class="stat ok"><b>${u.paid}</b><span>Pagaron · ${pct}%</span></div><div class="stat bad"><b>${u.unpaid_count}</b><span>No pagaron</span></div></div>
-    <div class="ul">${u.unpaid.length ? u.unpaid.map(x => `<div class="ui"><div class="l1"><b>#${esc(x.short_code)} · ${clp(x.total)}</b><span class="m">${when(x.created_at)}</span></div><span class="why ${/rechaz/i.test(x.reason) ? "rej" : ""}">${esc(x.reason)}</span><div class="m" style="margin-top:8px">${x.delivery_type === "delivery" ? "Delivery" : "Retiro"} · ${x.items.map(i => i.quantity + "× " + esc(i.name)).join(", ")}</div><div class="who"><span>${esc(x.customer.name)}</span>${x.customer.phone ? `<a class="call" href="tel:${esc(x.customer.phone)}">Llamar</a>` : ""}</div></div>`).join("") : '<p class="none">Nadie dejó un pago a medias en este período.</p>'}</div>
+    <div class="ul">${u.unpaid.length ? u.unpaid.map(x => `<div class="ui"><div class="l1"><b>#${esc(x.short_code)} · ${clp(x.total)}</b><span class="m">${when(x.created_at)}</span></div><span class="why ${/rechaz/i.test(x.reason) || x.review ? "rej" : ""}">${x.review ? "Pagado en Mercado Pago, pero el monto no calza: revisar a mano (cobró " + clp(x.review.paid) + ", pedido " + clp(x.review.expected) + ")" : esc(x.reason)}</span><div class="m" style="margin-top:8px">${x.delivery_type === "delivery" ? "Delivery" : "Retiro"} · ${x.items.map(i => i.quantity + "× " + esc(i.name)).join(", ")}</div><div class="who"><span>${esc(x.customer.name)}</span><span class="uact"><button type="button" class="chk" data-ref="${esc(x.reference)}">Revisar pago</button>${x.customer.phone ? `<a class="call" href="tel:${esc(x.customer.phone)}">Llamar</a>` : ""}</span></div><p class="m chkmsg" data-for="${esc(x.reference)}"></p></div>`).join("") : '<p class="none">Nadie dejó un pago a medias en este período.</p>'}</div>
     <p class="hint">Cuenta a quienes llegaron al paso de pago. Quienes agregan al carrito y se van antes aparecen en PostHog.</p>`;
+  const check = async btn => {
+    const ref = btn.dataset.ref, msg = box.querySelector(`.chkmsg[data-for="${ref}"]`);
+    btn.disabled = true; msg.textContent = "Consultando Mercado Pago…";
+    try {
+      const d = await call("/.netlify/functions/orders-recover", { payment_id:ref });
+      msg.textContent = d.outcome === "no_payment" ? "Mercado Pago no tiene pagos de este pedido." : (d.message || "Listo");
+      if (d.ok){ btn.textContent = "Pagado"; loadOrders(); } else btn.disabled = false;
+    } catch(e){ msg.textContent = e.message; btn.disabled = false; }
+  };
+  box.onclick = e => { const b = e.target.closest(".chk"); if (b && !b.disabled) check(b); };
+  const all = $("#chkAll"); if (all) all.onclick = async () => { all.disabled = true; for (const b of box.querySelectorAll(".chk")) if (!b.disabled) await check(b); all.disabled = false; };
 }
-async function loadUnpaid(){ try { S.unp = await call(API.unp, { days:S.unpDays }); if (route() === "sin-terminar") drawUnpaid(); else if (route() === "inicio") vHome(); } catch(e){ toast(e.message); const b = $("#ub"); if (b && route() === "sin-terminar") { b.innerHTML = '<p class="none">No se pudo cargar. <button type="button" class="undo" id="retryU" style="width:auto;padding:0 14px;height:40px">Reintentar</button></p>'; $("#retryU").onclick = () => { b.innerHTML = '<p class="none">Cargando…</p>'; loadUnpaid(); }; } } }
+async function loadUnpaid(){ try { S.unp = await call(API.unp, { days:S.unpDays }); drawNav(); if (route() === "sin-terminar") drawUnpaid(); else if (route() === "inicio") vHome(); } catch(e){ toast(e.message); const b = $("#ub"); if (b && route() === "sin-terminar") { b.innerHTML = '<p class="none">No se pudo cargar. <button type="button" class="undo" id="retryU" style="width:auto;padding:0 14px;height:40px">Reintentar</button></p>'; $("#retryU").onclick = () => { b.innerHTML = '<p class="none">Cargando…</p>'; loadUnpaid(); }; } } }
 /* ---------- resumen (dashboard, solo super admin) ---------- */
 const pct = (a, b) => b ? Math.round(a * 100 / b) : 0;
 const PAL = ["#2f6fdb", "#c8102e", "#12a594", "#8a4fd6", "#e07b00", "#2f9e62", "#d6336c", "#5c677d"];
