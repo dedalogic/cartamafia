@@ -572,12 +572,12 @@ window.addEventListener("beforeunload", e => { if (dirty){ e.preventDefault(); e
 
 
 /* ---------- carta local ---------- */
-const DEFAULT_PROMO_IDS = new Set(["tgm","pepperoni","pollo-bbq","napolitana","margarita","ajillo","funghi"]);
-function locEff(it){ const o = S.loc.over[it.id] || {}; return { name:o.name || it.name, desc:o.desc != null ? o.desc : it.desc, price:o.price != null ? o.price : it.price, img:o.img === null ? it.img : (o.img || it.img), promo:o.promo || "", own:o.price != null || !!o.promo || (o.img && o.img !== it.img) || !!o.name || o.desc != null }; }
+function locEff(it){ const o = S.loc.over[it.id] || {}; const e = { name:o.name || it.name, desc:o.desc != null ? o.desc : it.desc, price:o.price != null ? o.price : it.price, img:o.img === null ? it.img : (o.img || it.img), promo:o.promo || "", sub:o.sub || "", label:o.label || "" };
+  e.own = !it.local && (e.name !== it.name || e.desc !== it.desc || e.price !== it.price || e.img !== it.img || !!e.promo || !!e.sub); return e; }
 async function vLocal(){
   if (!S.loc){
     $("#view").innerHTML = '<p class="none">Cargando…</p>';
-    try { const d = await call(API.loc, { action:"login" }); S.loc = { off:new Set(d.disabledProducts), over:d.overrides || {}, notes:d.notes || {}, items:d.items, cats:d.categories, cat:"all", q:"" }; }
+    try { const d = await call(API.loc, { action:"login" }); S.loc = { off:new Set(d.disabledProducts), over:d.overrides || {}, base:JSON.parse(JSON.stringify(d.overrides || {})), notes:d.notes || {}, items:d.items, cats:d.categories, cat:"all", q:"" }; }
     catch(e){ $("#view").innerHTML = `<p class="none">${esc(e.message)}<br><button class="btn" id="retryL" type="button" style="margin-top:12px">Reintentar</button></p>`; $("#retryL").onclick = vLocal; return; }
     if (route() !== "carta-local") return;
   }
@@ -607,7 +607,7 @@ function drawLocal(keep){
   const groups = {}; items.forEach(x => (groups[x.category] = groups[x.category] || []).push(x));
   box.innerHTML = Object.entries(groups).map(([cat, list]) => `<h3 class="cat">${esc(cat)}</h3><div class="tiles">` + list.map(it => {
     const on = !L.off.has(it.id), e = locEff(it);
-    return `<div class="tile ${on ? "" : "off"}"><div class="ph" data-tap="${esc(it.id)}"><span class="ini">${esc((e.name || "?").trim().charAt(0))}</span>${e.img ? `<img src="${esc(e.img)}" alt="" loading="lazy" onerror="this.remove()">` : ""}${on ? "" : '<span class="sold">OCULTO</span>'}</div><div class="tb"><div><b>${esc(e.name)}</b><span class="state ${on ? "" : "off"}">${on ? clp(e.price) + (it.byPick && L.over[it.id]?.price == null ? " · desde" : "") : "No se muestra"}${e.own && on ? '<i class="tag2">Propio</i>' : ""}</span><button class="ledit" type="button" data-edit="${esc(it.id)}">Editar</button></div><label class="sw"><input type="checkbox" data-lp="${esc(it.id)}" ${on ? "checked" : ""} aria-label="${esc(e.name)} visible en el local"><i></i></label></div></div>`;
+    return `<div class="tile ${on ? "" : "off"}"><div class="ph" data-tap="${esc(it.id)}"><span class="ini">${esc((e.name || "?").trim().charAt(0))}</span>${e.img ? `<img src="${esc(e.img)}" alt="" loading="lazy" onerror="this.remove()">` : ""}${on ? "" : '<span class="sold">OCULTO</span>'}</div><div class="tb"><div><b>${esc(e.name)}</b><span class="state ${on ? "" : "off"}">${on ? (e.label ? esc(e.label) + " " : "") + clp(e.price) + (it.byPick && L.over[it.id]?.price == null ? " · desde" : "") : "No se muestra"}${(it.local || e.own) && on ? `<i class="tag2">${it.local ? "Solo local" : "Propio"}</i>` : ""}</span><button class="ledit" type="button" data-edit="${esc(it.id)}">Editar</button></div><label class="sw"><input type="checkbox" data-lp="${esc(it.id)}" ${on ? "checked" : ""} aria-label="${esc(e.name)} visible en el local"><i></i></label></div></div>`;
   }).join("") + "</div>").join("");
   if (keep) window.scrollTo(0, y);
 }
@@ -618,7 +618,8 @@ function editLocal(id){
     <div class="lph"><img id="lpv" src="${esc(e.img)}" alt=""><div><button class="btn alt" id="lpick" type="button">Cambiar foto</button><button class="ledit" id="lorig" type="button">Usar la foto de la carta online</button><input id="lfile" type="file" accept="image/*" hidden></div></div>
     <label class="lf">Nombre<input id="ln" value="${esc(e.name)}" maxlength="80"></label>
     <label class="lf">Descripción<textarea id="ld" maxlength="400">${esc(e.desc)}</textarea></label>
-    <label class="lf">Promo (opcional)<input id="lpr" value="${esc(e.promo)}" maxlength="120" placeholder="Ej: Con Palitos de ajo"></label>
+    <label class="lf">Texto bajo la descripción (opcional)<input id="lsu" value="${esc(e.sub)}" maxlength="160" placeholder="Ej: Familiar con palitos y bebida: $29.990"></label>
+    <label class="lf">Etiqueta PROMO (opcional)<input id="lpr" value="${esc(e.promo)}" maxlength="120" placeholder="Ej: Con Palitos de ajo"></label>
     <label class="lf">Precio en el local${it.byPick ? " (reemplaza todos los precios del plato)" : ""}<input id="lp" inputmode="numeric" value="${e.price}"></label>
     <button class="btn" id="lok" type="button">Listo</button></div>`;
   document.body.appendChild(sh);
@@ -640,9 +641,10 @@ function editLocal(id){
     const ov = o();
     if (n && n !== it.name) ov.name = n; else delete ov.name;
     if (d !== (it.desc || "")) ov.desc = d; else delete ov.desc;
-    const pr = $("#lpr").value.trim(); if (pr) ov.promo = pr; else ov.promo = "";
-    if (p !== "" && +p !== it.price) ov.price = +p; else delete ov.price;
-    if (ov.promo === "" && !(DEFAULT_PROMO_IDS.has(id))) delete ov.promo;
+    ov.promo = $("#lpr").value.trim(); ov.sub = $("#lsu").value.trim();
+    if (p !== "") ov.price = +p;
+    if (!ov.promo && !(S.loc.base && S.loc.base[id] && S.loc.base[id].promo)) delete ov.promo;
+    if (!ov.sub && !(S.loc.base && S.loc.base[id] && S.loc.base[id].sub)) delete ov.sub;
     if (!Object.keys(ov).length) delete L.over[id];
     markDirty(); close();
   };
@@ -666,7 +668,7 @@ async function saveLocal(){
   const b = $("#saveBtn"); b.disabled = true; b.textContent = "Guardando…"; const L = S.loc;
   try {
     const d = await call(API.loc, { action:"set", disabledProducts:[...L.off], overrides:L.over, notes:L.notes });
-    L.off = new Set(d.disabledProducts); L.over = d.overrides || {}; L.notes = d.notes || {};
+    L.off = new Set(d.disabledProducts); L.over = d.overrides || {}; L.notes = d.notes || {}; L.base = JSON.parse(JSON.stringify(L.over));
     dirty = false; $("#savebar").hidden = true; toast("Carta del local guardada ✓", 2200); vLocal();
   } catch(e){ toast(e.message); }
   finally { saving = false; b.disabled = false; b.textContent = "Guardar cambios"; }
