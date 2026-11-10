@@ -4,7 +4,7 @@
 [functions]
   directory = "netlify/functions"
   node_bundler = "esbuild"
-  included_files = ["menu-data.js"]
+  included_files = ["menu-data.js", "local-defaults.js"]
 
 [[headers]]
   for = "/admin/*"
@@ -42,3 +42,13 @@
   for = "/.well-known/*"
   [headers.values]
     Access-Control-Allow-Origin = "*"
+
+[[headers]]
+  for = "/local-defaults.js"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/carta/*"
+  [headers.values]
+    Cache-Control = "no-cache"
