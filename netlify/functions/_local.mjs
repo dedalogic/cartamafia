@@ -22,6 +22,7 @@ export function cleanLocal(raw = {}){
       if (Number.isFinite(+o.price) && o.price !== null && o.price !== "" && +o.price >= 0 && +o.price <= 1000000) c.price = Math.round(+o.price);
       if (typeof o.name === "string" && o.name.trim()) c.name = o.name.trim().slice(0, 80);
       if (typeof o.desc === "string") c.desc = o.desc.trim().slice(0, 400);
+      if (typeof o.promo === "string") c.promo = o.promo.trim().slice(0, 120);
       if (o.img === null) c.img = null;                  // null = usar la foto de la carta online
       else if (IMG_OK(o.img)) c.img = o.img;
       if (Object.keys(c).length) overrides[id] = c;
