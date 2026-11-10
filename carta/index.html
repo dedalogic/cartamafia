@@ -1162,14 +1162,14 @@ html[data-mafia-cards="street-style"] .pd-ph::after{background:linear-gradient(t
 <section class="mafia-hero" id="mafiaHero" aria-label="Novedades MAFIA">
   <div class="mafia-slider">
     <div class="mafia-track" id="mafiaTrack">
-      <a class="mafia-slide art" href="#combos" aria-label="Nuevo Combo Familiar">
-        <img src="/assets/banner-nuevo-combo-familiar.webp" alt="Nuevo Combo Familiar">
+      <a class="mafia-slide art" href="#combos" aria-label="Promo Familiar">
+        <img src="/assets/banner-local-familiar.webp" alt="Promo Familiar">
       </a>
-      <a class="mafia-slide art" href="#combos" aria-label="Nuevo Combo Padrinos">
-        <img src="/assets/banner-nuevo-combo-padrinos.webp" alt="Nuevo Combo Padrinos">
+      <a class="mafia-slide art" href="#combos" aria-label="Slice y bebida">
+        <img src="/assets/banner-local-slice.webp" alt="Slice y bebida">
       </a>
-      <a class="mafia-slide art" href="#nuestras-pastas" aria-label="Nuevas Pastas">
-        <img src="/assets/banner-nuevas-pastas.webp" alt="Nuevas Pastas">
+      <a class="mafia-slide art" href="#combos" aria-label="Fetuccini Pesto con Pollo Gravy y bebida">
+        <img src="/assets/banner-local-pesto.webp" alt="Fetuccini Pesto con Pollo Gravy y bebida">
       </a>
     </div>
     <button class="mafia-arr prev" id="mafiaPrev" type="button" aria-label="Banner anterior">‹</button>
@@ -1364,6 +1364,10 @@ html[data-mafia-cards="street-style"] .pd-ph::after{background:linear-gradient(t
   try { cached = JSON.parse(localStorage.getItem(KEY)); } catch(e){}
   if (cached && Array.isArray(cached.disabledProducts)) cfg = cached;
   var off = {}; cfg.disabledProducts.forEach(function(id){ off[id] = 1; });
+  (LOCAL_DEFAULTS.localItems || []).slice().reverse().forEach(function(x){
+    var c = MENU.filter(function(m){ return m.id === x.cat; })[0]; if (!c) return;
+    c.items.unshift({ id:x.id, name:x.name, desc:x.desc, price:x.price, img:x.img || "", sub:x.sub || "" });
+  });
   MENU.forEach(function(c){
     if (cfg.notes && c.id in cfg.notes) c.note = cfg.notes[c.id];
     c.items = c.items.filter(function(i){ return !off[i.id]; });
@@ -1374,6 +1378,9 @@ html[data-mafia-cards="street-style"] .pd-ph::after{background:linear-gradient(t
       if (o.price != null) { i.price = o.price; delete i.priceByPick; }
       if (typeof o.img === "string") { i.img = o.img; i.foto = ""; }
       if (o.promo) i.promo = o.promo;
+      if (o.sub != null) i.sub = o.sub;
+      if (o.label) i.label = o.label;
+      if (o.img2) i.img2 = o.img2;
       ["combo","suggest","extras","drinkChoice","pick","pickInSheet","bundleChoices","options"].forEach(function(k){ delete i[k]; });
     });
   });
@@ -3105,21 +3112,59 @@ document.addEventListener("click", e => {
 .cartbtn,.dock,#shbd,#sheet,.act-banner,#myOrdersLink,.admin-hotspot,.pd-add,.stp,.tog,.tag,.offer,.fmt,.pick{display:none!important}
 .add{pointer-events:none;cursor:default}
 .add .pl{display:none}
+#toppings .add .pl,#bebidas .add .pl{display:inline-flex}
+html .combo-people-filter,html[data-mafia-cards] .combo-people-filter,html[data-mafia-cards] #combos .combo-people-filter{display:none!important}
+.item .media{position:relative}
+.item .media{touch-action:pan-y}
+.dots{position:absolute;left:0;right:0;bottom:8px;z-index:3;display:flex;gap:8px;justify-content:center}
+.dots i{width:9px;height:9px;border-radius:50%;background:#f4ead7;opacity:.4;cursor:pointer;box-shadow:0 0 0 6px transparent;transition:opacity .2s}
+.dots i.on{opacity:1}
+img.dish.sl-l{animation:slL .28s ease}img.dish.sl-r{animation:slR .28s ease}
+@keyframes slL{from{transform:translateX(40%);opacity:.2}to{transform:none;opacity:1}}
+@keyframes slR{from{transform:translateX(-40%);opacity:.2}to{transform:none;opacity:1}}
+.add .ap small{font-size:12px;font-weight:600;opacity:.9;margin-right:6px}
 .item .promo{display:inline-block;margin:8px 0 0;padding:4px 10px;border:1px solid var(--red-hi);border-radius:999px;color:#fff;font-size:12px;font-weight:600;line-height:1.3}
 .item .promo b{color:var(--red-hi);letter-spacing:.06em;margin-right:6px}
 </style>
 <script>
 /* ===== MODO LOCAL: nada se agrega ni se abre; promo en cada producto ===== */
+var swiped = 0;
 document.addEventListener("click", function(e){
   var it = e.target.closest(".item"); if (!it) return;
-  if (e.target.closest(".zoom")) return;
+  var d = e.target.closest(".dots i");
+  if (d){ e.stopPropagation(); e.preventDefault(); go(it, +d.dataset.k); return; }
+  if (e.target.closest(".zoom") && Date.now() - swiped > 350) return;
   e.stopPropagation(); e.preventDefault();
 }, true);
+function go(card, k){
+  var it = IDX[card.dataset.id], img = card.querySelector("img.dish"); if (!it || !img || !it._img2) return;
+  var cur = card.dataset.mode === "slice" ? 1 : 0; if (k === cur) return;
+  card.dataset.mode = k ? "slice" : "full"; it.img = k ? it._img2 : it._img1; img.src = it.img;
+  img.classList.remove("sl-l","sl-r"); void img.offsetWidth; img.classList.add(k ? "sl-l" : "sl-r");
+  card.querySelectorAll(".dots i").forEach(function(x,n){ x.classList.toggle("on", n === k); });
+  var ap = card.querySelector(".ap");
+  if (ap) ap.innerHTML = "<small>" + (k ? "Slice" : "Familiar") + "</small>" + fmt(k ? it.price : it._fam);
+}
+function bindSwipe(card){
+  var m = card.querySelector(".media"), x0 = null;
+  function end(x){ if (x0 === null) return; var dx = x - x0; x0 = null;
+    if (Math.abs(dx) > 30){ swiped = Date.now(); go(card, dx < 0 ? 1 : 0); } }
+  m.addEventListener("touchstart", function(e){ x0 = e.touches[0].clientX; }, {passive:true});
+  m.addEventListener("touchend", function(e){ end(e.changedTouches[0].clientX); });
+  m.addEventListener("mousedown", function(e){ x0 = e.clientX; });
+  m.addEventListener("mouseup", function(e){ end(e.clientX); });
+}
+var X = function(t){ return String(t).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); };
 MENU.forEach(function(c){ c.items.forEach(function(i){
-  if (!i.promo) return;
-  var hd = document.querySelector('.item[data-id="' + i.id + '"] .hd'); if (!hd) return;
-  var p = document.createElement("p"); p.className = "promo"; p.innerHTML = "<b>PROMO</b>" + String(i.promo).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; });
-  hd.appendChild(p);
+  var card = document.querySelector('.item[data-id="' + i.id + '"]'); if (!card) return;
+  var hd = card.querySelector(".hd");
+  if (i.promo && hd){ var p = document.createElement("p"); p.className = "promo"; p.innerHTML = "<b>PROMO</b>" + X(i.promo); hd.appendChild(p); }
+  if (i.img2){
+    var fd = String((i.sub || "").split("$")[1] || "").replace(/[^0-9]/g, ""); i._fam = fd ? parseInt(fd, 10) : i.price;
+    i._img1 = i.img; i._img2 = i.img2; var m = card.querySelector(".media");
+    if (m){ var dd = document.createElement("div"); dd.className = "dots"; dd.innerHTML = '<i class="on" data-k="0"></i><i data-k="1"></i>'; m.appendChild(dd); bindSwipe(card); }
+    var ap = card.querySelector(".ap"); if (ap) ap.innerHTML = "<small>Familiar</small>" + fmt(i._fam);
+  } else if (i.label){ var ap2 = card.querySelector(".ap"); if (ap2) ap2.innerHTML = "<small>" + X(i.label) + "</small>" + fmt(i.price); }
 }); });
 </script>
 </body>
