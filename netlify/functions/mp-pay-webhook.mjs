@@ -6,7 +6,7 @@ import { getMpPayment, reconcilePayment } from "./_mafia-pay.mjs";
 export default async (req) => {
   if (req.method === "GET") return json({ ok:true, message:"Webhook de pagos activo", secret_configured:!!process.env.MERCADOPAGO_WEBHOOK_SECRET, access_token_configured:mpConfigured() });
   if (req.method !== "POST") return json({ error:"Método no permitido" }, 405);
-  if (!verifySignature({ url:req.url, headers:req.headers })) return json({ error:"Firma inválida" }, 401);
+  if (!verifySignature({ url:req.url, headers:req.headers })){ console.warn("pay-webhook  firma inválida", req.headers.get("x-signature") ? "con x-signature" : "sin x-signature"); return json({ error:"Firma inválida" }, 401); }
 
   let body = {}; try { body = await req.json(); } catch {}
   const q = new URL(req.url).searchParams;
