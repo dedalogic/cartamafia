@@ -37,7 +37,7 @@ export default async (req) => {
       if (o.status === "paid") { paid++; continue; }
       unpaid.push({
         reference:o.reference, short_code:o.short_code, created_at:o.created_at, reason:reason(o),
-        delivery_type:o.delivery_type, total:o.total, attempts:o.attempts || 0, payment_detail:o.payment_status_detail || null,
+        delivery_type:o.delivery_type, total:o.total, attempts:o.attempts || 0, payment_detail:o.payment_status_detail || null, review:o.review || null,
         customer:{ name:o.customer?.name || "", phone:o.customer?.phone || "" },
         items:(o.cart?.items || []).map(i => ({ name:i.name, quantity:i.quantity }))
       });
