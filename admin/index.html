@@ -50,6 +50,11 @@ svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;stroke
 .nav a:hover,.nav button:hover{background:var(--bg2);color:var(--text)}
 .nav .on{background:var(--bg2);color:var(--text)}
 .nav .sep{height:1px;background:var(--line);margin:10px 4px}
+.nav .mode{justify-content:space-between;color:var(--text)}
+.nav .mode i{position:relative;flex:0 0 44px;height:26px;border-radius:99px;background:var(--line);transition:background .2s}
+.nav .mode i::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .2s}
+.nav .mode[aria-checked="true"] i{background:var(--red,#C8102E)}
+.nav .mode[aria-checked="true"] i::after{transform:translateX(18px)}
 .nav .badge{margin-left:auto;min-width:22px;height:22px;padding:0 7px;border-radius:999px;background:var(--accent);color:#fff;font-size:12px;font-weight:800;display:grid;place-items:center}
 .foot{margin-top:auto}
 main{padding:20px 16px 110px;max-width:920px;margin:0 auto}
@@ -457,7 +462,9 @@ const I = {
 const VIEWS = { inicio:"Inicio", pedidos:"Pedidos", resumen:"Resumen", productos:"Productos", "carta-local":"Carta local", pago:"Pago online", "sin-terminar":"Sin terminar" };
 
 let pass = "", role = "", dirty = false, saving = false;
-const isAdmin = () => role === "admin";
+let simple = false; try { simple = localStorage.getItem("mafia_admin_simple") === "1"; } catch(e){}
+const canAdmin = () => role === "admin";           /* tiene clave de administrador */
+const isAdmin = () => role === "admin" && !simple; /* ve todo, salvo que active el modo simple */
 const S = { dash:null, dashDays:7, orders:[], known:null, tab:"nuevo", sel:null, msgOpen:null, sig:"", catalog:[], dp:new Set(), dop:{}, pay:null, unp:null, unpDays:7, today:null, q:"", cat:"all" };
 
 async function call(url, body){
@@ -480,7 +487,10 @@ function drawNav(){
     (A ? item("resumen", I.chart, "Resumen") : "") +
     (A ? item("carta-local", I.menuBook, "Carta local") : "") +
     (A ? item("pago", I.card, "Pago online") + item("sin-terminar", I.clock, "Compras sin terminar", S.unp && S.unp.unpaid.some(x => x.review) ? '<span class="badge">!</span>' : "") : "") +
-    `<div class="sep"></div><a href="/" target="_blank" rel="noopener">${I.menuBook}Ver carta</a>` + (A ? `<a href="/carta/" target="_blank" rel="noopener">${I.menuBook}Ver carta del local</a>` : "");
+    `<div class="sep"></div><a href="/" target="_blank" rel="noopener">${I.menuBook}Ver carta</a>` + (A ? `<a href="/carta/" target="_blank" rel="noopener">${I.menuBook}Ver carta del local</a>` : "") +
+    (canAdmin() ? `<div class="sep"></div><button type="button" class="mode" id="modeSw" role="switch" aria-checked="${simple}">Modo simple<i></i></button>` : "");
+  const sw = $("#modeSw");
+  if (sw) sw.onclick = () => { simple = !simple; try { localStorage.setItem("mafia_admin_simple", simple ? "1" : "0"); } catch(e){} if (isAdmin()){ loadPay(); loadUnpaid(); } render(); };
 }
 const openMenu = on => { document.body.classList.toggle("menu-open", on); $("#menuBtn").setAttribute("aria-expanded", on); };
 $("#menuBtn").onclick = () => openMenu(true);
