@@ -9,7 +9,7 @@
 <link rel="icon" type="image/png" href="/favicon.png?v=mafia-20261003-2">
 <link rel="shortcut icon" type="image/png" href="/favicon.png?v=mafia-20261003-2">
 <link rel="apple-touch-icon" href="/favicon.png?v=mafia-20261003-2">
-<link rel="preload" href="/PestoMafio.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="preload" href="/fonts/PestoMafio.ttf" as="font" type="font/ttf" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
@@ -24,7 +24,7 @@
     })
 </script>
 <style>
-@font-face{font-family:"Pesto Mafio";src:url("/PestoMafio.ttf") format("truetype");font-style:normal;font-weight:400;font-display:block}
+@font-face{font-family:"Pesto Mafio";src:url("/fonts/PestoMafio.ttf") format("truetype");font-style:normal;font-weight:400;font-display:block}
 :root{
   --bg:#0c0c0c; --surface:#161514; --line:#2a2826;
   --text:#f3ede2; --muted:#a39d92;
@@ -57,6 +57,10 @@ button{font:inherit;color:inherit;cursor:pointer}
   -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
 .nav-in{max-width:1160px;margin:0 auto;display:flex;align-items:center}
 .nav ul{position:relative;flex:1;min-width:0;list-style:none;display:flex;gap:8px;overflow-x:auto;padding:12px 8px 12px 16px;scrollbar-width:none}
+.profbtn{flex:none;width:44px;height:44px;margin:0;display:grid;place-items:center;border:0;background:none;color:#F3EDE2;opacity:.8}
+.profbtn:hover{opacity:1}
+.mo-h{margin:10px 2px 0;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#a39d92}
+.mo-last{border-color:#E0213F}.mo-last i{display:block;margin-top:4px;font-style:normal;font-size:13px;color:#E0213F}
 .cartbtn{position:relative;flex:none;width:44px;height:44px;margin:0 14px 0 4px;display:grid;place-items:center;border-radius:var(--r);border:1px solid var(--text);background:var(--text);color:#16130f;transition:filter .15s}
 .cartbtn::before{content:"";position:absolute;right:100%;top:-8px;bottom:-8px;width:20px;background:linear-gradient(to left,var(--bg),transparent);pointer-events:none}
 .cartbtn:hover{filter:brightness(.92)}
@@ -869,7 +873,7 @@ html[data-mafia-cards="street-style"] #combos .item{border-color:rgba(200,16,46,
 /* === v40 · fondo rojo amigable, logo blanco, tarjetas grises, negro y beige === */
 :root{--bg:#A82A25;--surface:#EEECE9;--line:#D6D2CC;--text:#1A1917;--muted:#55514B;--red:#C8102E;--red-hi:#B80F2A}
 html{color-scheme:light}
-html{background:#A82A25 url(/textura.png) repeat}
+html{background:#A82A25 url(/assets/textura.png) repeat}
 body{background:transparent!important;color:#fff}
 .online-note,.online-note *,.combo-people-filter .pf-label,#foot,#foot *{color:#fff!important}
 .nav{background:#141313;border-bottom:1px solid #141313}
@@ -1105,6 +1109,48 @@ html[data-mafia-cards="street-style"] .pd-ph::after{background:linear-gradient(t
 .tk-help{color:#6b6559}.tk-help a{color:#141313}
 .pv-done{background:#C8102E;color:#fff}
 @media(min-width:900px){.payscreen{align-items:stretch}.pv{width:420px;height:100%;margin:0 0 0 auto;border-radius:0}}
+/* ---- carrito v5: pedido protagonista, sugerencias discretas ---- */
+.line{display:flex!important;align-items:stretch;gap:12px;padding:12px!important}
+.line-thumb,.line-thumb-ph{width:76px;height:76px;flex:none;align-self:flex-start}
+.lc{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:space-between;min-height:76px}
+.lt{min-width:0}
+.line-name{white-space:normal!important;font-size:15px;line-height:1.2}
+.lr{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px}
+.line-total{font-size:17px;font-weight:700;color:#141313}
+.line .qty{gap:9px}.line .qty button{width:30px;height:30px;font-size:16px;border-radius:10px;background:#fff}
+.sug{margin:6px 0 4px!important;padding:0!important;background:none!important;border:0!important}
+.sug p{margin:0 0 8px 2px!important;font-size:13px!important;font-weight:700;letter-spacing:0!important;text-transform:none!important;color:#3a362f!important}
+.sug-list{gap:8px}
+.sug-row{display:flex!important;align-items:center;gap:12px;background:#fff!important;border:0!important;border-radius:14px!important;padding:8px 10px 8px 8px!important;box-shadow:0 1px 2px rgba(60,40,10,.08)}
+.sug-img{width:46px;height:46px;border-radius:10px;object-fit:cover;flex:none;background:#e6dcc6}
+.sug-copy{display:flex!important;flex-direction:column;gap:1px}
+.sug-name{font-size:14px;line-height:1.2;color:#141313;font-weight:700;white-space:normal}
+.sug-price{color:#C8102E!important;font-weight:700;font-size:14px}
+.sug-add,.sug-row .sug-add{width:34px!important;height:34px!important;min-width:34px!important;border-radius:11px!important;border:1.5px solid #C8102E!important;background:#fff!important;color:#C8102E!important;font-size:18px;font-weight:700}
+.act-banner{display:flex;align-items:center;gap:10px;width:calc(100% - 32px);margin:0 16px 10px;padding:12px 14px;border-radius:14px;border:1px solid #F0DC92;background:#FFF8DC;color:#141313;font-size:14px;text-align:left}
+.act-banner i{width:9px;height:9px;border-radius:50%;background:#E8AE2F;flex:none}
+.act-banner.rate i{background:#C8102E}
+.act-banner b{margin-left:auto;font-size:13px}
+.act-banner[hidden]{display:none}
+/* opiniones */
+.rate{background:#FFF8DC;border:1px solid #F0DC92;border-radius:16px;padding:14px;display:grid;gap:8px}
+.rate h4{margin:0 0 2px;font-size:16px;font-weight:800}
+.rt{background:#fff;border-radius:12px;padding:10px 12px;box-shadow:0 1px 2px rgba(60,40,10,.08)}
+.rr{display:flex;align-items:center;gap:10px}
+.rr img{width:40px;height:40px;border-radius:9px;object-fit:cover;flex:none}
+.rr b{flex:1;min-width:0;font-size:14px;line-height:1.2}
+.stars{display:flex;gap:0;flex:none}
+.star{width:30px;height:36px;border:0;background:none;color:#D9CFB4;font-size:24px;line-height:1;padding:0}
+.star.on{color:#F0A500}
+.star:disabled{cursor:default}
+.rc{width:100%;margin-top:8px;padding:9px 10px;border:1.5px solid #E6DCC6;border-radius:10px;background:#FFFDF5;font:inherit;font-size:14px;color:#141313}
+.rc:focus{outline:none;border-color:#C8102E}
+.rq{margin:8px 0 0;font-size:13px;color:#55514B;font-style:italic}
+.rsend{min-height:46px;border:0;border-radius:12px;background:#C8102E;color:#fff;font-weight:700;font-size:15px;margin-top:2px}
+.rsend:disabled{background:#D9CFBA;color:#8f8777}
+.rerr{margin:0;color:#8A1220;font-size:13px}.rerr:empty{display:none}
+.pv>*{flex-shrink:0}
+.tk{background:none;border-radius:0;margin:6px 20px 10px}
 .tk-live{display:none}
 .tk-ok{display:grid;justify-items:center;gap:4px;text-align:center;padding:6px 0 4px}
 .tk-ck{width:72px;height:72px;border-radius:50%;background:#14803F;display:grid;place-items:center;margin-bottom:8px}
@@ -1129,13 +1175,13 @@ html[data-mafia-cards="street-style"] .pd-ph::after{background:linear-gradient(t
   <div class="mafia-slider">
     <div class="mafia-track" id="mafiaTrack">
       <a class="mafia-slide art" href="#combos" aria-label="Nuevo Combo Familiar">
-        <img src="/banner-nuevo-combo-familiar.webp" alt="Nuevo Combo Familiar">
+        <img src="/assets/banner-nuevo-combo-familiar.webp" alt="Nuevo Combo Familiar">
       </a>
       <a class="mafia-slide art" href="#combos" aria-label="Nuevo Combo Padrinos">
-        <img src="/banner-nuevo-combo-padrinos.webp" alt="Nuevo Combo Padrinos">
+        <img src="/assets/banner-nuevo-combo-padrinos.webp" alt="Nuevo Combo Padrinos">
       </a>
       <a class="mafia-slide art" href="#nuestras-pastas" aria-label="Nuevas Pastas">
-        <img src="/banner-nuevas-pastas.webp" alt="Nuevas Pastas">
+        <img src="/assets/banner-nuevas-pastas.webp" alt="Nuevas Pastas">
       </a>
     </div>
     <button class="mafia-arr prev" id="mafiaPrev" type="button" aria-label="Banner anterior">‹</button>
@@ -1185,7 +1231,7 @@ html[data-mafia-cards="street-style"] .pd-ph::after{background:linear-gradient(t
 <div class="mafia-pop" id="mafiaPop" role="dialog" aria-modal="true" aria-label="Promoción MAFIA">
   <div class="mafia-pop-card">
     <button class="mafia-pop-x" id="mafiaPopX" type="button" aria-label="Cerrar">×</button>
-    <img src="/popup.webp" alt="">
+    <img src="/assets/popup.webp" alt="">
     <div class="mafia-pop-info">
       <b id="mafiaPopT">Promoción</b>
       <span id="mafiaPopS"></span>
@@ -1205,6 +1251,7 @@ html[data-mafia-cards="street-style"] .pd-ph::after{background:linear-gradient(t
   </div>
 
   <div class="checkout-step" id="checkout1">
+    <button class="act-banner" id="actBanner" type="button" hidden><i></i><span id="actTxt"></span><b id="actGo">Ver</b></button>
     <div class="lines" id="lines"></div>
     <div class="df">
       <div class="seg" id="deliverySelector" role="radiogroup" aria-label="Tipo de pedido">
@@ -1237,14 +1284,14 @@ html[data-mafia-cards="street-style"] .pd-ph::after{background:linear-gradient(t
         <label id="addrWrap">Dirección
           <input id="caddr" type="text" autocomplete="address-line1" placeholder="Calle y número" required>
         </label>
-        <button type="button" class="addr-sug" id="addrSug" hidden></button>
         <label id="unitWrap">Depto o casa (opcional)
           <input id="cunit" type="text" autocomplete="address-line2" placeholder="Depto 502">
         </label>
       </section>
       <div id="noteBox" hidden>
-        <button type="button" class="nbtn" id="noteBtn" aria-expanded="false">Agregar nota del pedido</button>
-        <textarea id="cnote" rows="2" aria-label="Nota del pedido" placeholder="Sin cebolla" hidden></textarea>
+        <label>Nota del pedido (opcional)
+          <textarea id="cnote" rows="2" placeholder="Sin cebolla"></textarea>
+        </label>
       </div>
       <input type="hidden" id="cemail">
       <p class="err" id="err" role="alert"></p>
@@ -1335,15 +1382,15 @@ const CONFIG = {
   transferencia: { titular:"", rut:"", banco:"", tipoCuenta:"", numeroCuenta:"", email:"" },
 
   /* --- Imagen y tipografía: solo deja los archivos en las carpetas y listo --- */
-  logo: "/logo-mafia-blanco.webp",                // archivo junto a este HTML (png, svg, webp). Si no existe, se muestra el nombre en texto
-  fotosCarpeta: "/",                // fotos junto a este archivo: <id del plato>.<extensión> (ej: margarita.jpg). Si las pones en una carpeta, escribe "fotos/"
+  logo: "/assets/logo-mafia-blanco.webp",                // archivo junto a este HTML (png, svg, webp). Si no existe, se muestra el nombre en texto
+  fotosCarpeta: "/fotos/",                // fotos junto a este archivo: <id del plato>.<extensión> (ej: margarita.jpg). Si las pones en una carpeta, escribe "fotos/"
   fotosExtension: "webp",           // jpg, png o webp (usa la misma para todas)
-  fuenteTitulos: "/PestoMafio.ttf",  // archivo junto a este HTML (woff2, woff, ttf u otf). Vacío = Playfair Display
+  fuenteTitulos: "/fonts/PestoMafio.ttf",  // archivo junto a este HTML (woff2, woff, ttf u otf). Vacío = Playfair Display
   fuenteTextos: "",                // ej: "fuentes/textos.woff2"   Vacío = Inter
 
   /* --- Diseño: aquí se deja la opción que elijas --- */
   diseno: { foto:"grid", tipografia:"contrast", cta:"sheet", desc:"full" },   // foto: lista | hero | grid · tipografia: actual | contrast | weight · cta (combo): actual | toggle | tag | sheet · desc: full | one | none
-  popup: { activo:false, titulo:"Promo de la semana", texto:"Escribe aquí tu mensaje.", boton:"Ver carta", imagen:"/popup.webp" },   // activo:true muestra el popup al entrar
+  popup: { activo:false, titulo:"Promo de la semana", texto:"Escribe aquí tu mensaje.", boton:"Ver carta", imagen:"/assets/popup.webp" },   // activo:true muestra el popup al entrar
   opciones: false                  // true = muestra el botón "Opciones de diseño" para probar las variantes
 };
 
@@ -1644,7 +1691,7 @@ function setOffer(id, k){
 }
 function pop(el){ if (!el) return; el.classList.remove("pop"); void el.offsetWidth; el.classList.add("pop"); }
 
-$("#nav").innerHTML = MENU.filter(c => !c.hidden).map(c => `<li><a href="#${c.id}">${esc(c.name)}</a></li>`).join("");
+$("#nav").innerHTML = MENU.filter(c => !c.hidden).map(c => `<li><a href="#${c.id}">${esc(c.name)}</a></li>`).join("") + '<li class="profli"><button class="profbtn" id="profbtn" type="button" aria-label="Mi perfil y pedidos"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4.5-6 8-6s7 2 8 6"/></svg></button></li>';
 $("#menu").innerHTML = MENU.filter(c => !c.hidden).map((c, ci) => `<section class="cat${c.compact ? " compact" : ""}" id="${c.id}" aria-labelledby="h-${c.id}">
   <h2 id="h-${c.id}">${esc(c.name)}</h2>
   ${c.note ? `<p class="note">${esc(c.note)}</p>` : ""}
@@ -1853,7 +1900,7 @@ const wide = window.matchMedia("(min-width:900px)");
 
 const inCart = id => Object.keys(cart).some(k => k.split("|")[0] === id);
 const pick = (ids, max) => ids.filter(id => IDX[id] && isProductAvailable(id) && !IDX[id].options && !IDX[id].pick && !IDX[id].combo && !inCart(id)).slice(0, max);
-const sugRow = (id, badge="") => `<div class="sug-row"><div class="sug-copy"><div class="sug-topline"><span class="sug-name">${esc(IDX[id].name)}</span><b class="sug-price">+${fmt(IDX[id].price)}</b></div>${badge ? `<small class="sug-badge">${esc(badge)}</small>` : ""}</div><button type="button" class="sug-add" data-sug="${esc(id)}" aria-label="Agregar ${esc(IDX[id].name)}">+</button></div>`;
+const sugRow = (id) => `<div class="sug-row">${IDX[id].img ? `<img class="sug-img" src="${esc(IDX[id].img)}" alt="" loading="lazy" decoding="async">` : `<span class="sug-img"></span>`}<div class="sug-copy"><b class="sug-name">${esc(IDX[id].name)}</b><span class="sug-price">+${fmt(IDX[id].price)}</span></div><button type="button" class="sug-add" data-sug="${esc(id)}" aria-label="Agregar ${esc(IDX[id].name)}">+</button></div>`;
 
 function panelSuggest(ls){
   if (!ls.length) return "";
@@ -1896,7 +1943,7 @@ function panelSuggest(ls){
     const context = hasPasta ? "pasta" : (hasPizza ? "pizza" : "other");
     trackOnce("upsell:" + context + ":" + ids.join(",") + ":" + ls.map(l=>l.it.id).sort().join(","), "upsell_impression", {context, suggested_product_ids:ids});
   }
-  return suggestions.length ? `<div class="sug"><p>Completa tu pedido</p><div class="sug-list">${suggestions.map(x => sugRow(x.id, x.badge)).join("")}</div></div>` : "";
+  return suggestions.length ? `<div class="sug"><p>¿Algo más?</p><div class="sug-list">${suggestions.map(x => sugRow(x.id)).join("")}</div></div>` : "";
 }
 
 const sugBox = $("#suggest");
@@ -1938,15 +1985,19 @@ function renderCart(){
   cartbtn.title = count ? fmt(sum) : "";
   $("#lines").innerHTML = ls.length ? ls.map(l => { const detail = cartDetail(l), thumb = cartPhotoSrc(l); return `<div class="line">
       ${thumb ? `<img class="line-thumb" src="${esc(thumb)}" alt="" loading="lazy" decoding="async">` : `<span class="line-thumb-ph" aria-hidden="true"></span>`}
-      <div class="line-content">
-        <b class="line-name">${esc(l.it.name)}</b>
-        ${detail ? `<small class="line-detail">${esc(detail)}</small>` : ""}
-        <div class="line-price"><b class="line-total">${fmt(l.qty * l.price)}</b>${l.qty > 1 ? `<small class="line-unit">${fmt(l.price)} c/u</small>` : ""}</div>
-      </div>
-      <div class="qty">
-        <button type="button" data-dec="${esc(l.k)}" aria-label="Quitar uno de ${esc(l.it.name)}">−</button>
-        <span aria-label="Cantidad">${l.qty}</span>
-        <button type="button" data-inc="${esc(l.k)}" aria-label="Agregar uno de ${esc(l.it.name)}">+</button>
+      <div class="lc">
+        <div class="lt">
+          <b class="line-name">${esc(l.it.name)}</b>
+          ${detail ? `<small class="line-detail">${esc(detail)}</small>` : ""}
+        </div>
+        <div class="lr">
+          <b class="line-total">${fmt(l.qty * l.price)}</b>
+          <div class="qty">
+            <button type="button" data-dec="${esc(l.k)}" aria-label="Quitar uno de ${esc(l.it.name)}">−</button>
+            <span aria-label="Cantidad">${l.qty}</span>
+            <button type="button" data-inc="${esc(l.k)}" aria-label="Agregar uno de ${esc(l.it.name)}">+</button>
+          </div>
+        </div>
       </div>
     </div>`; }).join("") + panelSuggest(ls) : `<p class="empty">Aún no agregas productos.</p>`;
   $("#total").textContent = fmt(sum);
@@ -2354,22 +2405,9 @@ normPhone();
 $("#cphone").addEventListener("input", normPhone);
 $("#cphone").addEventListener("focus", () => { normPhone(); const el = $("#cphone"); setTimeout(() => el.setSelectionRange(el.value.length, el.value.length), 0); });
 
-/* Dirección sugerida (la última usada en este dispositivo) */
-function syncAddrSug(){
-  const b = $("#addrSug"), v = $("#caddr").value.trim().toLowerCase(), sv = (SAVED.addr || "").trim();
-  const show = !!sv && sv.toLowerCase() !== v && sv.toLowerCase().startsWith(v);
-  b.hidden = !show; if (show) b.textContent = sv;
-}
-$("#caddr").addEventListener("input", syncAddrSug);
-$("#addrSug").addEventListener("click", () => { $("#caddr").value = SAVED.addr; if (SAVED.unit && !$("#cunit").value) $("#cunit").value = SAVED.unit; syncAddrSug(); $("#cunit").focus(); });
-
-/* Nota del pedido */
-$("#noteBtn").addEventListener("click", () => {
-  const t = $("#cnote"), open = t.hidden;
-  t.hidden = !open; $("#noteBtn").setAttribute("aria-expanded", String(open));
-  $("#noteBtn").textContent = open ? "Ocultar nota del pedido" : (t.value.trim() ? "Editar nota del pedido" : "Agregar nota del pedido");
-  if (open) t.focus();
-});
+if (SAVED.addr) $("#caddr").value = SAVED.addr;
+if (SAVED.unit) $("#cunit").value = SAVED.unit;
+const syncAddrSug = () => {};
 
 /* Pasos del formulario: nombre y teléfono → dirección (solo delivery) → pago */
 let sub = 1;
@@ -2727,8 +2765,28 @@ function stageText(o){
   if (s === "entregado") return ["Pedido entregado", "¡Buen provecho!"];
   return ["Recibimos tu pedido", "La cocina lo confirmará en unos minutos."];
 }
+const RATE = { ref:null, stars:{}, comments:{}, dirty:false, sent:false, busy:false };
+const IMG_OF = (() => { const m = {}; Object.values(IDX).forEach(it => { if (it && it.name && it.img) m[it.name] = it.img; }); return m; })();
+function rateHtml(o, st){
+  if (!o.paid || st < 2) return "";
+  if (RATE.ref !== o.reference){ RATE.ref = o.reference; RATE.stars = {}; RATE.comments = {}; RATE.dirty = false; RATE.sent = false; }
+  const done = o.ratings && o.ratings.items ? o.ratings.items : null;
+  const star = (n, on, i, ro) => `<button type="button" class="star${on ? " on" : ""}" ${ro ? "disabled" : `data-star="${n}" data-i="${i}"`} aria-label="${n} de 5">★</button>`;
+  const row = (i, it) => {
+    const dn = done ? done.find(d => d.i === i) : null, v = dn ? dn.stars : (RATE.stars[i] || 0), img = IMG_OF[it.name];
+    if (done && !dn) return "";
+    return `<div class="rt"><div class="rr">${img ? `<img src="${esc(img)}" alt="" loading="lazy">` : ""}<b>${esc(it.name)}</b><div class="stars" role="group" aria-label="Calificación de ${esc(it.name)}">${[1,2,3,4,5].map(n => star(n, n <= v, i, !!done)).join("")}</div></div>
+      ${dn ? (dn.comment ? `<p class="rq">${esc(dn.comment)}</p>` : "") : (v ? `<input class="rc" data-ci="${i}" maxlength="300" placeholder="¿Qué podemos mejorar? (opcional)" value="${esc(RATE.comments[i] || "")}">` : "")}</div>`;
+  };
+  const rows = o.items.map((it, i) => row(i, it)).join("");
+  if (done) return `<div class="rate"><h4>Gracias por tu opinión</h4>${rows}</div>`;
+  const any = Object.values(RATE.stars).some(v => v > 0);
+  return `<div class="rate"><h4>¿Cómo estuvo? ¿Qué podemos mejorar?</h4>${rows}<button type="button" class="rsend" id="rateSend"${any && !RATE.busy ? "" : " disabled"}>Enviar opinión</button><p class="rerr" id="rateErr" role="alert"></p></div>`;
+}
 const ETA = { retiro:25, delivery:40 };   /* minutos que se muestran al cliente */
+let LASTO = null;
 function renderTicket(o){
+  LASTO = o;
   const when = new Date(o.paid_at || o.created_at).toLocaleString("es-CL", { day:"numeric", month:"short", year:"numeric", hour:"2-digit", minute:"2-digit" });
   const delivery = o.delivery_type === "delivery", st = o.paid ? (STAGE_OF[o.kitchen_status] ?? 0) : -1, [h, sub] = stageText(o);
   const eta = !o.paid || st > 1 ? "" : (delivery ? ETA.delivery : ETA.retiro);
@@ -2741,6 +2799,7 @@ function renderTicket(o){
         ${eta ? `<span class="tk-eta">Listo en unos ${eta} min</span>` : ""}
       </div>
       ${st >= 0 ? `<ol class="tk-track" aria-label="Estado del pedido">${STAGES.map((n, i) => `<li class="${i < st || (i === st && st === 3) ? "done" : i === st ? "cur" : ""}"${i === st ? ' aria-current="step"' : ""}><span class="dot">${i < st || (i === st && st === 3) ? "✓" : ""}</span>${esc(n)}</li>`).join("")}</ol>` : ""}
+      ${rateHtml(o, st)}
       <details class="tk-det"><summary>Ver detalle</summary>
         <div class="tk-meta">
           <div><span>Fecha</span><b>${esc(when)}</b></div>
@@ -2764,11 +2823,34 @@ function openTicket(o, key){
   TK = { reference:o.reference, key };
   renderTicket(o); updateEntry(o); openPayScreen(); showView("pvTicket");
   stopTicketPoll();
-  if (o.kitchen_status !== "entregado") tkTimer = setInterval(async () => {
+  tkTimer = setInterval(async () => {
     if (document.hidden || !TK) return;
-    try { const n = await fetchOrder(TK.reference, TK.key); renderTicket(n); updateEntry(n); } catch(e){}
+    try {
+      const n = await fetchOrder(TK.reference, TK.key); updateEntry(n);
+      const busy = RATE.dirty || ($("#tk").contains(document.activeElement) && document.activeElement.tagName === "INPUT");
+      if (!busy) renderTicket(n); else LASTO = n;
+    } catch(e){}
   }, 8000);
 }
+$("#tk").addEventListener("click", async e => {
+  const st = e.target.closest("[data-star]");
+  if (st){ RATE.stars[st.dataset.i] = Number(st.dataset.star); RATE.dirty = true; renderTicket(LASTO); const c = $("#tk").querySelector('[data-ci="' + st.dataset.i + '"]'); if (c) c.focus({ preventScroll:true }); return; }
+  if (e.target.id === "rateSend" && !RATE.busy){
+    const ratings = Object.keys(RATE.stars).filter(i => RATE.stars[i] > 0).map(i => ({ i:Number(i), stars:RATE.stars[i], comment:RATE.comments[i] || "" }));
+    if (!ratings.length) return;
+    RATE.busy = true; e.target.disabled = true;
+    try {
+      const r = await fetch(FN + "order-rate", { method:"POST", headers:{ "Content-Type":"application/json" }, body:JSON.stringify({ ref:TK.reference, key:TK.key, ratings }) });
+      const d = await r.json().catch(() => ({}));
+      RATE.busy = false;
+      if (!r.ok || !d.ok){ renderTicket(LASTO); const er = $("#rateErr"); if (er) er.textContent = d.error || "No pudimos enviar tu opinión. Inténtalo de nuevo."; return; }
+      RATE.dirty = false; RATE.sent = true;
+      const list = lsGet(LS_ORDERS, []), en = list.find(x => x.reference === TK.reference); if (en){ en.rated = true; lsSet(LS_ORDERS, list); }
+      renderTicket({ ...LASTO, ratings:d.ratings }); syncBanner();
+    } catch(err){ RATE.busy = false; renderTicket(LASTO); const er = $("#rateErr"); if (er) er.textContent = "No pudimos conectar. Inténtalo de nuevo."; }
+  }
+});
+$("#tk").addEventListener("input", e => { if (e.target.dataset && e.target.dataset.ci !== undefined){ RATE.comments[e.target.dataset.ci] = e.target.value; RATE.dirty = true; } });
 $("#pvDone").addEventListener("click", () => { closePayScreen(); toggle(false); window.scrollTo({ top:0, behavior:"smooth" }); });
 $("#pvBack").addEventListener("click", () => { if (PG && PG.busy) return; closePayScreen(); setTimeout(() => $("#payOnline").focus(), 0); });
 window.addEventListener("keydown", e => {
@@ -2795,11 +2877,12 @@ function rememberOrder(o){
 function updateEntry(o){
   const list = lsGet(LS_ORDERS, []), e = list.find(x => x.reference === o.reference);
   if (e && e.st !== (o.kitchen_status || "nuevo")){ e.st = o.kitchen_status || "nuevo"; lsSet(LS_ORDERS, list); }
-  syncPill();
+  syncPill(); syncBanner();
 }
 const activeOrder = () => lsGet(LS_ORDERS, []).find(x => x.st !== "entregado" && Date.now() - new Date(x.at).getTime() < 12 * 3600 * 1000);
 function syncPill(){
   const a = activeOrder(), p = $("#myOrderPill"); if (!p) return;
+  syncBanner();
   p.hidden = !a || !$("#payScreen").hidden;
   if (!a) return;
   $("#mpTxt").textContent = "Mi pedido #" + a.short_code + " · " + (STAGE_LABEL[a.st] || "Pagado");
@@ -2813,13 +2896,36 @@ setInterval(async () => {
   const a = activeOrder(); if (!a || document.hidden || !$("#payScreen").hidden) return;
   try { updateEntry(await fetchOrder(a.reference, a.key)); } catch(e){}
 }, 20000);
-function syncMyOrders(){ const n = lsGet(LS_ORDERS, []).length, b = $("#myOrdersLink"); if (b){ b.hidden = !n; } }
+function syncMyOrders(){ const b = $("#myOrdersLink"); if (b) b.hidden = true; syncBanner(); }
+const ratableOrder = () => lsGet(LS_ORDERS, []).find(x => x.st === "entregado" && !x.rated && Date.now() - new Date(x.at).getTime() < 24 * 3600 * 1000);
+var bannerOrder = null;
+function syncBanner(){
+  const bn = $("#actBanner"); if (!bn) return;
+  const a = activeOrder(), r = a ? null : ratableOrder(); bannerOrder = a || r;
+  bn.hidden = !bannerOrder; if (!bannerOrder) return;
+  bn.className = "act-banner" + (r ? " rate" : "");
+  $("#actTxt").textContent = r ? "¿Cómo estuvo el pedido #" + r.short_code + "?" : "Pedido #" + a.short_code + " · " + (STAGE_LABEL[a.st] || "Pagado");
+  $("#actGo").textContent = r ? "Opinar" : "Ver";
+}
+$("#actBanner").addEventListener("click", async () => {
+  const a = bannerOrder; if (!a) return;
+  try { openTicket(await fetchOrder(a.reference, a.key), a.key); } catch(e){ openMyOrders(); }
+});
 function openMyOrders(){
   const list = lsGet(LS_ORDERS, []);
-  $("#moList").innerHTML = list.length ? list.map(x => `<button type="button" class="mo-item" data-ref="${esc(x.reference)}" data-key="${esc(x.key)}"><span><b>#${esc(x.short_code)}</b><small>${esc(new Date(x.at).toLocaleString("es-CL", { day:"numeric", month:"short", hour:"2-digit", minute:"2-digit" }))}</small></span><b>${fmt(x.total)}</b></button>`).join("") : '<p class="mo-empty">Aún no tienes pedidos pagados en este dispositivo.</p>';
+  const row = (x, last) => {
+    const when = esc(new Date(x.at).toLocaleString("es-CL", { day:"numeric", month:"short", hour:"2-digit", minute:"2-digit" }));
+    const rate = last && !x.rated && (x.st === "listo" || x.st === "entregado");
+    const hint = last ? (rate ? "<i>★★★★★ ¿Cómo estuvo? Cuéntanos qué podemos mejorar</i>" : (x.rated ? "<i>Gracias por tu opinión</i>" : "<i>" + esc(STAGE_LABEL[x.st] || "Pagado") + "</i>")) : "";
+    return `<button type="button" class="mo-item${last ? " mo-last" : ""}" data-ref="${esc(x.reference)}" data-key="${esc(x.key)}"><span><b>#${esc(x.short_code)}</b><small>${when}</small>${hint}</span><b>${fmt(x.total)}</b></button>`;
+  };
+  $("#moList").innerHTML = list.length
+    ? '<p class="mo-h">Tu último pedido</p>' + row(list[0], true) + (list.length > 1 ? '<p class="mo-h">Anteriores</p>' + list.slice(1).map(x => row(x, false)).join("") : "")
+    : '<p class="mo-empty">Aún no tienes pedidos pagados en este dispositivo.</p>';
   openPayScreen(); showView("pvOrders");
 }
 $("#myOrdersLink").addEventListener("click", openMyOrders);
+$("#profbtn").addEventListener("click", openMyOrders);
 $("#moBack").addEventListener("click", closePayScreen);
 $("#moList").addEventListener("click", async e => {
   const b = e.target.closest("[data-ref]"); if (!b) return;
