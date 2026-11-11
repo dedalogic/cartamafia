@@ -405,6 +405,13 @@ main.wide{max-width:1240px}
 .otab[data-st=nuevo]{--tc:#cf8a00}.otab[data-st=preparacion]{--tc:#2f6fdb}.otab[data-st=listo]{--tc:#14803f}.otab[data-st=entregado]{--tc:#8b8780}
 .otab b{background:rgba(255,255,255,.28)!important;color:#fff!important}
 .otab[aria-pressed=true]{opacity:1;box-shadow:0 0 0 2px #fff,0 0 0 4px var(--tc)}
+.cf{display:grid;gap:10px;margin:16px 0}.cf label{display:grid;gap:4px;font-size:13px;color:var(--muted)}
+.cf input{min-height:46px;border:1px solid var(--line);border-radius:var(--r);padding:0 12px;font:inherit;font-size:16px;color:var(--text);background:#fff}
+.cf .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cl{display:grid;gap:8px}.ci2{border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;background:#fff}
+.ci2 .l1{display:flex;justify-content:space-between;gap:10px}.ci2 .m{color:var(--muted);font-size:13px;margin-top:4px}
+.tag2{background:var(--text);color:#fff;border-radius:8px;padding:2px 8px;font-size:12px;font-weight:700;margin-left:6px}
+.bd{border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;margin:0 0 16px;background:#fff;font-size:14px}
 </style>
 </head>
 <body>
@@ -440,7 +447,7 @@ main.wide{max-width:1240px}
 <div class="toast" id="toast" role="alert" hidden></div>
 
 <script>
-const API = { av:"/.netlify/functions/menu-availability", pay:"/.netlify/functions/pay-switch", unp:"/.netlify/functions/orders-unpaid", ord:"/.netlify/functions/orders-list", rep:"/.netlify/functions/orders-report", loc:"/.netlify/functions/local-menu", geo:"/.netlify/functions/orders-geo", upd:"/.netlify/functions/orders-update" };
+const API = { av:"/.netlify/functions/menu-availability", pay:"/.netlify/functions/pay-switch", unp:"/.netlify/functions/orders-unpaid", ord:"/.netlify/functions/orders-list", rep:"/.netlify/functions/orders-report", loc:"/.netlify/functions/local-menu", geo:"/.netlify/functions/orders-geo", upd:"/.netlify/functions/orders-update", loy:"/.netlify/functions/loyalty-admin" };
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const clp = n => "$" + new Intl.NumberFormat("es-CL").format(n || 0);
@@ -459,13 +466,13 @@ const I = {
   pin:'<svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.800 12 21 12 21z"/><circle cx="12" cy="9.500" r="2.500"/></svg>',
   search:'<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>'
 };
-const VIEWS = { inicio:"Inicio", pedidos:"Pedidos", resumen:"Resumen", productos:"Productos", "carta-local":"Carta local", pago:"Pago online", "sin-terminar":"Sin terminar" };
+const VIEWS = { inicio:"Inicio", pedidos:"Pedidos", resumen:"Resumen", productos:"Productos", "carta-local":"Carta local", pago:"Pago online", "sin-terminar":"Sin terminar", clientes:"Clientes" };
 
 let pass = "", role = "", dirty = false, saving = false;
 let simple = false; try { simple = localStorage.getItem("mafia_admin_simple") === "1"; } catch(e){}
 const canAdmin = () => role === "admin";           /* tiene clave de administrador */
 const isAdmin = () => role === "admin" && !simple; /* ve todo, salvo que active el modo simple */
-const S = { dash:null, dashDays:7, orders:[], known:null, tab:"nuevo", sel:null, msgOpen:null, sig:"", catalog:[], dp:new Set(), dop:{}, pay:null, unp:null, unpDays:7, today:null, q:"", cat:"all" };
+const S = { loy:null, loyAge:"all", dash:null, dashDays:7, orders:[], known:null, tab:"nuevo", sel:null, msgOpen:null, sig:"", catalog:[], dp:new Set(), dop:{}, pay:null, unp:null, unpDays:7, today:null, q:"", cat:"all" };
 
 async function call(url, body){
   const r = await fetch(url + "?t=" + Date.now(), { method:"POST", cache:"no-store", headers:{ "Content-Type":"application/json" }, body:JSON.stringify({ password:pass, ...body }) });
@@ -486,6 +493,7 @@ function drawNav(){
     item("productos", I.box, "Productos") +
     (A ? item("resumen", I.chart, "Resumen") : "") +
     (A ? item("carta-local", I.menuBook, "Carta local") : "") +
+    (A ? item("clientes", I.orders, "Clientes") : "") +
     (A ? item("pago", I.card, "Pago online") + item("sin-terminar", I.clock, "Compras sin terminar", S.unp && S.unp.unpaid.some(x => x.review) ? '<span class="badge">!</span>' : "") : "") +
     `<div class="sep"></div><a href="/" target="_blank" rel="noopener">${I.menuBook}Ver carta</a>` + (A ? `<a href="/carta/" target="_blank" rel="noopener">${I.menuBook}Ver carta del local</a>` : "") +
     (canAdmin() ? `<div class="sep"></div><button type="button" class="mode" id="modeSw" role="switch" aria-checked="${simple}">Modo simple<i></i></button>` : "");
@@ -498,11 +506,11 @@ $("#closeBtn").onclick = $("#scrim").onclick = () => openMenu(false);
 document.addEventListener("keydown", e => { if (e.key === "Escape") openMenu(false); });
 
 /* ---------- vistas ---------- */
-const route = () => { const h = (location.hash || "").replace(/^#\/?/, ""); return VIEWS[h] && (isAdmin() || (h !== "pago" && h !== "sin-terminar" && h !== "resumen" && h !== "carta-local")) ? h : "inicio"; };
+const route = () => { const h = (location.hash || "").replace(/^#\/?/, ""); return VIEWS[h] && (isAdmin() || (h !== "pago" && h !== "sin-terminar" && h !== "resumen" && h !== "carta-local" && h !== "clientes")) ? h : "inicio"; };
 function render(){
   const v = route(); $("#title").textContent = VIEWS[v]; document.title = "MAFIA · " + VIEWS[v];
   $("#main").classList.toggle("wide", v === "pedidos");
-  ({ inicio:vHome, pedidos:vOrders, resumen:vDash, productos:vProducts, "carta-local":vLocal, pago:vPay, "sin-terminar":vUnpaid })[v]();
+  ({ inicio:vHome, pedidos:vOrders, resumen:vDash, productos:vProducts, "carta-local":vLocal, pago:vPay, "sin-terminar":vUnpaid, clientes:vClients })[v]();
   syncAlert();
   $("#savebar").hidden = !((v === "productos" || v === "carta-local") && dirty);
   drawNav(); openMenu(false); window.scrollTo(0, 0);
@@ -775,6 +783,31 @@ function drawUnpaid(){
   const all = $("#chkAll"); if (all) all.onclick = async () => { all.disabled = true; for (const b of box.querySelectorAll(".chk")) if (!b.disabled) await check(b); all.disabled = false; };
 }
 async function loadUnpaid(){ try { S.unp = await call(API.unp, { days:S.unpDays }); drawNav(); if (route() === "sin-terminar") drawUnpaid(); else if (route() === "inicio") vHome(); } catch(e){ toast(e.message); const b = $("#ub"); if (b && route() === "sin-terminar") { b.innerHTML = '<p class="none">No se pudo cargar. <button type="button" class="undo" id="retryU" style="width:auto;padding:0 14px;height:40px">Reintentar</button></p>'; $("#retryU").onclick = () => { b.innerHTML = '<p class="none">Cargando…</p>'; loadUnpaid(); }; } } }
+
+/* ---------- clientes (club de puntos y cumpleaños) ---------- */
+async function loadClients(){ try { S.loy = await call(API.loy, {}); } catch(e){ toast(e.message); } if (route() === "clientes") vClients(); }
+function vClients(){
+  const L = S.loy;
+  if (!L){ $("#view").innerHTML = '<p class="none">Cargando…</p>'; loadClients(); return; }
+  const c = L.config, all = L.customers, inAge = x => S.loyAge === "all" || (x.age != null && (S.loyAge === "u25" ? x.age < 25 : S.loyAge === "m40" ? x.age >= 40 : x.age >= 25 && x.age < 40));
+  const list = all.filter(inAge), soon = all.filter(x => x.bday_in != null && x.bday_in <= 7).sort((a, b) => a.bday_in - b.bday_in);
+  $("#view").innerHTML = `
+    <div class="big ${c.enabled ? "on" : ""}"><div class="t"><h3>${c.enabled ? "Encendido" : "Apagado"}</h3><p>${c.enabled ? "Se suman puntos por cada pedido pagado y la carta pregunta el cumpleaños." : "No se guarda ni se muestra nada a los clientes."}</p></div><label class="sw"><input type="checkbox" id="loySw" ${c.enabled ? "checked" : ""} aria-label="Club de puntos activo"><i></i></label></div>
+    <div class="cf">
+      <div class="two"><label>Pesos por punto<input id="cfPer" type="number" min="100" step="100" value="${c.per}"></label><label>Puntos para el premio<input id="cfGoal" type="number" min="1" value="${c.goal}"></label></div>
+      <div class="two"><label>Premio<input id="cfPrize" value="${esc(c.prize)}"></label><label>Regalo de cumpleaños<input id="cfGift" value="${esc(c.gift)}"></label></div>
+      <label>Pedidos para ser Cliente fiel<input id="cfFiel" type="number" min="1" value="${c.fiel_orders}"></label>
+      <button type="button" class="btn" id="cfSave">Guardar</button>
+    </div>
+    <div class="stats"><div class="stat"><b>${all.length}</b><span>Registrados</span></div><div class="stat"><b>${all.filter(x => x.fiel).length}</b><span>Clientes fieles</span></div><div class="stat"><b>${soon.length}</b><span>Cumplen esta semana</span></div></div>
+    ${soon.length ? `<div class="bd"><b>Cumpleaños próximos</b><br>${soon.map(x => `${esc(x.name || "Cliente")} · ${x.bday_in === 0 ? "hoy" : "en " + x.bday_in + " días"} · +56 ${esc(x.phone)}`).join("<br>")}</div>` : ""}
+    <div class="tabs" id="agetabs">${[["all", "Todos"], ["u25", "Menos de 25"], ["m25", "25 a 39"], ["m40", "40 o más"]].map(([k, l]) => `<button type="button" data-a="${k}" aria-pressed="${S.loyAge === k}">${l}</button>`).join("")}</div>
+    <div class="cl">${list.length ? list.map(x => `<div class="ci2"><div class="l1"><b>${esc(x.name || "Cliente")}${x.fiel ? '<span class="tag2">Fiel</span>' : ""}</b><b>${x.points} pts</b></div><div class="m">+56 ${esc(x.phone)} · ${x.age != null ? x.age + " años" : "sin fecha de nacimiento"} · ${x.orders} pedidos · ${clp(x.spent)}</div><div class="m">${x.top.length ? "Le gusta: " + x.top.map(esc).join(", ") : ""}</div></div>`).join("") : '<p class="none">Aún no hay clientes en este grupo.</p>'}</div>
+    <p class="hint">Los puntos se suman cuando el pago queda aprobado. Quien paga con el mismo teléfono acumula en la misma ficha.</p>`;
+  $("#loySw").onchange = async e => { e.target.disabled = true; try { await call(API.loy, { action:"set", config:{ enabled:e.target.checked } }); S.loy = null; } catch(err){ toast(err.message); } vClients(); };
+  $("#cfSave").onclick = async () => { try { await call(API.loy, { action:"set", config:{ per:$("#cfPer").value, goal:$("#cfGoal").value, prize:$("#cfPrize").value, gift:$("#cfGift").value, fiel_orders:$("#cfFiel").value } }); S.loy = null; toast("Guardado"); } catch(err){ toast(err.message); } vClients(); };
+  $("#agetabs").onclick = e => { const b = e.target.closest("[data-a]"); if (b){ S.loyAge = b.dataset.a; vClients(); } };
+}
 /* ---------- resumen (dashboard, solo super admin) ---------- */
 const pct = (a, b) => b ? Math.round(a * 100 / b) : 0;
 const kfmt = n => n >= 1000 ? (Math.round(n / 100) / 10).toString().replace(".", ",") + "k" : String(n);
