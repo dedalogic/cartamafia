@@ -10,7 +10,7 @@
 <link rel="icon" type="image/png" href="/favicon.png?v=mafia-20261003-2">
 <link rel="shortcut icon" type="image/png" href="/favicon.png?v=mafia-20261003-2">
 <link rel="apple-touch-icon" href="/favicon.png?v=mafia-20261003-2">
-<link rel="preload" href="/fonts/PestoMafio.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="preload" href="/PestoMafio.ttf" as="font" type="font/ttf" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
@@ -49,8 +49,12 @@ button{font:inherit;color:inherit;cursor:pointer}
   -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
 .nav-in{max-width:1160px;margin:0 auto;display:flex;align-items:center}
 .nav ul{position:relative;flex:1;min-width:0;list-style:none;display:flex;gap:8px;overflow-x:auto;padding:12px 8px 12px 16px;scrollbar-width:none}
-.profbtn{flex:none;width:44px;height:44px;margin:0;display:grid;place-items:center;border:0;background:none;color:#F3EDE2;opacity:.8}
-.profbtn:hover{opacity:1}
+.profli{flex:none}.profbtn{display:flex;align-items:center;justify-content:center;width:46px;min-height:44px;border:1px solid #4a4642;border-radius:var(--r);background:transparent;color:#F1E7D3}
+.profbtn:hover{border-color:#F1E7D3;color:#fff}
+.mo-me{background:#fff;border:1px solid #DDD3BC;border-radius:var(--r);padding:14px 16px;color:#141313}
+.mo-me h3{margin:0 0 6px;font-size:20px;font-weight:800}
+.mo-me p{margin:2px 0;font-size:14px;color:#55514B}
+.mo-rate{margin-top:10px}
 .mo-h{margin:10px 2px 0;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#a39d92}
 .mo-last{border-color:#E0213F}.mo-last i{display:block;margin-top:4px;font-style:normal;font-size:13px;color:#E0213F}
 .cartbtn{position:relative;flex:none;width:44px;height:44px;margin:0 14px 0 4px;display:grid;place-items:center;border-radius:var(--r);border:1px solid var(--text);background:var(--text);color:#16130f;transition:filter .15s}
@@ -1226,7 +1230,7 @@ html[data-mafia-cards="street-style"] .pd-ph::after{background:linear-gradient(t
 <div class="mafia-pop" id="mafiaPop" role="dialog" aria-modal="true" aria-label="Promoción MAFIA">
   <div class="mafia-pop-card">
     <button class="mafia-pop-x" id="mafiaPopX" type="button" aria-label="Cerrar">×</button>
-    <img src="/assets/popup.webp" alt="">
+    <img src="/popup.webp" alt="">
     <div class="mafia-pop-info">
       <b id="mafiaPopT">Promoción</b>
       <span id="mafiaPopS"></span>
@@ -1340,7 +1344,7 @@ html[data-mafia-cards="street-style"] .pd-ph::after{background:linear-gradient(t
     <button class="pv-done" id="pvDone" type="button">Volver a la carta</button>
   </section>
   <section class="pv" id="pvOrders" aria-labelledby="pvOrdersT">
-    <div class="pv-head"><button class="pv-back" id="moBack" type="button" aria-label="Cerrar mis pedidos">←</button><h2 id="pvOrdersT" tabindex="-1">Mis pedidos</h2></div>
+    <div class="pv-head"><button class="pv-back" id="moBack" type="button" aria-label="Cerrar mi perfil">←</button><h2 id="pvOrdersT" tabindex="-1">Mi perfil</h2></div>
     <div class="mo-list" id="moList"></div>
   </section>
 </div>
@@ -1419,15 +1423,15 @@ const CONFIG = {
   transferencia: { titular:"", rut:"", banco:"", tipoCuenta:"", numeroCuenta:"", email:"" },
 
   /* --- Imagen y tipografía: solo deja los archivos en las carpetas y listo --- */
-  logo: "/assets/logo-mafia-blanco.webp",                // archivo junto a este HTML (png, svg, webp). Si no existe, se muestra el nombre en texto
-  fotosCarpeta: "/fotos/",                // fotos junto a este archivo: <id del plato>.<extensión> (ej: margarita.jpg). Si las pones en una carpeta, escribe "fotos/"
+  logo: "/logo-mafia-blanco.webp",                // archivo junto a este HTML (png, svg, webp). Si no existe, se muestra el nombre en texto
+  fotosCarpeta: "/",                // fotos junto a este archivo: <id del plato>.<extensión> (ej: margarita.jpg). Si las pones en una carpeta, escribe "fotos/"
   fotosExtension: "webp",           // jpg, png o webp (usa la misma para todas)
-  fuenteTitulos: "/fonts/PestoMafio.ttf",  // archivo junto a este HTML (woff2, woff, ttf u otf). Vacío = Playfair Display
+  fuenteTitulos: "/PestoMafio.ttf",  // archivo junto a este HTML (woff2, woff, ttf u otf). Vacío = Playfair Display
   fuenteTextos: "",                // ej: "fuentes/textos.woff2"   Vacío = Inter
 
   /* --- Diseño: aquí se deja la opción que elijas --- */
   diseno: { foto:"grid", tipografia:"contrast", cta:"sheet", desc:"full" },   // foto: lista | hero | grid · tipografia: actual | contrast | weight · cta (combo): actual | toggle | tag | sheet · desc: full | one | none
-  popup: { activo:false, titulo:"Promo de la semana", texto:"Escribe aquí tu mensaje.", boton:"Ver carta", imagen:"/assets/popup.webp" },   // activo:true muestra el popup al entrar
+  popup: { activo:false, titulo:"Promo de la semana", texto:"Escribe aquí tu mensaje.", boton:"Ver carta", imagen:"/popup.webp" },   // activo:true muestra el popup al entrar
   opciones: false                  // true = muestra el botón "Opciones de diseño" para probar las variantes
 };
 
@@ -2818,7 +2822,7 @@ function rateHtml(o, st){
   const rows = o.items.map((it, i) => row(i, it)).join("");
   if (done) return `<div class="rate"><h4>Gracias por tu opinión</h4>${rows}</div>`;
   const any = Object.values(RATE.stars).some(v => v > 0);
-  return `<div class="rate"><h4>¿Cómo estuvo? ¿Qué podemos mejorar?</h4>${rows}<button type="button" class="rsend" id="rateSend"${any && !RATE.busy ? "" : " disabled"}>Enviar opinión</button><p class="rerr" id="rateErr" role="alert"></p></div>`;
+  return `<div class="rate"><h4>¿Cómo estuvo tu pedido?</h4>${rows}<button type="button" class="rsend" id="rateSend"${any && !RATE.busy ? "" : " disabled"}>Enviar opinión</button><p class="rerr" id="rateErr" role="alert"></p></div>`;
 }
 const ETA = { retiro:25, delivery:40 };   /* minutos que se muestran al cliente */
 let LASTO = null;
@@ -2907,7 +2911,7 @@ window.addEventListener("pageshow", e => {
 const STAGE_LABEL = { nuevo:"Pagado", preparacion:"Preparando", listo:"Listo", entregado:"Entregado" };
 function rememberOrder(o){
   const list = lsGet(LS_ORDERS, []).filter(x => x.reference !== o.reference);
-  list.unshift({ reference:o.reference, key:PG && PG.reference === o.reference ? PG.status_key : (lsGet(LS_PENDING, null) || {}).key, short_code:o.short_code, at:o.paid_at || o.created_at, total:o.total, st:o.kitchen_status || "nuevo" });
+  list.unshift({ reference:o.reference, key:PG && PG.reference === o.reference ? PG.status_key : (lsGet(LS_PENDING, null) || {}).key, short_code:o.short_code, at:o.paid_at || o.created_at, total:o.total, st:o.kitchen_status || "nuevo", cu:((PG && PG.form && PG.form.customer) || (lsGet(LS_PENDING, null) || {}).customer || null) });
   lsSet(LS_ORDERS, list.filter(x => x.key).slice(0, 20));
   syncMyOrders(); syncPill();
 }
@@ -2948,19 +2952,41 @@ $("#actBanner").addEventListener("click", async () => {
   const a = bannerOrder; if (!a) return;
   try { openTicket(await fetchOrder(a.reference, a.key), a.key); } catch(e){ openMyOrders(); }
 });
+let MO = null;
+function drawMoRate(o){ const el = $("#moRate"); if (!el) return; el.innerHTML = rateHtml(o, o.paid ? (STAGE_OF[o.kitchen_status] ?? 0) : -1); }
 function openMyOrders(){
-  const list = lsGet(LS_ORDERS, []);
+  const list = lsGet(LS_ORDERS, []), lc = (list.find(x => x.cu) || {}).cu || {}, me = { name:lc.name, phone:lc.phone, addr:lc.address, unit:lc.unit, ...(SAVED || {}) };
   const row = (x, last) => {
     const when = esc(new Date(x.at).toLocaleString("es-CL", { day:"numeric", month:"short", hour:"2-digit", minute:"2-digit" }));
-    const rate = last && !x.rated && (x.st === "listo" || x.st === "entregado");
-    const hint = last ? (rate ? "<i>★★★★★ ¿Cómo estuvo? Cuéntanos qué podemos mejorar</i>" : (x.rated ? "<i>Gracias por tu opinión</i>" : "<i>" + esc(STAGE_LABEL[x.st] || "Pagado") + "</i>")) : "";
-    return `<button type="button" class="mo-item${last ? " mo-last" : ""}" data-ref="${esc(x.reference)}" data-key="${esc(x.key)}"><span><b>#${esc(x.short_code)}</b><small>${when}</small>${hint}</span><b>${fmt(x.total)}</b></button>`;
+    return `<button type="button" class="mo-item${last ? " mo-last" : ""}" data-ref="${esc(x.reference)}" data-key="${esc(x.key)}"><span><b>#${esc(x.short_code)}</b><small>${when}</small></span><b>${fmt(x.total)}</b></button>`;
   };
-  $("#moList").innerHTML = list.length
-    ? '<p class="mo-h">Tu último pedido</p>' + row(list[0], true) + (list.length > 1 ? '<p class="mo-h">Anteriores</p>' + list.slice(1).map(x => row(x, false)).join("") : "")
-    : '<p class="mo-empty">Aún no tienes pedidos pagados en este dispositivo.</p>';
+  const info = [me.phone ? esc(me.phone) : "", [me.addr, me.unit].filter(Boolean).map(esc).join(", ")].filter(Boolean).map(t => `<p>${t}</p>`).join("");
+  const card = `<div class="mo-me"><h3>${me.name ? "Hola, " + esc(me.name) : "Mi perfil"}</h3>${info || "<p>Tus datos se guardan cuando haces tu primer pedido.</p>"}</div>`;
+  $("#moList").innerHTML = card + (list.length
+    ? '<p class="mo-h">Tu último pedido</p>' + row(list[0], true) + '<div class="mo-rate" id="moRate"></div>' + (list.length > 1 ? '<p class="mo-h">Anteriores</p>' + list.slice(1).map(x => row(x, false)).join("") : "")
+    : '<p class="mo-h">Mis pedidos</p><p class="mo-empty">Aún no tienes pedidos pagados en este dispositivo.</p>');
   openPayScreen(); showView("pvOrders");
+  if (list.length) fetchOrder(list[0].reference, list[0].key).then(o => { MO = { o, key:list[0].key }; updateEntry(o); drawMoRate(o); }).catch(() => {});
 }
+$("#moList").addEventListener("click", async e => {
+  const st = e.target.closest("[data-star]");
+  if (st && MO){ RATE.stars[st.dataset.i] = Number(st.dataset.star); RATE.dirty = true; drawMoRate(MO.o); const c = $("#moRate").querySelector('[data-ci="' + st.dataset.i + '"]'); if (c) c.focus({ preventScroll:true }); return; }
+  if (e.target.id === "rateSend" && MO && !RATE.busy){
+    const ratings = Object.keys(RATE.stars).filter(i => RATE.stars[i] > 0).map(i => ({ i:Number(i), stars:RATE.stars[i], comment:RATE.comments[i] || "" }));
+    if (!ratings.length) return;
+    RATE.busy = true; e.target.disabled = true;
+    const err = t => { RATE.busy = false; drawMoRate(MO.o); const er = $("#moRate").querySelector("#rateErr"); if (er) er.textContent = t; };
+    try {
+      const r = await fetch(FN + "order-rate", { method:"POST", headers:{ "Content-Type":"application/json" }, body:JSON.stringify({ ref:MO.o.reference, key:MO.key, ratings }) });
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok || !d.ok) return err(d.error || "No pudimos enviar tu opinión. Inténtalo de nuevo.");
+      RATE.busy = false; RATE.dirty = false; RATE.sent = true;
+      const l = lsGet(LS_ORDERS, []), en = l.find(x => x.reference === MO.o.reference); if (en){ en.rated = true; lsSet(LS_ORDERS, l); }
+      MO.o = { ...MO.o, ratings:d.ratings }; drawMoRate(MO.o); syncBanner();
+    } catch(x){ err("No pudimos conectar. Inténtalo de nuevo."); }
+  }
+});
+$("#moList").addEventListener("input", e => { if (e.target.dataset && e.target.dataset.ci !== undefined){ RATE.comments[e.target.dataset.ci] = e.target.value; RATE.dirty = true; } });
 $("#myOrdersLink").addEventListener("click", openMyOrders);
 $("#profbtn").addEventListener("click", openMyOrders);
 $("#moBack").addEventListener("click", closePayScreen);
