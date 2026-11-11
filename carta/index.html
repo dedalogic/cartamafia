@@ -3256,6 +3256,20 @@ html[data-mafia-cards="street-style"] :is(#combos,#entradas,#pizzas,#nuestras-pa
 .opts .oi span{display:block;margin:3px 8px 0;font-size:13px;color:#F2D88C;font-weight:700}
 .vb.open{background:#F2D88C;color:#111}
 html[data-mafia-cards] body #combos .combo-people-filter{display:flex!important}
+/* foto alta y precio + boton a la derecha, a ras del borde inferior de la foto */
+html[data-mafia-cards="street-style"] :is(#combos,#entradas,#pizzas,#nuestras-pastas,#pastas) .item.pu{grid-template-rows:1fr auto!important;align-items:stretch!important}
+html[data-mafia-cards="street-style"] :is(#combos,#entradas,#pizzas,#nuestras-pastas,#pastas) .item.pu .media{grid-row:1/3!important;aspect-ratio:auto!important;height:auto!important;min-height:184px!important;align-self:stretch!important}
+html[data-mafia-cards="street-style"] :is(#combos,#entradas,#pizzas,#nuestras-pastas,#pastas) .item.pu .media .zoom{height:100%!important}
+html[data-mafia-cards="street-style"] :is(#combos,#entradas,#pizzas,#nuestras-pastas,#pastas) .item.pu .media img{height:100%!important;width:100%!important}
+html[data-mafia-cards="street-style"] :is(#combos,#entradas,#pizzas,#nuestras-pastas,#pastas) .item.pu .row2{display:contents!important}
+html[data-mafia-cards="street-style"] :is(#combos,#entradas,#pizzas,#nuestras-pastas,#pastas) .item.pu .act{display:flex!important;flex-wrap:wrap;align-items:center;gap:8px;grid-column:2!important;grid-row:2!important;align-self:end!important;justify-self:start}
+html[data-mafia-cards="street-style"] :is(#combos,#entradas,#pizzas,#nuestras-pastas,#pastas) .item.pu .act .add{grid-column:auto!important;grid-row:auto!important;width:auto!important;padding:0 16px!important;margin:0!important}
+html[data-mafia-cards="street-style"] :is(#combos,#entradas,#pizzas,#nuestras-pastas,#pastas) .item.pu .act .vb{grid-column:auto!important;grid-row:auto!important}
+@media(max-width:560px){html[data-mafia-cards="street-style"] #menu .cat:not(.compact) .item.pu{grid-template-columns:clamp(150px,45vw,190px) minmax(0,1fr)!important}
+html[data-mafia-cards="street-style"] #menu .cat:not(.compact) .item.pu .media{min-height:172px!important}}
+/* precio y boton: misma anchura, uno sobre otro, a ras de la foto */
+html[data-mafia-cards="street-style"] #menu .cat:not(.compact) .item.pu .act{flex-direction:column!important;align-items:stretch!important;justify-self:stretch!important;gap:8px!important}
+html[data-mafia-cards="street-style"] #menu .cat:not(.compact) .item.pu .act :is(.add,.vb){width:100%!important;height:40px!important;min-height:0!important;padding:0 10px!important;justify-content:center;font-size:14px!important;box-sizing:border-box}
 
 </style>
 <script>
