@@ -1,10 +1,9 @@
-MAFIA - CORRECCIONES (3 archivos)
+MAFIA - CORRECCIONES 2
 
-En GitHub (rama main), reemplaza:
-  index.html         -> raiz del repositorio (carta online: arregla el filtro de personas, agrega "Todas")
-  local-defaults.js  -> raiz del repositorio (textos, orden y variedades de la carta local)
-  carta/index.html   -> carpeta carta (tarjetas que se abren y filtro de personas)
+En GitHub (rama main), reemplaza cada archivo en su carpeta:
+  index.html, menu-data.js, local-defaults.js, combo-complices.webp,
+  bbq.webp, pomodoro.webp, parmigiano.webp   -> raiz del repositorio
+  carta/index.html                           -> carpeta carta
+  fotos/local/combo-complices.webp           -> carpeta fotos/local
 
-Estos 3 reemplazan a los del ZIP anterior. Si aun no subes el ZIP anterior (MAFIA-actualizacion-final), subelo tambien.
-La version de la carta local sube a 6: lo guardado en el panel (Carta local) vuelve a estos valores.
 Despues del deploy, recarga con Ctrl+F5.

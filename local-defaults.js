@@ -31,7 +31,7 @@ const LOCAL_DEFAULTS = {
     "cremita-zapallo": { img:"/fotos/local/cremita-zapallo.webp?v=2" },
     "palitos": { img:"/fotos/local/palitos-ajo.webp?v=2" },
     "combo-mafioso": { img:"/fotos/local/combo-mafioso.webp?v=2" },
-    "combo-complices": { img:"/fotos/local/combo-complices.webp?v=2", desc:"4 slices a elección y 2 Bebidas Mini." },
+    "combo-complices": { img:"/fotos/local/combo-complices.webp?v=3", desc:"4 slices a elección y 2 Bebidas Mini." },
     "promo-alfredo": { desc:"Fetuccini Alfredo y Bebida Mini." },
     "l-slice-bebida": { label:"Desde" },
     "l-familiar": { label:"Desde" },
@@ -53,11 +53,7 @@ const LOCAL_DEFAULTS = {
     "l-familiar": { noun:"pizzas", title:"ELIGE TU PIZZA XXL", items:[
       { n:"Margarita", img:"/fotos/local/margarita.webp", p:"$24.990" }, { n:"Funghi", img:"/fotos/local/funghi.webp", p:"$24.990" },
       { n:"Tony Pepperoni", img:"/fotos/local/pepperoni.webp", p:"$29.990" }, { n:"Il Traditore", img:"/fotos/local/pollo-bbq.webp", p:"$29.990" },
-      { n:"Napolitana", img:"/fotos/local/napolitana.webp", p:"$29.990" }, { n:"Al Ajillo Boss", img:"/fotos/local/ajillo.webp", p:"$29.990" } ] },
-    "combo-duo-del-don": { noun:"pastas", title:"ELIGE TUS PASTAS", items:[
-      { n:"Pesto Limón", img:"/fotos/local/np-pesto-lemon.webp" }, { n:"Alfredo Gravy", img:"/fotos/local/np-alfredo-gravy.webp" }, { n:"Bolognesa del Don", img:"/fotos/local/np-bolognesa-albondigas.webp" } ] },
-    "l-pasta-familia": { noun:"pastas", title:"ELIGE HASTA 2 SABORES", items:[
-      { n:"Pesto Limón", img:"/fotos/local/np-pesto-lemon.webp" }, { n:"Alfredo Gravy", img:"/fotos/local/np-alfredo-gravy.webp" }, { n:"Bolognesa del Don", img:"/fotos/local/np-bolognesa-albondigas.webp" } ] }
+      { n:"Napolitana", img:"/fotos/local/napolitana.webp", p:"$29.990" }, { n:"Al Ajillo Boss", img:"/fotos/local/ajillo.webp", p:"$29.990" } ] }
   },
   notes: { pizzas: "Pizzas XXL o Slices", combos: "" },
   /* Banners de arriba. "to": #seccion, o #item:ID (lleva a ese plato), o #item:ID:slice (idem, con la carta en Slice) */

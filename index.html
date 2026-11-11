@@ -91,6 +91,7 @@ main{max-width:1160px;margin:0 auto;padding:0 20px}
 @media(min-width:880px){.list{grid-template-columns:1fr 1fr}}
 
 .item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px 16px;padding:22px 0;border-bottom:1px solid var(--line)}
+.item .media img.dish{opacity:0;transition:opacity .28s ease}.item .media img.dish.ld{opacity:1}
 .item[hidden],.cat[hidden]{display:none!important}
 .item h3{font:400 24px/1.05 var(--serif);letter-spacing:.03em}
 .item:last-child{border-bottom:0}
@@ -1556,10 +1557,9 @@ const photoSrc = (it, pi=-1) => {
   return assetPath(f);
 };
 const CART_PHOTO_OVERRIDES = {
-  "top-bbq":"bbq.webp",
-  "top-ketchup":"ketchup.webp",
-  "top-pomodoro":"pomodoro.webp",
-  "top-parmigiano":"parmigiano.webp"
+  "top-bbq":"bbq.webp?v=2",
+  "top-pomodoro":"pomodoro.webp?v=2",
+  "top-parmigiano":"parmigiano.webp?v=2"
 };
 const cartPhotoSrc = l => CART_PHOTO_OVERRIDES[l.it.id] ? assetPath(CART_PHOTO_OVERRIDES[l.it.id]) : l.thumb;
 
@@ -2824,7 +2824,7 @@ function renderTicket(o){
       ${st >= 0 ? `<ol class="tk-track" aria-label="Estado del pedido">${STAGES.map((n, i) => `<li class="${i < st || (i === st && st === 3) ? "done" : i === st ? "cur" : ""}"${i === st ? ' aria-current="step"' : ""}><span class="dot">${i < st || (i === st && st === 3) ? "✓" : ""}</span>${esc(n)}</li>`).join("")}</ol>` : ""}
       ${rateHtml(o, st)}
       ${loyHtml(o)}
-      <details class="tk-det"><summary>Ver detalle</summary>
+      <details class="tk-det"${st === 3 ? " open" : ""}><summary>Ver detalle</summary>
         <div class="tk-meta">
           <div><span>Fecha</span><b>${esc(when)}</b></div>
           <div><span>Entrega</span><b>${delivery ? "Delivery" : "Retiro en local"}</b></div>
@@ -3115,6 +3115,16 @@ window.addEventListener("focus", loadAvailability);
   if(!seen){ setTimeout(()=>{ pop?.classList.add("on"); try{ sessionStorage.setItem("mafiaPopSeen","1"); }catch(e){} },700); }
 })();
 
+
+/* fotos: aparecen suavemente al terminar de cargar (sin cargar "por partes") */
+(function(){
+  function ok(i){ i.classList.add("ld"); }
+  function scan(){ document.querySelectorAll("img.dish:not(.ld)").forEach(function(i){ if (i.complete) ok(i); }); }
+  document.addEventListener("load", function(e){ if (e.target && e.target.tagName === "IMG" && e.target.classList.contains("dish")) ok(e.target); }, true);
+  document.addEventListener("error", function(e){ if (e.target && e.target.tagName === "IMG") ok(e.target); }, true);
+  scan(); setTimeout(scan, 400); setTimeout(scan, 1500); window.addEventListener("load", scan);
+  new MutationObserver(scan).observe(document.body, { childList:true, subtree:true });
+})();
 
 /* ---------- Filtro de COMBOS por personas ----------
    Usa data-pf (no "hidden"): la revisión de disponibilidad vuelve a calcular "hidden" y deshacía el filtro. */
