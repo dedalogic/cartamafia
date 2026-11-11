@@ -91,6 +91,7 @@ main{max-width:1160px;margin:0 auto;padding:0 20px}
 @media(min-width:880px){.list{grid-template-columns:1fr 1fr}}
 
 .item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px 16px;padding:22px 0;border-bottom:1px solid var(--line)}
+#toppings .item .media::after{content:"";position:absolute;inset:0;border:3px solid #E9DCC0;border-radius:16px;pointer-events:none;z-index:3}
 .item .media img.dish{opacity:0;transition:opacity .28s ease}.item .media img.dish.ld{opacity:1}
 .item[hidden],.cat[hidden]{display:none!important}
 .item h3{font:400 24px/1.05 var(--serif);letter-spacing:.03em}
@@ -1557,9 +1558,9 @@ const photoSrc = (it, pi=-1) => {
   return assetPath(f);
 };
 const CART_PHOTO_OVERRIDES = {
-  "top-bbq":"bbq.webp?v=3",
-  "top-pomodoro":"pomodoro.webp?v=3",
-  "top-parmigiano":"parmigiano.webp?v=3"
+  "top-bbq":"bbq.webp?v=4",
+  "top-pomodoro":"pomodoro.webp?v=4",
+  "top-parmigiano":"parmigiano.webp?v=4"
 };
 const cartPhotoSrc = l => CART_PHOTO_OVERRIDES[l.it.id] ? assetPath(CART_PHOTO_OVERRIDES[l.it.id]) : l.thumb;
 

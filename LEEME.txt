@@ -1,7 +1,7 @@
-MAFIA - CORRECCIONES 3 (reemplazan a las de Correcciones 2)
+MAFIA - ACTUALIZACION 4 (reemplaza todo lo anterior de popup)
 
-Raiz del repositorio: index.html, menu-data.js, local-defaults.js, combo-complices.webp, bbq.webp, pomodoro.webp, parmigiano.webp
-Carpeta carta: carta/index.html
-Carpeta fotos/local: combo-complices.webp
+Raiz del repo: index.html, menu-data.js, local-defaults.js, bbq.webp, pomodoro.webp, parmigiano.webp
+carpeta carta: index.html
+carpeta assets: popup-pastas.webp
 
-Despues del deploy, recarga con Ctrl+F5.
+Nota: local-defaults.js sube la version a 7 (se reinician ajustes guardados del panel para la carta local).

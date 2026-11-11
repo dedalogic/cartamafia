@@ -4,7 +4,7 @@
    Si cambias "version", los valores guardados antes se descartan y vuelven estos.
    ===================================================================== */
 const LOCAL_DEFAULTS = {
-  version: 6,
+  version: 7,
   /* Productos que NO se muestran en el local: los combos de la carta online (el local tiene los suyos). */
   disabledProducts: ["combo-famiglia","combo-doble-capo","combo-mafioso"],
   /* Productos que solo existen en el local. Van al principio de su sección. */
@@ -50,6 +50,8 @@ const LOCAL_DEFAULTS = {
     "combo-complices": { noun:"slices", title:"ELIGE TUS SLICES", items:[
       { n:"Tony Pepperoni", img:"/fotos/local/slice-pepperoni.webp" }, { n:"Funghi", img:"/fotos/local/slice-funghi.webp" },
       { n:"Il Traditore", img:"/fotos/local/slice-pollo-bbq.webp" }, { n:"Margarita", img:"/fotos/local/slice-margarita.webp" } ] },
+    "combo-duo-del-don": { noun:"pastas", title:"ELIGE TUS PASTAS", items:[ { n:"Fetuccini Pesto", img:"/fetuccini-pesto.webp" }, { n:"Fetuccini Alfredo", img:"/fetuccini-alfredo.webp" }, { n:"Fetuccini Bolognesa", img:"/fetuccini-bolognesa.webp" } ] },
+    "l-pasta-familia": { noun:"pastas", title:"ELIGE TUS PASTAS", items:[ { n:"Fetuccini Pesto", img:"/fetuccini-pesto.webp" }, { n:"Fetuccini Alfredo", img:"/fetuccini-alfredo.webp" }, { n:"Fetuccini Bolognesa", img:"/fetuccini-bolognesa.webp" } ] },
     "l-familiar": { noun:"pizzas", title:"ELIGE TU PIZZA XXL", items:[
       { n:"Margarita", img:"/fotos/local/margarita.webp", p:"$24.990" }, { n:"Funghi", img:"/fotos/local/funghi.webp", p:"$24.990" },
       { n:"Tony Pepperoni", img:"/fotos/local/pepperoni.webp", p:"$29.990" }, { n:"Il Traditore", img:"/fotos/local/pollo-bbq.webp", p:"$29.990" },
