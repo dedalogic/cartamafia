@@ -1,7 +1,7 @@
-MAFIA - ACTUALIZACION 4 (reemplaza todo lo anterior de popup)
+MAFIA - ACTUALIZACION 6 (reemplaza la 5 y la 6 anteriores)
 
 Raiz del repo: index.html, menu-data.js, local-defaults.js, bbq.webp, pomodoro.webp, parmigiano.webp
 carpeta carta: index.html
-carpeta assets: popup-pastas.webp
 
-Nota: local-defaults.js sube la version a 7 (se reinician ajustes guardados del panel para la carta local).
+Incluye: Combo del Don con opciones (Alfredo, Bolognesa con Albondigas, Pesto con Pollo Gravy), toppings con fondo crema, pastas visibles en Par de Mafiosos y Pasta en Familia.
+local-defaults.js es version 7: reinicia ajustes de la carta local guardados en el panel.
