@@ -1170,16 +1170,16 @@ html[data-mafia-cards="street-style"] .pd-ph::after{background:linear-gradient(t
 <section class="mafia-hero" id="mafiaHero" aria-label="Novedades MAFIA">
   <div class="mafia-slider">
     <div class="mafia-track" id="mafiaTrack">
-      <a class="mafia-slide art" href="#pizzas" aria-label="Todos los martes, 50% en slices">
+      <a class="mafia-slide art" href="#item:napolitana:slice" aria-label="Todos los martes, 50% en slices">
         <img src="/assets/banner-local-martes.webp" alt="Todos los martes, 50% en slices">
       </a>
-      <a class="mafia-slide art" href="#combos" aria-label="Promo Familiar">
+      <a class="mafia-slide art" href="#item:l-familiar" aria-label="Promo Familiar">
         <img src="/assets/banner-local-familiar.webp" alt="Promo Familiar">
       </a>
-      <a class="mafia-slide art" href="#combos" aria-label="Slice y bebida">
+      <a class="mafia-slide art" href="#item:l-slice-bebida" aria-label="Slice y bebida">
         <img src="/assets/banner-local-slice.webp" alt="Slice y bebida">
       </a>
-      <a class="mafia-slide art" href="#combos" aria-label="Fetuccini Pesto con Pollo Gravy y bebida">
+      <a class="mafia-slide art" href="#item:l-pesto-pollo" aria-label="Fetuccini Pesto con Pollo Gravy y bebida">
         <img src="/assets/banner-local-pesto.webp" alt="Fetuccini Pesto con Pollo Gravy y bebida">
       </a>
     </div>
@@ -3176,12 +3176,31 @@ html #pizzas .item .media,html #combos .item .media{height:auto!important;min-he
 img.dish.sl-l{animation:slL .28s ease}img.dish.sl-r{animation:slR .28s ease}
 @keyframes slL{from{transform:translateX(40%);opacity:.2}to{transform:none;opacity:1}}
 @keyframes slR{from{transform:translateX(-40%);opacity:.2}to{transform:none;opacity:1}}
-.xinc{margin:6px 0 0;font-size:13px;line-height:1.35;color:#F3EDE2;font-weight:700}
+.xinc{margin:6px 0 0;font-size:13px;line-height:1.35;color:#F2D88C;font-weight:700}
 .add .ap small{font-size:12px;font-weight:600;opacity:.9;margin-right:6px}
 #toppings .item{background:transparent!important;border:0!important;box-shadow:none!important;padding-left:0;padding-right:0}
 html #toppings .item .hd h3,html[data-mafia-cards] #toppings .item .hd h3{color:#F3EDE2!important}
 .item .promo{display:inline-block;margin:8px 0 0;padding:4px 10px;border:1px solid var(--red-hi);border-radius:999px;color:#fff;font-size:12px;font-weight:600;line-height:1.3}
 .item .promo b{color:var(--red-hi);letter-spacing:.06em;margin-right:6px}
+.vars{grid-column:1/-1;display:flex;gap:12px;overflow-x:auto;margin:4px -2px 0;padding:2px 2px 6px;scrollbar-width:none}
+.vars::-webkit-scrollbar{display:none}
+.vars figure{margin:0;flex:0 0 auto;width:68px;text-align:center}
+.vars img{width:68px;height:68px;border-radius:50%;object-fit:cover;display:block;border:2px solid #F2D88C;background:#111}
+.vars figcaption{margin-top:5px;font-size:11px;line-height:1.15;color:#F3EDE2;font-weight:600}
+@keyframes flashg{0%,100%{box-shadow:0 10px 28px rgba(0,0,0,.18)}25%,75%{box-shadow:0 0 0 3px #F2D88C,0 0 28px rgba(242,216,140,.55)}}
+.item.flash{animation:flashg 1.8s ease 1}
+.vars figure{cursor:pointer;background:none;border:0;padding:0;font:inherit;-webkit-tap-highlight-color:transparent}
+#pm{position:fixed;inset:0;z-index:80;display:grid;place-items:center;padding:20px;background:rgba(0,0,0,.55);-webkit-backdrop-filter:blur(7px);backdrop-filter:blur(7px);opacity:0;pointer-events:none;transition:opacity .3s}
+#pm.on{opacity:1;pointer-events:auto}
+#pm .box{position:relative;width:min(86vw,380px);transform:scale(.94);transition:transform .3s}
+#pm.on .box{transform:none}
+#pm img{display:block;width:100%;height:auto;border-radius:22px;box-shadow:0 18px 50px rgba(0,0,0,.6)}
+#pm button{position:absolute;top:12px;right:12px;width:44px;height:44px;border:0;border-radius:50%;background:rgba(122,26,52,.92);color:#fff;font-size:24px;line-height:1;cursor:pointer}
+#bk{position:fixed;left:50%;top:78px;z-index:70;transform:translate(-50%,-14px);padding:8px 15px;border:1px solid rgba(242,216,140,.7);border-radius:999px;background:rgba(18,18,18,.92);color:#F2D88C;font:600 13px/1 var(--sans,Inter,sans-serif);opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;cursor:pointer}
+#bk.on{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+.swn{margin:-6px 0 14px;font-size:13px;line-height:1.3;font-weight:700;color:#F2D88C}
+.xinc[hidden]{display:none}
+
 </style>
 <script>
 /* ===== MODO LOCAL: nada se agrega ni se abre; promo en cada producto ===== */
@@ -3244,6 +3263,94 @@ MENU.forEach(function(c){ c.items.forEach(function(i){
     document.querySelectorAll("#pizzas .item").forEach(function(c){ go(c, k); });
   });
 })();
+/* banners: llevan al plato (y lo destacan) */
+document.addEventListener("click", function(e){
+  var a = e.target.closest('a.mafia-slide[href^="#item:"]'); if (!a) return;
+  e.preventDefault();
+  var p = a.getAttribute("href").split(":"), id = p[1], mode = p[2];
+  if (mode === "slice"){ var sw = document.querySelector(".sw2"); if (sw && sw.getAttribute("aria-checked") === "true") sw.click(); }
+  var card = document.querySelector('.item[data-id="' + id + '"]'); if (!card) return;
+  window.__jump = Date.now() + 3000;
+  card.scrollIntoView({ behavior:"smooth", block:"center" });
+  setTimeout(function(){ card.classList.remove("flash"); void card.offsetWidth; card.classList.add("flash"); }, 450);
+});
+/* fotos de las variedades dentro de la promo */
+(function(){
+  var pz = (MENU.filter(function(c){ return c.id === "pizzas"; })[0] || { items:[] }).items.filter(function(i){ return i._img2; });
+  function strip(id, key){
+    var card = document.querySelector('.item[data-id="' + id + '"]'); if (!card || !pz.length) return;
+    var d = document.createElement("div"); d.className = "vars";
+    d.innerHTML = pz.map(function(i){ return "<figure role='button' tabindex='0' data-pz='" + X(i.id) + "' data-from='" + X(id) + "' data-m='" + (key === "_img2" ? "slice" : "full") + "'><img src='" + X(i[key]) + "' alt='' loading='lazy'><figcaption>" + X(i.name) + "</figcaption></figure>"; }).join("");
+    card.appendChild(d);
+  }
+  strip("l-familiar", "_img1"); strip("l-slice-bebida", "_img2");
+})();
+/* tocar una pizza: te lleva a ella; botón sutil para volver a la promo */
+(function(){
+  var bk = document.createElement("button"); bk.id = "bk"; bk.type = "button"; bk.textContent = "Volver a la promo"; document.body.appendChild(bk);
+  var from = null, io = null;
+  function hide(){ bk.classList.remove("on"); if (io){ io.disconnect(); io = null; } from = null; }
+  function visit(card, sec){
+    window.__jump = Date.now() + 3000;
+    card.scrollIntoView({ behavior:"smooth", block:"center" });
+    setTimeout(function(){ card.classList.remove("flash"); void card.offsetWidth; card.classList.add("flash"); }, 450);
+  }
+  document.addEventListener("click", function(e){
+    var f = e.target.closest(".vars figure"); if (!f) return;
+    var card = document.querySelector('.item[data-id="' + f.dataset.pz + '"]'); if (!card) return;
+    var sw = document.querySelector(".sw2"), isFam = sw && sw.getAttribute("aria-checked") === "true";
+    if (sw && ((f.dataset.m === "slice" && isFam) || (f.dataset.m === "full" && !isFam))) sw.click();
+    from = f.dataset.from; visit(card);
+    setTimeout(function(){ bk.classList.add("on"); }, 700);
+    var promo = document.querySelector('.item[data-id="' + from + '"]');
+    if (io) io.disconnect();
+    io = new IntersectionObserver(function(en){ if (en[0].isIntersecting && bk.classList.contains("on") && Date.now() > (window.__jump || 0)) hide(); }, { threshold:0.6 });
+    setTimeout(function(){ if (promo && from) io.observe(promo); }, 1600);
+  }, true);
+  bk.addEventListener("click", function(){
+    var promo = from && document.querySelector('.item[data-id="' + from + '"]'); if (!promo) return hide();
+    window.__jump = Date.now() + 3000; promo.scrollIntoView({ behavior:"smooth", block:"center" }); setTimeout(hide, 900);
+  });
+})();
+/* pop up de pastas: una sola vez, al llegar a la sección */
+(function(){
+  var sec = document.getElementById("nuestras-pastas"); if (!sec || !("IntersectionObserver" in window)) return;
+  var K = "mafia_pp_v2", seen = false; try { seen = localStorage.getItem(K) === "1"; } catch(e){}
+  if (seen) return;
+  var el = document.createElement("div"); el.id = "pm"; el.setAttribute("role", "dialog"); el.setAttribute("aria-label", "Escoge tu pasta y te regalamos la bebida mini");
+  el.innerHTML = "<div class='box'><img src='/assets/popup-pastas.webp' alt='Escoge tu pasta y te regalamos la bebida mini'><button type='button' aria-label='Cerrar'>&times;</button></div>";
+  document.body.appendChild(el);
+  function close(){ el.classList.remove("on"); }
+  el.querySelector("button").addEventListener("click", close);
+  el.addEventListener("click", function(e){ if (e.target === el) close(); });
+  var done = false, dwell = null;
+  new IntersectionObserver(function(en, ob){
+    if (done) return;
+    if (!en[0].isIntersecting){ clearTimeout(dwell); return; }
+    clearTimeout(dwell);
+    dwell = setTimeout(function(){
+      if (done || Date.now() < (window.__jump || 0)) return;
+      done = true; ob.disconnect();
+      try { localStorage.setItem(K, "1"); } catch(e){}
+      el.classList.add("on");
+    }, 1300);
+  }, { threshold:0.25 }).observe(sec);
+})();
+/* una sola frase bajo el interruptor; la de cada pizza solo aparece si esa pizza difiere del interruptor */
+(function(){
+  var sw = document.querySelector(".sw2"); if (!sw) return;
+  var n = document.createElement("p"); n.className = "swn"; sw.insertAdjacentElement("afterend", n);
+  function sync(){
+    var g = sw.getAttribute("aria-checked") === "true" ? "full" : "slice";
+    n.textContent = g === "full" ? "Incluyen Palitos de Ajo y Bebida." : "Agrega bebida por $500.";
+    document.querySelectorAll("#pizzas .item").forEach(function(c){
+      var m = c.dataset.mode === "slice" ? "slice" : "full", x = c.querySelector(".xinc"); if (x) x.hidden = (m === g);
+    });
+  }
+  var _g = go; go = function(c, k){ _g(c, k); sync(); };
+  sync();
+})();
+
 </script>
 </body>
 </html>
