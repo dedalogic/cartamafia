@@ -3,6 +3,7 @@
 import { randomBytes } from "node:crypto";
 import { openStore } from "./_store.mjs";
 import { safeEqual } from "./_auth.mjs";
+import { awardForOrder } from "./_loyalty.mjs";
 
 export const ORDERS_STORE = "mafia-orders";
 const FIRST_NUMBER = 1;
@@ -102,7 +103,12 @@ export function recordAttempt(reference, { mpOrderId, status, statusDetail }){
 }
 
 // Idempotente: si ya estaba pagada no hace nada (evita procesar dos veces el mismo webhook).
-export function markOrderPaid(reference, { mpOrderId, status, statusDetail, paidTotal }){
+export async function markOrderPaid(reference, args){
+  const r = await markOrderPaidRaw(reference, args);
+  if (r && r.changed){ try { await awardForOrder(r.order); } catch (e){ console.error("loyalty", e.message); } }   // puntos: solo si el club está encendido
+  return r;
+}
+function markOrderPaidRaw(reference, { mpOrderId, status, statusDetail, paidTotal }){
   return updateOrder(reference, o => {
     if (o.status === "paid"){
       if (mpOrderId && o.mercado_pago_order_id && mpOrderId !== o.mercado_pago_order_id){

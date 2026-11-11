@@ -2,6 +2,7 @@
 // Si el webhook aún no llegó, se consulta directamente a Mercado Pago y se aplica la misma regla de validación.
 import { json } from "./_auth.mjs";
 import { getOrderByReference, statusKeyOk, publicOrderView } from "./_mafia-orders.mjs";
+import { ticketView } from "./_loyalty.mjs";
 import { getMpOrder, reconcileOrder, mpConfigured } from "./_mp.mjs";
 
 export default async (req) => {
@@ -17,5 +18,6 @@ export default async (req) => {
       else if (rec.outcome === "mismatch") return json({ ...publicOrderView(order), problem:"amount_mismatch" });
     } catch (e){ console.error("status lookup", e.message); }
   }
-  return json(publicOrderView(order));
+  let loyalty = null; try { loyalty = await ticketView(order); } catch {}
+  return json({ ...publicOrderView(order), loyalty });
 };
