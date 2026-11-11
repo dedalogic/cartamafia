@@ -11,7 +11,7 @@ const ITEMS = MENU.flatMap(c => c.items.map(it => ({ it, cat:c })));
 const LOCAL_ITEMS = Array.isArray(DEFAULTS.localItems) ? DEFAULTS.localItems : [];
 const IDS = new Set([...ITEMS.map(x => x.it.id), ...LOCAL_ITEMS.map(x => x.id)]);
 const CATS = new Set(MENU.map(c => c.id));
-const IMG_OK = s => typeof s === "string" && (/^\/fotos\/[\w./-]+$/.test(s) || /^\/\.netlify\/functions\/local-photo\?id=[\w-]+&v=\d+$/.test(s));
+const IMG_OK = s => typeof s === "string" && (/^\/fotos\/[\w./-]+$/.test(s) || /^\/[\w-]+\.(webp|png|jpe?g)$/.test(s) || /^\/\.netlify\/functions\/local-photo\?id=[\w-]+&v=\d+$/.test(s));
 
 export function cleanLocal(raw = {}){
   const disabledProducts = Array.isArray(raw.disabledProducts) ? [...new Set(raw.disabledProducts.filter(id => IDS.has(id)))] : [];
@@ -71,7 +71,7 @@ export function panelItems(){
   const catName = id => MENU.find(c => c.id === id)?.name || id;
   const own = LOCAL_ITEMS.map(x => ({ id:x.id, category:catName(x.cat), categoryId:x.cat, name:x.name, desc:x.desc || "", price:x.price, img:x.img || "", byPick:false, local:true }));
   const rest = MENU.filter(c => !c.hidden).flatMap(c => c.items.map(it => ({
-    id:it.id, category:c.name, categoryId:c.id, name:it.name, desc:it.desc || "", price:it.price, img:it.img || (it.foto ? `/fotos/${it.foto}.webp` : ""),
+    id:it.id, category:c.name, categoryId:c.id, name:it.name, desc:it.desc || "", price:it.price, img:it.img || (it.foto ? `/${it.foto}.webp` : ""),
     byPick: it.priceByPick ? true : false
   })));
   // los productos propios del local van primero dentro de su sección
