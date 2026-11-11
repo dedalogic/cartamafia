@@ -83,7 +83,6 @@ main{max-width:1160px;margin:0 auto;padding:0 20px}
 @media(min-width:880px){.list{grid-template-columns:1fr 1fr}}
 
 .item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px 16px;padding:22px 0;border-bottom:1px solid var(--line)}
-#toppings .item .media::after{content:"";position:absolute;inset:0;border:3px solid #E9DCC0;border-radius:16px;pointer-events:none;z-index:3}
 .item .media img.dish{opacity:0;transition:opacity .28s ease}.item .media img.dish.ld{opacity:1}
 .item[hidden],.cat[hidden]{display:none!important}
 .item h3{font:400 24px/1.05 var(--serif);letter-spacing:.03em}
@@ -1191,7 +1190,7 @@ html[data-mafia-cards="street-style"] .pd-ph::after{background:linear-gradient(t
       <a class="mafia-slide art" href="#item:l-pasta-familia" aria-label="Pasta en Familia">
         <img src="/assets/banner-local-pasta-familia.webp" alt="Pasta en Familia">
       </a>
-      <a class="mafia-slide art" href="#item:l-pesto-pollo" aria-label="Fetuccini Pesto con Pollo Gravy y bebida">
+      <a class="mafia-slide art" href="#item:combo-del-don" aria-label="Fetuccini Pesto con Pollo Gravy y bebida">
         <img src="/assets/banner-local-pesto.webp?v=3" alt="Fetuccini Pesto con Pollo Gravy y bebida">
       </a>
     </div>
@@ -1600,9 +1599,9 @@ const photoSrc = (it, pi=-1) => {
   return assetPath(f);
 };
 const CART_PHOTO_OVERRIDES = {
-  "top-bbq":"bbq.webp?v=4",
-  "top-pomodoro":"pomodoro.webp?v=4",
-  "top-parmigiano":"parmigiano.webp?v=4"
+  "top-bbq":"bbq.webp?v=7",
+  "top-pomodoro":"pomodoro.webp?v=7",
+  "top-parmigiano":"parmigiano.webp?v=7"
 };
 const cartPhotoSrc = l => CART_PHOTO_OVERRIDES[l.it.id] ? assetPath(CART_PHOTO_OVERRIDES[l.it.id]) : l.thumb;
 
@@ -3285,6 +3284,7 @@ html[data-mafia-cards="street-style"] #menu .cat:not(.compact) .item.pu .act :is
 /* "Ver ..." con el mismo diseno que "Ocultar ...": invita a apretarlo */
 .vb,.vb.open{background:#F2D88C!important;color:#111!important;border-color:#F2D88C!important}
 .vb:hover{background:#F7E3A8!important}
+#menu .cat .list{align-items:start!important}
 
 </style>
 <script>
