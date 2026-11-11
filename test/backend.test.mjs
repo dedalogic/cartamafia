@@ -394,7 +394,7 @@ test("carta local: valores de partida (60 cm, Padrinos oculto) sin guardar nada"
   assert.equal(d.overrides.tgm.price, 5490);            // en el local la pizza se vende por slice
   assert.equal(d.overrides.margarita.price, 4490);
   assert.equal(d.overrides.funghi.sub, "Familiar con palitos y bebida: $24.990");
-  assert.match(d.notes.pizzas, /60 cm/);
+  assert.match(d.notes.pizzas, /XXL/);
 });
 
 test("carta local: solo el administrador puede cambiarla", async () => {
