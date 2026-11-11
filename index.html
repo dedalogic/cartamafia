@@ -1153,6 +1153,13 @@ html[data-mafia-cards="street-style"] .pd-ph::after{background:linear-gradient(t
 .rsend{min-height:46px;border:0;border-radius:12px;background:#C8102E;color:#fff;font-weight:700;font-size:15px;margin-top:2px}
 .rsend:disabled{background:#D9CFBA;color:#8f8777}
 .rerr{margin:0;color:#8A1220;font-size:13px}.rerr:empty{display:none}
+.loy h4{margin:0;font-size:16px;font-weight:800}.loy p{margin:0;font-size:14px;line-height:1.35;color:#55514B}
+.loy .lpts{font-size:15px;color:#141312}.loy .lpts b{color:#C8102E}
+.loy .lq{font-size:18px;font-weight:800;color:#141312;margin-top:4px}
+.loy .lbar{height:8px;border-radius:6px;background:#EADFB4;overflow:hidden}.loy .lbar i{display:block;height:100%;background:#C8102E;border-radius:6px}
+.loy .lin{width:100%;padding:13px 12px;border:1.5px solid #E6DCC6;border-radius:12px;background:#FFFDF5;font:inherit;font-size:18px;letter-spacing:.06em;color:#141313;box-sizing:border-box}
+.loy .lskip{background:none;border:0;color:#6a655d;font:inherit;font-size:14px;min-height:40px}
+
 .pv>*{flex-shrink:0}
 .tk{background:none;border-radius:0;margin:6px 20px 10px}
 .tk-live{display:none}
@@ -2787,6 +2794,17 @@ function rateHtml(o, st){
   const any = Object.values(RATE.stars).some(v => v > 0);
   return `<div class="rate"><h4>¿Cómo estuvo tu pedido?</h4>${rows}<button type="button" class="rsend" id="rateSend"${any && !RATE.busy ? "" : " disabled"}>Enviar opinión</button><p class="rerr" id="rateErr" role="alert"></p></div>`;
 }
+const LOY = { ref:null, val:"", busy:false, done:false, err:"" };
+function loyHtml(o){
+  const l = o.loyalty; if (!l || !o.paid) return "";
+  if (LOY.ref !== o.reference){ LOY.ref = o.reference; LOY.val = ""; LOY.busy = false; LOY.done = false; LOY.err = ""; }
+  const left = Math.max(0, l.goal - l.points), pct = Math.min(100, Math.round(l.points * 100 / l.goal));
+  const pts = `<p class="lpts">Este pedido suma <b>+${l.earned} puntos</b>. Llevas <b>${l.points}</b>.</p><div class="lbar" aria-hidden="true"><i style="width:${pct}%"></i></div><p>${left ? "Te faltan " + left + " para " + esc(l.prize) + "." : "Ya tienes " + esc(l.prize) + ". Avísanos al pedir."}</p>`;
+  let ask = "";
+  if (l.ask_birth && !LOY.done) ask = `<div class="lq">Tenemos regalos en tu cumpleaños</div><p>¿Cuándo naciste?</p><input class="lin" id="loyIn" inputmode="numeric" autocomplete="bday" maxlength="14" placeholder="DD / MM / AAAA" value="${esc(LOY.val)}" aria-label="Fecha de nacimiento"><button type="button" class="rsend" id="loyGo"${LOY.busy ? " disabled" : ""}>Listo</button><button type="button" class="lskip" id="loySkip">Ahora no</button><p class="rerr" id="loyErr" role="alert">${esc(LOY.err)}</p>`;
+  else if (LOY.done) ask = `<p>Anotado. Ese día te esperamos con un regalo: ${esc(l.gift)}.</p>`;
+  return `<div class="rate loy">${pts}${ask}</div>`;
+}
 const ETA = { retiro:25, delivery:40 };   /* minutos que se muestran al cliente */
 let LASTO = null;
 function renderTicket(o){
@@ -2804,6 +2822,7 @@ function renderTicket(o){
       </div>
       ${st >= 0 ? `<ol class="tk-track" aria-label="Estado del pedido">${STAGES.map((n, i) => `<li class="${i < st || (i === st && st === 3) ? "done" : i === st ? "cur" : ""}"${i === st ? ' aria-current="step"' : ""}><span class="dot">${i < st || (i === st && st === 3) ? "✓" : ""}</span>${esc(n)}</li>`).join("")}</ol>` : ""}
       ${rateHtml(o, st)}
+      ${loyHtml(o)}
       <details class="tk-det"><summary>Ver detalle</summary>
         <div class="tk-meta">
           <div><span>Fecha</span><b>${esc(when)}</b></div>
@@ -2831,7 +2850,7 @@ function openTicket(o, key){
     if (document.hidden || !TK) return;
     try {
       const n = await fetchOrder(TK.reference, TK.key); updateEntry(n);
-      const busy = RATE.dirty || ($("#tk").contains(document.activeElement) && document.activeElement.tagName === "INPUT");
+      const busy = RATE.dirty || LOY.val.length > 0 || ($("#tk").contains(document.activeElement) && document.activeElement.tagName === "INPUT");
       if (!busy) renderTicket(n); else LASTO = n;
     } catch(e){}
   }, 8000);
@@ -2853,6 +2872,23 @@ $("#tk").addEventListener("click", async e => {
       renderTicket({ ...LASTO, ratings:d.ratings }); syncBanner();
     } catch(err){ RATE.busy = false; renderTicket(LASTO); const er = $("#rateErr"); if (er) er.textContent = "No pudimos conectar. Inténtalo de nuevo."; }
   }
+});
+$("#tk").addEventListener("input", e => {
+  if (e.target.id !== "loyIn") return;
+  const g = e.target.value.replace(/\D/g, "").slice(0, 8);
+  e.target.value = LOY.val = [g.slice(0, 2), g.slice(2, 4), g.slice(4)].filter(Boolean).join(" / ");
+});
+$("#tk").addEventListener("click", async e => {
+  const go = e.target.id === "loyGo", skip = e.target.id === "loySkip"; if ((!go && !skip) || LOY.busy) return;
+  LOY.busy = true; LOY.err = "";
+  try {
+    const r = await fetch(FN + "loyalty", { method:"POST", headers:{ "Content-Type":"application/json" }, body:JSON.stringify(skip ? { ref:TK.reference, key:TK.key, skip:true } : { ref:TK.reference, key:TK.key, birth:LOY.val }) });
+    const d = await r.json().catch(() => ({}));
+    LOY.busy = false;
+    if (!r.ok){ LOY.err = d.error || "No pudimos guardarlo. Inténtalo de nuevo."; renderTicket(LASTO); return; }
+    LOY.val = ""; if (go) LOY.done = true; else LASTO = { ...LASTO, loyalty:{ ...LASTO.loyalty, ask_birth:false } };
+    renderTicket(LASTO);
+  } catch(err){ LOY.busy = false; LOY.err = "No pudimos conectar. Inténtalo de nuevo."; renderTicket(LASTO); }
 });
 $("#tk").addEventListener("input", e => { if (e.target.dataset && e.target.dataset.ci !== undefined){ RATE.comments[e.target.dataset.ci] = e.target.value; RATE.dirty = true; } });
 $("#pvDone").addEventListener("click", () => { closePayScreen(); toggle(false); window.scrollTo({ top:0, behavior:"smooth" }); });
