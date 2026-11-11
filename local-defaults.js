@@ -27,7 +27,7 @@ const LOCAL_DEFAULTS = {
   notes: { pizzas: "Pizzas XXL o Slices", combos: "" },
   /* Banners de arriba. "to": #seccion, o #item:ID (lleva a ese plato), o #item:ID:slice (idem, con la carta en Slice) */
   banners: [
-    { img:"/assets/banner-local-martes.webp", to:"#item:napolitana:slice", alt:"Todos los martes, 50% en slices" },
+    { img:"/assets/banner-local-martes-2.webp", to:"#item:napolitana:slice", alt:"Todos los martes, 50% en slices" },
     { img:"/assets/banner-local-familiar.webp", to:"#item:l-familiar", alt:"Promo Familiar" },
     { img:"/assets/banner-local-slice.webp", to:"#item:l-slice-bebida", alt:"Slice y bebida" },
     { img:"/assets/banner-local-pesto.webp", to:"#item:l-pesto-pollo", alt:"Fetuccini Pesto con Pollo Gravy y bebida" }
