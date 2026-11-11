@@ -25,12 +25,12 @@ const LOCAL_DEFAULTS = {
   },
   /* Texto bajo el título de cada sección (id de la sección: texto). Vacío = sin texto. */
   notes: { pizzas: "Pizzas XXL o Slices", combos: "" },
-  /* Banners de arriba (imagen y a qué sección llevan) */
+  /* Banners de arriba. "to": #seccion, o #item:ID (lleva a ese plato), o #item:ID:slice (idem, con la carta en Slice) */
   banners: [
-    { img:"/assets/banner-local-martes.webp", to:"#pizzas", alt:"Todos los martes, 50% en slices" },
-    { img:"/assets/banner-local-familiar.webp", to:"#combos", alt:"Promo Familiar" },
-    { img:"/assets/banner-local-slice.webp", to:"#combos", alt:"Slice y bebida" },
-    { img:"/assets/banner-local-pesto.webp", to:"#combos", alt:"Fetuccini Pesto con Pollo Gravy y bebida" }
+    { img:"/assets/banner-local-martes.webp", to:"#item:napolitana:slice", alt:"Todos los martes, 50% en slices" },
+    { img:"/assets/banner-local-familiar.webp", to:"#item:l-familiar", alt:"Promo Familiar" },
+    { img:"/assets/banner-local-slice.webp", to:"#item:l-slice-bebida", alt:"Slice y bebida" },
+    { img:"/assets/banner-local-pesto.webp", to:"#item:l-pesto-pollo", alt:"Fetuccini Pesto con Pollo Gravy y bebida" }
   ]
 };
 if (typeof module !== "undefined") module.exports = LOCAL_DEFAULTS;
