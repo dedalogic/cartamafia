@@ -805,7 +805,7 @@ html[data-mafia-cards="street-style"] #combos .item[data-id="combo-famiglia"] .h
 #combos .pf-btn[aria-pressed="true"]{
   background:var(--red);border-color:var(--red);color:#fff;
 }
-#combos .item[hidden]{display:none!important}
+#combos .item[hidden],#combos .item[data-pf="off"]{display:none!important}
 
 /* todas las tarjetas de combos con exactamente la misma estructura */
 html[data-mafia-cards="street-style"] #combos .item{
@@ -1711,6 +1711,7 @@ $("#menu").innerHTML = MENU.filter(c => !c.hidden).map((c, ci) => `<section clas
       <svg class="pf-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7" r="3.1" fill="currentColor"/><path d="M5.4 20c.3-4.4 2.8-6.6 6.6-6.6s6.3 2.2 6.6 6.6H5.4Z" fill="currentColor"/></svg>
       ¿Para cuántas personas?
     </span>
+    <button type="button" class="pf-btn" data-people-filter="all" aria-pressed="true">Todas</button>
     <button type="button" class="pf-btn" data-people-filter="1" aria-pressed="false">1 persona</button>
     <button type="button" class="pf-btn" data-people-filter="2" aria-pressed="false">2 personas</button>
     <button type="button" class="pf-btn" data-people-filter="4" aria-pressed="false">3 o más</button>
@@ -3115,34 +3116,20 @@ window.addEventListener("focus", loadAvailability);
 })();
 
 
-/* ---------- Filtro de COMBOS por personas ---------- */
+/* ---------- Filtro de COMBOS por personas ----------
+   Usa data-pf (no "hidden"): la revisión de disponibilidad vuelve a calcular "hidden" y deshacía el filtro. */
 document.addEventListener("click", e => {
   const btn = e.target.closest("[data-people-filter]");
   if (!btn) return;
-
   const filter = btn.closest(".combo-people-filter");
   const list = document.querySelector("#combos .list");
   if (!filter || !list) return;
-
   const selected = btn.dataset.peopleFilter;
-  const alreadyOn = btn.getAttribute("aria-pressed") === "true";
-
-  filter.querySelectorAll("[data-people-filter]").forEach(b => b.setAttribute("aria-pressed","false"));
-
-  if (alreadyOn){
-    list.querySelectorAll(".item[data-people]").forEach(card => card.hidden = false);
-    return;
-  }
-
-  btn.setAttribute("aria-pressed","true");
-
+  filter.querySelectorAll("[data-people-filter]").forEach(b => b.setAttribute("aria-pressed", String(b === btn)));
   list.querySelectorAll(".item[data-people]").forEach(card => {
     const p = Number(card.dataset.people || 0);
-    if (selected === "4"){
-      card.hidden = p < 3;
-    } else {
-      card.hidden = p !== Number(selected);
-    }
+    const show = selected === "all" || (selected === "4" ? p >= 3 : p === Number(selected));
+    if (show) card.removeAttribute("data-pf"); else card.setAttribute("data-pf", "off");
   });
 });
 

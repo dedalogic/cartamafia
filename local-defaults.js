@@ -4,15 +4,15 @@
    Si cambias "version", los valores guardados antes se descartan y vuelven estos.
    ===================================================================== */
 const LOCAL_DEFAULTS = {
-  version: 5,
+  version: 6,
   /* Productos que NO se muestran en el local: los combos de la carta online (el local tiene los suyos). */
-  disabledProducts: ["combo-famiglia","combo-doble-capo","combo-mafioso","promo-alfredo"],
+  disabledProducts: ["combo-famiglia","combo-doble-capo","combo-mafioso"],
   /* Productos que solo existen en el local. Van al principio de su sección. */
   localItems: [
-    { cat:"combos", id:"l-familiar", name:"Promo Familiar", desc:"Pizza XXL a elección, Palitos de Ajo y Bebida 1.5 L. De 4 a 6 personas. Margarita y Funghi: $24.990.", price:29990, img:"/fotos/local/promo-familiar.webp", sub:"Margarita y Funghi: $24.990" },
-    { cat:"combos", id:"l-slice-bebida", name:"Slice + Bebida", desc:"1 slice a elección y Bebida Mini. Margarita y Funghi: $4.990, otros sabores: $5.990.", price:4990, img:"/fotos/local/slice-bebida.webp?v=2", sub:"" },
-    { cat:"combos", id:"l-pasta-familia", name:"Pasta en Familia", desc:"4 pastas (2 sabores a elección), Palitos de Ajo y Bebida 1.5 L. Para 4 personas.", price:29990, img:"/fotos/local/pasta-en-familia.webp?v=2" },
-    { cat:"combos", id:"l-pesto-pollo", name:"Fetuccini Pesto con Pollo Gravy", desc:"Fetuccini al Pesto con Pollo con Gravy y Bebida Mini.", price:9990, img:"/fotos/local/pesto-pollo-gravy.webp?v=2" }
+    { cat:"combos", id:"l-familiar", name:"Promo Familiar", desc:"Pizza XXL a elección, Palitos de Ajo y Bebida 1,5 L. De 4 a 6 personas.", price:24990, people:4, img:"/fotos/local/promo-familiar.webp", sub:"" },
+    { cat:"combos", id:"l-slice-bebida", name:"Slice + Bebida", desc:"1 slice a elección y Bebida Mini.", price:4990, people:1, img:"/fotos/local/slice-bebida.webp?v=2", sub:"" },
+    { cat:"combos", id:"l-pasta-familia", name:"Pasta en Familia", desc:"Escoge hasta 2 sabores, distribuye como quieras. 4 Pastas, Palitos de Ajo y Bebida 1,5 L.", price:29990, people:4, img:"/fotos/local/pasta-en-familia.webp?v=2" },
+    { cat:"combos", id:"l-pesto-pollo", name:"Fetuccini Pesto con Pollo Gravy", desc:"Fetuccini al Pesto con Pollo Gravy y Bebida Mini.", price:9990, people:1, img:"/fotos/local/pesto-pollo-gravy.webp?v=2" }
   ],
   /* Cambios solo para el local: price, name, desc, img, img2 (foto del slice), label (antes del precio), sub (texto bajo el precio), promo (etiqueta destacada) */
   overrides: {
@@ -31,15 +31,34 @@ const LOCAL_DEFAULTS = {
     "cremita-zapallo": { img:"/fotos/local/cremita-zapallo.webp?v=2" },
     "palitos": { img:"/fotos/local/palitos-ajo.webp?v=2" },
     "combo-mafioso": { img:"/fotos/local/combo-mafioso.webp?v=2" },
-    "combo-complices": { img:"/fotos/local/combo-complices.webp?v=2" },
-    "promo-alfredo": { desc:"Fetuccini Alfredo y Bebida Mini. Para 1 persona." },
+    "combo-complices": { img:"/fotos/local/combo-complices.webp?v=2", desc:"4 slices a elección y 2 Bebidas Mini." },
+    "promo-alfredo": { desc:"Fetuccini Alfredo y Bebida Mini." },
     "l-slice-bebida": { label:"Desde" },
-    "combo-del-don": { price:9990, img:"/fotos/local/combo-del-don.webp?v=2" },
-    "combo-duo-del-don": { img:"/fotos/local/combo-duo-del-don.webp?v=2", name:"Par de Mafiosos", desc:"2 pastas a elección y 2 Bebidas Mini. Para 2 personas." }
+    "l-familiar": { label:"Desde" },
+    "combo-del-don": { price:9990, desc:"Fetuccini con salsa Bolognesa, 3 Albóndigas y Bebida Mini.", img:"/fotos/local/combo-del-don.webp?v=2" },
+    "combo-duo-del-don": { img:"/fotos/local/combo-duo-del-don.webp?v=2", name:"Par de Mafiosos", desc:"2 pastas a elección y 2 Bebidas Mini." }
   },
   /* Texto bajo el título de cada sección (id de la sección: texto). Vacío = sin texto. */
   /* Orden de los combos (los que no estan aqui van al final) */
-  order: { combos: ["l-slice-bebida","combo-complices","l-familiar","l-pesto-pollo","combo-del-don","combo-duo-del-don","l-pasta-familia"] },
+  order: { combos: ["l-slice-bebida","promo-alfredo","l-pesto-pollo","combo-del-don","combo-complices","combo-duo-del-don","l-familiar","l-pasta-familia"] },
+  /* Tarjetas que se abren con las variedades a escoger (solo se muestran, no se compran desde aqui) */
+  options: {
+    "l-slice-bebida": { noun:"slices", title:"ELIGE TU SLICE", items:[
+      { n:"Margarita", img:"/fotos/local/slice-margarita.webp", p:"$4.990" }, { n:"Funghi", img:"/fotos/local/slice-funghi.webp", p:"$4.990" },
+      { n:"Tony Pepperoni", img:"/fotos/local/slice-pepperoni.webp", p:"$5.990" }, { n:"Il Traditore", img:"/fotos/local/slice-pollo-bbq.webp", p:"$5.990" },
+      { n:"Napolitana", img:"/fotos/local/slice-napolitana.webp", p:"$5.990" }, { n:"Al Ajillo Boss", img:"/fotos/local/slice-ajillo.webp", p:"$5.990" } ] },
+    "combo-complices": { noun:"slices", title:"ELIGE TUS SLICES", items:[
+      { n:"Tony Pepperoni", img:"/fotos/local/slice-pepperoni.webp" }, { n:"Funghi", img:"/fotos/local/slice-funghi.webp" },
+      { n:"Il Traditore", img:"/fotos/local/slice-pollo-bbq.webp" }, { n:"Margarita", img:"/fotos/local/slice-margarita.webp" } ] },
+    "l-familiar": { noun:"pizzas", title:"ELIGE TU PIZZA XXL", items:[
+      { n:"Margarita", img:"/fotos/local/margarita.webp", p:"$24.990" }, { n:"Funghi", img:"/fotos/local/funghi.webp", p:"$24.990" },
+      { n:"Tony Pepperoni", img:"/fotos/local/pepperoni.webp", p:"$29.990" }, { n:"Il Traditore", img:"/fotos/local/pollo-bbq.webp", p:"$29.990" },
+      { n:"Napolitana", img:"/fotos/local/napolitana.webp", p:"$29.990" }, { n:"Al Ajillo Boss", img:"/fotos/local/ajillo.webp", p:"$29.990" } ] },
+    "combo-duo-del-don": { noun:"pastas", title:"ELIGE TUS PASTAS", items:[
+      { n:"Pesto Limón", img:"/fotos/local/np-pesto-lemon.webp" }, { n:"Alfredo Gravy", img:"/fotos/local/np-alfredo-gravy.webp" }, { n:"Bolognesa del Don", img:"/fotos/local/np-bolognesa-albondigas.webp" } ] },
+    "l-pasta-familia": { noun:"pastas", title:"ELIGE HASTA 2 SABORES", items:[
+      { n:"Pesto Limón", img:"/fotos/local/np-pesto-lemon.webp" }, { n:"Alfredo Gravy", img:"/fotos/local/np-alfredo-gravy.webp" }, { n:"Bolognesa del Don", img:"/fotos/local/np-bolognesa-albondigas.webp" } ] }
+  },
   notes: { pizzas: "Pizzas XXL o Slices", combos: "" },
   /* Banners de arriba. "to": #seccion, o #item:ID (lleva a ese plato), o #item:ID:slice (idem, con la carta en Slice) */
   banners: [
