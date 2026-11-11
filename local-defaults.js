@@ -10,7 +10,7 @@ const LOCAL_DEFAULTS = {
   /* Productos que solo existen en el local. Van al principio de su sección. */
   localItems: [
     { cat:"combos", id:"l-familiar", name:"Promo Familiar", desc:"Pizza de 60 cm a elección, Palitos de Ajo y Bebida 1.5 L.", price:29990, img:"/fotos/local/promo-familiar.webp", sub:"Margarita y Funghi: $24.990" },
-    { cat:"combos", id:"l-slice-bebida", name:"Slice + Bebida", desc:"1 slice a elección y Bebida Mini.", price:4990, img:"/fotos/combo-mafioso.webp", sub:"" },
+    { cat:"combos", id:"l-slice-bebida", name:"Slice + Bebida", desc:"1 slice a elección y Bebida Mini.", price:4990, img:"/combo-mafioso.webp", sub:"" },
     { cat:"combos", id:"l-pesto-pollo", name:"Fetuccini Pesto con Pollo Gravy", desc:"Fetuccini al Pesto con Pollo con Gravy y Bebida Mini.", price:9990, img:"/fotos/local/pesto-pollo-gravy.webp" }
   ],
   /* Cambios solo para el local: price, name, desc, img, img2 (foto del slice), label (antes del precio), sub (texto bajo el precio), promo (etiqueta destacada) */
