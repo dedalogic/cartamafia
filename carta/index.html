@@ -83,6 +83,7 @@ main{max-width:1160px;margin:0 auto;padding:0 20px}
 @media(min-width:880px){.list{grid-template-columns:1fr 1fr}}
 
 .item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px 16px;padding:22px 0;border-bottom:1px solid var(--line)}
+.item .media img.dish{opacity:0;transition:opacity .28s ease}.item .media img.dish.ld{opacity:1}
 .item[hidden],.cat[hidden]{display:none!important}
 .item h3{font:400 24px/1.05 var(--serif);letter-spacing:.03em}
 .item:last-child{border-bottom:0}
@@ -1598,10 +1599,9 @@ const photoSrc = (it, pi=-1) => {
   return assetPath(f);
 };
 const CART_PHOTO_OVERRIDES = {
-  "top-bbq":"bbq.webp",
-  "top-ketchup":"ketchup.webp",
-  "top-pomodoro":"pomodoro.webp",
-  "top-parmigiano":"parmigiano.webp"
+  "top-bbq":"bbq.webp?v=2",
+  "top-pomodoro":"pomodoro.webp?v=2",
+  "top-parmigiano":"parmigiano.webp?v=2"
 };
 const cartPhotoSrc = l => CART_PHOTO_OVERRIDES[l.it.id] ? assetPath(CART_PHOTO_OVERRIDES[l.it.id]) : l.thumb;
 
@@ -2866,7 +2866,7 @@ function renderTicket(o){
       ${st >= 0 ? `<ol class="tk-track" aria-label="Estado del pedido">${STAGES.map((n, i) => `<li class="${i < st || (i === st && st === 3) ? "done" : i === st ? "cur" : ""}"${i === st ? ' aria-current="step"' : ""}><span class="dot">${i < st || (i === st && st === 3) ? "✓" : ""}</span>${esc(n)}</li>`).join("")}</ol>` : ""}
       ${rateHtml(o, st)}
       ${loyHtml(o)}
-      <details class="tk-det"><summary>Ver detalle</summary>
+      <details class="tk-det"${st === 3 ? " open" : ""}><summary>Ver detalle</summary>
         <div class="tk-meta">
           <div><span>Fecha</span><b>${esc(when)}</b></div>
           <div><span>Entrega</span><b>${delivery ? "Delivery" : "Retiro en local"}</b></div>
@@ -3158,6 +3158,16 @@ window.addEventListener("focus", loadAvailability);
 })();
 
 
+/* fotos: aparecen suavemente al terminar de cargar (sin cargar "por partes") */
+(function(){
+  function ok(i){ i.classList.add("ld"); }
+  function scan(){ document.querySelectorAll("img.dish:not(.ld)").forEach(function(i){ if (i.complete) ok(i); }); }
+  document.addEventListener("load", function(e){ if (e.target && e.target.tagName === "IMG" && e.target.classList.contains("dish")) ok(e.target); }, true);
+  document.addEventListener("error", function(e){ if (e.target && e.target.tagName === "IMG") ok(e.target); }, true);
+  scan(); setTimeout(scan, 400); setTimeout(scan, 1500); window.addEventListener("load", scan);
+  new MutationObserver(scan).observe(document.body, { childList:true, subtree:true });
+})();
+
 /* ---------- Filtro de COMBOS por personas ----------
    Usa data-pf (no "hidden"): la revisión de disponibilidad vuelve a calcular "hidden" y deshacía el filtro. */
 document.addEventListener("click", e => {
@@ -3271,6 +3281,10 @@ html[data-mafia-cards="street-style"] #menu .cat:not(.compact) .item.pu .media{m
 html[data-mafia-cards="street-style"] #menu .cat:not(.compact) .item.pu .act{flex-direction:column!important;align-items:stretch!important;justify-self:stretch!important;gap:8px!important}
 html[data-mafia-cards="street-style"] #menu .cat:not(.compact) .item.pu .act :is(.add,.vb){width:100%!important;height:40px!important;min-height:0!important;padding:0 10px!important;justify-content:center;font-size:14px!important;box-sizing:border-box}
 
+/* "Ver ..." con el mismo diseno que "Ocultar ...": invita a apretarlo */
+.vb,.vb.open{background:#F2D88C!important;color:#111!important;border-color:#F2D88C!important}
+.vb:hover{background:#F7E3A8!important}
+
 </style>
 <script>
 /* ===== MODO LOCAL: nada se agrega ni se abre; promo en cada producto ===== */
@@ -3354,7 +3368,7 @@ document.addEventListener("click", function(e){
     var b = document.createElement("button"); b.type = "button"; b.className = "vb"; b.textContent = "Ver " + o.noun; b.setAttribute("aria-expanded", "false"); act.appendChild(b);
     var p = document.createElement("div"); p.className = "opts"; p.hidden = true;
     p.innerHTML = '<div class="ot">' + esc(o.title) + '</div><div class="orow' + (n <= 3 ? " o3" : "") + '">' + o.items.map(function(x){
-      return '<div class="oi"><img src="' + esc(x.img) + '" alt="" loading="lazy" draggable="false"><b>' + esc(x.n) + '</b>' + (x.p ? '<span>' + esc(x.p) + '</span>' : '') + '</div>'; }).join("") + '</div>';
+      return '<div class="oi"><img src="' + esc(x.img) + '" alt="" decoding="async" draggable="false"><b>' + esc(x.n) + '</b>' + (x.p ? '<span>' + esc(x.p) + '</span>' : '') + '</div>'; }).join("") + '</div>';
     card.appendChild(p);
     b._p = p; b._o = o;
   });
@@ -3364,6 +3378,9 @@ document.addEventListener("click", function(e){
   e.stopPropagation(); var p = b._p, o = b._o, open = p.hidden; p.hidden = !open; b.classList.toggle("open", open); b.setAttribute("aria-expanded", String(open));
   b.textContent = (open ? "Ocultar " : "Ver ") + o.noun;
 }, true);
+/* precarga de las fotos de variedades (para que al deslizar ya esten listas) */
+(function(){ var O = (typeof LOCAL_DEFAULTS !== "undefined" && LOCAL_DEFAULTS.options) || {};
+window.addEventListener("load", function(){ setTimeout(function(){ Object.keys(O).forEach(function(k){ O[k].items.forEach(function(x){ var i = new Image(); i.src = x.img; }); }); }, 600); }); })();
 /* botón sutil para subir al principio */
 (function(){
   var u = document.createElement("button"); u.id = "up"; u.type = "button"; u.setAttribute("aria-label", "Subir al inicio");
