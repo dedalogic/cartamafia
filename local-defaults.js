@@ -50,8 +50,8 @@ const LOCAL_DEFAULTS = {
     "combo-complices": { noun:"slices", title:"ELIGE TUS SLICES", items:[
       { n:"Tony Pepperoni", img:"/fotos/local/slice-pepperoni.webp" }, { n:"Funghi", img:"/fotos/local/slice-funghi.webp" },
       { n:"Il Traditore", img:"/fotos/local/slice-pollo-bbq.webp" }, { n:"Margarita", img:"/fotos/local/slice-margarita.webp" } ] },
-    "combo-duo-del-don": { noun:"pastas", title:"ELIGE TUS PASTAS", items:[ { n:"Fetuccini Pesto", img:"/fetuccini-pesto.webp" }, { n:"Fetuccini Alfredo", img:"/fetuccini-alfredo.webp" }, { n:"Fetuccini Bolognesa", img:"/fetuccini-bolognesa.webp" } ] },
-    "l-pasta-familia": { noun:"pastas", title:"ELIGE TUS PASTAS", items:[ { n:"Fetuccini Pesto", img:"/fetuccini-pesto.webp" }, { n:"Fetuccini Alfredo", img:"/fetuccini-alfredo.webp" }, { n:"Fetuccini Bolognesa", img:"/fetuccini-bolognesa.webp" } ] },
+    "combo-duo-del-don": { noun:"pastas", title:"ELIGE TUS PASTAS", items:[ { n:"Bolognesa con Albóndigas", img:"/np-bolognesa-albondigas.webp" }, { n:"Pesto Pollo Limón", img:"/np-pesto-lemon.webp" }, { n:"Alfredo Pollo Gravy", img:"/np-alfredo-gravy.webp" } ] },
+    "l-pasta-familia": { noun:"pastas", title:"ELIGE TUS PASTAS", items:[ { n:"Bolognesa con Albóndigas", img:"/np-bolognesa-albondigas.webp" }, { n:"Pesto Pollo Limón", img:"/np-pesto-lemon.webp" }, { n:"Alfredo Pollo Gravy", img:"/np-alfredo-gravy.webp" } ] },
     "l-familiar": { noun:"pizzas", title:"ELIGE TU PIZZA XXL", items:[
       { n:"Margarita", img:"/fotos/local/margarita.webp", p:"$24.990" }, { n:"Funghi", img:"/fotos/local/funghi.webp", p:"$24.990" },
       { n:"Tony Pepperoni", img:"/fotos/local/pepperoni.webp", p:"$29.990" }, { n:"Il Traditore", img:"/fotos/local/pollo-bbq.webp", p:"$29.990" },
