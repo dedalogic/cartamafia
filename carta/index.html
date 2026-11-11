@@ -797,7 +797,7 @@ html[data-mafia-cards="street-style"] #combos .item[data-id="combo-famiglia"] .h
 #combos .pf-btn[aria-pressed="true"]{
   background:var(--red);border-color:var(--red);color:#fff;
 }
-#combos .item[hidden]{display:none!important}
+#combos .item[hidden],#combos .item[data-pf="off"]{display:none!important}
 
 /* todas las tarjetas de combos con exactamente la misma estructura */
 html[data-mafia-cards="street-style"] #combos .item{
@@ -1387,7 +1387,7 @@ html[data-mafia-cards="street-style"] .pd-ph::after{background:linear-gradient(t
   var off = {}; cfg.disabledProducts.forEach(function(id){ off[id] = 1; });
   (LOCAL_DEFAULTS.localItems || []).slice().reverse().forEach(function(x){
     var c = MENU.filter(function(m){ return m.id === x.cat; })[0]; if (!c) return;
-    c.items.unshift({ id:x.id, name:x.name, desc:x.desc, price:x.price, img:x.img || "", sub:x.sub || "" });
+    c.items.unshift({ id:x.id, name:x.name, desc:x.desc, price:x.price, img:x.img || "", sub:x.sub || "", people:x.people });
   });
   MENU.forEach(function(c){
     if (cfg.notes && c.id in cfg.notes) c.note = cfg.notes[c.id];
@@ -1753,6 +1753,7 @@ $("#menu").innerHTML = MENU.filter(c => !c.hidden).map((c, ci) => `<section clas
       <svg class="pf-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7" r="3.1" fill="currentColor"/><path d="M5.4 20c.3-4.4 2.8-6.6 6.6-6.6s6.3 2.2 6.6 6.6H5.4Z" fill="currentColor"/></svg>
       ¿Para cuántas personas?
     </span>
+    <button type="button" class="pf-btn" data-people-filter="all" aria-pressed="true">Todas</button>
     <button type="button" class="pf-btn" data-people-filter="1" aria-pressed="false">1 persona</button>
     <button type="button" class="pf-btn" data-people-filter="2" aria-pressed="false">2 personas</button>
     <button type="button" class="pf-btn" data-people-filter="4" aria-pressed="false">3 o más</button>
@@ -3157,34 +3158,20 @@ window.addEventListener("focus", loadAvailability);
 })();
 
 
-/* ---------- Filtro de COMBOS por personas ---------- */
+/* ---------- Filtro de COMBOS por personas ----------
+   Usa data-pf (no "hidden"): la revisión de disponibilidad vuelve a calcular "hidden" y deshacía el filtro. */
 document.addEventListener("click", e => {
   const btn = e.target.closest("[data-people-filter]");
   if (!btn) return;
-
   const filter = btn.closest(".combo-people-filter");
   const list = document.querySelector("#combos .list");
   if (!filter || !list) return;
-
   const selected = btn.dataset.peopleFilter;
-  const alreadyOn = btn.getAttribute("aria-pressed") === "true";
-
-  filter.querySelectorAll("[data-people-filter]").forEach(b => b.setAttribute("aria-pressed","false"));
-
-  if (alreadyOn){
-    list.querySelectorAll(".item[data-people]").forEach(card => card.hidden = false);
-    return;
-  }
-
-  btn.setAttribute("aria-pressed","true");
-
+  filter.querySelectorAll("[data-people-filter]").forEach(b => b.setAttribute("aria-pressed", String(b === btn)));
   list.querySelectorAll(".item[data-people]").forEach(card => {
     const p = Number(card.dataset.people || 0);
-    if (selected === "4"){
-      card.hidden = p < 3;
-    } else {
-      card.hidden = p !== Number(selected);
-    }
+    const show = selected === "all" || (selected === "4" ? p >= 3 : p === Number(selected));
+    if (show) card.removeAttribute("data-pf"); else card.setAttribute("data-pf", "off");
   });
 });
 
@@ -3255,6 +3242,20 @@ html[data-mafia-cards="street-style"] :is(#combos,#entradas,#pizzas,#nuestras-pa
 .mafia-slide.on{opacity:1;visibility:visible;transition:none}
 .mafia-slide,.mafia-slide img{-webkit-user-drag:none;user-select:none}
 @media(prefers-reduced-motion:reduce){.mafia-slide,.mafia-slide.on{transition:none}}
+
+/* tarjetas que se abren */
+.item.pu .opts{grid-column:1/-1;border-top:1px solid #333;padding-top:12px;margin-top:4px;min-width:0}
+.item .opts[hidden]{display:none!important}
+.opts .ot{font-size:12px;letter-spacing:.1em;color:#a9a39a;margin-bottom:8px}
+.opts .orow{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin:0 -2px;padding:0 2px 2px}
+.opts .orow::-webkit-scrollbar{display:none}
+.opts .oi{flex:none;width:128px;scroll-snap-align:start;background:#1c1c1c;border-radius:14px;overflow:hidden;padding-bottom:8px}
+.opts .orow.o3 .oi{width:calc((100% - 20px)/3)}
+.opts .oi img{display:block;width:100%;aspect-ratio:1;object-fit:cover}
+.opts .oi b{display:block;margin:7px 8px 0;font-size:13px;line-height:1.15;color:#fff;font-weight:700}
+.opts .oi span{display:block;margin:3px 8px 0;font-size:13px;color:#F2D88C;font-weight:700}
+.vb.open{background:#F2D88C;color:#111}
+html[data-mafia-cards] body #combos .combo-people-filter{display:flex!important}
 
 </style>
 <script>
@@ -3329,21 +3330,26 @@ document.addEventListener("click", function(e){
   window.__jump = Date.now() + 3000;
   card.scrollIntoView({ behavior:"smooth", block:"center" }); flashCard(card);
 });
-/* promos: botón que baja directo a las pizzas */
+/* tarjetas que se abren con las variedades (slices / pizzas / pastas) */
 (function(){
-  function add(id, label, mode){
+  var O = (typeof LOCAL_DEFAULTS !== "undefined" && LOCAL_DEFAULTS.options) || {};
+  function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+  Object.keys(O).forEach(function(id){
     var card = document.querySelector('.item[data-id="' + id + '"]'); var act = card && card.querySelector(".act"); if (!act) return;
-    var b = document.createElement("button"); b.type = "button"; b.className = "vb"; b.dataset.m = mode; b.textContent = label; act.appendChild(b);
-  }
-  add("l-familiar", "Ver pizzas", "full"); add("l-slice-bebida", "Ver slices", "slice");
-  document.addEventListener("click", function(e){
-    var b = e.target.closest(".vb"); if (!b) return;
-    var sw = document.querySelector(".sw2"), fam = sw && sw.getAttribute("aria-checked") === "true";
-    if (sw && ((b.dataset.m === "slice" && fam) || (b.dataset.m === "full" && !fam))) sw.click();
-    window.__jump = Date.now() + 3000;
-    document.getElementById("pizzas").scrollIntoView({ behavior:"smooth", block:"start" });
-  }, true);
+    var o = O[id], n = o.items.length;
+    var b = document.createElement("button"); b.type = "button"; b.className = "vb"; b.textContent = "Ver " + o.noun; b.setAttribute("aria-expanded", "false"); act.appendChild(b);
+    var p = document.createElement("div"); p.className = "opts"; p.hidden = true;
+    p.innerHTML = '<div class="ot">' + esc(o.title) + '</div><div class="orow' + (n <= 3 ? " o3" : "") + '">' + o.items.map(function(x){
+      return '<div class="oi"><img src="' + esc(x.img) + '" alt="" loading="lazy" draggable="false"><b>' + esc(x.n) + '</b>' + (x.p ? '<span>' + esc(x.p) + '</span>' : '') + '</div>'; }).join("") + '</div>';
+    card.appendChild(p);
+    b._p = p; b._o = o;
+  });
 })();
+document.addEventListener("click", function(e){
+  var b = e.target.closest(".vb"); if (!b || !b._p) return;
+  e.stopPropagation(); var p = b._p, o = b._o, open = p.hidden; p.hidden = !open; b.classList.toggle("open", open); b.setAttribute("aria-expanded", String(open));
+  b.textContent = (open ? "Ocultar " : "Ver ") + o.noun;
+}, true);
 /* botón sutil para subir al principio */
 (function(){
   var u = document.createElement("button"); u.id = "up"; u.type = "button"; u.setAttribute("aria-label", "Subir al inicio");
