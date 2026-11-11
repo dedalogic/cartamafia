@@ -27,7 +27,7 @@ const MENU = [
         { label:"Elige tu bebida mini", short:"Bebida", list:["Coca-Cola Original","Coca-Cola Zero","Sprite","Fanta"] }
       ] },
 
-    { id:"combo-complices", name:"Combo Cómplices", people:2, desc:"4 slices a elección y 2 bebidas mini. Para 2 personas.", price:16990, img:"/combo-complices.webp?v=2",
+    { id:"combo-complices", name:"Combo Cómplices", people:2, desc:"4 slices a elección y 2 bebidas mini. Para 2 personas.", price:16990, img:"/combo-complices.webp?v=3",
       bundleChoices:[
         { label:"Elige tu slice 1", short:"Slice 1", list:["Tony Pepperoni","The Good Meat","Il Traditore","Napolitana","Margarita","Al Ajillo Boss","Funghi"] },
         { label:"Elige tu slice 2", short:"Slice 2", list:["Tony Pepperoni","The Good Meat","Il Traditore","Napolitana","Margarita","Al Ajillo Boss","Funghi"] },
@@ -104,9 +104,9 @@ const MENU = [
     { id:"pollo-gravy", name:"Pollo con Gravy", desc:"Pollo al horno con Salsa Gravy.", price:2990, img:"/pollo-gravy.webp" }
   ]},
   { id:"toppings", name:"Toppings", items:[
-    { id:"top-bbq", name:"BBQ", price:990, img:"/bbq.webp?v=2" },
-    { id:"top-pomodoro", name:"Pomodoro New York", price:990, img:"/pomodoro.webp?v=2" },
-    { id:"top-parmigiano", name:"Parmigiano", price:1290, img:"/parmigiano.webp?v=2" }
+    { id:"top-bbq", name:"BBQ", price:990, img:"/bbq.webp?v=3" },
+    { id:"top-pomodoro", name:"Pomodoro New York", price:990, img:"/pomodoro.webp?v=3" },
+    { id:"top-parmigiano", name:"Parmigiano", price:1290, img:"/parmigiano.webp?v=3" }
   ]},
   { id:"bebidas", name:"Bebidas", compact:true, items:[
     { id:"beb-350", name:"Bebida mini", desc:"Coca-Cola Original, Coca-Cola Zero, Sprite o Fanta.", price:1800, img:"", drinkChoice:{ label:"Elige tu bebida mini", list:["Coca-Cola Original","Coca-Cola Zero","Sprite","Fanta"], suffix:"" } },

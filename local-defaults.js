@@ -31,7 +31,7 @@ const LOCAL_DEFAULTS = {
     "cremita-zapallo": { img:"/fotos/local/cremita-zapallo.webp?v=2" },
     "palitos": { img:"/fotos/local/palitos-ajo.webp?v=2" },
     "combo-mafioso": { img:"/fotos/local/combo-mafioso.webp?v=2" },
-    "combo-complices": { img:"/fotos/local/combo-complices.webp?v=3", desc:"4 slices a elección y 2 Bebidas Mini." },
+    "combo-complices": { img:"/fotos/local/combo-complices.webp?v=4", desc:"4 slices a elección y 2 Bebidas Mini." },
     "promo-alfredo": { desc:"Fetuccini Alfredo y Bebida Mini." },
     "l-slice-bebida": { label:"Desde" },
     "l-familiar": { label:"Desde" },

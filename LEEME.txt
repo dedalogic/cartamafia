@@ -1,9 +1,7 @@
-MAFIA - CORRECCIONES 2
+MAFIA - CORRECCIONES 3 (reemplazan a las de Correcciones 2)
 
-En GitHub (rama main), reemplaza cada archivo en su carpeta:
-  index.html, menu-data.js, local-defaults.js, combo-complices.webp,
-  bbq.webp, pomodoro.webp, parmigiano.webp   -> raiz del repositorio
-  carta/index.html                           -> carpeta carta
-  fotos/local/combo-complices.webp           -> carpeta fotos/local
+Raiz del repositorio: index.html, menu-data.js, local-defaults.js, combo-complices.webp, bbq.webp, pomodoro.webp, parmigiano.webp
+Carpeta carta: carta/index.html
+Carpeta fotos/local: combo-complices.webp
 
 Despues del deploy, recarga con Ctrl+F5.
