@@ -19,7 +19,7 @@ const LOCAL_DEFAULTS = {
     pepperoni: { price:5490, img:"/fotos/local/pepperoni.webp?v=2", img2:"/fotos/local/slice-pepperoni.webp", sub:"Familiar con palitos y bebida: $29.990" },
     "pollo-bbq": { price:5490, img:"/fotos/local/pollo-bbq.webp?v=2", img2:"/fotos/local/slice-pollo-bbq.webp", sub:"Familiar con palitos y bebida: $29.990" },
     napolitana: { price:5490, img:"/fotos/local/napolitana.webp?v=2", img2:"/fotos/local/slice-napolitana.webp", sub:"Familiar con palitos y bebida: $29.990" },
-    margarita: { price:4490, img:"/fotos/local/margarita.webp?v=2", img2:"/fotos/local/slice-margarita.webp", sub:"Familiar con palitos y bebida: $24.990" },
+    margarita: { price:4490, img:"/fotos/local/margarita.webp?v=3", img2:"/fotos/local/slice-margarita.webp", sub:"Familiar con palitos y bebida: $24.990" },
     ajillo: { price:5490, img:"/fotos/local/ajillo.webp?v=2", img2:"/fotos/local/slice-ajillo.webp", sub:"Familiar con palitos y bebida: $29.990" },
     funghi: { price:4490, img:"/fotos/local/funghi.webp?v=2", img2:"/fotos/local/slice-funghi.webp", sub:"Familiar con palitos y bebida: $24.990" },
     "np-mechada-mafia": { img:"/fotos/local/np-mechada-mafia.webp?v=2" },
@@ -43,22 +43,22 @@ const LOCAL_DEFAULTS = {
   /* Tarjetas que se abren con las variedades a escoger (solo se muestran, no se compran desde aqui) */
   options: {
     "l-slice-bebida": { noun:"slices", title:"ELIGE TU SLICE", items:[
-      { n:"Margarita", img:"/fotos/local/slice-margarita.webp", p:"$4.990" }, { n:"Funghi", img:"/fotos/local/slice-funghi.webp", p:"$4.990" },
-      { n:"Tony Pepperoni", img:"/fotos/local/slice-pepperoni.webp", p:"$5.990" }, { n:"Il Traditore", img:"/fotos/local/slice-pollo-bbq.webp", p:"$5.990" },
-      { n:"Napolitana", img:"/fotos/local/slice-napolitana.webp", p:"$5.990" }, { n:"Al Ajillo Boss", img:"/fotos/local/slice-ajillo.webp", p:"$5.990" } ] },
+      { n:"Margarita", d:"Salsa Pomodoro New York, Queso Mozzarella y Albahaca Fresca.", img:"/fotos/local/slice-margarita.webp", p:"$4.990" }, { n:"Funghi", d:"Champiñones y Callampas Deshidratadas, Salsa Bechamel, Queso Mozzarella, Queso Parmigiano y Perejil Fresco.", img:"/fotos/local/slice-funghi.webp", p:"$4.990" },
+      { n:"Tony Pepperoni", d:"Pepperoni Americano Ultradelgado, Salsa Pomodoro New York y Queso Mozzarella.", img:"/fotos/local/slice-pepperoni.webp", p:"$5.990" }, { n:"Il Traditore", d:"Pollo BBQ, Tocino, Cebolla Morada, Salsa BBQ y Queso Mozzarella.", img:"/fotos/local/slice-pollo-bbq.webp", p:"$5.990" },
+      { n:"Napolitana", d:"Jamón, Tomate, Aceitunas de la Zona, Salsa Pomodoro New York, Queso Mozzarella y Orégano.", img:"/fotos/local/slice-napolitana.webp", p:"$5.990" }, { n:"Al Ajillo Boss", d:"Camarones al Ajillo, Pimentón Rojo, Salsa Pomodoro New York, Queso Mozzarella y Perejil Fresco.", img:"/fotos/local/slice-ajillo.webp", p:"$5.990" } ] },
     "combo-del-don": { noun:"opciones", title:"ELIGE TU FETUCCINI", items:[
-      { n:"Fetuccini Alfredo", img:"/combo-alfredo.webp", p:"$7.990" },
-      { n:"Bolognesa con Albóndigas", img:"/fotos/local/combo-del-don.webp", p:"$9.990" },
-      { n:"Pesto con Pollo Gravy", img:"/fotos/local/pesto-pollo-gravy.webp", p:"$9.990" } ] },
+      { n:"Fetuccini Alfredo", d:"Fetuccini en salsa Alfredo, con Bebida Mini.", img:"/combo-alfredo.webp", p:"$7.990" },
+      { n:"Bolognesa con Albóndigas", d:"Fetuccini con salsa Bolognesa, 3 albóndigas y Parmigiano, con Bebida Mini.", img:"/fotos/local/combo-del-don.webp", p:"$9.990" },
+      { n:"Pesto con Pollo Gravy", d:"Fetuccini al pesto con Pollo Gravy, con Bebida Mini.", img:"/fotos/local/pesto-pollo-gravy.webp", p:"$9.990" } ] },
     "combo-complices": { noun:"slices", title:"ELIGE TUS SLICES", items:[
-      { n:"Tony Pepperoni", img:"/fotos/local/slice-pepperoni.webp" }, { n:"Funghi", img:"/fotos/local/slice-funghi.webp" },
-      { n:"Il Traditore", img:"/fotos/local/slice-pollo-bbq.webp" }, { n:"Margarita", img:"/fotos/local/slice-margarita.webp" } ] },
-    "combo-duo-del-don": { noun:"pastas", title:"ELIGE TUS PASTAS", items:[ { n:"Bolognesa con Albóndigas", img:"/np-bolognesa-albondigas.webp" }, { n:"Pesto Pollo Limón", img:"/np-pesto-lemon.webp" }, { n:"Alfredo Pollo Gravy", img:"/np-alfredo-gravy.webp" } ] },
-    "l-pasta-familia": { noun:"pastas", title:"ELIGE TUS PASTAS", items:[ { n:"Bolognesa con Albóndigas", img:"/np-bolognesa-albondigas.webp" }, { n:"Pesto Pollo Limón", img:"/np-pesto-lemon.webp" }, { n:"Alfredo Pollo Gravy", img:"/np-alfredo-gravy.webp" } ] },
+      { n:"Tony Pepperoni", d:"Pepperoni Americano Ultradelgado, Salsa Pomodoro New York y Queso Mozzarella.", img:"/fotos/local/slice-pepperoni.webp" }, { n:"Funghi", d:"Champiñones y Callampas Deshidratadas, Salsa Bechamel, Queso Mozzarella, Queso Parmigiano y Perejil Fresco.", img:"/fotos/local/slice-funghi.webp" },
+      { n:"Il Traditore", d:"Pollo BBQ, Tocino, Cebolla Morada, Salsa BBQ y Queso Mozzarella.", img:"/fotos/local/slice-pollo-bbq.webp" }, { n:"Margarita", d:"Salsa Pomodoro New York, Queso Mozzarella y Albahaca Fresca.", img:"/fotos/local/slice-margarita.webp" } ] },
+    "combo-duo-del-don": { noun:"pastas", title:"ELIGE TUS PASTAS", items:[ { n:"Bolognesa con Albóndigas", d:"Fetuccini con salsa Bolognesa, 3 albóndigas y Parmigiano.", img:"/np-bolognesa-albondigas.webp" }, { n:"Pesto Pollo Limón", d:"Fetuccini al pesto con pollo Lemon Pepper.", img:"/np-pesto-lemon.webp" }, { n:"Alfredo Pollo Gravy", d:"Fetuccini en salsa Alfredo con pollo y gravy.", img:"/np-alfredo-gravy.webp" } ] },
+    "l-pasta-familia": { noun:"pastas", title:"ELIGE TUS PASTAS", items:[ { n:"Bolognesa con Albóndigas", d:"Fetuccini con salsa Bolognesa, 3 albóndigas y Parmigiano.", img:"/np-bolognesa-albondigas.webp" }, { n:"Pesto Pollo Limón", d:"Fetuccini al pesto con pollo Lemon Pepper.", img:"/np-pesto-lemon.webp" }, { n:"Alfredo Pollo Gravy", d:"Fetuccini en salsa Alfredo con pollo y gravy.", img:"/np-alfredo-gravy.webp" } ] },
     "l-familiar": { noun:"pizzas", title:"ELIGE TU PIZZA XXL", items:[
-      { n:"Margarita", img:"/fotos/local/margarita.webp", p:"$24.990" }, { n:"Funghi", img:"/fotos/local/funghi.webp", p:"$24.990" },
-      { n:"Tony Pepperoni", img:"/fotos/local/pepperoni.webp", p:"$29.990" }, { n:"Il Traditore", img:"/fotos/local/pollo-bbq.webp", p:"$29.990" },
-      { n:"Napolitana", img:"/fotos/local/napolitana.webp", p:"$29.990" }, { n:"Al Ajillo Boss", img:"/fotos/local/ajillo.webp", p:"$29.990" } ] }
+      { n:"Margarita", d:"Salsa Pomodoro New York, Queso Mozzarella y Albahaca Fresca.", img:"/fotos/local/margarita.webp", p:"$24.990" }, { n:"Funghi", d:"Champiñones y Callampas Deshidratadas, Salsa Bechamel, Queso Mozzarella, Queso Parmigiano y Perejil Fresco.", img:"/fotos/local/funghi.webp", p:"$24.990" },
+      { n:"Tony Pepperoni", d:"Pepperoni Americano Ultradelgado, Salsa Pomodoro New York y Queso Mozzarella.", img:"/fotos/local/pepperoni.webp", p:"$29.990" }, { n:"Il Traditore", d:"Pollo BBQ, Tocino, Cebolla Morada, Salsa BBQ y Queso Mozzarella.", img:"/fotos/local/pollo-bbq.webp", p:"$29.990" },
+      { n:"Napolitana", d:"Jamón, Tomate, Aceitunas de la Zona, Salsa Pomodoro New York, Queso Mozzarella y Orégano.", img:"/fotos/local/napolitana.webp", p:"$29.990" }, { n:"Al Ajillo Boss", d:"Camarones al Ajillo, Pimentón Rojo, Salsa Pomodoro New York, Queso Mozzarella y Perejil Fresco.", img:"/fotos/local/ajillo.webp", p:"$29.990" } ] }
   },
   notes: { pizzas: "Pizzas XXL o Slices", combos: "" },
   /* Banners de arriba. "to": #seccion, o #item:ID (lleva a ese plato), o #item:ID:slice (idem, con la carta en Slice) */

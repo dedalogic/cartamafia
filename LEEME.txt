@@ -1,7 +1,17 @@
-MAFIA - ACTUALIZACION 6 (reemplaza la 5 y la 6 anteriores)
+MAFIA - ACTUALIZACION: HORARIOS + PANEL (reemplaza el ZIP anterior)
 
-Raiz del repo: index.html, menu-data.js, local-defaults.js, bbq.webp, pomodoro.webp, parmigiano.webp
-carpeta carta: index.html
+Subir cada archivo a su carpeta en GitHub:
+- Raiz: index.html, menu-data.js, local-defaults.js, bbq.webp, pomodoro.webp, parmigiano.webp, margarita.webp
+- carpeta carta: index.html
+- carpeta admin: index.html
+- carpeta netlify/functions: schedule.mjs  (ARCHIVO NUEVO)
+- carpeta assets: popup-pastas.webp
+- carpeta fotos/local: margarita.webp
 
-Incluye: Combo del Don con opciones (Alfredo, Bolognesa con Albondigas, Pesto con Pollo Gravy), toppings con fondo crema, pastas visibles en Par de Mafiosos y Pasta en Familia.
+NUEVO en esta version
+- Horarios automaticos en la carta del local Y en la carta online (hora de Chile).
+- Panel Admin > Horarios: eliges mensaje, dias, hora, combos primero, banner primero y seccion primero. Carta local y online por separado. Los cambios se guardan en el sitio y se ven al recargar la carta.
+- Sin guardar nada, usan los horarios originales (local: martes slices, 12-17 pastas, resto combos / online: 12-17 y resto, martes apagado).
+- Probar sin esperar: agregar al link ?h=mar-13 (dias: lun mar mie jue vie sab dom).
+
 local-defaults.js es version 7: reinicia ajustes de la carta local guardados en el panel.

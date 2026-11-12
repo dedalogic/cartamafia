@@ -73,7 +73,7 @@ const MENU = [
       price:14990, img:"/napolitana.webp", combo:{ all:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" } },
       suggest:{ ids:["top-bbq", "top-pomodoro", "top-parmigiano"] } },
     { id:"margarita", name:"Margarita", desc:"Salsa Pomodoro New York, Queso Mozzarella y Albahaca Fresca.",
-      price:14990, img:"/margarita.webp", combo:{ all:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" } },
+      price:14990, img:"/margarita.webp?v=2", combo:{ all:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" } },
       suggest:{ ids:["top-bbq", "top-pomodoro", "top-parmigiano"] } },
     { id:"ajillo", name:"Al Ajillo Boss", desc:"Camarones al Ajillo, Pimentón Rojo, Salsa Pomodoro New York, Queso Mozzarella y Perejil Fresco.",
       price:16990, img:"/ajillo.webp", combo:{ all:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" } },
