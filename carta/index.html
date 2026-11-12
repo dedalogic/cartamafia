@@ -883,6 +883,15 @@ body{background:transparent!important;color:#fff}
 .cat h2{color:#F4EDDF!important}
 .cat h2::after{display:none!important}
 .cat .note,.combo-people-filter,.combo-people-filter *:not(button){color:#fff}
+/* Horarios: titulo amarillo y pregunta grande */
+#menu h2.sch-h{display:inline-block;background:#F2D88C;color:#111!important;padding:8px 18px 6px;border-radius:14px;line-height:1.05;font-size:38px!important;white-space:nowrap;margin:0 0 14px}
+#menu h2.sch-h.two{font-size:30px!important;line-height:1.1}
+@media(max-width:360px){#menu h2.sch-h{font-size:32px!important}}
+#combos .combo-people-filter.sch-pf{margin:14px 0 18px!important;gap:6px!important}
+#combos .combo-people-filter.sch-pf .pf-label{width:100%!important;margin:0 0 6px!important;font-size:26px!important;font-weight:700!important;opacity:1!important;color:#fff!important}
+#combos .combo-people-filter.sch-pf .pf-btn{min-height:44px!important;height:44px!important;padding:0 8px!important;font-size:13px!important;font-weight:700!important;white-space:nowrap;flex:1 1 auto;min-width:0!important}
+#combos .combo-people-filter.sch-pf .pf-btn{border-radius:14px!important}
+
 #combos .combo-people-filter{display:flex!important;align-items:center;flex-wrap:wrap;gap:8px;margin:8px 0 16px}
 #combos .combo-people-filter .pf-label{width:auto!important;margin:0 6px 0 0!important;font-size:13px;font-weight:500!important;opacity:.92;color:#F4EDDF!important}
 #combos .pf-icon{display:none!important}
@@ -3106,6 +3115,63 @@ document.addEventListener("visibilitychange", () => { if (!document.hidden) load
 window.addEventListener("focus", loadAvailability);
 
 
+/* Horarios (hora de Chile): la carta destaca distinto segun dia y hora. Los horarios se editan en Admin > Horarios. Prueba: agregar ?h=mar-13 al link. */
+(function(){
+  var SITE = "online", DEFS = {"local":[{"id":"martes","on":true,"tag":"Promo del martes","msg":"HOY: SLICES|50% DCTO.","days":[2],"from":"00:00","to":"24:00","first":"pizzas","then":"pastas","top":[],"ban":"martes","slice":true},{"id":"almuerzo","on":true,"tag":"Almuerzo","msg":"PIDE PASTAS","days":[0,1,2,3,4,5,6],"from":"12:00","to":"17:00","first":"combos","then":"pastas","top":["combo-del-don","combo-duo-del-don"],"ban":"pasta-familia","slice":false},{"id":"resto","on":true,"tag":"Resto del día","msg":"PIDE UN COMBO","days":[0,1,2,3,4,5,6],"from":"00:00","to":"24:00","first":"combos","then":"pizzas","top":[],"ban":"pesto","slice":false}],"online":[{"id":"martes","on":false,"tag":"Promo del martes","msg":"HOY: MARTES","days":[2],"from":"00:00","to":"24:00","first":"combos","then":"pizzas","top":[],"ban":"familiar","slice":false},{"id":"almuerzo","on":true,"tag":"Almuerzo","msg":"PIDE UN COMBO","days":[0,1,2,3,4,5,6],"from":"12:00","to":"17:00","first":"combos","then":"pizzas","top":["combo-del-don","combo-famiglia","combo-duo-del-don","combo-doble-capo","promo-alfredo","combo-complices"],"ban":"pastas","slice":false},{"id":"resto","on":true,"tag":"Resto del día","msg":"PIDE UN COMBO","days":[0,1,2,3,4,5,6],"from":"00:00","to":"24:00","first":"combos","then":"pizzas","top":["combo-famiglia","combo-del-don","combo-doble-capo","combo-duo-del-don","combo-complices","promo-alfredo"],"ban":"familiar","slice":false}]}, DEF = DEFS[SITE], KEY = "mafia_sched_" + SITE;
+  var DIAS = ["dom","lun","mar","mie","jue","vie","sab"];
+  var SEQ = SITE === "local" ? ["pasta-familia","pesto","familiar","slice","martes"] : ["pastas","familiar","padrinos"];
+  function when(){
+    var q = (location.search.match(/[?&]h=([a-z]{3})-([0-9]{1,2})/) || []);
+    if (q[1] && DIAS.indexOf(q[1]) > -1) return { d:DIAS.indexOf(q[1]), m:(+q[2]) * 60 };
+    var o = {}; new Intl.DateTimeFormat("en-US", { timeZone:"America/Santiago", weekday:"short", hour:"numeric", minute:"numeric", hour12:false }).formatToParts(new Date()).forEach(function(x){ o[x.type] = x.value; });
+    return { d:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].indexOf(o.weekday), m:((+o.hour) % 24) * 60 + (+o.minute) };
+  }
+  function mins(s){ var p = String(s || "0:0").split(":"); return (+p[0]) * 60 + (+p[1] || 0); }
+  function pick(rules, w){
+    for (var i = 0; i < rules.length; i++){ var r = rules[i];
+      if (!r || r.on === false || !r.days || r.days.indexOf(w.d) < 0) continue;
+      if (w.m >= mins(r.from) && w.m < mins(r.to)) return r; }
+    return null;
+  }
+  function bkey(a){
+    var im = a.querySelector("img"), s = (im && im.getAttribute("src")) || "";
+    return s.indexOf("pasta-familia") > -1 ? "pasta-familia" : s.indexOf("nuevas-pastas") > -1 ? "pastas" : s.indexOf("pesto") > -1 ? "pesto" : s.indexOf("padrinos") > -1 ? "padrinos" : s.indexOf("familiar") > -1 ? "familiar" : s.indexOf("slice") > -1 ? "slice" : s.indexOf("martes") > -1 ? "martes" : "otro";
+  }
+  function apply(rules){
+    try{
+      var S = pick(rules, when()), menu = document.getElementById("menu"); if (!S || !menu) return;
+      var pz = S.then === "pastas" ? ["nuestras-pastas","pizzas"] : ["pizzas","nuestras-pastas"];
+      var ord = [S.first, "combos"].concat(pz, ["entradas","toppings","bebidas"]).filter(function(id, i, a){ return a.indexOf(id) === i; });
+      function rank(id){ var i = ord.indexOf(id); return i < 0 ? ord.indexOf("pizzas") + .5 : i; }
+      ord.forEach(function(id){ var e = document.getElementById(id); if (e && e.parentNode === menu) menu.appendChild(e); });
+      var ul = document.getElementById("nav");
+      if (ul) ord.forEach(function(id){ var a = ul.querySelector('a[href="#' + id + '"]'); if (a && a.parentNode.parentNode === ul) ul.appendChild(a.parentNode); });
+      if (typeof MENU !== "undefined" && MENU.sort) MENU.sort(function(a, b){ return rank(a.id) - rank(b.id); });
+      if (typeof setActive === "function" && typeof MENU !== "undefined"){ var v = MENU.filter(function(c){ return !c.hidden; })[0]; if (v) setActive(v.id); }
+      (S.top || []).slice().reverse().forEach(function(id){ var c = document.querySelector('#combos .item[data-id="' + id + '"]'); if (c && c.parentNode) c.parentNode.prepend(c); });
+      var first = document.getElementById(S.first), h = first && first.querySelector("h2"), parts = String(S.msg || "").split("|");
+      if (h && parts[0]){ h.textContent = ""; parts.forEach(function(t, i){ if (i) h.appendChild(document.createElement("br")); h.appendChild(document.createTextNode(t)); }); h.classList.add("sch-h"); if (parts.length > 1) h.classList.add("two"); }
+      if (S.first === "combos"){ var pf = document.querySelector("#combos .combo-people-filter"); if (pf){ pf.classList.add("sch-pf"); var l = pf.querySelector(".pf-label"); if (l){ var sv = l.querySelector("svg"); l.textContent = "¿Cuántas personas son?"; if (sv) sv.style.display = "none"; } var al = pf.querySelector('[data-people-filter="all"]'); if (al) al.textContent = "Todos"; } }
+      var tr = document.getElementById("mafiaTrack");
+      if (tr && S.ban){ var order = [S.ban].concat(SEQ); var sl = [].slice.call(tr.children);
+        sl.sort(function(a, b){ var x = order.indexOf(bkey(a)), y = order.indexOf(bkey(b)); return (x < 0 ? 99 : x) - (y < 0 ? 99 : y); });
+        sl.forEach(function(a, i){ a.classList.toggle("on", i === 0); tr.appendChild(a); }); var sn = tr.style.scrollSnapType; tr.style.scrollSnapType = "none"; tr.scrollLeft = 0; void tr.offsetWidth; tr.style.scrollSnapType = sn; }
+      if (S.slice){ var sw = document.querySelector(".sw2"); if (sw && sw.getAttribute("aria-checked") === "true") sw.click(); }
+    }catch(e){ if (window.console) console.warn("horarios", e); }
+  }
+  var cached = null; try { cached = JSON.parse(localStorage.getItem(KEY)); } catch(e){}
+  var rules = (cached && cached.length) ? cached : DEF;
+  apply(rules);
+  try{
+    fetch("/.netlify/functions/schedule?site=" + SITE + "&t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.json() : null; }).then(function(d){
+      if (!d) return; var next = (d.rules && d.rules.length) ? d.rules : null, a = JSON.stringify(rules), b = JSON.stringify(next || DEF);
+      try { if (next) localStorage.setItem(KEY, JSON.stringify(next)); else localStorage.removeItem(KEY); } catch(e){}
+      if (a !== b){ try { if (!sessionStorage.getItem(KEY + "_r")){ sessionStorage.setItem(KEY + "_r", "1"); location.reload(); } } catch(e){} }
+    }).catch(function(){});
+  }catch(e){}
+})();
+
+
 /* ---------- Preview: carrusel + popup promocional ---------- */
 (function(){
   const tr = document.getElementById("mafiaTrack");
@@ -3286,6 +3352,25 @@ html[data-mafia-cards="street-style"] #menu .cat:not(.compact) .item.pu .act :is
 .vb:hover{background:#F7E3A8!important}
 #menu .cat .list{align-items:start!important}
 
+.opts .oi{cursor:pointer}
+html.lbo{overflow:hidden}
+#vz{display:flex;flex-direction:column;align-items:stretch;justify-content:center;padding:0;z-index:99999}
+#vz[hidden]{display:none}
+#vz .lt{display:flex;width:100%;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+#vz .lt::-webkit-scrollbar{display:none}
+#vz .ls{flex:0 0 100%;scroll-snap-align:center;display:grid;place-items:center;padding:16px;box-sizing:border-box}
+#vz .ls .pd{animation:none}
+#vz .lc{margin-top:6px;text-align:center;font-size:13px;letter-spacing:.12em;color:#b9b2a3}
+#vz .lx{position:fixed;top:calc(14px + env(safe-area-inset-top,0px));right:14px;z-index:3;width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.14);background:rgba(12,12,12,.72);color:#fff;font-size:18px;cursor:pointer}
+/* Horarios: titulo amarillo y pregunta grande */
+#menu h2.sch-h{display:inline-block;background:#F2D88C;color:#111!important;padding:8px 18px 6px;border-radius:14px;line-height:1.05;font-size:38px!important;white-space:nowrap;margin:0 0 14px}
+#menu h2.sch-h.two{font-size:30px!important;line-height:1.1}
+@media(max-width:360px){#menu h2.sch-h{font-size:32px!important}}
+#combos .combo-people-filter.sch-pf{margin:14px 0 18px!important;gap:6px!important}
+#combos .combo-people-filter.sch-pf .pf-label{width:100%!important;margin:0 0 6px!important;font-size:26px!important;font-weight:700!important;opacity:1!important;color:#fff!important}
+#combos .combo-people-filter.sch-pf .pf-btn{min-height:44px!important;height:44px!important;padding:0 8px!important;font-size:13px!important;font-weight:700!important;white-space:nowrap;flex:1 1 auto;min-width:0!important}
+#combos .combo-people-filter.sch-pf .pf-btn{border-radius:14px!important}
+
 </style>
 <script>
 /* ===== MODO LOCAL: nada se agrega ni se abre; promo en cada producto ===== */
@@ -3369,7 +3454,7 @@ document.addEventListener("click", function(e){
     var b = document.createElement("button"); b.type = "button"; b.className = "vb"; b.textContent = "Ver " + o.noun; b.setAttribute("aria-expanded", "false"); act.appendChild(b);
     var p = document.createElement("div"); p.className = "opts"; p.hidden = true;
     p.innerHTML = '<div class="ot">' + esc(o.title) + '</div><div class="orow' + (n <= 3 ? " o3" : "") + '">' + o.items.map(function(x){
-      return '<div class="oi"><img src="' + esc(x.img) + '" alt="" decoding="async" draggable="false"><b>' + esc(x.n) + '</b>' + (x.p ? '<span>' + esc(x.p) + '</span>' : '') + '</div>'; }).join("") + '</div>';
+      return '<div class="oi"' + (x.d ? ' data-d="' + esc(x.d) + '"' : '') + '><img src="' + esc(x.img) + '" alt="" decoding="async" draggable="false"><b>' + esc(x.n) + '</b>' + (x.p ? '<span>' + esc(x.p) + '</span>' : '') + '</div>'; }).join("") + '</div>';
     card.appendChild(p);
     b._p = p; b._o = o;
   });
@@ -3379,6 +3464,29 @@ document.addEventListener("click", function(e){
   e.stopPropagation(); var p = b._p, o = b._o, open = p.hidden; p.hidden = !open; b.classList.toggle("open", open); b.setAttribute("aria-expanded", String(open));
   b.textContent = (open ? "Ocultar " : "Ver ") + o.noun;
 }, true);
+/* al tocar una variedad se abre la misma tarjeta de siempre y se desliza a las otras variedades */
+(function(){
+  var vz = document.createElement("div"); vz.id = "vz"; vz.className = "lb"; vz.hidden = true; vz.setAttribute("role", "dialog");
+  vz.innerHTML = '<button type="button" class="lx" aria-label="Cerrar">&#10005;</button><div class="lt"></div><div class="lc"></div>';
+  document.body.appendChild(vz);
+  var tr = vz.querySelector(".lt"), cnt = vz.querySelector(".lc");
+  function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+  function close(){ vz.hidden = true; document.documentElement.classList.remove("lbo"); }
+  function upd(){ var n = tr.children.length, i = Math.round(tr.scrollLeft / (tr.clientWidth || 1)); cnt.textContent = (i + 1) + " / " + n; }
+  tr.addEventListener("scroll", upd, { passive:true });
+  vz.addEventListener("click", function(e){ if (e.target.closest(".lx") || e.target === vz || e.target === tr || e.target.classList.contains("ls")) close(); });
+  document.addEventListener("keydown", function(e){ if (vz.hidden) return; if (e.key === "Escape") close(); if (e.key === "ArrowRight") tr.scrollBy({ left:tr.clientWidth, behavior:"smooth" }); if (e.key === "ArrowLeft") tr.scrollBy({ left:-tr.clientWidth, behavior:"smooth" }); });
+  document.addEventListener("click", function(e){
+    var oi = e.target.closest(".opts .oi"); if (!oi) return;
+    e.stopPropagation();
+    var row = oi.parentNode, items = [].slice.call(row.querySelectorAll(".oi")), at = items.indexOf(oi);
+    var card = oi.closest(".item"), h = card && card.querySelector("h3"), label = h ? h.textContent : "";
+    tr.innerHTML = items.map(function(x){ var im = x.querySelector("img"), nm = x.querySelector("b"), pr = x.querySelector("span"), ds = x.getAttribute("data-d");
+      return '<div class="ls"><div class="pd"><div class="pd-ph"><img src="' + esc(im.getAttribute("src")) + '" alt="" draggable="false"></div><div class="pd-body"><i class="pd-cat">' + esc(label) + '</i><h3>' + esc(nm ? nm.textContent : "") + '</h3>' + (ds ? '<p class="pd-d">' + esc(ds) + '</p>' : "") + (pr ? '<div class="pd-row"><b class="pd-pr">' + esc(pr.textContent) + '</b></div>' : "") + '</div></div></div>'; }).join("");
+    vz.hidden = false; document.documentElement.classList.add("lbo");
+    tr.style.scrollBehavior = "auto"; tr.scrollLeft = at * tr.clientWidth; tr.style.scrollBehavior = ""; upd();
+  }, true);
+})();
 /* precarga de las fotos de variedades (para que al deslizar ya esten listas) */
 (function(){ var O = (typeof LOCAL_DEFAULTS !== "undefined" && LOCAL_DEFAULTS.options) || {};
 window.addEventListener("load", function(){ setTimeout(function(){ Object.keys(O).forEach(function(k){ O[k].items.forEach(function(x){ var i = new Image(); i.src = x.img; }); }); }, 600); }); })();
@@ -3426,6 +3534,62 @@ window.addEventListener("load", function(){ setTimeout(function(){ Object.keys(O
   new MutationObserver(function(ms){ ms.forEach(function(r){ if (r.type === "attributes" && r.target.matches && r.target.matches("img.dish")) p(r.target); }); all(); })
     .observe(document.body, { subtree:true, childList:true, attributes:true, attributeFilter:["src"] });
   all();
+})();
+
+/* Horarios (hora de Chile): la carta destaca distinto segun dia y hora. Los horarios se editan en Admin > Horarios. Prueba: agregar ?h=mar-13 al link. */
+(function(){
+  var SITE = "local", DEFS = {"local":[{"id":"martes","on":true,"tag":"Promo del martes","msg":"HOY: SLICES|50% DCTO.","days":[2],"from":"00:00","to":"24:00","first":"pizzas","then":"pastas","top":[],"ban":"martes","slice":true},{"id":"almuerzo","on":true,"tag":"Almuerzo","msg":"PIDE PASTAS","days":[0,1,2,3,4,5,6],"from":"12:00","to":"17:00","first":"combos","then":"pastas","top":["combo-del-don","combo-duo-del-don"],"ban":"pasta-familia","slice":false},{"id":"resto","on":true,"tag":"Resto del día","msg":"PIDE UN COMBO","days":[0,1,2,3,4,5,6],"from":"00:00","to":"24:00","first":"combos","then":"pizzas","top":[],"ban":"pesto","slice":false}],"online":[{"id":"martes","on":false,"tag":"Promo del martes","msg":"HOY: MARTES","days":[2],"from":"00:00","to":"24:00","first":"combos","then":"pizzas","top":[],"ban":"familiar","slice":false},{"id":"almuerzo","on":true,"tag":"Almuerzo","msg":"PIDE UN COMBO","days":[0,1,2,3,4,5,6],"from":"12:00","to":"17:00","first":"combos","then":"pizzas","top":["combo-del-don","combo-famiglia","combo-duo-del-don","combo-doble-capo","promo-alfredo","combo-complices"],"ban":"pastas","slice":false},{"id":"resto","on":true,"tag":"Resto del día","msg":"PIDE UN COMBO","days":[0,1,2,3,4,5,6],"from":"00:00","to":"24:00","first":"combos","then":"pizzas","top":["combo-famiglia","combo-del-don","combo-doble-capo","combo-duo-del-don","combo-complices","promo-alfredo"],"ban":"familiar","slice":false}]}, DEF = DEFS[SITE], KEY = "mafia_sched_" + SITE;
+  var DIAS = ["dom","lun","mar","mie","jue","vie","sab"];
+  var SEQ = SITE === "local" ? ["pasta-familia","pesto","familiar","slice","martes"] : ["pastas","familiar","padrinos"];
+  function when(){
+    var q = (location.search.match(/[?&]h=([a-z]{3})-([0-9]{1,2})/) || []);
+    if (q[1] && DIAS.indexOf(q[1]) > -1) return { d:DIAS.indexOf(q[1]), m:(+q[2]) * 60 };
+    var o = {}; new Intl.DateTimeFormat("en-US", { timeZone:"America/Santiago", weekday:"short", hour:"numeric", minute:"numeric", hour12:false }).formatToParts(new Date()).forEach(function(x){ o[x.type] = x.value; });
+    return { d:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].indexOf(o.weekday), m:((+o.hour) % 24) * 60 + (+o.minute) };
+  }
+  function mins(s){ var p = String(s || "0:0").split(":"); return (+p[0]) * 60 + (+p[1] || 0); }
+  function pick(rules, w){
+    for (var i = 0; i < rules.length; i++){ var r = rules[i];
+      if (!r || r.on === false || !r.days || r.days.indexOf(w.d) < 0) continue;
+      if (w.m >= mins(r.from) && w.m < mins(r.to)) return r; }
+    return null;
+  }
+  function bkey(a){
+    var im = a.querySelector("img"), s = (im && im.getAttribute("src")) || "";
+    return s.indexOf("pasta-familia") > -1 ? "pasta-familia" : s.indexOf("nuevas-pastas") > -1 ? "pastas" : s.indexOf("pesto") > -1 ? "pesto" : s.indexOf("padrinos") > -1 ? "padrinos" : s.indexOf("familiar") > -1 ? "familiar" : s.indexOf("slice") > -1 ? "slice" : s.indexOf("martes") > -1 ? "martes" : "otro";
+  }
+  function apply(rules){
+    try{
+      var S = pick(rules, when()), menu = document.getElementById("menu"); if (!S || !menu) return;
+      var pz = S.then === "pastas" ? ["nuestras-pastas","pizzas"] : ["pizzas","nuestras-pastas"];
+      var ord = [S.first, "combos"].concat(pz, ["entradas","toppings","bebidas"]).filter(function(id, i, a){ return a.indexOf(id) === i; });
+      function rank(id){ var i = ord.indexOf(id); return i < 0 ? ord.indexOf("pizzas") + .5 : i; }
+      ord.forEach(function(id){ var e = document.getElementById(id); if (e && e.parentNode === menu) menu.appendChild(e); });
+      var ul = document.getElementById("nav");
+      if (ul) ord.forEach(function(id){ var a = ul.querySelector('a[href="#' + id + '"]'); if (a && a.parentNode.parentNode === ul) ul.appendChild(a.parentNode); });
+      if (typeof MENU !== "undefined" && MENU.sort) MENU.sort(function(a, b){ return rank(a.id) - rank(b.id); });
+      if (typeof setActive === "function" && typeof MENU !== "undefined"){ var v = MENU.filter(function(c){ return !c.hidden; })[0]; if (v) setActive(v.id); }
+      (S.top || []).slice().reverse().forEach(function(id){ var c = document.querySelector('#combos .item[data-id="' + id + '"]'); if (c && c.parentNode) c.parentNode.prepend(c); });
+      var first = document.getElementById(S.first), h = first && first.querySelector("h2"), parts = String(S.msg || "").split("|");
+      if (h && parts[0]){ h.textContent = ""; parts.forEach(function(t, i){ if (i) h.appendChild(document.createElement("br")); h.appendChild(document.createTextNode(t)); }); h.classList.add("sch-h"); if (parts.length > 1) h.classList.add("two"); }
+      if (S.first === "combos"){ var pf = document.querySelector("#combos .combo-people-filter"); if (pf){ pf.classList.add("sch-pf"); var l = pf.querySelector(".pf-label"); if (l){ var sv = l.querySelector("svg"); l.textContent = "¿Cuántas personas son?"; if (sv) sv.style.display = "none"; } var al = pf.querySelector('[data-people-filter="all"]'); if (al) al.textContent = "Todos"; } }
+      var tr = document.getElementById("mafiaTrack");
+      if (tr && S.ban){ var order = [S.ban].concat(SEQ); var sl = [].slice.call(tr.children);
+        sl.sort(function(a, b){ var x = order.indexOf(bkey(a)), y = order.indexOf(bkey(b)); return (x < 0 ? 99 : x) - (y < 0 ? 99 : y); });
+        sl.forEach(function(a, i){ a.classList.toggle("on", i === 0); tr.appendChild(a); }); var sn = tr.style.scrollSnapType; tr.style.scrollSnapType = "none"; tr.scrollLeft = 0; void tr.offsetWidth; tr.style.scrollSnapType = sn; }
+      if (S.slice){ var sw = document.querySelector(".sw2"); if (sw && sw.getAttribute("aria-checked") === "true") sw.click(); }
+    }catch(e){ if (window.console) console.warn("horarios", e); }
+  }
+  var cached = null; try { cached = JSON.parse(localStorage.getItem(KEY)); } catch(e){}
+  var rules = (cached && cached.length) ? cached : DEF;
+  apply(rules);
+  try{
+    fetch("/.netlify/functions/schedule?site=" + SITE + "&t=" + Date.now(), { cache:"no-store" }).then(function(r){ return r.ok ? r.json() : null; }).then(function(d){
+      if (!d) return; var next = (d.rules && d.rules.length) ? d.rules : null, a = JSON.stringify(rules), b = JSON.stringify(next || DEF);
+      try { if (next) localStorage.setItem(KEY, JSON.stringify(next)); else localStorage.removeItem(KEY); } catch(e){}
+      if (a !== b){ try { if (!sessionStorage.getItem(KEY + "_r")){ sessionStorage.setItem(KEY + "_r", "1"); location.reload(); } } catch(e){} }
+    }).catch(function(){});
+  }catch(e){}
 })();
 
 /* Banners: fundido entre imagenes + deslizar con el dedo */
