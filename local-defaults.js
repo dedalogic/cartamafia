@@ -34,7 +34,7 @@ const LOCAL_DEFAULTS = {
     "promo-alfredo": { desc:"Fetuccini Alfredo Mini." },
     "l-slice-bebida": { label:"Desde" },
     "l-familiar": { label:"Desde" },
-    "combo-del-don": { price:7990, label:"Desde", desc:"Fetuccini con Bebida Mini. Elige tu favorito.", img:"/fotos/local/combo-del-don.webp?v=2" },
+    "combo-del-don": { price:7990, label:"Desde", desc:"Fetuccini con Bebida Mini. Elige tu favorito.", img:"/combo-alfredo.webp" },
     "combo-duo-del-don": { img:"/fotos/local/combo-duo-del-don.webp?v=3", name:"Par de Mafiosos", desc:"2 pastas a elección y 2 Bebidas Mini." }
   },
   /* Texto bajo el título de cada sección (id de la sección: texto). Vacío = sin texto. */
