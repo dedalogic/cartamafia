@@ -412,6 +412,21 @@ main.wide{max-width:1240px}
 .ci2 .l1{display:flex;justify-content:space-between;gap:10px}.ci2 .m{color:var(--muted);font-size:13px;margin-top:4px}
 .tag2{background:var(--text);color:#fff;border-radius:8px;padding:2px 8px;font-size:12px;font-weight:700;margin-left:6px}
 .bd{border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;margin:0 0 16px;background:#fff;font-size:14px}
+.sch{max-width:560px}.sch-h2{margin:0 0 4px;font-size:20px}.sch-s{margin:0 0 14px;color:var(--muted);font-size:14px;line-height:1.4}
+.sch-seg{display:flex;background:var(--bg2);border-radius:12px;padding:4px;margin-bottom:14px}.sch-seg button{flex:1;border:0;background:none;padding:10px;border-radius:9px;font-size:14px;font-weight:600;color:var(--muted)}.sch-seg button.on{background:#fff;color:var(--text);box-shadow:0 1px 3px #0002}
+.sch-card{border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:10px;cursor:pointer}.sch-card:hover{border-color:#b9b5b0}
+.sch-row{display:flex;align-items:center;gap:10px}.sch-row .sp{flex:1}
+.sch-chip{display:inline-block;min-width:0;flex:0 1 auto;background:#F2D88C;color:#111;border-radius:10px;padding:6px 12px;font-family:var(--disp);font-size:20px;letter-spacing:.03em;line-height:1.1}
+.sch-m{font-size:13px;color:var(--muted);margin-top:8px}.sch-tag{font-size:11px;font-weight:800;padding:3px 8px;border-radius:99px;background:var(--amberbg);color:var(--amberdk)}
+.sch-sw{flex:0 0 44px;height:26px;border-radius:99px;border:0;background:var(--accent);position:relative;padding:0}.sch-sw::after{content:"";position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;background:#fff}.sch-sw.off{background:var(--line)}.sch-sw.off::after{right:auto;left:3px}
+.sch-add{width:100%;min-height:48px;border:1px dashed #bbb;border-radius:14px;background:none;font-weight:700;font-size:15px}
+.sch-link{border:0;background:none;padding:10px 4px;font-weight:700;font-size:14px;color:var(--text);text-decoration:underline}.sch-link:disabled{opacity:.35}.sch-link.danger{color:var(--accent)}
+.sch-l{display:block;font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.06em;margin:16px 0 6px}
+.sch-in{width:100%;border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:16px;background:#fff}
+.sch-days{display:flex;gap:6px}.sch-days button{flex:1;padding:10px 0;border:1px solid var(--line);border-radius:10px;background:#fff;font-weight:700;font-size:14px;color:var(--muted)}.sch-days button.on{background:var(--text);border-color:var(--text);color:#fff}
+.sch-t{display:flex;gap:8px}.sch-cs{display:flex;gap:8px;flex-wrap:wrap}
+.sch-c{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:10px;padding:9px 12px;background:#fff;font-size:14px;font-weight:600}.sch-c.on{background:var(--text);border-color:var(--text);color:#fff}.sch-c i{font-style:normal;width:20px;height:20px;border-radius:50%;background:var(--amber);color:#111;font-size:12px;font-weight:800;display:grid;place-items:center}
+.sch-save{width:100%;margin-top:20px}.sch-ops{display:flex;gap:12px;flex-wrap:wrap;margin-top:6px}
 </style>
 </head>
 <body>
@@ -447,7 +462,7 @@ main.wide{max-width:1240px}
 <div class="toast" id="toast" role="alert" hidden></div>
 
 <script>
-const API = { av:"/.netlify/functions/menu-availability", pay:"/.netlify/functions/pay-switch", unp:"/.netlify/functions/orders-unpaid", ord:"/.netlify/functions/orders-list", rep:"/.netlify/functions/orders-report", loc:"/.netlify/functions/local-menu", geo:"/.netlify/functions/orders-geo", upd:"/.netlify/functions/orders-update", loy:"/.netlify/functions/loyalty-admin" };
+const API = { av:"/.netlify/functions/menu-availability", pay:"/.netlify/functions/pay-switch", unp:"/.netlify/functions/orders-unpaid", ord:"/.netlify/functions/orders-list", rep:"/.netlify/functions/orders-report", loc:"/.netlify/functions/local-menu", geo:"/.netlify/functions/orders-geo", upd:"/.netlify/functions/orders-update", loy:"/.netlify/functions/loyalty-admin", sch:"/.netlify/functions/schedule" };
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const clp = n => "$" + new Intl.NumberFormat("es-CL").format(n || 0);
@@ -466,7 +481,7 @@ const I = {
   pin:'<svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.800 12 21 12 21z"/><circle cx="12" cy="9.500" r="2.500"/></svg>',
   search:'<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>'
 };
-const VIEWS = { inicio:"Inicio", pedidos:"Pedidos", resumen:"Resumen", productos:"Productos", "carta-local":"Carta local", pago:"Pago online", "sin-terminar":"Sin terminar", clientes:"Clientes" };
+const VIEWS = { inicio:"Inicio", pedidos:"Pedidos", resumen:"Resumen", productos:"Productos", "carta-local":"Carta local", horarios:"Horarios", pago:"Pago online", "sin-terminar":"Sin terminar", clientes:"Clientes" };
 
 let pass = "", role = "", dirty = false, saving = false;
 let simple = false; try { simple = localStorage.getItem("mafia_admin_simple") === "1"; } catch(e){}
@@ -493,6 +508,7 @@ function drawNav(){
     item("productos", I.box, "Productos") +
     (A ? item("resumen", I.chart, "Resumen") : "") +
     (A ? item("carta-local", I.menuBook, "Carta local") : "") +
+    (A ? item("horarios", I.clock, "Horarios") : "") +
     (A ? item("clientes", I.orders, "Clientes") : "") +
     (A ? item("pago", I.card, "Pago online") + item("sin-terminar", I.clock, "Compras sin terminar", S.unp && S.unp.unpaid.some(x => x.review) ? '<span class="badge">!</span>' : "") : "") +
     `<div class="sep"></div><a href="/" target="_blank" rel="noopener">${I.menuBook}Ver carta</a>` + (A ? `<a href="/carta/" target="_blank" rel="noopener">${I.menuBook}Ver carta del local</a>` : "") +
@@ -506,11 +522,11 @@ $("#closeBtn").onclick = $("#scrim").onclick = () => openMenu(false);
 document.addEventListener("keydown", e => { if (e.key === "Escape") openMenu(false); });
 
 /* ---------- vistas ---------- */
-const route = () => { const h = (location.hash || "").replace(/^#\/?/, ""); return VIEWS[h] && (isAdmin() || (h !== "pago" && h !== "sin-terminar" && h !== "resumen" && h !== "carta-local" && h !== "clientes")) ? h : "inicio"; };
+const route = () => { const h = (location.hash || "").replace(/^#\/?/, ""); return VIEWS[h] && (isAdmin() || (h !== "pago" && h !== "sin-terminar" && h !== "resumen" && h !== "carta-local" && h !== "horarios" && h !== "clientes")) ? h : "inicio"; };
 function render(){
   const v = route(); $("#title").textContent = VIEWS[v]; document.title = "MAFIA · " + VIEWS[v];
   $("#main").classList.toggle("wide", v === "pedidos");
-  ({ inicio:vHome, pedidos:vOrders, resumen:vDash, productos:vProducts, "carta-local":vLocal, pago:vPay, "sin-terminar":vUnpaid, clientes:vClients })[v]();
+  ({ inicio:vHome, pedidos:vOrders, resumen:vDash, productos:vProducts, "carta-local":vLocal, horarios:vSched, pago:vPay, "sin-terminar":vUnpaid, clientes:vClients })[v]();
   syncAlert();
   $("#savebar").hidden = !((v === "productos" || v === "carta-local") && dirty);
   drawNav(); openMenu(false); window.scrollTo(0, 0);
@@ -592,6 +608,111 @@ window.addEventListener("beforeunload", e => { if (dirty){ e.preventDefault(); e
 /* ---------- carta local ---------- */
 function locEff(it){ const o = S.loc.over[it.id] || {}; const e = { name:o.name || it.name, desc:o.desc != null ? o.desc : it.desc, price:o.price != null ? o.price : it.price, img:o.img === null ? it.img : (o.img || it.img), promo:o.promo || "", sub:o.sub || "", label:o.label || "" };
   e.own = !it.local && (e.name !== it.name || e.desc !== it.desc || e.price !== it.price || e.img !== it.img || !!e.promo || !!e.sub); return e; }
+/* ---------- Horarios: la carta destaca distinto segun dia y hora ---------- */
+const SCH = { site:"local", rules:{}, saved:{}, edit:null, busy:false };
+const SCH_CAT = {
+  local:{ combos:[["l-slice-bebida","Slice + Bebida"],["combo-del-don","Combo del Don"],["combo-complices","Combo Cómplices"],["combo-duo-del-don","Par de Mafiosos"],["l-familiar","Promo Familiar"],["l-pasta-familia","Pasta en Familia"]],
+    bans:[["pasta-familia","Pasta en Familia"],["pesto","Fetuccini Pesto"],["familiar","Promo Familiar"],["slice","Slices"],["martes","Martes 50%"]] },
+  online:{ combos:[["combo-famiglia","Combo Famiglia"],["combo-doble-capo","Combo Padrinos"],["combo-mafioso","Combo Mafioso"],["combo-complices","Combo Cómplices"],["combo-del-don","Combo del Don"],["combo-duo-del-don","Combo 2 Mafiosos"],["promo-alfredo","Promo Fetuccini Alfredo"]],
+    bans:[["pastas","Nuevas Pastas"],["familiar","Combo Familiar"],["padrinos","Combo Padrinos"]] }
+};
+const SCH_DAYS = [[1,"L"],[2,"M"],[3,"X"],[4,"J"],[5,"V"],[6,"S"],[0,"D"]];
+const SCH_SEC = [["combos","Combos"],["pizzas","Pizzas"],["nuestras-pastas","Pastas"]];
+const schName = (list, id) => (list.find(x => x[0] === id) || [id, id])[1];
+function schDays(d){
+  d = [...d].sort(); const all = [0,1,2,3,4,5,6];
+  if (d.length === 7) return "Todos los días";
+  if (d.join() === "1,2,3,4,5") return "Lun a Vie";
+  if (d.join() === "0,6") return "Sáb y Dom";
+  const N = ["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"];
+  if (d.length < 3) return d.map(n => N[n]).join(" y ");
+  return SCH_DAYS.filter(x => d.includes(x[0])).map(x => x[1]).join(" ");
+}
+function schSummary(r){
+  const c = SCH_CAT[SCH.site], t = r.from === "00:00" && r.to === "24:00" ? "todo el día" : r.from + " a " + r.to;
+  const first = r.top && r.top.length ? schName(c.combos, r.top[0]) : schName(SCH_SEC, r.first);
+  return schDays(r.days) + " · " + t + " · Primero: " + first;
+}
+const schChip = msg => `<span class="chip sch-chip">${esc(String(msg || "SIN MENSAJE").split("|").join(" "))}</span>`;
+async function schLoad(site){
+  const r = await fetch(API.sch + "?site=" + site + "&t=" + Date.now(), { cache:"no-store" });
+  const d = await r.json(); if (!r.ok) throw new Error(d.error || "No se pudo cargar");
+  SCH.saved[site] = !!d.rules; SCH.rules[site] = JSON.parse(JSON.stringify(d.rules || d.defaults));
+}
+async function schSave(){
+  await call(API.sch, { action:"set", site:SCH.site, rules:SCH.rules[SCH.site] });
+  SCH.saved[SCH.site] = true; toast("Guardado. La carta lo toma al recargar.");
+}
+async function vSched(){
+  const v = $("#view");
+  if (!SCH.rules.local || !SCH.rules.online){
+    v.innerHTML = '<p class="none">Cargando…</p>';
+    try { await Promise.all([schLoad("local"), schLoad("online")]); }
+    catch(e){ v.innerHTML = `<p class="none">${esc(e.message)}<br><button class="btn" id="retryS" type="button" style="margin-top:12px">Reintentar</button></p>`; $("#retryS").onclick = vSched; return; }
+  }
+  if (route() !== "horarios") return;
+  SCH.edit === null ? schList() : schEdit();
+}
+function schList(){
+  const rules = SCH.rules[SCH.site];
+  $("#view").innerHTML = `<div class="sch">
+    <h2 class="sch-h2">Horarios automáticos</h2><p class="sch-s">La carta destaca distinto según día y hora (hora de Chile).</p>
+    <div class="sch-seg"><button type="button" data-site="local" class="${SCH.site === "local" ? "on" : ""}">Carta local</button><button type="button" data-site="online" class="${SCH.site === "online" ? "on" : ""}">Carta online</button></div>
+    ${rules.map((r, i) => `<div class="sch-card" data-i="${i}"><div class="sch-row">${schChip(r.msg)}<span class="sp"></span><button type="button" class="sch-sw ${r.on === false ? "off" : ""}" data-tog="${i}" role="switch" aria-checked="${r.on !== false}" aria-label="Activar o desactivar"></button></div><div class="sch-m">${r.tag ? `<b>${esc(r.tag)}</b> · ` : ""}${esc(schSummary(r))}</div></div>`).join("")}
+    <button type="button" class="sch-add" id="schAdd">Agregar horario</button>
+    <p class="sch-s" style="margin-top:14px;font-size:13px">Si dos horarios coinciden, gana el que está más arriba. Toca un horario para editarlo.</p>
+    ${SCH.saved[SCH.site] ? '<button type="button" class="sch-link" id="schReset">Volver a los horarios originales</button>' : ""}</div>`;
+  document.querySelectorAll(".sch-seg [data-site]").forEach(b => b.onclick = () => { SCH.site = b.dataset.site; schList(); });
+  document.querySelectorAll(".sch-card").forEach(c => c.onclick = e => { if (e.target.closest("[data-tog]")) return; SCH.edit = +c.dataset.i; SCH.draft = JSON.parse(JSON.stringify(rules[SCH.edit])); schEdit(); });
+  document.querySelectorAll("[data-tog]").forEach(b => b.onclick = async () => { const r = rules[+b.dataset.tog]; r.on = r.on === false; schList(); try { await schSave(); } catch(e){ toast(e.message); } });
+  $("#schAdd").onclick = () => { SCH.edit = -1; SCH.draft = { id:"h" + Date.now().toString(36), on:true, tag:"", msg:"PIDE UN COMBO", days:[0,1,2,3,4,5,6], from:"00:00", to:"24:00", first:"combos", then:"pizzas", top:[], ban:"", slice:false }; schEdit(); };
+  const rs = $("#schReset"); if (rs) rs.onclick = async () => { if (!confirm("¿Volver a los horarios originales de esta carta?")) return; try { await call(API.sch, { action:"reset", site:SCH.site }); await schLoad(SCH.site); schList(); toast("Listo"); } catch(e){ toast(e.message); } };
+}
+function schEdit(){
+  const d = SCH.draft, c = SCH_CAT[SCH.site], isNew = SCH.edit === -1, rules = SCH.rules[SCH.site], allDay = d.from === "00:00" && d.to === "24:00";
+  const chips = (list, on, attr) => list.map(x => `<button type="button" class="sch-c ${on(x[0]) ? "on" : ""}" ${attr}="${esc(x[0])}">${on(x[0]) && attr === "data-top" ? `<i>${d.top.indexOf(x[0]) + 1}</i>` : ""}${esc(x[1])}</button>`).join("");
+  $("#view").innerHTML = `<div class="sch">
+    <button type="button" class="sch-link" id="schBack" style="margin:0 0 6px">Volver a los horarios</button>
+    <h2 class="sch-h2">${isNew ? "Nuevo horario" : "Editar horario"}</h2><p class="sch-s">${SCH.site === "local" ? "Carta local" : "Carta online"}</p>
+    <label class="sch-l">MENSAJE EN AMARILLO</label><input class="sch-in" id="sMsg" maxlength="40" value="${esc(d.msg)}"><p class="sch-s" style="margin:6px 0 0;font-size:12px">Usa | para cortar en dos líneas. Ej: HOY: SLICES|50% DCTO.</p><div style="margin-top:10px" id="sPrev">${schChip(d.msg)}</div>
+    <label class="sch-l">NOMBRE INTERNO (solo para ti)</label><input class="sch-in" id="sTag" maxlength="24" value="${esc(d.tag)}" placeholder="Ej: Almuerzo">
+    <label class="sch-l">DÍAS</label><div class="sch-days">${SCH_DAYS.map(x => `<button type="button" class="${d.days.includes(x[0]) ? "on" : ""}" data-day="${x[0]}">${x[1]}</button>`).join("")}</div>
+    <label class="sch-l">HORA</label><button type="button" class="sch-c ${allDay ? "on" : ""}" id="sAll" style="margin-bottom:8px">Todo el día</button>
+    <div class="sch-t" ${allDay ? "hidden" : ""} id="sTimes"><input class="sch-in" type="time" id="sFrom" value="${esc(d.from === "24:00" ? "00:00" : d.from)}"><input class="sch-in" type="time" id="sTo" value="${esc(d.to === "24:00" ? "00:00" : d.to)}"></div>
+    <label class="sch-l">COMBOS QUE VAN PRIMERO (toca en el orden que quieres)</label><div class="sch-cs">${chips(c.combos, id => d.top.includes(id), "data-top")}</div>
+    <label class="sch-l">BANNER PRIMERO</label><div class="sch-cs">${chips(c.bans, id => d.ban === id, "data-ban")}</div>
+    <label class="sch-l">SECCIÓN PRIMERO</label><div class="sch-cs">${chips(SCH_SEC, id => d.first === id, "data-first")}</div>
+    <label class="sch-l">SEGUNDA SECCIÓN</label><div class="sch-cs">${chips([["pizzas","Pizzas"],["pastas","Pastas"]], id => d.then === id, "data-then")}</div>
+    ${SCH.site === "local" && d.first === "pizzas" ? `<label class="sch-l">PIZZAS</label><button type="button" class="sch-c ${d.slice ? "on" : ""}" id="sSlice">Abrir directo en Slice</button>` : ""}
+    <button type="button" class="btn sch-save" id="sSave">Guardar</button>
+    ${!isNew ? `<div class="sch-ops"><button type="button" class="sch-link" id="sUp" ${SCH.edit === 0 ? "disabled" : ""}>Subir prioridad</button><button type="button" class="sch-link" id="sDown" ${SCH.edit === rules.length - 1 ? "disabled" : ""}>Bajar prioridad</button><button type="button" class="sch-link danger" id="sDel">Eliminar</button></div>` : ""}</div>`;
+  const re = () => schEdit();
+  $("#schBack").onclick = () => { SCH.edit = null; schList(); };
+  $("#sMsg").oninput = e => { d.msg = e.target.value; $("#sPrev").innerHTML = schChip(d.msg); };
+  $("#sTag").oninput = e => d.tag = e.target.value;
+  document.querySelectorAll("[data-day]").forEach(b => b.onclick = () => { const n = +b.dataset.day; d.days = d.days.includes(n) ? d.days.filter(x => x !== n) : [...d.days, n]; b.classList.toggle("on"); });
+  $("#sAll").onclick = () => { if (allDay){ d.from = "12:00"; d.to = "17:00"; } else { d.from = "00:00"; d.to = "24:00"; } re(); };
+  const f = $("#sFrom"), t = $("#sTo"); if (f) f.onchange = () => d.from = f.value || "00:00"; if (t) t.onchange = () => d.to = (!t.value || t.value === "00:00") ? "24:00" : t.value;
+  document.querySelectorAll("[data-top]").forEach(b => b.onclick = () => { const id = b.dataset.top; d.top = d.top.includes(id) ? d.top.filter(x => x !== id) : [...d.top, id]; re(); });
+  document.querySelectorAll("[data-ban]").forEach(b => b.onclick = () => { d.ban = d.ban === b.dataset.ban ? "" : b.dataset.ban; re(); });
+  document.querySelectorAll("[data-first]").forEach(b => b.onclick = () => { d.first = b.dataset.first; re(); });
+  document.querySelectorAll("[data-then]").forEach(b => b.onclick = () => { d.then = b.dataset.then; re(); });
+  const sl = $("#sSlice"); if (sl) sl.onclick = () => { d.slice = !d.slice; re(); };
+  const commit = async () => {
+    if (!d.msg.trim()){ toast("Escribe el mensaje"); return false; }
+    if (!d.days.length){ toast("Elige al menos un día"); return false; }
+    if (d.to !== "24:00" && d.to <= d.from){ toast("La hora de término debe ser después de la de inicio"); return false; }
+    if (isNew) rules.unshift(d); else rules[SCH.edit] = d;
+    try { await schSave(); } catch(e){ toast(e.message); return false; }
+    return true;
+  };
+  $("#sSave").onclick = async () => { if (await commit()){ SCH.edit = null; schList(); } };
+  const mv = async n => { if (!(await commit())) return; const i = SCH.edit, j = i + n; if (j < 0 || j >= rules.length) return; [rules[i], rules[j]] = [rules[j], rules[i]]; try { await schSave(); } catch(e){ toast(e.message); } SCH.edit = null; schList(); };
+  const up = $("#sUp"), dn = $("#sDown"), del = $("#sDel");
+  if (up) up.onclick = () => mv(-1); if (dn) dn.onclick = () => mv(1);
+  if (del) del.onclick = async () => { if (rules.length < 2){ toast("Debe quedar al menos un horario"); return; } if (!confirm("¿Eliminar este horario?")) return; rules.splice(SCH.edit, 1); try { await schSave(); } catch(e){ toast(e.message); } SCH.edit = null; schList(); };
+}
+
 async function vLocal(){
   if (!S.loc){
     $("#view").innerHTML = '<p class="none">Cargando…</p>';
