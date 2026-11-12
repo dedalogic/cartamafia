@@ -42,7 +42,7 @@ const MENU = [
         { label:"Elige tu bebida mini", short:"Bebida", list:["Coca-Cola Original","Coca-Cola Zero","Sprite","Fanta"] }
       ] },
 
-    { id:"combo-duo-del-don", name:"Combo 2 Mafiosos", people:2, desc:"2 pastas a elección y 2 bebidas mini. Para 2 personas.", price:14990, img:"/combo-duo-del-don.webp",
+    { id:"combo-duo-del-don", name:"Combo 2 Mafiosos", people:2, desc:"2 pastas a elección y 2 bebidas mini. Para 2 personas.", price:14990, img:"/combo-duo-del-don.webp?v=2",
       bundleChoices:[
         { label:"Elige la pasta 1", short:"Pasta 1", list:["La Bolognesa del Don","Alfredo Gravy","Vodka Boss","Pesto Limón","Il Mechada","Picante Pastel"] },
         { label:"Elige la pasta 2", short:"Pasta 2", list:["La Bolognesa del Don","Alfredo Gravy","Vodka Boss","Pesto Limón","Il Mechada","Picante Pastel"] },
@@ -54,7 +54,7 @@ const MENU = [
         { label:"Elige tu bebida mini", short:"Bebida", list:["Coca-Cola Original","Coca-Cola Zero","Sprite","Fanta"] }
       ] }
   ]},
-  { id:"entradas", name:"Entradas", items:[
+  { id:"entradas", name:"Sides", items:[
     { id:"palitos", name:"Palitos de ajo", desc:"6 Palitos de Ajo cubiertos con Salsa Garlic y Queso Parmigiano. Incluye Salsa Pomodoro New York.", price:3990, img:"/palitos-ajo.webp",
       extras:{ label:"Agrega una salsa", ids:["top-pomodoro","top-bbq"] } },
     { id:"cremita-zapallo", name:"Crema de Zapallo", desc:"Crema casera de Zapallo con Palitos de Ajo y Queso Parmigiano.", price:5990, img:"", foto:"cremita-zapallo" }

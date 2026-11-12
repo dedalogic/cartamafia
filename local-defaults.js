@@ -35,7 +35,7 @@ const LOCAL_DEFAULTS = {
     "l-slice-bebida": { label:"Desde" },
     "l-familiar": { label:"Desde" },
     "combo-del-don": { price:7990, label:"Desde", desc:"Fetuccini con Bebida Mini. Elige tu favorito.", img:"/fotos/local/combo-del-don.webp?v=2" },
-    "combo-duo-del-don": { img:"/fotos/local/combo-duo-del-don.webp?v=2", name:"Par de Mafiosos", desc:"2 pastas a elección y 2 Bebidas Mini." }
+    "combo-duo-del-don": { img:"/fotos/local/combo-duo-del-don.webp?v=3", name:"Par de Mafiosos", desc:"2 pastas a elección y 2 Bebidas Mini." }
   },
   /* Texto bajo el título de cada sección (id de la sección: texto). Vacío = sin texto. */
   /* Orden de los combos (los que no estan aqui van al final) */
@@ -49,7 +49,7 @@ const LOCAL_DEFAULTS = {
     "combo-del-don": { noun:"opciones", title:"ELIGE TU FETUCCINI", items:[
       { n:"Fetuccini Alfredo", d:"Fetuccini en salsa Alfredo, con Bebida Mini.", img:"/combo-alfredo.webp", p:"$7.990" },
       { n:"Bolognesa con Albóndigas", d:"Fetuccini con salsa Bolognesa, 3 albóndigas y Parmigiano, con Bebida Mini.", img:"/fotos/local/combo-del-don.webp", p:"$9.990" },
-      { n:"Pesto con Pollo Gravy", d:"Fetuccini al pesto con Pollo Gravy, con Bebida Mini.", img:"/fotos/local/pesto-pollo-gravy.webp", p:"$9.990" } ] },
+      { n:"Pesto con Pollo Gravy", d:"Fetuccini al pesto con Pollo Gravy, con Bebida Mini.", img:"/fotos/local/pesto-pollo-gravy.webp?v=2", p:"$9.990" } ] },
     "combo-complices": { noun:"slices", title:"ELIGE TUS SLICES", items:[
       { n:"Tony Pepperoni", d:"Pepperoni Americano Ultradelgado, Salsa Pomodoro New York y Queso Mozzarella.", img:"/fotos/local/slice-pepperoni.webp" }, { n:"Funghi", d:"Champiñones y Callampas Deshidratadas, Salsa Bechamel, Queso Mozzarella, Queso Parmigiano y Perejil Fresco.", img:"/fotos/local/slice-funghi.webp" },
       { n:"Il Traditore", d:"Pollo BBQ, Tocino, Cebolla Morada, Salsa BBQ y Queso Mozzarella.", img:"/fotos/local/slice-pollo-bbq.webp" }, { n:"Margarita", d:"Salsa Pomodoro New York, Queso Mozzarella y Albahaca Fresca.", img:"/fotos/local/slice-margarita.webp" } ] },
@@ -61,13 +61,11 @@ const LOCAL_DEFAULTS = {
       { n:"Napolitana", d:"Jamón, Tomate, Aceitunas de la Zona, Salsa Pomodoro New York, Queso Mozzarella y Orégano.", img:"/fotos/local/napolitana.webp", p:"$29.990" }, { n:"Al Ajillo Boss", d:"Camarones al Ajillo, Pimentón Rojo, Salsa Pomodoro New York, Queso Mozzarella y Perejil Fresco.", img:"/fotos/local/ajillo.webp", p:"$29.990" } ] }
   },
   notes: { pizzas: "Pizzas XXL o Slices", combos: "" },
-  /* Banners de arriba. "to": #seccion, o #item:ID (lleva a ese plato), o #item:ID:slice (idem, con la carta en Slice) */
+  /* Banners de arriba. "to": #seccion, o #item:ID (lleva a ese plato), o #item:ID:slice (idem, con la carta en Slice). Vacio = no lleva a nada */
   banners: [
-    { img:"/assets/banner-local-martes-2.webp", to:"#item:napolitana:slice", alt:"Todos los martes, 50% en slices" },
-    { img:"/assets/banner-local-familiar.webp?v=2", to:"#item:l-familiar", alt:"Promo Familiar" },
-    { img:"/assets/banner-local-slice.webp?v=3", to:"#item:l-slice-bebida", alt:"Slice y bebida, desde $4.990" },
-    { img:"/assets/banner-local-pasta-familia.webp", to:"#item:l-pasta-familia", alt:"Pasta en Familia" },
-    { img:"/assets/banner-local-pesto.webp?v=3", to:"#item:combo-del-don", alt:"Fetuccini Pesto con Pollo Gravy y bebida" }
+    { img:"/assets/banner-local-nuevas-pastas.webp", to:"#nuestras-pastas", alt:"Nuevas Pastas" },
+    { img:"/assets/banner-local-nuevos-combos.webp", to:"#combos", alt:"Nuevos Combos" },
+    { img:"/assets/banner-local-martes-3.webp", to:"", alt:"Todos los martes, 50% en slices" }
   ]
 };
 if (typeof module !== "undefined") module.exports = LOCAL_DEFAULTS;
