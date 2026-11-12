@@ -612,7 +612,7 @@ function locEff(it){ const o = S.loc.over[it.id] || {}; const e = { name:o.name 
 const SCH = { site:"local", rules:{}, saved:{}, edit:null, busy:false };
 const SCH_CAT = {
   local:{ combos:[["l-slice-bebida","Slice + Bebida"],["combo-del-don","Combo del Don"],["combo-complices","Combo Cómplices"],["combo-duo-del-don","Par de Mafiosos"],["l-familiar","Promo Familiar"],["l-pasta-familia","Pasta en Familia"]],
-    bans:[["pasta-familia","Pasta en Familia"],["pesto","Fetuccini Pesto"],["familiar","Promo Familiar"],["slice","Slices"],["martes","Martes 50%"]] },
+    bans:[["pastas","Nuevas Pastas"],["combos","Nuevos Combos"],["martes","Martes 50%"]] },
   online:{ combos:[["combo-famiglia","Combo Famiglia"],["combo-doble-capo","Combo Padrinos"],["combo-mafioso","Combo Mafioso"],["combo-complices","Combo Cómplices"],["combo-del-don","Combo del Don"],["combo-duo-del-don","Combo 2 Mafiosos"],["promo-alfredo","Promo Fetuccini Alfredo"]],
     bans:[["pastas","Nuevas Pastas"],["familiar","Combo Familiar"],["padrinos","Combo Padrinos"]] }
 };
@@ -682,7 +682,7 @@ function schEdit(){
     <label class="sch-l">COMBOS QUE VAN PRIMERO (toca en el orden que quieres)</label><div class="sch-cs">${chips(c.combos, id => d.top.includes(id), "data-top")}</div>
     <label class="sch-l">BANNER PRIMERO</label><div class="sch-cs">${chips(c.bans, id => d.ban === id, "data-ban")}</div>
     <label class="sch-l">SECCIÓN PRIMERO</label><div class="sch-cs">${chips(SCH_SEC, id => d.first === id, "data-first")}</div>
-    <label class="sch-l">SEGUNDA SECCIÓN</label><div class="sch-cs">${chips([["pizzas","Pizzas"],["pastas","Pastas"]], id => d.then === id, "data-then")}</div>
+    
     ${SCH.site === "local" && d.first === "pizzas" ? `<label class="sch-l">PIZZAS</label><button type="button" class="sch-c ${d.slice ? "on" : ""}" id="sSlice">Abrir directo en Slice</button>` : ""}
     <button type="button" class="btn sch-save" id="sSave">Guardar</button>
     ${!isNew ? `<div class="sch-ops"><button type="button" class="sch-link" id="sUp" ${SCH.edit === 0 ? "disabled" : ""}>Subir prioridad</button><button type="button" class="sch-link" id="sDown" ${SCH.edit === rules.length - 1 ? "disabled" : ""}>Bajar prioridad</button><button type="button" class="sch-link danger" id="sDel">Eliminar</button></div>` : ""}</div>`;
