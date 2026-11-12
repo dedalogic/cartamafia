@@ -82,7 +82,7 @@ const MENU = [
       price:14990, img:"/funghi.webp", combo:{ all:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" } },
       suggest:{ ids:["top-bbq", "top-pomodoro", "top-parmigiano"] } },
   ]},
-  { id:"nuestras-pastas", name:"Nuestras Pastas", items:[
+  { id:"nuestras-pastas", name:"Pastas", items:[
     { id:"np-bolognesa-albondigas", name:"La Bolognesa del Don", desc:"Fetuccini con salsa Bolognesa, 3 albóndigas y Parmigiano.", price:10490, img:"/np-bolognesa-albondigas.webp" },
     { id:"np-alfredo-gravy", name:"Alfredo Gravy", desc:"Fetuccini en salsa Alfredo con pollo y gravy.", price:9490, img:"/np-alfredo-gravy.webp" },
     { id:"np-pesto-lemon", name:"Pesto Limón", desc:"Fetuccini al pesto con pollo Lemon Pepper.", price:9490, img:"/np-pesto-lemon.webp" },

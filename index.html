@@ -892,13 +892,16 @@ body{background:transparent!important;color:#fff}
 .cat h2::after{display:none!important}
 .cat .note,.combo-people-filter,.combo-people-filter *:not(button){color:#fff}
 /* Horarios: titulo amarillo y pregunta grande */
-#menu h2.sch-h{display:inline-block;background:#F2D88C;color:#111!important;padding:8px 18px 6px;border-radius:14px;line-height:1.05;font-size:38px!important;white-space:nowrap;margin:0 0 14px}
-#menu h2.sch-h.two{font-size:30px!important;line-height:1.1}
-@media(max-width:360px){#menu h2.sch-h{font-size:32px!important}}
-#combos .combo-people-filter.sch-pf{margin:14px 0 18px!important;gap:6px!important}
-#combos .combo-people-filter.sch-pf .pf-label{width:100%!important;margin:0 0 6px!important;font-size:26px!important;font-weight:700!important;opacity:1!important;color:#fff!important}
-#combos .combo-people-filter.sch-pf .pf-btn{min-height:44px!important;height:44px!important;padding:0 8px!important;font-size:13px!important;font-weight:700!important;white-space:nowrap;flex:1 1 auto;min-width:0!important}
-#combos .combo-people-filter.sch-pf .pf-btn{border-radius:14px!important}
+#menu .sch-box{background:#F2D88C;border-radius:16px;padding:12px 14px 14px;margin:0 0 16px}
+#menu .sch-box h2.sch-h{display:block;background:none!important;color:#111!important;padding:0!important;margin:0!important;border-radius:0;line-height:1.05;font-size:32px!important;white-space:nowrap}
+#menu .sch-box h2.sch-h.two{line-height:1.08}
+#menu .sch-box h2.sch-h .sch-k{color:#C8102E}
+@media(max-width:340px){#menu .sch-box h2.sch-h{font-size:28px!important}}
+#combos .sch-box .combo-people-filter.sch-pf{margin:10px 0 0!important;gap:6px!important;padding:0!important;background:none!important}
+#combos .sch-box .combo-people-filter.sch-pf .pf-label{display:none!important}
+#combos .sch-box .combo-people-filter.sch-pf .pf-btn{min-height:42px!important;height:42px!important;padding:0 8px!important;font-size:14px!important;font-weight:700!important;white-space:nowrap;flex:1 1 auto;min-width:0!important;border-radius:14px!important;background:transparent!important;color:#111!important;border:1.5px solid #111!important}
+#combos .sch-box .combo-people-filter.sch-pf .pf-btn[aria-pressed="true"]{background:#C8102E!important;border-color:#C8102E!important;color:#fff!important}
+#menu .sch-nonote .note{display:none!important}
 
 #combos .combo-people-filter{display:flex!important;align-items:center;flex-wrap:wrap;gap:8px;margin:8px 0 16px}
 #combos .combo-people-filter .pf-label{width:auto!important;margin:0 6px 0 0!important;font-size:13px;font-weight:500!important;opacity:.92;color:#F4EDDF!important}
@@ -3108,8 +3111,18 @@ window.addEventListener("focus", loadAvailability);
       if (typeof setActive === "function" && typeof MENU !== "undefined"){ var v = MENU.filter(function(c){ return !c.hidden; })[0]; if (v) setActive(v.id); }
       (S.top || []).slice().reverse().forEach(function(id){ var c = document.querySelector('#combos .item[data-id="' + id + '"]'); if (c && c.parentNode) c.parentNode.prepend(c); });
       var first = document.getElementById(S.first), h = first && first.querySelector("h2"), parts = String(S.msg || "").split("|");
-      if (h && parts[0]){ h.textContent = ""; parts.forEach(function(t, i){ if (i) h.appendChild(document.createElement("br")); h.appendChild(document.createTextNode(t)); }); h.classList.add("sch-h"); if (parts.length > 1) h.classList.add("two"); }
-      if (S.first === "combos"){ var pf = document.querySelector("#combos .combo-people-filter"); if (pf){ pf.classList.add("sch-pf"); var l = pf.querySelector(".pf-label"); if (l){ var sv = l.querySelector("svg"); l.textContent = "¿Cuántas personas son?"; if (sv) sv.style.display = "none"; } var al = pf.querySelector('[data-people-filter="all"]'); if (al) al.textContent = "Todos"; } }
+      if (h && parts[0]){ h.textContent = ""; var np = parts.length;
+        parts.forEach(function(t, i){ if (i) h.appendChild(document.createElement("br"));
+          if (i < np - 1){ h.appendChild(document.createTextNode(t)); return; }
+          var k = document.createElement("span"); k.className = "sch-k";
+          if (np > 1){ k.textContent = t; } else { var w = t.trim().split(" "), lw = w.pop(); if (w.length) h.appendChild(document.createTextNode(w.join(" ") + " ")); k.textContent = lw; }
+          h.appendChild(k); });
+        h.classList.add("sch-h"); if (np > 1) h.classList.add("two");
+        var box = h.parentNode; if (!(box.classList && box.classList.contains("sch-box"))){ box = document.createElement("div"); box.className = "sch-box"; h.parentNode.insertBefore(box, h); box.appendChild(h); }
+        if (S.first === "pizzas") first.classList.add("sch-nonote");
+        if (S.first === "combos"){ var pf = document.querySelector("#combos .combo-people-filter"); if (pf){ pf.classList.add("sch-pf"); box.appendChild(pf); var l = pf.querySelector(".pf-label"); if (l) l.style.display = "none";
+          var tx = { all:"Todos", "1":"Para 1", "2":"Para 2", "4":"3 o más" }; [].forEach.call(pf.querySelectorAll("[data-people-filter]"), function(b){ var v = tx[b.getAttribute("data-people-filter")]; if (v) b.textContent = v; }); } }
+      }
       var tr = document.getElementById("mafiaTrack");
       if (tr && S.ban){ var order = [S.ban].concat(SEQ); var sl = [].slice.call(tr.children);
         sl.sort(function(a, b){ var x = order.indexOf(bkey(a)), y = order.indexOf(bkey(b)); return (x < 0 ? 99 : x) - (y < 0 ? 99 : y); });
