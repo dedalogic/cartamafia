@@ -3359,7 +3359,7 @@ function go(card, k){
   img.classList.remove("sl-l","sl-r"); void img.offsetWidth; img.classList.add(k ? "sl-l" : "sl-r");
   var pkI = card.querySelector(".pk"); if (pkI) pkI.src = k ? it._img1 : it._img2;
   card.querySelectorAll(".dots i").forEach(function(x,n){ x.classList.toggle("on", n === k); });
-  var xn = card.querySelector(".xinc"); if (xn) xn.textContent = k ? "Agrega bebida por $500." : "Incluye Palitos de Ajo y Bebida 1.5 L.";
+  var xn = card.querySelector(".xinc"); if (xn) xn.textContent = k ? "Agrega bebida por $500." : "Incluye Palitos de Ajo y Bebida 1,5 L.";
   var ap = card.querySelector(".ap");
   if (ap) ap.innerHTML = fmt(k ? it.price : it._fam);
 }
@@ -3378,7 +3378,7 @@ window.openLb = function(btn){
   var card = btn.closest(".item"), it = card && IDX[card.dataset.id]; if (!it || !it._img2) return;
   var sl = card.dataset.mode === "slice";
   document.getElementById("lbp").textContent = fmt(sl ? it.price : it._fam);
-  document.getElementById("lbd").textContent = sl ? "1 slice. Agrega bebida por $500." : "Incluye Palitos de Ajo y Bebida 1.5 L.";
+  document.getElementById("lbd").textContent = it.desc || "";
   document.getElementById("lbd").hidden = false;
 };
 var X = function(t){ return String(t).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); };
@@ -3389,7 +3389,7 @@ MENU.forEach(function(c){ c.items.forEach(function(i){
   if (i.img2){
     var fd = String((i.sub || "").split("$")[1] || "").replace(/[^0-9]/g, ""); i._fam = fd ? parseInt(fd, 10) : i.price;
     i._img1 = i.img; i._img2 = i.img2; var m = card.querySelector(".media");
-    var dsc = card.querySelector(".desc"); if (dsc){ var xi = document.createElement("span"); xi.className = "xinc"; xi.textContent = "Incluye Palitos de Ajo y Bebida 1.5 L."; dsc.appendChild(document.createTextNode(" ")); dsc.appendChild(xi); }
+    var dsc = card.querySelector(".desc"); if (dsc){ var xi = document.createElement("span"); xi.className = "xinc"; xi.textContent = "Incluye Palitos de Ajo y Bebida 1,5 L."; dsc.appendChild(document.createTextNode(" ")); dsc.appendChild(xi); }
     var ap = card.querySelector(".ap"); if (ap) ap.innerHTML = fmt(i._fam);
   } else if (i.label){ var ap2 = card.querySelector(".ap"); if (ap2) ap2.innerHTML = "<small>" + X(i.label) + "</small>" + fmt(i.price); }
 }); });
@@ -3484,7 +3484,7 @@ window.addEventListener("load", function(){ setTimeout(function(){ Object.keys(O
 
 /* Horarios (hora de Chile): la carta destaca distinto segun dia y hora. Los horarios se editan en Admin > Horarios. Prueba: agregar ?h=mar-13 al link. */
 (function(){
-  var SITE = "local", DEFS = {"local":[{"id":"martes","on":true,"tag":"Promo del martes","msg":"HOY: SLICES|50% DCTO.","days":[2],"from":"00:00","to":"24:00","first":"pizzas","then":"pastas","top":[],"ban":"martes","slice":true},{"id":"almuerzo","on":true,"tag":"Almuerzo","msg":"PIDE PASTAS","days":[0,1,2,3,4,5,6],"from":"12:00","to":"17:00","first":"combos","then":"pastas","top":["combo-del-don","combo-duo-del-don"],"ban":"pastas","slice":false},{"id":"resto","on":true,"tag":"Resto del día","msg":"PIDE UN COMBO","days":[0,1,2,3,4,5,6],"from":"00:00","to":"24:00","first":"combos","then":"pizzas","top":[],"ban":"combos","slice":false}],"online":[{"id":"martes","on":false,"tag":"Promo del martes","msg":"HOY: MARTES","days":[2],"from":"00:00","to":"24:00","first":"combos","then":"pizzas","top":[],"ban":"familiar","slice":false},{"id":"almuerzo","on":true,"tag":"Almuerzo","msg":"Elige tu combo","days":[0,1,2,3,4,5,6],"from":"12:00","to":"17:00","first":"combos","then":"pizzas","top":["combo-del-don","combo-famiglia","combo-duo-del-don","combo-doble-capo","promo-alfredo","combo-complices"],"ban":"pastas","slice":false},{"id":"resto","on":true,"tag":"Resto del día","msg":"Elige tu combo","days":[0,1,2,3,4,5,6],"from":"00:00","to":"24:00","first":"combos","then":"pizzas","top":["combo-famiglia","combo-del-don","combo-doble-capo","combo-duo-del-don","combo-complices","promo-alfredo"],"ban":"familiar","slice":false}]}, DEF = DEFS[SITE], KEY = "mafia_sched_" + SITE;
+  var SITE = "local", DEFS = {"local":[{"id":"martes","on":true,"tag":"Promo del martes","msg":"HOY: SLICES|50% DCTO.","days":[2],"from":"00:00","to":"24:00","first":"pizzas","then":"pastas","top":[],"ban":"martes","slice":true},{"id":"almuerzo","on":true,"tag":"Almuerzo","msg":"PIDE PASTAS","days":[0,1,2,3,4,5,6],"from":"00:00","to":"17:00","first":"combos","then":"pastas","top":["combo-del-don","combo-duo-del-don"],"ban":"pastas","slice":false},{"id":"resto","on":true,"tag":"Resto del día","msg":"PIDE UN COMBO","days":[0,1,2,3,4,5,6],"from":"00:00","to":"24:00","first":"combos","then":"pizzas","top":[],"ban":"combos","slice":false}],"online":[{"id":"martes","on":false,"tag":"Promo del martes","msg":"HOY: MARTES","days":[2],"from":"00:00","to":"24:00","first":"combos","then":"pizzas","top":[],"ban":"familiar","slice":false},{"id":"almuerzo","on":true,"tag":"Almuerzo","msg":"Elige tu combo","days":[0,1,2,3,4,5,6],"from":"12:00","to":"17:00","first":"combos","then":"pizzas","top":["combo-del-don","combo-famiglia","combo-duo-del-don","combo-doble-capo","promo-alfredo","combo-complices"],"ban":"pastas","slice":false},{"id":"resto","on":true,"tag":"Resto del día","msg":"Elige tu combo","days":[0,1,2,3,4,5,6],"from":"00:00","to":"24:00","first":"combos","then":"pizzas","top":["combo-famiglia","combo-del-don","combo-doble-capo","combo-duo-del-don","combo-complices","promo-alfredo"],"ban":"familiar","slice":false}]}, DEF = DEFS[SITE], KEY = "mafia_sched_" + SITE;
   var DIAS = ["dom","lun","mar","mie","jue","vie","sab"];
   var SEQ = SITE === "local" ? ["pastas","combos","martes"] : ["pastas","familiar","padrinos"];
   function when(){
