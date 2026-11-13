@@ -481,7 +481,7 @@ const I = {
   pin:'<svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.800 12 21 12 21z"/><circle cx="12" cy="9.500" r="2.500"/></svg>',
   search:'<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>'
 };
-const VIEWS = { inicio:"Inicio", pedidos:"Pedidos", resumen:"Resumen", productos:"Productos", "carta-local":"Carta local", horarios:"Horarios", pago:"Pago online", "sin-terminar":"Sin terminar", clientes:"Clientes" };
+const VIEWS = { inicio:"Inicio", pedidos:"Pedidos", resumen:"Resumen", productos:"Carta online", "carta-local":"Carta local", horarios:"Horarios", pago:"Pago online", "sin-terminar":"Sin terminar", clientes:"Clientes" };
 
 let pass = "", role = "", dirty = false, saving = false;
 let simple = false; try { simple = localStorage.getItem("mafia_admin_simple") === "1"; } catch(e){}
@@ -505,9 +505,9 @@ function drawNav(){
   $("#nav").innerHTML =
     item("inicio", I.home, "Inicio") +
     item("pedidos", I.orders, "Pedidos", n ? `<span class="badge">${n}</span>` : "") +
-    item("productos", I.box, "Productos") +
+    item("productos", I.box, "Carta online") +
+    (canAdmin() ? item("carta-local", I.menuBook, "Carta local") : "") +
     (A ? item("resumen", I.chart, "Resumen") : "") +
-    (A ? item("carta-local", I.menuBook, "Carta local") : "") +
     (A ? item("horarios", I.clock, "Horarios") : "") +
     (A ? item("clientes", I.orders, "Clientes") : "") +
     (A ? item("pago", I.card, "Pago online") + item("sin-terminar", I.clock, "Compras sin terminar", S.unp && S.unp.unpaid.some(x => x.review) ? '<span class="badge">!</span>' : "") : "") +
@@ -522,7 +522,7 @@ $("#closeBtn").onclick = $("#scrim").onclick = () => openMenu(false);
 document.addEventListener("keydown", e => { if (e.key === "Escape") openMenu(false); });
 
 /* ---------- vistas ---------- */
-const route = () => { const h = (location.hash || "").replace(/^#\/?/, ""); return VIEWS[h] && (isAdmin() || (h !== "pago" && h !== "sin-terminar" && h !== "resumen" && h !== "carta-local" && h !== "horarios" && h !== "clientes")) ? h : "inicio"; };
+const route = () => { const h = (location.hash || "").replace(/^#\/?/, ""); return VIEWS[h] && (h !== "carta-local" || canAdmin()) && (isAdmin() || (h !== "pago" && h !== "sin-terminar" && h !== "resumen" && h !== "horarios" && h !== "clientes")) ? h : "inicio"; };
 function render(){
   const v = route(); $("#title").textContent = VIEWS[v]; document.title = "MAFIA · " + VIEWS[v];
   $("#main").classList.toggle("wide", v === "pedidos");
@@ -548,7 +548,8 @@ function vHome(){
     </div>
     <div class="grid">
       ${tile("#/pedidos", "Pedidos", n ? n + (n === 1 ? " pedido por aceptar" : " pedidos por aceptar") : "Sin pedidos por aceptar", pic("combo-mafioso", 0), n ? `<span class="tag">${n}</span>` : "")}
-      ${tile("#/productos", "Productos", off ? off + (off === 1 ? " agotado" : " agotados") : "Todo disponible", pic("pepperoni", 1))}
+      ${tile("#/productos", "Carta online", off ? off + (off === 1 ? " agotado" : " agotados") : "Todo disponible", pic("pepperoni", 1))}
+      ${canAdmin() ? tile("#/carta-local", "Carta local", "Agotados y precios del local", pic("combo-del-don", 6)) : ""}
       ${A ? tile("#/resumen", "Resumen", "Ventas y productos más vendidos", pic("combo-del-don", 2)) : ""}
       ${A ? tile("#/pago", "Pago online", `<span class="dot ${p && p.online ? "on" : ""}"></span>${p ? (p.online ? "Encendido" : "Apagado") : "…"}`, pic("combo-famiglia", 3)) : ""}
       ${A ? tile("#/sin-terminar", "Sin terminar", S.unp ? S.unp.unpaid_count + " no pagaron en " + S.unp.days + " días" : "Quién no completó su compra", pic("palitos", 4)) : ""}
@@ -558,7 +559,7 @@ function vHome(){
 function vProducts(){
   const cats = [...new Set(S.catalog.map(x => x.category))], offN = S.catalog.filter(x => S.dp.has(x.id)).length;
   $("#view").innerHTML = `
-    <div class="view-h"><p>Toca la foto para marcar un producto como agotado. Se oculta de la carta apenas guardes.</p></div>
+    <div class="view-h"><p>Carta <b>online</b> (somosmafia.cl). Toca la foto para marcar un producto como agotado. Se oculta apenas guardes.</p></div>
     <div class="search">${I.search}<input id="q" type="search" placeholder="Buscar producto" aria-label="Buscar producto" value="${esc(S.q)}"></div>
     <div class="chips" id="chips">
       <button class="chip" type="button" data-c="all" aria-pressed="${S.cat === "all"}">Todo</button>
@@ -722,7 +723,7 @@ async function vLocal(){
   }
   const L = S.loc, cats = [...new Set(L.items.map(x => x.category))], offN = L.items.filter(x => L.off.has(x.id)).length;
   $("#view").innerHTML = `
-    <div class="view-h"><p>Es la carta de <b>somosmafia.cl/carta</b>. Apaga lo que no se usa en el local o cambia su precio y foto. No afecta la carta online.</p></div>
+    <div class="view-h"><p>Carta del <b>local</b> (somosmafia.cl/carta). Toca la foto para ocultar lo agotado. No afecta la carta online.</p></div>
     <details class="lnote"><summary>Textos de las secciones <span>Editar</span></summary><div class="nb">${L.cats.map(c => `<label>${esc(c.name)}<input data-note="${esc(c.id)}" value="${esc(c.id in L.notes ? L.notes[c.id] : c.note)}" placeholder="Sin texto" maxlength="160"></label>`).join("")}</div></details>
     <div class="search">${I.search}<input id="lq" type="search" placeholder="Buscar producto" aria-label="Buscar producto" value="${esc(L.q)}"></div>
     <div class="chips" id="lchips">
