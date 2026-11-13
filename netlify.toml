@@ -49,6 +49,28 @@
     Cache-Control = "no-cache"
 
 [[headers]]
-  for = "/carta/*"
+  for = "/local/*"
   [headers.values]
     Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/delivery/*"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+[[redirects]]
+  from = "/carta"
+  to = "/local/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/carta/*"
+  to = "/local/"
+  status = 301
+  force = true
