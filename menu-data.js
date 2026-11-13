@@ -5,7 +5,7 @@
    ===================================================================== */
 const MENU = [
   { id:"combos", name:"Combos", items:[
-    { id:"combo-famiglia", name:"Combo Famiglia", people:3, desc:"6 slices a elección, máximo 2 sabores, 6 Palitos de Ajo y Bebida 1.5 L. Para 3 a 4 personas.", price:21990, img:"/combo-famiglia.webp",
+    { id:"combo-famiglia", name:"Combo Famiglia", people:3, desc:"6 Slices a elección (máx. 2 sabores), 6 Palitos de Ajo y Bebida 1,5 L. Para 3 a 4 personas.", price:21990, img:"/combo-famiglia.webp",
       bundleChoices:[
         { label:"Elige el primer sabor", short:"Sabor 1", list:["Tony Pepperoni","The Good Meat","Il Traditore","Napolitana","Margarita","Al Ajillo Boss","Funghi"] },
         { label:"Elige el segundo sabor", short:"Sabor 2", list:["Tony Pepperoni","The Good Meat","Il Traditore","Napolitana","Margarita","Al Ajillo Boss","Funghi"] },
@@ -13,21 +13,21 @@ const MENU = [
         { label:"Elige tu bebida 1.5 L", short:"Bebida", list:["Coca-Cola Original","Coca-Cola Zero","Sprite","Fanta"] }
       ] },
 
-    { id:"combo-doble-capo", name:"Combo Padrinos", people:2, desc:"2 pizzas de 40 cm a elección. Para 2 personas. Puedes convertirlo en combo con Palitos de Ajo + Bebida 1.5 L.", price:24990, img:"/combo-doble-capo.webp",
+    { id:"combo-doble-capo", name:"Combo Padrinos", people:2, desc:"2 Pizzas de 40 cm a elección. Para 2 personas. Hazlo combo con Palitos de Ajo y Bebida 1,5 L.", price:24990, img:"/combo-doble-capo.webp",
       bundleChoices:[
         { label:"Elige tu pizza 1", short:"Pizza 1", list:["Tony Pepperoni","The Good Meat","Il Traditore","Napolitana","Margarita","Al Ajillo Boss","Funghi"] },
         { label:"Elige tu pizza 2", short:"Pizza 2", list:["Tony Pepperoni","The Good Meat","Il Traditore","Napolitana","Margarita","Al Ajillo Boss","Funghi"] }
       ],
       combo:{ all:{ extra:5000, desc:"Palitos de Ajo + Bebida 1.5 L" } }
     },
-    { id:"combo-mafioso", name:"Combo Mafioso", people:1, desc:"2 slices a elección y bebida mini. Para 1 persona.", price:9990, img:"/combo-mafioso.webp",
+    { id:"combo-mafioso", name:"Combo Mafioso", people:1, desc:"2 Slices a elección y Bebida Mini. Para 1 persona.", price:9990, img:"/combo-mafioso.webp",
       bundleChoices:[
         { label:"Elige tu slice 1", short:"Slice 1", list:["Tony Pepperoni","The Good Meat","Il Traditore","Napolitana","Margarita","Al Ajillo Boss","Funghi"] },
         { label:"Elige tu slice 2", short:"Slice 2", list:["Tony Pepperoni","The Good Meat","Il Traditore","Napolitana","Margarita","Al Ajillo Boss","Funghi"] },
         { label:"Elige tu bebida mini", short:"Bebida", list:["Coca-Cola Original","Coca-Cola Zero","Sprite","Fanta"] }
       ] },
 
-    { id:"combo-complices", name:"Combo Cómplices", people:2, desc:"4 slices a elección y 2 bebidas mini. Para 2 personas.", price:16990, img:"/combo-complices.webp?v=3",
+    { id:"combo-complices", name:"Combo Cómplices", people:2, desc:"4 Slices a elección y 2 Bebidas Mini. Para 2 personas.", price:16990, img:"/combo-complices.webp?v=3",
       bundleChoices:[
         { label:"Elige tu slice 1", short:"Slice 1", list:["Tony Pepperoni","The Good Meat","Il Traditore","Napolitana","Margarita","Al Ajillo Boss","Funghi"] },
         { label:"Elige tu slice 2", short:"Slice 2", list:["Tony Pepperoni","The Good Meat","Il Traditore","Napolitana","Margarita","Al Ajillo Boss","Funghi"] },
@@ -37,45 +37,45 @@ const MENU = [
         { label:"Elige tu bebida mini 2", short:"Bebida 2", list:["Coca-Cola Original","Coca-Cola Zero","Sprite","Fanta"] }
       ] },
 
-    { id:"combo-del-don", name:"Combo del Don", people:1, desc:"Fettuccine con salsa Bolognesa, 3 Albóndigas y Bebida Mini. Para 1 persona.", price:10990, img:"/combo-del-don.webp",
+    { id:"combo-del-don", name:"Combo del Don", people:1, desc:"Fetuccini con Salsa Bolognesa, 3 Albóndigas y Bebida Mini. Para 1 persona.", price:10990, img:"/combo-del-don.webp",
       bundleChoices:[
         { label:"Elige tu bebida mini", short:"Bebida", list:["Coca-Cola Original","Coca-Cola Zero","Sprite","Fanta"] }
       ] },
 
-    { id:"combo-duo-del-don", name:"Combo 2 Mafiosos", people:2, desc:"2 pastas a elección y 2 bebidas mini. Para 2 personas.", price:14990, img:"/combo-duo-del-don.webp?v=2",
+    { id:"combo-duo-del-don", name:"Combo 2 Mafiosos", people:2, desc:"2 Pastas a elección y 2 Bebidas Mini. Para 2 personas.", price:14990, img:"/combo-duo-del-don.webp?v=2",
       bundleChoices:[
         { label:"Elige la pasta 1", short:"Pasta 1", list:["La Bolognesa del Don","Alfredo Gravy","Vodka Boss","Pesto Limón","Il Mechada","Picante Pastel"] },
         { label:"Elige la pasta 2", short:"Pasta 2", list:["La Bolognesa del Don","Alfredo Gravy","Vodka Boss","Pesto Limón","Il Mechada","Picante Pastel"] },
         { label:"Elige tu bebida mini 1", short:"Bebida 1", list:["Coca-Cola Original","Coca-Cola Zero","Sprite","Fanta"] },
         { label:"Elige tu bebida mini 2", short:"Bebida 2", list:["Coca-Cola Original","Coca-Cola Zero","Sprite","Fanta"] }
       ] },
-    { id:"promo-alfredo", name:"Promo Fetuccini Alfredo", people:1, desc:"Fetuccini Alfredo y bebida mini. Para 1 persona.", price:7990, img:"/combo-alfredo.webp",
+    { id:"promo-alfredo", name:"Promo Fetuccini Alfredo", people:1, desc:"Fetuccini Alfredo y Bebida Mini. Para 1 persona.", price:7990, img:"/combo-alfredo.webp",
       bundleChoices:[
         { label:"Elige tu bebida mini", short:"Bebida", list:["Coca-Cola Original","Coca-Cola Zero","Sprite","Fanta"] }
       ] }
   ]},
   { id:"entradas", name:"Sides", items:[
-    { id:"palitos", name:"Palitos de ajo", desc:"6 Palitos de Ajo cubiertos con Salsa Garlic y Queso Parmigiano. Incluye Salsa Pomodoro New York.", price:3990, img:"/palitos-ajo.webp",
+    { id:"palitos", name:"Palitos de ajo", desc:"6 Palitos de Ajo con Salsa Garlic y Queso Parmigiano. Incluye Salsa Pomodoro.", price:3990, img:"/palitos-ajo.webp",
       extras:{ label:"Agrega una salsa", ids:["top-pomodoro","top-bbq"] } },
-    { id:"cremita-zapallo", name:"Crema de Zapallo", desc:"Crema casera de Zapallo con Palitos de Ajo y Queso Parmigiano.", price:5990, img:"", foto:"cremita-zapallo" }
+    { id:"cremita-zapallo", name:"Crema de Zapallo", desc:"Crema de Zapallo casera con Palitos de Ajo y Queso Parmigiano.", price:5990, img:"", foto:"cremita-zapallo" }
   ]},
   { id:"pizzas", name:"Pizzas", note:"Formato único de 40 cm.", items:[
-    { id:"tgm", name:"The Good Meat", desc:"Carne Mechada, Tocino, Salsa Pomodoro New York y Queso Mozzarella.",
+    { id:"tgm", name:"The Good Meat", desc:"Carne Mechada, Tocino, Salsa Pomodoro y Queso Mozzarella.",
       price:16990, img:"/tgm.webp", combo:{ all:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" } },
       suggest:{ ids:["top-bbq", "top-pomodoro", "top-parmigiano"] } },
-    { id:"pepperoni", name:"Tony Pepperoni", desc:"Pepperoni Americano Ultradelgado, Salsa Pomodoro New York y Queso Mozzarella.",
+    { id:"pepperoni", name:"Tony Pepperoni", desc:"Pepperoni Americano Ultradelgado, Salsa Pomodoro y Queso Mozzarella.",
       price:16990, img:"/pepperoni.webp", combo:{ all:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" } },
       suggest:{ ids:["top-bbq", "top-pomodoro", "top-parmigiano"] } },
     { id:"pollo-bbq", name:"Il Traditore", desc:"Pollo BBQ, Tocino, Cebolla Morada, Salsa BBQ y Queso Mozzarella.",
       price:16990, img:"/pollo-bbq.webp", combo:{ all:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" } },
       suggest:{ ids:["top-bbq", "top-pomodoro", "top-parmigiano"] } },
-    { id:"napolitana", name:"Napolitana", desc:"Jamón, Tomate, Aceitunas de la Zona, Salsa Pomodoro New York, Queso Mozzarella y Orégano.",
+    { id:"napolitana", name:"Napolitana", desc:"Jamón, Tomate, Aceitunas de la Zona, Salsa Pomodoro, Queso Mozzarella y Orégano.",
       price:14990, img:"/napolitana.webp", combo:{ all:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" } },
       suggest:{ ids:["top-bbq", "top-pomodoro", "top-parmigiano"] } },
-    { id:"margarita", name:"Margarita", desc:"Salsa Pomodoro New York, Queso Mozzarella y Albahaca Fresca.",
+    { id:"margarita", name:"Margarita", desc:"Salsa Pomodoro, Queso Mozzarella y Albahaca Fresca.",
       price:14990, img:"/margarita.webp?v=2", combo:{ all:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" } },
       suggest:{ ids:["top-bbq", "top-pomodoro", "top-parmigiano"] } },
-    { id:"ajillo", name:"Al Ajillo Boss", desc:"Camarones al Ajillo, Pimentón Rojo, Salsa Pomodoro New York, Queso Mozzarella y Perejil Fresco.",
+    { id:"ajillo", name:"Al Ajillo Boss", desc:"Camarones al Ajillo, Pimentón Rojo, Salsa Pomodoro, Queso Mozzarella y Perejil Fresco.",
       price:16990, img:"/ajillo.webp", combo:{ all:{ extra:5000, desc:"+ Palitos de ajo + Bebida 1.5 L" } },
       suggest:{ ids:["top-bbq", "top-pomodoro", "top-parmigiano"] } },
     { id:"funghi", name:"Funghi", desc:"Champiñones y Callampas Deshidratadas, Salsa Bechamel, Queso Mozzarella, Queso Parmigiano y Perejil Fresco.",
@@ -83,11 +83,11 @@ const MENU = [
       suggest:{ ids:["top-bbq", "top-pomodoro", "top-parmigiano"] } },
   ]},
   { id:"nuestras-pastas", name:"Pastas", items:[
-    { id:"np-bolognesa-albondigas", name:"La Bolognesa del Don", desc:"Fetuccini con salsa Bolognesa, 3 albóndigas y Parmigiano.", price:10490, img:"/np-bolognesa-albondigas.webp" },
-    { id:"np-alfredo-gravy", name:"Alfredo Gravy", desc:"Fetuccini en salsa Alfredo con pollo y gravy.", price:9490, img:"/np-alfredo-gravy.webp" },
-    { id:"np-pesto-lemon", name:"Pesto Limón", desc:"Fetuccini al pesto con pollo Lemon Pepper.", price:9490, img:"/np-pesto-lemon.webp" },
-    { id:"np-carne-vino-ajo", name:"Carne al Vino & Ajo Parmigiano", desc:"Fetuccini con carne al vino, ajo y Parmigiano.", price:9990, img:"/np-carne-vino-ajo.webp" },
-    { id:"np-mechada-mafia", name:"Fetuccini con Carne Mechada en Salsa Mafia", desc:"Fetuccini con carne mechada y Salsa Mafia.", price:10990, img:"/np-mechada-mafia.webp" }
+    { id:"np-bolognesa-albondigas", name:"La Bolognesa del Don", desc:"Fetuccini con Salsa Bolognesa, 3 Albóndigas y Parmigiano.", price:10490, img:"/np-bolognesa-albondigas.webp" },
+    { id:"np-alfredo-gravy", name:"Alfredo Gravy", desc:"Fetuccini en Salsa Alfredo con Pollo y Gravy.", price:9490, img:"/np-alfredo-gravy.webp" },
+    { id:"np-pesto-lemon", name:"Pesto Limón", desc:"Fetuccini al Pesto con Pollo Lemon Pepper.", price:9490, img:"/np-pesto-lemon.webp" },
+    { id:"np-carne-vino-ajo", name:"Carne al Vino & Ajo Parmigiano", desc:"Fetuccini con Carne al Vino, Ajo y Parmigiano.", price:9990, img:"/np-carne-vino-ajo.webp" },
+    { id:"np-mechada-mafia", name:"Fetuccini con Carne Mechada en Salsa Mafia", desc:"Fetuccini con Carne Mechada y Salsa Mafia.", price:10990, img:"/np-mechada-mafia.webp" }
   ]},
 
   { id:"pastas", name:"Arma tu Pasta", note:"Elige tu salsa. Agrega proteína si quieres.", items:[
@@ -100,8 +100,8 @@ const MENU = [
       suggest:{ ids:["albondigas","pollo-gravy"] } }
   ]},
   { id:"proteinas", name:"Proteínas", hidden:true, items:[
-    { id:"albondigas", name:"3 Albóndigas", desc:"3 Albóndigas de carne de vacuno, cocinadas y servidas en su salsa.", price:2990, img:"/Albondigas.webp" },
-    { id:"pollo-gravy", name:"Pollo con Gravy", desc:"Pollo al horno con Salsa Gravy.", price:2990, img:"/pollo-gravy.webp" }
+    { id:"albondigas", name:"3 Albóndigas", desc:"3 Albóndigas de Vacuno en su Salsa.", price:2990, img:"/Albondigas.webp" },
+    { id:"pollo-gravy", name:"Pollo con Gravy", desc:"Pollo al Horno con Salsa Gravy.", price:2990, img:"/pollo-gravy.webp" }
   ]},
   { id:"toppings", name:"Toppings", items:[
     { id:"top-bbq", name:"BBQ", price:990, img:"/bbq.webp?v=7" },
@@ -119,7 +119,7 @@ const MENU = [
 /* Pastas: "Arma tu Pasta" se muestra como último plato de "Nuestras Pastas", antes de Pizzas. */
 (function(){
   const arma=MENU.find(c=>c.id==="pastas"), np=MENU.find(c=>c.id==="nuestras-pastas");
-  arma.items.forEach(i=>{ if(i.id==="fetuccini") i.desc="Arma tu pasta: elige tu salsa (Alfredo, Pesto o Bolognesa) y agrega tu proteína."; });
+  arma.items.forEach(i=>{ if(i.id==="fetuccini") i.desc="Arma tu pasta: elige la salsa (Alfredo, Pesto o Bolognesa) y suma una proteína."; });
   np.items.push(...arma.items);
   MENU.splice(MENU.indexOf(arma),1);
   MENU.splice(MENU.indexOf(np),1);
