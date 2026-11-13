@@ -51,7 +51,7 @@ export default async (req) => {
     items:[{ id:order.reference, title:`Pedido MAFIA ${order.short_code}`, quantity:1, currency_id:"CLP", unit_price:Number(amountString(order.total)) }],
     external_reference:order.reference,
     notification_url:`${origin}/.netlify/functions/mp-pay-webhook`,
-    back_urls:{ success:`${origin}/?mp=success`, failure:`${origin}/?mp=failure`, pending:`${origin}/?mp=pending` },
+    back_urls:{ success:`${origin}/delivery/?mp=success`, failure:`${origin}/delivery/?mp=failure`, pending:`${origin}/delivery/?mp=pending` },
     auto_return:"approved"
   };
   // Versión completa; si Mercado Pago rechaza algún campo opcional, se reintenta con la mínima.
