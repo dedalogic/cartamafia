@@ -53,7 +53,7 @@ const LOCAL_DEFAULTS = {
     "combo-del-don": { noun:"opciones", title:"ELIGE TU FETUCCINI", items:[
       { n:"Fetuccini Alfredo", d:"Fetuccini en salsa Alfredo, con Bebida Mini.", img:"/combo-alfredo.webp", p:"$7.990" },
       { n:"Bolognesa con Albóndigas", d:"Fetuccini con salsa Bolognesa, 3 albóndigas y Parmigiano, con Bebida Mini.", img:"/fotos/local/combo-del-don.webp", p:"$9.990" },
-      { n:"Pesto con Pollo Gravy", d:"Fetuccini al pesto con Pollo Gravy, con Bebida Mini.", img:"/fotos/local/pesto-pollo-gravy.webp?v=2", p:"$9.990" } ] },
+      { n:"Pesto con Pollo Gravy", d:"Fetuccini al pesto con Pollo Gravy, con Bebida Mini.", img:"/fotos/local/pesto-pollo-gravy.webp?v=3", p:"$9.990" } ] },
     "combo-complices": { noun:"slices", title:"ELIGE TUS SLICES", items:[
       { n:"Tony Pepperoni", d:"Pepperoni Americano Ultradelgado, Salsa Pomodoro y Queso Mozzarella.", img:"/fotos/local/slice-pepperoni.webp" }, { n:"Funghi", d:"Champiñones y Callampas Deshidratadas, Salsa Bechamel, Queso Mozzarella, Queso Parmigiano y Perejil Fresco.", img:"/fotos/local/slice-funghi.webp" },
       { n:"Il Traditore", d:"Pollo BBQ, Tocino, Cebolla Morada, Salsa BBQ y Queso Mozzarella.", img:"/fotos/local/slice-pollo-bbq.webp" }, { n:"Margarita", d:"Salsa Pomodoro, Queso Mozzarella y Albahaca.", img:"/fotos/local/slice-margarita.webp" } ] },
